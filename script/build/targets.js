@@ -16,7 +16,10 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
-import { packageEntryPoints } from "../lib/packages.js";
+import {
+  packageEntryPoints,
+  packageEntryPointsWithSearchWorkerEntry,
+} from "../lib/packages.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
@@ -179,7 +182,7 @@ export const esmTarget = {
   buildSelf: async (dev) => {
     await esbuild.build({
       // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
-      entryPoints: packageEntryPoints,
+      entryPoints: packageEntryPointsWithSearchWorkerEntry,
       outdir: "dist/esm",
       format: "esm",
       target: "es2020",
