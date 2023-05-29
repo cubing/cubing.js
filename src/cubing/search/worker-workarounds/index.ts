@@ -29,3 +29,13 @@ export async function searchWorkerURLEsbuildWorkaround(): Promise<string> {
   exposeAPI.expose = false;
   return (await import("./search-worker-entry")).WORKER_ENTRY_FILE_URL;
 }
+
+export function instantiateSearchWorkerURLNewURLImportMetaURL(): Worker {
+  return new Worker(
+    new URL(
+      "./search/worker-workarounds/search-worker-entry.js",
+      import.meta.url,
+    ),
+    { type: "module" },
+  );
+}
