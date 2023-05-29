@@ -111,35 +111,40 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
   if (searchOutsideDebugGlobals.forceStringWorker) {
     console.warn("The `forceStringWorker` workaround is no longer supported.");
   }
-  try {
-    return await instantiateModuleWorker(
-      await searchWorkerURLImportMetaResolve(),
-    );
-  } catch {
-    console.warn(
-      "Module worker instantiation using `import.meta.resolve(…)` failed, falling back.",
-    );
+
+  function failed(methodDescription?: string) {
+    return `Module worker instantiation${
+      methodDescription ? ` ${methodDescription}` : ""
+    } failed`;
   }
 
-  try {
-    return await instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL());
-  } catch {
-    console.warn(
-      "Module worker instantiation using `new URL(…, import.meta.url)` failed, falling back.",
-    );
+  const fallbackOrder: [
+    fn: () => string | URL | Promise<string>,
+    description: string,
+    warnOnSuccess: boolean,
+  ][] = [
+    [searchWorkerURLImportMetaResolve, "using `import.meta.resolve(…)", false],
+    [
+      searchWorkerURLNewURLImportMetaURL,
+      "using `new URL(…, import.meta.url)`",
+      true,
+    ],
+    [searchWorkerURLEsbuildWorkaround, "using the `esbuild` workaround", true],
+  ];
+
+  for (const [fn, description, warnOnSuccess] of fallbackOrder) {
+    try {
+      const worker = await instantiateModuleWorker(await fn());
+      if (warnOnSuccess) {
+        console.warn(
+          `Module worker instantiation required ${description}. \`cubing.js\` will not support this fallback in the future.`,
+        );
+      }
+      return worker;
+    } catch {
+      console.warn(`${failed(description)}, falling back.`);
+    }
   }
 
-  try {
-    return await instantiateModuleWorker(
-      await searchWorkerURLEsbuildWorkaround(),
-    );
-  } catch {
-    console.warn(
-      "Module worker instantiation using the `esbuild` workaround failed, falling back.",
-    );
-  }
-
-  throw new Error(
-    "Module worker instantiation failed. There are no more fallbacks available.",
-  );
+  throw new Error(`${failed()}. There are no more fallbacks available.`);
 }
