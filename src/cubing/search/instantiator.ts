@@ -3,8 +3,12 @@ import {
   wrap,
 } from "../vendor/apache/comlink-everywhere/outside";
 import { insideAPI, type WorkerInsideAPI } from "./inside/api";
-import { getWorkerEntryFileURL } from "./inside/search-worker-ts-entry-path-getter";
 import { searchOutsideDebugGlobals } from "./outside";
+import {
+  searchWorkerURLEsbuildWorkaround,
+  searchWorkerURLImportMetaResolve,
+  searchWorkerURLNewURLImportMetaURL,
+} from "./worker-workarounds";
 
 const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
 
@@ -16,15 +20,12 @@ export interface InsideOutsideAPI {
   outsideAPI: WorkerOutsideAPI;
 }
 
-export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
+export async function instantiateModuleWorker(
+  workerEntryFileURL: string | URL,
+): Promise<InsideOutsideAPI> {
   // rome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
-    const timeoutID = setTimeout(() => {
-      reject(new Error("module instantiation timeout"));
-    }, MODULE_WORKER_TIMEOUT_MILLISECONDS);
-
     try {
-      const workerEntryFileURL = await getWorkerEntryFileURL();
       if (!workerEntryFileURL) {
         reject(new Error("Could not get worker entry file URL."));
       }
@@ -50,16 +51,12 @@ export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
       };
 
       const onError = (e: ErrorEvent) => {
-        // TODO: Remove fallback when Firefox implements module workers: https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
-        if (e.message?.startsWith("SyntaxError")) {
-          reject(e);
-        }
+        reject(e);
       };
 
       const onFirstMessage = (messageData: string) => {
         if (messageData === "comlink-exposed") {
           // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
-          clearTimeout(timeoutID);
           resolve(wrapWithTerminate(worker));
         } else {
           reject(
@@ -91,14 +88,6 @@ function wrapWithTerminate(worker: Worker): InsideOutsideAPI {
   return { insideAPI, outsideAPI: { terminate } };
 }
 
-async function instantiateClassicWorker(): Promise<InsideOutsideAPI> {
-  const { workerSource } = await import(
-    "./search-worker-inside-generated-string.js"
-  );
-  const worker = await constructWorker(workerSource, { eval: true });
-  return wrapWithTerminate(worker);
-}
-
 export const allInsideOutsideAPIPromises: Promise<InsideOutsideAPI>[] = [];
 
 export async function instantiateWorker(): Promise<InsideOutsideAPI> {
@@ -121,25 +110,37 @@ export async function mapToAllWorkers(
 
 async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
   if (searchOutsideDebugGlobals.forceStringWorker) {
-    console.warn(
-      "Using the `forceStringWorker` workaround for search worker instantiation. This will require downloading significantly more code than necessary, but the functionality will be the same.",
-    );
-    return instantiateClassicWorker();
+    console.warn("The `forceStringWorker` workaround is no longer supported.");
   }
   try {
-    // `await` is important for `catch` to work.
-    return await instantiateModuleWorker();
-  } catch (e) {
-    const commonErrorPrefix =
-      "Could not instantiate module worker (this may happen in Firefox, or when using Parcel).";
-    if (searchOutsideDebugGlobals.disableStringWorker) {
-      console.error(
-        `${commonErrorPrefix} Fallback to string worker is disabled.`,
-        e,
-      );
-      throw new Error("Module worker instantiation failed.");
-    }
-    console.warn(`${commonErrorPrefix} Falling back to string worker.`, e);
-    return instantiateClassicWorker();
+    return await instantiateModuleWorker(
+      await searchWorkerURLImportMetaResolve(),
+    );
+  } catch {
+    console.warn(
+      "Module worker instantiation using `import.meta.resolve(…)` failed, falling back.",
+    );
   }
+
+  try {
+    return await instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL());
+  } catch {
+    console.warn(
+      "Module worker instantiation using `new URL(…, import.meta.url)` failed, falling back.",
+    );
+  }
+
+  try {
+    return await instantiateModuleWorker(
+      await searchWorkerURLEsbuildWorkaround(),
+    );
+  } catch {
+    console.warn(
+      "Module worker instantiation using the `esbuild` workaround failed, falling back.",
+    );
+  }
+
+  throw new Error(
+    "Module worker instantiation failed. There are no more fallbacks available.",
+  );
 }
