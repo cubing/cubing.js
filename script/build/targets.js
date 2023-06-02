@@ -249,7 +249,6 @@ export const esmTarget = {
       target: "es2020",
       bundle: true,
       splitting: true,
-      watch: dev,
       logLevel: "info",
       sourcemap: true,
       //
@@ -274,7 +273,6 @@ export const binTarget = {
       format: "esm",
       target: "es2020",
       bundle: true,
-      watch: dev,
       logLevel: "info",
       sourcemap: dev,
       //
