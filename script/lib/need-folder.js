@@ -1,4 +1,4 @@
-import { existsSync } from "fs";
+import { existsSync } from "node:fs";
 
 export function needFolder(folder, cmd) {
   if (!existsSync(folder)) {

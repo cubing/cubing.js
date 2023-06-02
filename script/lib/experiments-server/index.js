@@ -1,8 +1,8 @@
 // https://developer.mozilla.org/en-US/docs/Learn/Server-side/Node_server_without_framework
 
-import { readFile } from "fs";
-import { createServer } from "http";
-import { extname, join } from "path";
+import { readFile } from "node:fs";
+import { createServer } from "node:http";
+import { extname, join } from "node:path";
 import { needFolder } from "../need-folder.js";
 
 const DIST_SITES_ROOT = "../../../dist/sites/";
