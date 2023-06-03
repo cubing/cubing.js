@@ -185,7 +185,6 @@ export const searchWorkerTarget = {
       format: "cjs",
       target: "es2020",
       bundle: true,
-      watch,
       write: false,
       logLevel: "info",
       external: ["node:*"],
