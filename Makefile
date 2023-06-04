@@ -176,12 +176,7 @@ prepack: clean build test-dist-esm-node-import test-dist-esm-plain-esbuild-compa
 .PHONY: prepublishOnly
 prepublishOnly: test-all
 .PHONY: postpublish
-postpublish: # update-cdn update-create-cubing-app deploy # Uncomment after Firefox 114
-	@echo ""
-	@echo ""
-	@echo "NOTE: SKIPPING POSTPUBLISH STEPS DUE BECAUSE FIREFOX 114 IS NOT OUT YET"
-	@echo ""
-	@echo ""
+postpublish: update-cdn update-create-cubing-app deploy
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
 .PHONY: deploy-twizzle
