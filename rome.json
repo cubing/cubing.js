@@ -19,7 +19,6 @@
       }
     },
     "ignore": [
-      "./src/cubing/search/search-worker-inside-generated-string.js",
       "./src/cubing/vendor/gpl/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
       "./src/cubing/vendor/mpl/xyzzy/*.js",
@@ -31,7 +30,6 @@
     "indentStyle": "space",
     "indentSize": 2,
     "ignore": [
-      "./src/cubing/search/search-worker-inside-generated-string.js",
       "./src/cubing/vendor/gpl/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
       "./src/cubing/vendor/mpl/xyzzy/*.js",

@@ -1,6 +1,6 @@
 {
   "name": "cubing",
-  "version": "0.36.3",
+  "version": "0.37.0-pre2",
   "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
   "type": "module",
@@ -113,7 +113,6 @@
     "build-site-twizzle": "make build-site-twizzle",
     "build-site-experiments": "make build-site-experiments",
     "build-site-docs": "make build-site-docs",
-    "build-search-worker": "make build-search-worker",
     "generate-js": "make generate-js",
     "generate-js-parsers": "make generate-js-parsers",
     "generate-js-svg": "make generate-js-svg",

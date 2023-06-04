@@ -16,7 +16,10 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
-import { packageEntryPoints } from "../lib/packages.js";
+import {
+  packageEntryPoints,
+  packageEntryPointsWithSearchWorkerEntry,
+} from "../lib/packages.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
@@ -238,11 +241,11 @@ export const staticPackageMetadataTarget = {
 export const esmTarget = {
   name: "esm",
   builtYet: false,
-  dependencies: [searchWorkerTarget, staticPackageMetadataTarget],
+  dependencies: [staticPackageMetadataTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
       // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
-      entryPoints: packageEntryPoints,
+      entryPoints: packageEntryPointsWithSearchWorkerEntry,
       outdir: "dist/esm",
       format: "esm",
       target: "es2020",
@@ -260,7 +263,7 @@ export const esmTarget = {
 export const binTarget = {
   name: "bin",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await esbuild.build({
       entryPoints: [
@@ -287,7 +290,7 @@ export const binTarget = {
 export const sitesTarget = {
   name: "sites",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await barelyServe(siteOptions("sites", dev));
   },
@@ -296,7 +299,7 @@ export const sitesTarget = {
 export const twizzleTarget = {
   name: "twizzle",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await barelyServe(siteOptions("sites/alpha.twizzle.net", dev));
     if (!dev) {
@@ -309,7 +312,7 @@ export const twizzleTarget = {
 export const experimentsTarget = {
   name: "experiments",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await barelyServe(
       siteOptions("sites/experiments.cubing.net/cubing.js", dev),
@@ -325,7 +328,7 @@ export const experimentsTarget = {
 export const typesTarget = {
   name: "types",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     console.warn("Note: The `types` target is slow. Expect several seconds.");
     if (dev) {
@@ -353,7 +356,6 @@ export const allTarget = {
 };
 
 export const targets /*: Record<String, SolverWorker>*/ = {
-  "search-worker": searchWorkerTarget,
   sites: sitesTarget,
   twizzle: twizzleTarget,
   experiments: experimentsTarget,

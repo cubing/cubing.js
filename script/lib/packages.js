@@ -17,3 +17,8 @@ export const packageNames = [
 export const packageEntryPoints = packageNames.map((p) =>
   join("src/cubing/", p, "/index.ts"),
 );
+
+export const packageEntryPointsWithSearchWorkerEntry =
+  packageEntryPoints.concat([
+    "./src/cubing/search/worker-workarounds/search-worker-entry.js",
+  ]);

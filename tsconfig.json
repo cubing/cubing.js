@@ -33,8 +33,7 @@
     "src",
   ],
   "exclude": [
-    "script/test/dist/esm", // Avoid indexing `dist`.
-    "src/cubing/search/search-worker-inside-generated*"
+    "script/test/dist/esm" // Avoid indexing `dist`.
   ],
   "typedocOptions": {
     "out": "dist/sites/js.cubing.net/cubing/api",

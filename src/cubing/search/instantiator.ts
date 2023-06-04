@@ -3,10 +3,13 @@ import {
   wrap,
 } from "../vendor/apache/comlink-everywhere/outside";
 import { insideAPI, type WorkerInsideAPI } from "./inside/api";
-import { getWorkerEntryFileURL } from "./inside/search-worker-ts-entry-path-getter";
 import { searchOutsideDebugGlobals } from "./outside";
-
-const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
+import {
+  instantiateSearchWorkerURLNewURLImportMetaURL,
+  searchWorkerURLEsbuildWorkaround,
+  searchWorkerURLImportMetaResolve,
+  searchWorkerURLNewURLImportMetaURL,
+} from "./worker-workarounds";
 
 export interface WorkerOutsideAPI {
   terminate: () => void; // `node` can return a `Promise` with an exit code, but we match the web worker API.
@@ -16,15 +19,12 @@ export interface InsideOutsideAPI {
   outsideAPI: WorkerOutsideAPI;
 }
 
-export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
+export async function instantiateModuleWorker(
+  workerEntryFileURL: string | URL,
+): Promise<InsideOutsideAPI> {
   // rome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
-    const timeoutID = setTimeout(() => {
-      reject(new Error("module instantiation timeout"));
-    }, MODULE_WORKER_TIMEOUT_MILLISECONDS);
-
     try {
-      const workerEntryFileURL = await getWorkerEntryFileURL();
       if (!workerEntryFileURL) {
         reject(new Error("Could not get worker entry file URL."));
       }
@@ -50,16 +50,13 @@ export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
       };
 
       const onError = (e: ErrorEvent) => {
-        // TODO: Remove fallback when Firefox implements module workers: https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
-        if (e.message?.startsWith("SyntaxError")) {
-          reject(e);
-        }
+        reject(e);
       };
 
+      // TODO: Remove this once we can remove the workarounds for lack of `import.meta.resolve(…)` support.
       const onFirstMessage = (messageData: string) => {
         if (messageData === "comlink-exposed") {
           // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
-          clearTimeout(timeoutID);
           resolve(wrapWithTerminate(worker));
         } else {
           reject(
@@ -85,18 +82,47 @@ export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
   });
 }
 
+// Maybe some day if we work really hard, this code path can work:
+// - in `node` (https://github.com/nodejs/node/issues/43583#issuecomment-1540025755)
+// - for CDNs (https://github.com/tc39/proposal-module-expressions or https://github.com/whatwg/html/issues/6911)
+export async function instantiateModuleWorkerDirectlyForBrowser(): Promise<InsideOutsideAPI> {
+  // rome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
+  return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
+    try {
+      const worker = instantiateSearchWorkerURLNewURLImportMetaURL();
+
+      const onError = (e: ErrorEvent) => {
+        reject(e);
+      };
+
+      // TODO: Remove this once we can remove the workarounds for lack of `import.meta.resolve(…)` support.
+      const onFirstMessage = (messageData: string) => {
+        if (messageData === "comlink-exposed") {
+          // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
+          resolve(wrapWithTerminate(worker));
+        } else {
+          reject(
+            new Error(`wrong module instantiation message ${messageData}`),
+          );
+        }
+      };
+
+      worker.addEventListener("error", onError, {
+        once: true,
+      });
+      worker.addEventListener("message", (e) => onFirstMessage(e.data), {
+        once: true,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
 function wrapWithTerminate(worker: Worker): InsideOutsideAPI {
   const insideAPI = wrap<WorkerInsideAPI>(worker);
   const terminate = worker.terminate.bind(worker);
   return { insideAPI, outsideAPI: { terminate } };
-}
-
-async function instantiateClassicWorker(): Promise<InsideOutsideAPI> {
-  const { workerSource } = await import(
-    "./search-worker-inside-generated-string.js"
-  );
-  const worker = await constructWorker(workerSource, { eval: true });
-  return wrapWithTerminate(worker);
 }
 
 export const allInsideOutsideAPIPromises: Promise<InsideOutsideAPI>[] = [];
@@ -121,25 +147,58 @@ export async function mapToAllWorkers(
 
 async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
   if (searchOutsideDebugGlobals.forceStringWorker) {
-    console.warn(
-      "Using the `forceStringWorker` workaround for search worker instantiation. This will require downloading significantly more code than necessary, but the functionality will be the same.",
-    );
-    return instantiateClassicWorker();
+    console.warn("The `forceStringWorker` workaround is no longer supported.");
   }
-  try {
-    // `await` is important for `catch` to work.
-    return await instantiateModuleWorker();
-  } catch (e) {
-    const commonErrorPrefix =
-      "Could not instantiate module worker (this may happen in Firefox, or when using Parcel).";
-    if (searchOutsideDebugGlobals.disableStringWorker) {
-      console.error(
-        `${commonErrorPrefix} Fallback to string worker is disabled.`,
-        e,
-      );
-      throw new Error("Module worker instantiation failed.");
+
+  function failed(methodDescription?: string) {
+    return `Module worker instantiation${
+      methodDescription ? ` ${methodDescription}` : ""
+    } failed`;
+  }
+
+  const fallbackOrder: [
+    fn: () => Promise<InsideOutsideAPI>,
+    description: string,
+    warnOnSuccess: null | string,
+  ][] = [
+    [
+      async () =>
+        instantiateModuleWorker(await searchWorkerURLImportMetaResolve()),
+      "using `import.meta.resolve(…)",
+      null,
+    ],
+    // TODO: This fallback should be lower (because it's less portable), but we need to try it earlier to work around https://github.com/parcel-bundler/parcel/issues/9051
+    [
+      instantiateModuleWorkerDirectlyForBrowser,
+      "using inline `new URL(…, import.meta.url)`",
+      "may",
+    ],
+    [
+      async () => instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL()),
+      "using `new URL(…, import.meta.url)`",
+      "will",
+    ],
+    [
+      async () =>
+        instantiateModuleWorker(await searchWorkerURLEsbuildWorkaround()),
+      "using the `esbuild` workaround",
+      "will",
+    ],
+  ];
+
+  for (const [fn, description, warnOnSuccess] of fallbackOrder) {
+    try {
+      const worker = await fn();
+      if (warnOnSuccess) {
+        console.warn(
+          `Module worker instantiation required ${description}. \`cubing.js\` ${warnOnSuccess} not support this fallback in the future.`,
+        );
+      }
+      return worker;
+    } catch {
+      console.warn(`${failed(description)}, falling back.`);
     }
-    console.warn(`${commonErrorPrefix} Falling back to string worker.`, e);
-    return instantiateClassicWorker();
   }
+
+  throw new Error(`${failed()}. There are no more fallbacks available.`);
 }
