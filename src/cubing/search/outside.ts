@@ -12,9 +12,9 @@ import {
   mapToAllWorkers,
 } from "./instantiator";
 
-let cachedWorkerInstance: Promise<InsideOutsideAPI> | null = null;
-async function getCachedWorkerInstance(): Promise<InsideOutsideAPI> {
-  return await (cachedWorkerInstance ??= instantiateWorker());
+let cachedWorkerInstance: Promise<InsideOutsideAPI> | undefined;
+function getCachedWorkerInstance(): Promise<InsideOutsideAPI> {
+  return (cachedWorkerInstance ??= instantiateWorker());
 }
 
 // Pre-initialize the scrambler for the given event. (Otherwise, an event is
