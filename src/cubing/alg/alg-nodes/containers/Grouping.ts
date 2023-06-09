@@ -4,7 +4,8 @@ import { IterationDirection } from "../../iteration";
 import { Move, QuantumMove } from "../leaves/Move";
 import type { Pause } from "../leaves/Pause";
 import { QuantumWithAmount } from "../QuantumWithAmount";
-import type { AlgLeaf } from "../AlgNode";
+import type { AlgLeaf, AlgNode } from "../AlgNode";
+import { Commutator, Conjugate } from "..";
 
 // This is a workaround for `jest`, which doesn't handle cycles of imports inside `cubing/alg`.
 // We need to lazy-initialize the reusable quantum moves for Square-1, so we create this wrapper for it.
@@ -106,10 +107,23 @@ export class Grouping extends AlgCommon<Grouping> {
     throw new Error("unimplemented");
   }
 
+  #unrepeatedString(): string | null {
+    const insideString = this.#quantumWithAmount.quantum.toString();
+    const iter = this.alg.childAlgNodes();
+    const { value } = iter.next() as {
+      value: AlgNode;
+      done: boolean;
+    };
+    if ((iter.next().done && value?.is(Commutator)) || value?.is(Conjugate)) {
+      return insideString;
+    }
+    return `(${insideString})`;
+  }
+
   toString(): string {
     return (
       square1TupleFormatterInstance.format(this) ??
-      `(${this.#quantumWithAmount.quantum.toString()})${this.#quantumWithAmount.suffix()}`
+      `${this.#unrepeatedString()}${this.#quantumWithAmount.suffix()}`
     );
   }
 

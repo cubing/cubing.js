@@ -220,30 +220,53 @@ class AlgParser {
         const separator = this.popNext();
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
+        let unrepeated: Commutator | Conjugate;
         switch (separator) {
           case ":": {
-            algBuilder.push(
-              addCharIndices(new Conjugate(A, B), savedCharIndex, this.#idx),
+            unrepeated = addCharIndices(
+              new Conjugate(A, B),
+              savedCharIndex,
+              this.#idx,
             );
             crowded = true;
             algEndIdx = this.#idx;
-
-            // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-            continue mainLoop;
+            break;
           }
           case ",": {
-            algBuilder.push(
-              addCharIndices(new Commutator(A, B), savedCharIndex, this.#idx),
+            unrepeated = addCharIndices(
+              new Commutator(A, B),
+              savedCharIndex,
+              this.#idx,
             );
             crowded = true;
             algEndIdx = this.#idx;
-
-            // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-            continue mainLoop;
+            break;
           }
           default:
             throw new Error("unexpected parsing error");
         }
+        const afterClosingBracketIdx = this.#idx;
+        const amount = this.parseAmount();
+        if (amount === 1) {
+          algBuilder.push(unrepeated);
+        } else {
+          const unrepeatedAlg = addCharIndices(
+            new Alg([unrepeated]),
+            savedCharIndex,
+            afterClosingBracketIdx,
+          );
+          const grouping = addCharIndices(
+            new Grouping(unrepeatedAlg, amount),
+            savedCharIndex,
+            this.#idx,
+          );
+          algBuilder.push(grouping);
+        }
+        crowded = true;
+        algEndIdx = this.#idx;
+
+        // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        continue mainLoop;
       } else if (this.tryConsumeNext("\n")) {
         algBuilder.push(
           addCharIndices(new Newline(), savedCharIndex, this.#idx),

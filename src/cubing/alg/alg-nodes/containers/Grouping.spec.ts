@@ -18,4 +18,8 @@ describe("Grouping", () => {
       "(U_SQ_5 D_SQ_4)7'",
     );
   });
+  it("collapses conjugates and commutators", () => {
+    expect(new Alg("([R, F])2").toString()).to.equal("[R, F]2");
+    expect(new Alg("([R: F])2").toString()).to.equal("[R: F]2");
+  });
 });
