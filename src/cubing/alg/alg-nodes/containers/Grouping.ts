@@ -114,7 +114,7 @@ export class Grouping extends AlgCommon<Grouping> {
       value: AlgNode;
       done: boolean;
     };
-    if ((iter.next().done && value?.is(Commutator)) || value?.is(Conjugate)) {
+    if (iter.next().done && (value?.is(Commutator) || value?.is(Conjugate))) {
       return insideString;
     }
     return `(${insideString})`;
