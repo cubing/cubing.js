@@ -21,5 +21,6 @@ describe("Grouping", () => {
   it("collapses conjugates and commutators", () => {
     expect(new Alg("([R, F])2").toString()).to.equal("[R, F]2");
     expect(new Alg("([R: F])2").toString()).to.equal("[R: F]2");
+    expect(new Alg("([R: F] U)2").toString()).to.equal("([R: F] U)2");
   });
 });
