@@ -149,7 +149,7 @@ export class Move extends AlgCommon<Move> {
         );
         return;
       } else {
-        // rome-ignore lint/nursery/noConstructorReturn: https://github.com/rome/tools/issues/4005
+        // rome-ignore lint/correctness/noConstructorReturn: https://github.com/rome/tools/issues/4005
         return Move.fromString(args[0]);
       }
     }

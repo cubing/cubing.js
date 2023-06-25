@@ -111,7 +111,6 @@ class Dialog {
   textarea = this.dialogElement.querySelector(
     "textarea",
   ) as HTMLTextAreaElement;
-  constructor() {}
 
   show(text: string): void {
     this.textarea.value = text;

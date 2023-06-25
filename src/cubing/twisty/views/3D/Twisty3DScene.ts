@@ -9,7 +9,6 @@ export class Twisty3DScene implements Twisty3DRenderTarget {
 
   threeJSScene: Promise<ThreeScene> = (async () =>
     new (await THREEJS).Scene())();
-  constructor() {}
 
   addRenderTarget(renderTarget: Twisty3DRenderTarget): void {
     this.renderTargets.add(renderTarget);

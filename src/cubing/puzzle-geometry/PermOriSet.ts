@@ -631,10 +631,6 @@ export class PGTransformBase {
   }
 }
 export class PGTransform extends PGTransformBase {
-  constructor(orbits: PGOrbit[]) {
-    super(orbits);
-  }
-
   public mul(b: PGTransform): PGTransform {
     return new PGTransform(this.internalMul(b));
   }
@@ -680,10 +676,6 @@ export class PGTransform extends PGTransformBase {
   }
 }
 export class VisibleState extends PGTransformBase {
-  constructor(orbits: PGOrbit[]) {
-    super(orbits);
-  }
-
   public mul(b: PGTransform): VisibleState {
     return new VisibleState(this.internalMul(b));
   }
