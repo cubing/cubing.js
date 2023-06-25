@@ -138,6 +138,7 @@ class AlgParser {
           algStartIdx = this.#idx;
         }
         // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (MOVE_START_REGEX.test(this.#input[this.#idx])) {
         mustNotBeCrowded(savedCharIndex);
@@ -147,6 +148,7 @@ class AlgParser {
         algEndIdx = this.#idx;
 
         // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
         mustNotBeCrowded(savedCharIndex);
@@ -177,6 +179,7 @@ class AlgParser {
           algEndIdx = this.#idx;
 
           // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         } else {
           const alg = this.parseAlgWithStopping([")"]);
@@ -193,6 +196,7 @@ class AlgParser {
           algEndIdx = this.#idx;
 
           // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         }
       } else if (this.tryConsumeNext("^")) {
@@ -266,6 +270,7 @@ class AlgParser {
         algEndIdx = this.#idx;
 
         // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("\n")) {
         algBuilder.push(
@@ -275,6 +280,7 @@ class AlgParser {
         algEndIdx = this.#idx;
 
         // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
         if (this.tryConsumeNext("/")) {
@@ -287,6 +293,7 @@ class AlgParser {
           algEndIdx = this.#idx;
 
           // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         } else {
           // We allow crowding here to account for csTimer scrambles, which don't have a space between a Square-1 tuple and the following slash.
@@ -297,6 +304,7 @@ class AlgParser {
           algEndIdx = this.#idx;
 
           // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         }
       } else if (this.tryConsumeNext(".")) {
@@ -306,6 +314,7 @@ class AlgParser {
         algEndIdx = this.#idx;
 
         // rome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // rome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else {
         throw new Error(`Unexpected character: ${this.popNext()}`);

@@ -1,7 +1,7 @@
 import type { ButtonCommand } from "../../../views/control-panel/TwistyButtons";
 import { fullscreenEnabled } from "../../../views/control-panel/webkit-fullscreen";
 import type { ViewerLinkPageWithAuto } from "./ViewerLinkProp";
-import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../timeline/CoarseTimelineInfoProp";
+import type { CoarseTimelineInfo } from "../timeline/CoarseTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 export const buttonIcons = [

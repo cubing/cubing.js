@@ -3,15 +3,17 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "nursery": {
-        "useEnumInitializers": "off",
-        "noAssignInExpressions": "off"
-      },
+      "nursery": {},
       "style": {
         "noNegationElse": "off",
-        "noShoutyConstants": "off"
+        "noShoutyConstants": "off",
+        "noInferrableTypes": "off",
+        "noNonNullAssertion": "off",
+        "noParameterAssign": "off",
+        "useEnumInitializers": "off"
       },
       "suspicious": {
+        "noAssignInExpressions": "off",
         "noExplicitAny": "off"
       },
       "performance": {
