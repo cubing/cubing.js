@@ -4,6 +4,9 @@
     "rules": {
       "recommended": true,
       "nursery": {},
+      "correctness": {
+        "noUnreachableSuper": "off"
+      },
       "style": {
         "noNegationElse": "off",
         "noShoutyConstants": "off",
