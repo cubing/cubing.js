@@ -134,6 +134,34 @@ export const clockJSON: KPuzzleDefinition = {
         ],
       },
     },
+    UL: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: t18,
+      FACES: t18,
+      FRAME: { permutation: [0], orientation: [0] },
+      HOUR_MARKS: t18,
+    },
+    UR: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: t18,
+      FACES: t18,
+      FRAME: { permutation: [0], orientation: [0] },
+      HOUR_MARKS: t18,
+    },
+    DL: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: t18,
+      FACES: t18,
+      FRAME: { permutation: [0], orientation: [0] },
+      HOUR_MARKS: t18,
+    },
+    DR: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: t18,
+      FACES: t18,
+      FRAME: { permutation: [0], orientation: [0] },
+      HOUR_MARKS: t18,
+    },
   },
   experimentalDerivedMoves: {
     UR_PLUS_: "[z': UL_PLUS_]",
