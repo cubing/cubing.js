@@ -180,34 +180,6 @@ export const clockJSON: KPuzzleDefinition = {
         orientation: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
       },
     },
-    UL: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientation: [0] },
-      HOUR_MARKS: t18,
-    },
-    UR: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientation: [0] },
-      HOUR_MARKS: t18,
-    },
-    DL: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientation: [0] },
-      HOUR_MARKS: t18,
-    },
-    DR: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientation: [0] },
-      HOUR_MARKS: t18,
-    },
   },
   experimentalDerivedMoves: {
     // x2: "y2 z2", // TODO(https://github.com/cubing/cubing.js/issues/279)
