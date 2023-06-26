@@ -5,21 +5,24 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
     <g id="hand" transform="translate(-20, -20)">
       <path d="M19.9995197,2.22079449 L23.8791657,19.0203611 C23.9580836,19.3338406 24,19.6620253 24,20 C24,22.209139 22.209139,24 20,24 C17.790861,24 16,22.209139 16,20 C16,19.6620253 16.0419164,19.3338406 16.1208343,19.0203611 L19.9995197,2.22079449 Z"></path>
     </g>
-    <g id="cardinal_hours" style="fill: #FFFFFF">
-      <circle cx="0" cy="24" r="2"></circle>
-      <circle cx="-24" cy="0" r="2"></circle>
-      <circle cx="24" cy="0" r="2"></circle>
-      <circle cx="0" cy="-24" r="2"></circle>
+    <g id="cardinal_hour">
+      <circle cx="0" cy="-24" r="3"></circle>
     </g>
-    <g id="face_hours">
+    <g id="background_cardinal_hours" style="fill: #FFFFFF66">
+      <circle cx="0" cy="24" r="1.5"></circle>
+      <circle cx="-24" cy="0" r="1.5"></circle>
+      <circle cx="24" cy="0" r="1.5"></circle>
+      <circle cx="0" cy="-24" r="1.5"></circle>
+    </g>
+    <g id="background_face_hours">
       <g>
-        <use xlink:href="#cardinal_hours"/>
+        <use xlink:href="#background_cardinal_hours"/>
       </g>
       <g transform="rotate(30)">
-        <use xlink:href="#cardinal_hours"/>
+        <use xlink:href="#background_cardinal_hours"/>
       </g>
       <g  transform="rotate(60)">
-        <use xlink:href="#cardinal_hours"/>
+        <use xlink:href="#background_cardinal_hours"/>
       </g>
     </g>
     <g id="pegs" stroke="#000000" style="fill: #FFD000">
@@ -37,8 +40,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       <use xlink:href="#frame" id="FRAME-l0-o0" style="fill: #0C5093"/>
       <use xlink:href="#pegs" transform="translate(36, 36)"/>
       <g transform="translate(36, 36)">
-        <circle id="FACES-l0-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l0-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l0-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l0-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l0-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l0-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l0-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l0-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -55,8 +64,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(96, 36)">
-        <circle id="FACES-l1-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l1-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l1-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l1-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l1-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l1-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l1-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l1-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -73,8 +88,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(156, 36)">
-        <circle id="FACES-l2-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l2-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l2-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l2-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l2-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l2-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l2-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l2-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -91,8 +112,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(36, 96)">
-        <circle id="FACES-l3-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l3-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l3-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l3-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l3-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l3-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l3-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l3-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -109,8 +136,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(96, 96)">
-        <circle id="FACES-l4-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l4-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l4-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l4-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l4-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l4-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l4-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l4-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -127,8 +160,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(156, 96)">
-        <circle id="FACES-l5-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l5-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l5-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l5-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l5-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l5-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l5-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l5-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -145,8 +184,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(36, 156)">
-        <circle id="FACES-l6-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l6-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l6-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l6-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l6-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l6-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l6-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l6-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -163,8 +208,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(96, 156)">
-        <circle id="FACES-l7-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l7-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l7-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l7-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l7-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l7-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l7-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l7-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -181,8 +232,14 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
         </g>
       </g>
       <g transform="translate(156, 156)">
-        <circle id="FACES-l8-o0" stroke="#000000" style="fill: #90B8DF" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <circle id="FACES-l8-o0" stroke="#000000" style="fill: #4C94DA" r="20"></circle>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l8-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l8-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l8-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l8-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l8-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l8-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -200,11 +257,17 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
     </g>
     <g transform="translate(264, 24)">
-      <use xlink:href="#frame" id="FRAME-l0-o1" style="fill: #90B8DF"/>
+      <use xlink:href="#frame" id="FRAME-l0-o1" style="fill: #4C94DA"/>
       <use xlink:href="#pegs" transform="translate(36, 36)"/>
       <g transform="translate(36, 36)">
         <circle id="FACES-l9-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l9-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l9-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l9-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l9-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l9-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l9-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -222,7 +285,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(96, 36)">
         <circle id="FACES-l10-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l10-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l10-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l10-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l10-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l10-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l10-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -240,7 +309,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(156, 36)">
         <circle id="FACES-l11-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l11-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l11-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l11-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l11-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l11-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l11-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -258,7 +333,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(36, 96)">
         <circle id="FACES-l12-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l12-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l12-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l12-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l12-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l12-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l12-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -276,7 +357,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(96, 96)">
         <circle id="FACES-l13-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l13-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l13-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l13-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l13-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l13-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l13-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -294,7 +381,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(156, 96)">
         <circle id="FACES-l14-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l14-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l14-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l14-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l14-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l14-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l14-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -312,7 +405,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(36, 156)">
         <circle id="FACES-l15-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l15-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l15-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l15-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l15-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l15-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l15-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -330,7 +429,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(96, 156)">
         <circle id="FACES-l16-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l16-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l16-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l16-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l16-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l16-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l16-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
@@ -348,7 +453,13 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <g transform="translate(156, 156)">
         <circle id="FACES-l17-o0" stroke="#000000" style="fill: #0C5093" r="20"></circle>
-        <use xlink:href="#face_hours"/>
+        <use xlink:href="#background_face_hours"/>
+        <g>
+          <use id="HOUR_MARKS-l17-o0" xlink:href="#cardinal_hour" transform="rotate(0)" style="fill: #FFD000"/>
+          <use id="HOUR_MARKS-l17-o1" xlink:href="#cardinal_hour" transform="rotate(90)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l17-o2" xlink:href="#cardinal_hour" transform="rotate(180)" style="fill: #0000"/>
+          <use id="HOUR_MARKS-l17-o3" xlink:href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
+        </g>
         <g>
           <use id="DIALS-l17-o0"  xlink:href="#hand" transform="rotate(0)" style="fill: #FFD000"/>
           <use id="DIALS-l17-o1"  xlink:href="#hand" transform="rotate(30)" style="fill: #0000"/>
