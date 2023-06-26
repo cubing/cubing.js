@@ -212,6 +212,16 @@ export const clockJSON: KPuzzleDefinition = {
   experimentalDerivedMoves: {
     // x2: "y2 z2", // TODO(https://github.com/cubing/cubing.js/issues/279)
 
+    ULw_PLUS_: "U_PLUS_ L_PLUS_ UL_PLUS_'",
+    URw_PLUS_: "U_PLUS_ R_PLUS_ UR_PLUS_'",
+    DLw_PLUS_: "D_PLUS_ L_PLUS_ DL_PLUS_'",
+    DRw_PLUS_: "D_PLUS_ R_PLUS_ DR_PLUS_'",
+
+    BULw_PLUS_: "[y2: URw_PLUS_']",
+    BURw_PLUS_: "[y2: ULw_PLUS_']",
+    BDLw_PLUS_: "[y2: DRw_PLUS_']",
+    BDRw_PLUS_: "[y2: DLw_PLUS_']",
+
     // TODO: moves with diagonally opposite pins?
     B_PLUS_: "[y2: ALL_PLUS_']",
     BU_PLUS_: "[y2: U_PLUS_']",
