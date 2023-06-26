@@ -21,7 +21,7 @@ You can find more documentation at [js.cubing.net/cubing/](https://js.cubing.net
 
 ## Using with `node` and `npm`
 
-If you would like to use cubing.js as a library in your package-based projects, make sure you have [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) installed (installing `node` will install `npm` as well). Once you have installed those, you can run:
+If you would like to use `cubing.js` as a library in your package-based projects, make sure you have [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) installed (installing `node` will install `npm` as well). Once you have installed those, you can run:
 
 ```shell
 npm install cubing
