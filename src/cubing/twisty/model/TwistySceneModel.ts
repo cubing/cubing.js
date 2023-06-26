@@ -12,7 +12,7 @@ import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOpti
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { BackgroundProp } from "./props/viewer/BackgroundProp";
 import { ColorSchemeProp } from "./props/viewer/ColorSchemeProp";
-import { ColorSchemeRequstProp } from "./props/viewer/ColorSchemeRequestProp";
+import { ColorSchemeRequestProp } from "./props/viewer/ColorSchemeRequestProp";
 import { DOMElementReferenceProp } from "./props/viewer/DOMElementReferenceProp";
 import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
@@ -22,7 +22,7 @@ import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 export class TwistySceneModel {
   // Depth 0
   background = new BackgroundProp();
-  colorSchemeRequest = new ColorSchemeRequstProp();
+  colorSchemeRequest = new ColorSchemeRequestProp();
   dragInput = new DragInputProp();
   foundationDisplay = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();

@@ -7,7 +7,7 @@ export const colorSchemes = {
 export type ColorScheme = keyof typeof colorSchemes;
 export type ColorSchemeWithAuto = ColorScheme | "auto";
 
-export class ColorSchemeRequstProp extends SimpleTwistyPropSource<ColorSchemeWithAuto> {
+export class ColorSchemeRequestProp extends SimpleTwistyPropSource<ColorSchemeWithAuto> {
   getDefaultValue(): ColorSchemeWithAuto {
     return "auto";
   }
