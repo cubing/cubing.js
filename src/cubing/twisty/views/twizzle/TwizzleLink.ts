@@ -5,6 +5,7 @@ import {
   experimentalCountMetricMoves,
 } from "../../../notation";
 import { puzzles } from "../../../puzzles";
+import type { ColorSchemeWithAuto } from "../../model/props/viewer/ColorSchemeRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
@@ -63,7 +64,10 @@ export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
   a: HTMLAnchorElement | null = null;
   constructor(
-    private options?: { cdnForumTweaks?: boolean; colorScheme?: boolean },
+    private options?: {
+      cdnForumTweaks?: boolean;
+      colorScheme?: ColorSchemeWithAuto;
+    },
   ) {
     super({ mode: "open" });
   }
@@ -90,7 +94,7 @@ export class TwizzleLink extends ManagedCustomElement {
   async connectedCallback() {
     this.#responsiveWrapper = this.addElement(document.createElement("div"));
     this.#responsiveWrapper.classList.add("responsive-wrapper");
-    if (this.options?.colorScheme) {
+    if (this.options?.colorScheme === "dark") {
       this.contentWrapper.classList.add("dark-mode");
     }
     this.#cssElem = this.addCSS(twizzleLinkCSS);
