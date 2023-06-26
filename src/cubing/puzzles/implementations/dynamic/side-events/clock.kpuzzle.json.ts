@@ -215,5 +215,13 @@ export const clockJSON: KPuzzleDefinition = {
     BMUR_PLUS_: "[y2: MUL_PLUS_']",
     BMDR_PLUS_: "[y2: MDR_PLUS_']",
     BMDL_PLUS_: "[y2: MDL_PLUS_']",
+
+    Fv: "z",
+    Bv: "z'",
   },
 };
+
+clockJSON.moves["Uv2"] = clockJSON.moves["y2"];
+clockJSON.moves["Dv2"] = clockJSON.moves["y2"];
+clockJSON.moves["Rv2"] = clockJSON.moves["x2"];
+clockJSON.moves["Lv2"] = clockJSON.moves["x2"];
