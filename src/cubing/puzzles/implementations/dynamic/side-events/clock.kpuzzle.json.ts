@@ -15,6 +15,7 @@ export const clockJSON: KPuzzleDefinition = {
     FACES: { numPieces: 18, numOrientations: 1 },
     FRAME: { numPieces: 1, numOrientations: 2 },
     HOUR_MARKS: { numPieces: 18, numOrientations: 4 },
+    PEG_CAPS: { numPieces: 8, numOrientations: 12 },
   },
   startStateData: {
     DIALS: {
@@ -30,6 +31,10 @@ export const clockJSON: KPuzzleDefinition = {
       pieces: p18,
       orientation: o18,
     },
+    PEG_CAPS: {
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7],
+      orientation: [0, 0, 0, 0, 0, 0, 0, 0],
+    },
   },
   moves: {
     UL_PLUS_: {
@@ -40,6 +45,10 @@ export const clockJSON: KPuzzleDefinition = {
       FACES: t18,
       FRAME: { permutation: [0], orientation: [0] },
       HOUR_MARKS: t18,
+      PEG_CAPS: {
+        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+        orientation: [1, 0, 0, 0, 0, 0, 0, 0],
+      },
     },
     U_PLUS_: {
       DIALS: {
@@ -49,6 +58,10 @@ export const clockJSON: KPuzzleDefinition = {
       FACES: t18,
       FRAME: { permutation: [0], orientation: [0] },
       HOUR_MARKS: t18,
+      PEG_CAPS: {
+        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+        orientation: [1, 1, 0, 0, 0, 0, 0, 0],
+      },
     },
     ALL_PLUS_: {
       DIALS: {
@@ -58,6 +71,10 @@ export const clockJSON: KPuzzleDefinition = {
       FACES: t18,
       FRAME: { permutation: [0], orientation: [0] },
       HOUR_MARKS: t18,
+      PEG_CAPS: {
+        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+        orientation: [1, 1, 1, 1, 0, 0, 0, 0],
+      },
     },
     y2: {
       DIALS: {
@@ -78,6 +95,10 @@ export const clockJSON: KPuzzleDefinition = {
           9, 10, 11, 12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8,
         ],
         orientation: o18,
+      },
+      PEG_CAPS: {
+        permutation: [4, 5, 6, 7, 0, 1, 2, 3],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     z: {
@@ -103,6 +124,10 @@ export const clockJSON: KPuzzleDefinition = {
         orientation: [
           1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         ],
+      },
+      PEG_CAPS: {
+        permutation: [3, 0, 1, 2, 5, 6, 7, 4],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     // TODO: define this as `z2 y2`
@@ -133,6 +158,10 @@ export const clockJSON: KPuzzleDefinition = {
           2, 2, 2, 2, 2, 2, 2, 2, 2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
         ],
       },
+      PEG_CAPS: {
+        permutation: [6, 7, 4, 5, 2, 3, 0, 1],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0],
+      },
     },
     UL: {
       // TODO: define "pin up" as something other than a normal move.
@@ -140,6 +169,10 @@ export const clockJSON: KPuzzleDefinition = {
       FACES: t18,
       FRAME: { permutation: [0], orientation: [0] },
       HOUR_MARKS: t18,
+      PEG_CAPS: {
+        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+        orientation: [1, 0, 0, 0, 0, 0, 0, 0],
+      },
     },
     UR: {
       // TODO: define "pin up" as something other than a normal move.
@@ -147,6 +180,10 @@ export const clockJSON: KPuzzleDefinition = {
       FACES: t18,
       FRAME: { permutation: [0], orientation: [0] },
       HOUR_MARKS: t18,
+      PEG_CAPS: {
+        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+        orientation: [0, 1, 0, 0, 0, 0, 0, 0],
+      },
     },
     DL: {
       // TODO: define "pin up" as something other than a normal move.
@@ -154,6 +191,10 @@ export const clockJSON: KPuzzleDefinition = {
       FACES: t18,
       FRAME: { permutation: [0], orientation: [0] },
       HOUR_MARKS: t18,
+      PEG_CAPS: {
+        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+        orientation: [0, 0, 0, 1, 0, 0, 0, 0],
+      },
     },
     DR: {
       // TODO: define "pin up" as something other than a normal move.
@@ -161,6 +202,10 @@ export const clockJSON: KPuzzleDefinition = {
       FACES: t18,
       FRAME: { permutation: [0], orientation: [0] },
       HOUR_MARKS: t18,
+      PEG_CAPS: {
+        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+        orientation: [0, 0, 1, 0, 0, 0, 0, 0],
+      },
     },
   },
   experimentalDerivedMoves: {
