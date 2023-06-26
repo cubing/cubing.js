@@ -155,7 +155,7 @@ export const clockJSON: KPuzzleDefinition = {
         orientation: new Array(18).fill(1),
       },
     },
-    // TODO: define this as `x2 y2`
+    // TODO: define this as `z2 y2`
     x2: {
       DIALS: {
         permutation: [
