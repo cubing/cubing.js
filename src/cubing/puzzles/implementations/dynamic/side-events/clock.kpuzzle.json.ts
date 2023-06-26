@@ -182,6 +182,8 @@ export const clockJSON: KPuzzleDefinition = {
     },
   },
   experimentalDerivedMoves: {
+    F_PLUS_: "ALL_PLUS_",
+
     // x2: "y2 z2", // TODO(https://github.com/cubing/cubing.js/issues/279)
 
     ULw_PLUS_: "U_PLUS_ L_PLUS_ UL_PLUS_'",
