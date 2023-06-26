@@ -222,7 +222,6 @@ export const clockJSON: KPuzzleDefinition = {
     BDLw_PLUS_: "[y2: DRw_PLUS_']",
     BDRw_PLUS_: "[y2: DLw_PLUS_']",
 
-    // TODO: moves with diagonally opposite pins?
     B_PLUS_: "[y2: ALL_PLUS_']",
     BU_PLUS_: "[y2: U_PLUS_']",
     BR_PLUS_: "[y2: L_PLUS_']",
@@ -232,5 +231,15 @@ export const clockJSON: KPuzzleDefinition = {
     BUL_PLUS_: "[y2: UR_PLUS_']",
     BDL_PLUS_: "[y2: DR_PLUS_']",
     BDR_PLUS_: "[y2: DL_PLUS_']",
+
+    MUL_PLUS_: "UR_PLUS_' DL_PLUS_' U_PLUS_ R_PLUS_ D_PLUS_ L_PLUS_ ALL_PLUS_'",
+    MUR_PLUS_: "UL_PLUS_' DR_PLUS_' U_PLUS_ L_PLUS_ D_PLUS_ R_PLUS_ ALL_PLUS_'",
+    MDR_PLUS_: "MUL_PLUS_",
+    MDL_PLUS_: "MUR_PLUS_",
+
+    BMUL_PLUS_: "[y2: MUR_PLUS_']",
+    BMUR_PLUS_: "[y2: MUL_PLUS_']",
+    BMDR_PLUS_: "[y2: MDR_PLUS_']",
+    BMDL_PLUS_: "[y2: MDL_PLUS_']",
   },
 };
