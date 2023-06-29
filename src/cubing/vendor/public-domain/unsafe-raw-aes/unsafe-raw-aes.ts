@@ -41,32 +41,44 @@ export async function unsafeEncryptBlock(
   plaintextBlock: ArrayBuffer,
 ): Promise<ArrayBuffer> {
   return (await unsafeEncryptBlockWithIV(key, plaintextBlock, zeros)).slice(
-    0,
+    0, 
     blockSize,
-  );
+    );
 }
 
 export async function unsafeDecryptBlock(
+    key: CryptoKey,
+    ciphertextBlock: ArrayBuffer,
+): Promise<ArrayBuffer> {
+  return (await unsafeDecryptBlockWithIV(key, ciphertextBlock, zeros)).slice(
+    0, 
+    blockSize,
+    );
+  }
+
+export async function unsafeDecryptBlockWithIV(
   key: CryptoKey,
   ciphertextBlock: ArrayBuffer,
-): Promise<ArrayBuffer> {
-  const paddingBlock = await unsafeEncryptBlockWithIV(
-    key,
-    paddingBlockPlaintext,
-    ciphertextBlock,
-  );
+  iv: ArrayBuffer,
+) {
+    const paddingBlock = (await unsafeEncryptBlockWithIV(
+        key,
+        paddingBlockPlaintext,
+        ciphertextBlock.slice(0, blockSize),
+    )).slice(0, blockSize);
 
-  const cbcCiphertext = new Uint8Array(2 * blockSize);
-  cbcCiphertext.set(new Uint8Array(ciphertextBlock), 0);
-  cbcCiphertext.set(new Uint8Array(paddingBlock), blockSize);
-
-  const cryptoResult: ArrayBuffer = await window.crypto.subtle.decrypt(
-    {
-      name: AES_CBC,
-      iv: zeros,
-    },
-    key,
-    cbcCiphertext,
-  );
-  return cryptoResult.slice(0, blockSize);
-}
+    const cbcCiphertext = new Uint8Array(2 * blockSize);
+    cbcCiphertext.set(new Uint8Array(ciphertextBlock), 0);
+    cbcCiphertext.set(new Uint8Array(paddingBlock), blockSize);
+  
+    const cryptoResult: ArrayBuffer = await window.crypto.subtle.decrypt(
+      {
+        name: AES_CBC,
+        iv: iv
+      },
+      key,
+      cbcCiphertext,
+    );
+    return cryptoResult.slice(0, blockSize);
+  }
+  
