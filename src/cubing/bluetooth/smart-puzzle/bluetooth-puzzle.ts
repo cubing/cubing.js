@@ -59,6 +59,12 @@ export abstract class BluetoothPuzzle extends EventTarget {
     throw new Error("cannot get state");
   }
 
+  // TODO: require subclasses to implement this?
+  // TODO: should reset() return the state?
+  public async reset(): Promise<void> {
+    throw new Error("cannot issue a reset");
+  }
+
   public addAlgLeafListener(listener: (e: AlgLeafEvent) => void): void {
     this.listeners.push(listener);
   }
