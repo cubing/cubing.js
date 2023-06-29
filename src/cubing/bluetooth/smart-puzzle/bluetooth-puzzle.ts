@@ -40,6 +40,7 @@ export interface BluetoothConfig<T> {
   prefixes: string[]; // `[""]` for GiiKER
   filters: BluetoothLEScanFilter[];
   optionalServices: BluetoothServiceUUID[];
+  optionalManufacturerData: number[];
 }
 
 // TODO: Expose device name (and/or globally unique identifier)?

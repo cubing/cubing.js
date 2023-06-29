@@ -11,10 +11,12 @@ function requestOptions<T>(
     ? {
         acceptAllDevices: true,
         optionalServices: [] as BluetoothServiceUUID[],
+        optionalManufacturerData: [] as number[]
       }
     : {
         filters: [] as BluetoothLEScanFilter[],
         optionalServices: [] as BluetoothServiceUUID[],
+        optionalManufacturerData: [] as number[]
       };
   for (const config of configs) {
     if (!acceptAllDevices) {
@@ -23,6 +25,9 @@ function requestOptions<T>(
     options.optionalServices = options.optionalServices.concat(
       config.optionalServices,
     );
+    options.optionalManufacturerData = options.optionalManufacturerData.concat(
+      config.optionalManufacturerData
+    ).filter(x => x !== undefined);
   }
   debugLog({ requestOptions: options });
   return options;
