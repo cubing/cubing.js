@@ -94,7 +94,7 @@ export class GoCube extends BluetoothPuzzle {
     this.server.disconnect();
   }
 
-  public reset(): void {
+  public override reset(): void {
     this.resetAlg();
     this.resetOrientation();
   }

@@ -61,7 +61,7 @@ export abstract class BluetoothPuzzle extends EventTarget {
 
   // TODO: require subclasses to implement this?
   // TODO: should reset() return the state?
-  public async reset(): Promise<void> {
+  public reset(): Promise<void> | void {
     throw new Error("cannot issue a reset");
   }
 

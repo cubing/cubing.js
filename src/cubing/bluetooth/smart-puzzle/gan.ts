@@ -442,7 +442,7 @@ export class GanCube extends BluetoothPuzzle {
     return this.cachedActualAngleAndBatteryCharacteristic;
   }
 
-  public async reset(): Promise<void> {
+  public override async reset(): Promise<void> {
     const faceletStatus1Characteristic =
       await this.faceletStatus1Characteristic();
     await faceletStatus1Characteristic.writeValue(commands.reset);
