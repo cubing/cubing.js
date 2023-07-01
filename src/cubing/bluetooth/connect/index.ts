@@ -26,7 +26,7 @@ function requestOptions<T>(
       config.optionalServices,
     );
     options.optionalManufacturerData = options.optionalManufacturerData.concat(
-      config.optionalManufacturerData
+      config.optionalManufacturerData ?? []
     ).filter(x => x !== undefined);
   }
   debugLog({ requestOptions: options });
