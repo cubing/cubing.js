@@ -243,7 +243,7 @@ export const esmTarget = {
   builtYet: false,
   dependencies: [staticPackageMetadataTarget],
   buildSelf: async (dev) => {
-    await esbuild.build({
+    const build = await esbuild.build({
       // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
       entryPoints: packageEntryPointsWithSearchWorkerEntry,
       outdir: "dist/esm",
@@ -256,7 +256,14 @@ export const esmTarget = {
       //
       external,
       supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
+      metafile: true,
     });
+
+    await mkdir("./.temp", { recursive: true });
+    await writeFile(
+      "./.temp/esbuild-metafile.json",
+      JSON.stringify(build.metafile),
+    );
   },
 };
 
