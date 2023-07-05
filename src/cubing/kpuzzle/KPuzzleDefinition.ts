@@ -3,15 +3,16 @@ import type { KState } from "./KState";
 // TODO: Use a list instead of an object for performance?
 export type KTransformationData = Record<string, KTransformationOrbitData>;
 export interface KTransformationOrbitData {
-  permutation: number[];
-  orientation: number[];
+  permutation?: number[];
+  orientation?: number[];
 }
 
 // TODO: Use a list instead of an object for performance?
 export type KStateData = Record<string, KStateOrbitData>;
 export interface KStateOrbitData {
-  pieces: number[];
-  orientation: number[];
+  pieces?: number[];
+  orientation?: number[];
+  orientationMod?: number[];
 }
 
 export interface KPuzzleOrbitDefinition {
