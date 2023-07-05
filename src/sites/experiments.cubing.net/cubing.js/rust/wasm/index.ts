@@ -1,7 +1,7 @@
 console.log("loading…");
 
 import { Alg } from "../../../../../cubing/alg";
-import { default as init, internal_init, invert_alg } from "./hello_wasm.js";
+import { default as init, internal_init, invert_alg } from "./cubing_rust_wasm";
 import { solutionAlg } from "../../stress-tests/40x40x40-solve.js";
 
 (async () => {

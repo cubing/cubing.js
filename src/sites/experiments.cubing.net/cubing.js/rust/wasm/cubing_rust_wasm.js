@@ -185,7 +185,7 @@ async function load(module, imports) {
 function getImports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_alert_8755b7883b6ce0ef = function(arg0, arg1) {
+    imports.wbg.__wbg_alert_e19662cc5fa07958 = function(arg0, arg1) {
         alert(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
@@ -247,7 +247,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('hello_wasm_bg.wasm', import.meta.url);
+        input = new URL('cubing_rust_wasm_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
