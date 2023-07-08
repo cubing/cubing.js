@@ -1,5 +1,6 @@
 import type { KPuzzle } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
+import { getOriAtIndex, getPermOrPieceAtIndex } from "../../../kpuzzle/sparse";
 import type {
   FaceletMeshStickeringMask,
   StickeringMask,
@@ -166,9 +167,9 @@ export class KPuzzleSVGWrapper {
           const id = this.elementID(orbitName, idx, orientation);
           const fromCur = this.elementID(
             orbitName,
-            curTransformationOrbit.permutation[idx],
+            getPermOrPieceAtIndex(idx, curTransformationOrbit.permutation),
             (orbitDefinition.numOrientations -
-              curTransformationOrbit.orientation[idx] +
+              getOriAtIndex(idx, curTransformationOrbit.orientation) +
               orientation) %
               orbitDefinition.numOrientations,
           );
@@ -176,9 +177,9 @@ export class KPuzzleSVGWrapper {
           if (nextTransformationOrbit) {
             const fromNext = this.elementID(
               orbitName,
-              nextTransformationOrbit.permutation[idx],
+              getPermOrPieceAtIndex(idx, nextTransformationOrbit.permutation),
               (orbitDefinition.numOrientations -
-                nextTransformationOrbit.orientation[idx] +
+                getOriAtIndex(idx, nextTransformationOrbit.orientation) +
                 orientation) %
                 orbitDefinition.numOrientations,
             );

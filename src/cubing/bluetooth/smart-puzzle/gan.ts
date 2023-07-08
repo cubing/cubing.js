@@ -407,15 +407,15 @@ export class GanCube extends BluetoothPuzzle {
     for (const cornerMapping of gan356iCornerMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[cornerMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      stateData.CORNERS.pieces.push(pieceInfo.piece);
-      stateData.CORNERS.orientation.push(pieceInfo.orientation);
+      stateData.CORNERS.pieces!.push(pieceInfo.piece);
+      stateData.CORNERS.orientation!.push(pieceInfo.orientation);
     }
 
     for (const edgeMapping of gan356iEdgeMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[edgeMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      stateData.EDGES.pieces.push(pieceInfo.piece);
-      stateData.EDGES.orientation.push(pieceInfo.orientation);
+      stateData.EDGES.pieces!.push(pieceInfo.piece);
+      stateData.EDGES.orientation!.push(pieceInfo.orientation);
     }
 
     return new KState(this.kpuzzle, stateData);

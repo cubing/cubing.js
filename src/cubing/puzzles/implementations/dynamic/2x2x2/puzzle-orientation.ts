@@ -1,11 +1,18 @@
 import { Alg } from "../../../../alg";
 import type { KPuzzle, KState, KTransformation } from "../../../../kpuzzle";
+import {
+  getOriAtIndex,
+  getPermOrPieceAtIndex,
+} from "../../../../kpuzzle/sparse";
 
 export function puzzleOrientation2x2x2Idx(state: KState): number {
   const inverse = state.experimentalToTransformation()!.invert();
 
   const inverseDFL = inverse.transformationData["CORNERS"];
-  return inverseDFL.permutation[6] * 3 + inverseDFL.orientation[6];
+  return (
+    getPermOrPieceAtIndex(6, inverseDFL.permutation) * 3 +
+    getOriAtIndex(6, inverseDFL.orientation)
+  );
 }
 
 const puzzleOrientationCacheRaw: {

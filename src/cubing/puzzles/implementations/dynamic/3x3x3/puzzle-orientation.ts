@@ -1,11 +1,15 @@
 import { Alg } from "../../../../alg";
 import { KState, KTransformation } from "../../../../kpuzzle";
+import { getPermOrPieceAtIndex } from "../../../../kpuzzle/sparse";
 import { experimental3x3x3KPuzzle } from "../../../cubing-private";
 
 export function puzzleOrientation3x3x3Idx(state: KState): [number, number] {
-  const idxU = state.stateData["CENTERS"].pieces[0];
-  const idxD = state.stateData["CENTERS"].pieces[5];
-  const unadjustedIdxL = state.stateData["CENTERS"].pieces[1];
+  const idxU = getPermOrPieceAtIndex(0, state.stateData["CENTERS"].pieces);
+  const idxD = getPermOrPieceAtIndex(5, state.stateData["CENTERS"].pieces);
+  const unadjustedIdxL = getPermOrPieceAtIndex(
+    1,
+    state.stateData["CENTERS"].pieces,
+  );
   let idxL = unadjustedIdxL;
   if (idxU < unadjustedIdxL) {
     idxL--;

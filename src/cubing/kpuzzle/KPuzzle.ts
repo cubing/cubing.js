@@ -8,6 +8,7 @@ import type {
 } from "./KPuzzleDefinition";
 import { KState } from "./KState";
 import { KTransformation } from "./KTransformation";
+import { getPermOrPieceAtIndex } from "./sparse";
 
 export type KTransformationSource = Alg | Move | string | KTransformation;
 
@@ -89,8 +90,10 @@ export class KPuzzle {
           this.definition.orbits,
         )) {
           const pieces = new Array(orbitDefinition.numPieces).fill(false);
-          for (const piece of this.definition.startStateData[orbitName]
-            .pieces) {
+          const startStateOrbit =
+            this.definition.startStateData[orbitName].pieces;
+          for (let i = 0; i < orbitDefinition.numPieces; i++) {
+            const piece = getPermOrPieceAtIndex(i, startStateOrbit);
             pieces[piece] = true;
           }
           for (const piece of pieces) {

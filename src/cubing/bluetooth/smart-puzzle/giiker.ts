@@ -182,16 +182,16 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     for (let i = 0; i < 12; i++) {
       const gi = epReid333toGiiKER[i];
-      state.EDGES.pieces[i] = epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
-      state.EDGES.orientation[i] =
-        this.getBit(val, gi + 112) ^ preEO[state.EDGES.pieces[i]] ^ postEO[i];
+      state.EDGES.pieces![i] = epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
+      state.EDGES.orientation![i] =
+        this.getBit(val, gi + 112) ^ preEO[state.EDGES.pieces![i]] ^ postEO[i];
     }
     for (let i = 0; i < 8; i++) {
       const gi = cpReid333toGiiKER[i];
-      state.CORNERS.pieces[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
-      state.CORNERS.orientation[i] =
+      state.CORNERS.pieces![i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
+      state.CORNERS.orientation![i] =
         (getNibble(val, gi + 8) * coFlip[gi] +
-          preCO[state.CORNERS.pieces[i]] +
+          preCO[state.CORNERS.pieces![i]] +
           postCO[i]) %
         3;
     }

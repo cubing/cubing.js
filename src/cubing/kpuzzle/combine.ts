@@ -1,4 +1,5 @@
 import { isOrbitTransformationDataIdentityUncached } from "./calculate";
+import { getOriAtIndex, getPermOrPieceAtIndex } from "./cubing-private";
 import type {
   KPuzzleDefinition,
   KStateData,
@@ -34,7 +35,10 @@ export function combineTransformationData(
       const newPerm = new Array(orbitDefinition.numPieces);
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPerm[idx] = orbit1.permutation[orbit2.permutation[idx]];
+          newPerm[idx] = getPermOrPieceAtIndex(
+            getPermOrPieceAtIndex(idx, orbit2.permutation),
+            orbit1.permutation,
+          );
         }
         newTransformationData[orbitName] = {
           permutation: newPerm,
@@ -44,10 +48,16 @@ export function combineTransformationData(
         const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newOri[idx] =
-            (orbit1.orientation[orbit2.permutation[idx]] +
-              orbit2.orientation[idx]) %
+            (getOriAtIndex(
+              getPermOrPieceAtIndex(idx, orbit2.permutation),
+              orbit1.orientation,
+            ) +
+              getOriAtIndex(idx, orbit2.orientation)) %
             orbitDefinition.numOrientations;
-          newPerm[idx] = orbit1.permutation[orbit2.permutation[idx]];
+          newPerm[idx] = getPermOrPieceAtIndex(
+            getPermOrPieceAtIndex(idx, orbit2.permutation),
+            orbit1.permutation,
+          );
         }
         newTransformationData[orbitName] = {
           permutation: newPerm,
@@ -81,7 +91,10 @@ export function applyTransformationDataToStateData(
       const newPieces = new Array(orbitDefinition.numPieces);
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPieces[idx] = orbit1.pieces[orbit2.permutation[idx]];
+          newPieces[idx] = getPermOrPieceAtIndex(
+            getPermOrPieceAtIndex(idx, orbit2.permutation),
+            orbit1.pieces,
+          );
         }
         newStateData[orbitName] = {
           pieces: newPieces,
@@ -91,10 +104,16 @@ export function applyTransformationDataToStateData(
         const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newOri[idx] =
-            (orbit1.orientation[orbit2.permutation[idx]] +
-              orbit2.orientation[idx]) %
+            (getOriAtIndex(
+              getPermOrPieceAtIndex(idx, orbit2.permutation),
+              orbit1.orientation,
+            ) +
+              getOriAtIndex(idx, orbit2.orientation)) %
             orbitDefinition.numOrientations;
-          newPieces[idx] = orbit1.pieces[orbit2.permutation[idx]];
+          newPieces[idx] = getPermOrPieceAtIndex(
+            getPermOrPieceAtIndex(idx, orbit2.permutation),
+            orbit1.pieces,
+          );
         }
         newStateData[orbitName] = {
           pieces: newPieces,

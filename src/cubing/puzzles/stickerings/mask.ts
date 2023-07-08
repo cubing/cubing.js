@@ -2,6 +2,7 @@
 
 import type { Move } from "../../alg";
 import type { KPuzzle } from "../../kpuzzle";
+import { getOriAtIndex, getPermOrPieceAtIndex } from "../../kpuzzle/sparse";
 
 export type FaceletMeshStickeringMask =
   | "regular"
@@ -254,8 +255,14 @@ export class StickeringManager {
     )) {
       for (let i = 0; i < orbitDef.numPieces; i++) {
         if (
-          transformation.transformationData[orbitName].permutation[i] !== i ||
-          transformation.transformationData[orbitName].orientation[i] !== 0
+          getPermOrPieceAtIndex(
+            i,
+            transformation.transformationData[orbitName].permutation,
+          ) !== i ||
+          getOriAtIndex(
+            i,
+            transformation.transformationData[orbitName].orientation,
+          ) !== 0
         ) {
           newPieceSet.stickerings.get(orbitName)![i] = true;
         }
