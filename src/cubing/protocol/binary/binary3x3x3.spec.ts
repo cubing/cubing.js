@@ -106,7 +106,9 @@ describe("Binary 3x3x3", () => {
     const state = stateForAlg(
       "x D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R y",
     );
-    expect(state.stateData["CENTERS"].pieces).to.deep.equal([2, 5, 3, 0, 1, 4]);
+    expect(state.stateData["CENTERS"]!.pieces).to.deep.equal([
+      2, 5, 3, 0, 1, 4,
+    ]);
     expect(
       twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(state)),
     ).to.deep.equal(state);
@@ -118,11 +120,13 @@ describe("puzzle orientation", () => {
     const state = stateForAlg(
       "D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R",
     );
-    expect(state.stateData["CENTERS"].pieces).to.deep.equal([0, 1, 2, 3, 4, 5]);
+    expect(state.stateData["CENTERS"]!.pieces).to.deep.equal([
+      0, 1, 2, 3, 4, 5,
+    ]);
     const rotatedState = stateForAlg(
       "D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R x y",
     );
-    expect(rotatedState.stateData["CENTERS"].pieces).to.deep.equal([
+    expect(rotatedState.stateData["CENTERS"]!.pieces).to.deep.equal([
       2, 5, 3, 0, 1, 4,
     ]);
     const buffy = new Uint8Array(reid3x3x3ToTwizzleBinary(rotatedState));

@@ -4,11 +4,11 @@ import { getPermOrPieceAtIndex } from "../../../../kpuzzle/sparse";
 import { experimental3x3x3KPuzzle } from "../../../cubing-private";
 
 export function puzzleOrientation3x3x3Idx(state: KState): [number, number] {
-  const idxU = getPermOrPieceAtIndex(0, state.stateData["CENTERS"].pieces);
-  const idxD = getPermOrPieceAtIndex(5, state.stateData["CENTERS"].pieces);
+  const idxU = getPermOrPieceAtIndex(0, state.stateData["CENTERS"]?.pieces);
+  const idxD = getPermOrPieceAtIndex(5, state.stateData["CENTERS"]?.pieces);
   const unadjustedIdxL = getPermOrPieceAtIndex(
     1,
-    state.stateData["CENTERS"].pieces,
+    state.stateData["CENTERS"]?.pieces,
   );
   let idxL = unadjustedIdxL;
   if (idxU < unadjustedIdxL) {
@@ -74,7 +74,7 @@ export function experimentalIs3x3x3Solved(
       EDGES: state.stateData.EDGES,
       CORNERS: state.stateData.CORNERS,
       CENTERS: {
-        pieces: state.stateData.CENTERS.pieces,
+        pieces: state.stateData.CENTERS?.pieces,
         orientation: new Array(6).fill(0),
       },
     });

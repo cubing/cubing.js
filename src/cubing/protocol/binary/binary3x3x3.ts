@@ -103,28 +103,28 @@ export function reid3x3x3ToBinaryComponents(
 
   const epLex = permutationToLex(
     12, // state.kpuzzle.definition.orbits["EDGES"].numPieces,
-    normedState.stateData["EDGES"].pieces,
+    normedState.stateData["EDGES"]?.pieces,
   );
   const eoMask = orientationsToMask(
     12, // state.kpuzzle.definition.orbits["EDGES"].numPieces,
     2,
-    normedState.stateData["EDGES"].orientation,
+    normedState.stateData["EDGES"]?.orientation,
   );
   const cpLex = permutationToLex(
     8, //state.kpuzzle.definition.orbits["CORNERS"].numPieces,
-    normedState.stateData["CORNERS"].pieces,
+    normedState.stateData["CORNERS"]?.pieces,
   );
   const coMask = orientationsToMask(
     8, //state.kpuzzle.definition.orbits["CORNERS"].numPieces,
     3,
-    normedState.stateData["CORNERS"].orientation,
+    normedState.stateData["CORNERS"]?.orientation,
   );
   const [poIdxU, poIdxL] = experimentalPuzzleOrientation3x3x3Idx(state);
   const moSupport = 1; // Required for now.
   const moMask = orientationsToMask(
     6, //state.kpuzzle.definition.orbits["CENTERS"].numPieces,
     4,
-    normedState.stateData["CENTERS"].orientation,
+    normedState.stateData["CENTERS"]?.orientation,
   );
 
   return {

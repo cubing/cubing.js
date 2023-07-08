@@ -8,7 +8,7 @@ export interface KTransformationOrbitData {
 }
 
 // TODO: Use a list instead of an object for performance?
-export type KStateData = Record<string, KStateOrbitData>;
+export type KStateData = Partial<Record<string, KStateOrbitData>>;
 export interface KStateOrbitData {
   pieces?: number[];
   orientation?: number[];

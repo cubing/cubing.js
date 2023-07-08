@@ -93,12 +93,12 @@ export function applyTransformationDataToStateData(
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newPieces[idx] = getPermOrPieceAtIndex(
             getPermOrPieceAtIndex(idx, orbit2.permutation),
-            orbit1.pieces,
+            orbit1?.pieces,
           );
         }
         newStateData[orbitName] = {
           pieces: newPieces,
-          orientation: orbit1.orientation,
+          orientation: orbit1?.orientation,
         };
       } else {
         const newOri = new Array(orbitDefinition.numPieces);
@@ -106,13 +106,13 @@ export function applyTransformationDataToStateData(
           newOri[idx] =
             (getOriAtIndex(
               getPermOrPieceAtIndex(idx, orbit2.permutation),
-              orbit1.orientation,
+              orbit1?.orientation,
             ) +
               getOriAtIndex(idx, orbit2.orientation)) %
             orbitDefinition.numOrientations;
           newPieces[idx] = getPermOrPieceAtIndex(
             getPermOrPieceAtIndex(idx, orbit2.permutation),
-            orbit1.pieces,
+            orbit1?.pieces,
           );
         }
         newStateData[orbitName] = {

@@ -91,7 +91,7 @@ export class KPuzzle {
         )) {
           const pieces = new Array(orbitDefinition.numPieces).fill(false);
           const startStateOrbit =
-            this.definition.startStateData[orbitName].pieces;
+            this.definition.startStateData[orbitName]?.pieces;
           for (let i = 0; i < orbitDefinition.numPieces; i++) {
             const piece = getPermOrPieceAtIndex(i, startStateOrbit);
             pieces[piece] = true;
