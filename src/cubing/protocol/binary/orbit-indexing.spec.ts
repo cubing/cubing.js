@@ -20,6 +20,7 @@ function fakePermView(numPieces: number, permutation: number[]) {
       },
     },
     "DEFAULT_ORBIT",
+    false,
   );
 }
 
@@ -39,6 +40,7 @@ function fakeOriView(
       },
     },
     "DEFAULT_ORBIT",
+    false,
   );
 }
 

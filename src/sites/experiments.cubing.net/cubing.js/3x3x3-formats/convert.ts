@@ -124,10 +124,10 @@ export function reidStringToKState(s: string): KState {
       orbitName,
       true,
     );
-    orbitView.setOrientation(
+    orbitView.setOrientationRaw(
       pieces.slice(offset, n + offset).map((s) => pieceMap[s].piece),
     );
-    orbitView.setOrientation(
+    orbitView.setOrientationRaw(
       pieces.slice(offset, n + offset).map((s) => pieceMap[s].orientation),
     );
   };

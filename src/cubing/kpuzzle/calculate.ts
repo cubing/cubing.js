@@ -98,6 +98,7 @@ export function invertTransformation(
     } else {
       const invserseOrbitView = inverseTransformation.orbitView(
         orbitView.orbitName,
+        true,
       );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
@@ -109,8 +110,8 @@ export function invertTransformation(
       } else {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           const fromIdx = orbitView.getPermutationAt(idx);
-          orbitView.setPermutationAt(fromIdx, idx);
-          orbitView.setOrientationDeltaAt(
+          invserseOrbitView.setPermutationAt(fromIdx, idx);
+          invserseOrbitView.setOrientationDeltaAt(
             fromIdx,
             -orbitView.getOrientationAt(idx),
           );

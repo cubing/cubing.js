@@ -120,30 +120,27 @@ export async function solve222ForScramble(state: KState): Promise<Alg> {
 
 // TODO: factor out and test.
 function mutatingRandomizeOrbit(
-  kpuzzle: KPuzzle,
-  orbitName: string,
   state: KState,
+  orbitName: string,
   options?: { orientationSum?: number },
 ): void {
-  randomPermuteInPlace(state.stateData[orbitName].pieces);
+  const orbitView = state.orbitView(orbitName, true);
+  const orbitPieces = [...orbitView.getPieces()];
+  randomPermuteInPlace(orbitPieces);
+  orbitView.setPiecesRaw(orbitPieces);
 
-  const orbitDef = kpuzzle.definition.orbits[orbitName];
-  const ori = state.stateData[orbitName].orientation;
+  const { orbitDefinition } = orbitView;
 
   let sum = 0;
-  for (let i = 0; i < orbitDef.numPieces; i++) {
-    const o = randomUIntBelow(orbitDef.numOrientations);
-    ori[i] = o;
+  for (let i = 0; i < orbitDefinition.numPieces; i++) {
+    const o = randomUIntBelow(orbitDefinition.numOrientations);
+    orbitView.setOrientationAt(i, o);
     sum += o;
   }
 
   // console.log("aaaa", options && "orientationSum" in options);
   if (options && "orientationSum" in options) {
-    // console.log("sfdsf", options!.orientationSum),
-    ori[0] =
-      (((ori[0] + options.orientationSum! - sum) % orbitDef.numOrientations) +
-        orbitDef.numOrientations) %
-      orbitDef.numOrientations;
+    orbitView.setOrientationDeltaAt(0, options.orientationSum! - sum);
   }
 }
 
@@ -154,7 +151,7 @@ export async function random222State(): Promise<KState> {
     kpuzzle,
     structuredClone(kpuzzle.startState().stateData),
   ); // TODO
-  mutatingRandomizeOrbit(kpuzzle, "CORNERS", stateCopy, {
+  mutatingRandomizeOrbit(stateCopy, "CORNERS", {
     orientationSum: 0,
   });
   return stateCopy;
