@@ -186,7 +186,7 @@ export class KTransformationOrbitView {
   }
 
   getOrientationAt(index: number): number {
-    return this.#orbit()?.orientation?.[index] ?? index;
+    return this.#orbit()?.orientation?.[index] ?? 0;
   }
 
   // Automatically mods `value` into the appropriate range.

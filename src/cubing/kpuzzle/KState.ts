@@ -163,7 +163,7 @@ export class KStateOrbitView {
   }
 
   getOrientationAt(idx: number): number {
-    return this.#orbit()?.orientation?.[idx] ?? idx;
+    return this.#orbit()?.orientation?.[idx] ?? 0;
   }
 
   // Automatically mods `value` into the appropriate range.
