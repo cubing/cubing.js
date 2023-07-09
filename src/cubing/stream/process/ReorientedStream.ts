@@ -58,8 +58,8 @@ class OrientationTracker {
       );
     } else {
       const faceIdx = faces.indexOf(move.family);
-      const family =
-        faces[this.state.stateData["CENTERS"].pieces.indexOf(faceIdx)];
+      const pieces = [...this.state.orbitView("CENTERS").getPieces()]; // TODO: Avoid redundant work.
+      const family = faces[pieces.indexOf(faceIdx)];
       return [move.modified({ family })];
     }
   }

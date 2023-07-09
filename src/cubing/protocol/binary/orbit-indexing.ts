@@ -1,7 +1,4 @@
-import {
-  getOriAtIndex,
-  getPermOrPieceAtIndex,
-} from "../../kpuzzle/cubing-private";
+import type { KTransformationOrbitView } from "../../kpuzzle/KTransformation";
 
 export function identityPermutation(numElems: number): number[] {
   const arr = new Array<number>(numElems);
@@ -13,14 +10,13 @@ export function identityPermutation(numElems: number): number[] {
 
 // Inclusive start, exclusive end (similar to `Array.prototype.slice`)
 export function orientationsToMask(
-  numElems: number,
-  radix: number,
-  orientations?: number[],
+  orbitView: KTransformationOrbitView,
 ): number {
   let val = 0;
-  for (let i = 0; i < numElems; i++) {
-    val *= radix;
-    val += getOriAtIndex(i, orientations);
+  const { orbitDefinition } = orbitView;
+  for (let i = 0; i < orbitDefinition.numPieces; i++) {
+    val *= orbitDefinition.numOrientations;
+    val += orbitView.getOrientation(i);
   }
   return val;
 }
@@ -40,18 +36,13 @@ export function maskToOrientations(
 }
 
 // From https://www.jaapsch.net/puzzles/compindx.htm#perm
-export function permutationToLex(
-  numPieces: number,
-  permutation?: number[],
-): number {
+export function permutationToLex(orbitView: KTransformationOrbitView): number {
+  const numPieces = orbitView.orbitDefinition.numPieces;
   let lexicographicIdx = 0;
   for (let i = 0; i < numPieces - 1; i++) {
     lexicographicIdx = lexicographicIdx * (numPieces - i);
     for (let j = i + 1; j < numPieces; j++) {
-      if (
-        getPermOrPieceAtIndex(i, permutation) >
-        getPermOrPieceAtIndex(j, permutation)
-      ) {
+      if (orbitView.getPermutation(i) > orbitView.getPermutation(j)) {
         lexicographicIdx += 1;
       }
     }

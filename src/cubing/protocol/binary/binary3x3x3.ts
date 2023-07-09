@@ -100,34 +100,22 @@ export function reid3x3x3ToBinaryComponents(
   state: KState,
 ): Binary3x3x3Components {
   const normedState = experimentalNormalize3x3x3Orientation(state);
+  const normedTransformation = normedState.experimentalToTransformation();
+  if (!normedTransformation) {
+    throw new Error("Invalid 3x3x3 state. Cannot encode to binary.");
+  }
 
-  const edgeView = normedState.orbitView("EDGES");
+  const edgesView = normedTransformation.orbitView("EDGES");
+  const cornersView = normedTransformation.orbitView("CORNERS");
+  const centersView = normedTransformation.orbitView("CENTERS");
 
-  const epLex = permutationToLex(
-    12, // state.kpuzzle.definition.orbits["EDGES"].numPieces,
-    normedState.stateData["EDGES"]?.pieces,
-  );
-  const eoMask = orientationsToMask(
-    12, // state.kpuzzle.definition.orbits["EDGES"].numPieces,
-    2,
-    normedState.stateData["EDGES"]?.orientation,
-  );
-  const cpLex = permutationToLex(
-    8, //state.kpuzzle.definition.orbits["CORNERS"].numPieces,
-    normedState.stateData["CORNERS"]?.pieces,
-  );
-  const coMask = orientationsToMask(
-    8, //state.kpuzzle.definition.orbits["CORNERS"].numPieces,
-    3,
-    normedState.stateData["CORNERS"]?.orientation,
-  );
+  const epLex = permutationToLex(edgesView);
+  const eoMask = orientationsToMask(edgesView);
+  const cpLex = permutationToLex(cornersView);
+  const coMask = orientationsToMask(cornersView);
   const [poIdxU, poIdxL] = experimentalPuzzleOrientation3x3x3Idx(state);
   const moSupport = 1; // Required for now.
-  const moMask = orientationsToMask(
-    6, //state.kpuzzle.definition.orbits["CENTERS"].numPieces,
-    4,
-    normedState.stateData["CENTERS"]?.orientation,
-  );
+  const moMask = orientationsToMask(centersView);
 
   return {
     epLex,

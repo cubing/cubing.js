@@ -1,6 +1,4 @@
-import type { KPuzzle } from "../../../kpuzzle";
-import type { KStateData } from "../../../kpuzzle/KState";
-import { getOriAtIndex, getPermOrPieceAtIndex } from "../../../kpuzzle/sparse";
+import type { KPuzzle, KState } from "../../../kpuzzle";
 import type {
   FaceletMeshStickeringMask,
   StickeringMask,
@@ -137,20 +135,12 @@ export class KPuzzleSVGWrapper {
     }
   }
 
-  public drawState(
-    state: KStateData,
-    nextState?: KStateData,
-    fraction?: number,
-  ): void {
+  public drawState(state: KState, nextState?: KState, fraction?: number): void {
     this.draw(state, nextState, fraction);
   }
 
   // TODO: save definition in the constructor?
-  public draw(
-    state: KStateData,
-    nextState?: KStateData,
-    fraction?: number,
-  ): void {
+  public draw(state: KState, nextState?: KState, fraction?: number): void {
     const transformation = state.experimentalToTransformation();
     const nextTransformation = nextState?.experimentalToTransformation();
     if (!transformation) {
@@ -161,11 +151,8 @@ export class KPuzzleSVGWrapper {
       const orbitDefinition =
         transformation.kpuzzle.definition.orbits[orbitName];
 
-      const curTransformationOrbit =
-        transformation.transformationData[orbitName];
-      const nextTransformationOrbit = nextTransformation
-        ? nextTransformation.transformationData[orbitName]
-        : null;
+      const curOrbitView = transformation.orbitView(orbitName);
+      const nextOrbitView = nextTransformation?.orbitView(orbitName);
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
           let orientation = 0;
@@ -175,19 +162,19 @@ export class KPuzzleSVGWrapper {
           const id = this.elementID(orbitName, idx, orientation);
           const fromCur = this.elementID(
             orbitName,
-            getPermOrPieceAtIndex(idx, curTransformationOrbit.permutation),
+            curOrbitView.getPermutation(idx),
             (orbitDefinition.numOrientations -
-              getOriAtIndex(idx, curTransformationOrbit.orientation) +
+              curOrbitView.getOrientation(idx) +
               orientation) %
               orbitDefinition.numOrientations,
           );
           let singleColor = false;
-          if (nextTransformationOrbit) {
+          if (nextOrbitView) {
             const fromNext = this.elementID(
               orbitName,
-              getPermOrPieceAtIndex(idx, nextTransformationOrbit.permutation),
+              nextOrbitView.getPermutation(idx),
               (orbitDefinition.numOrientations -
-                getOriAtIndex(idx, nextTransformationOrbit.orientation) +
+                nextOrbitView.getOrientation(idx) +
                 orientation) %
                 orbitDefinition.numOrientations,
             );

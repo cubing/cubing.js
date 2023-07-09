@@ -1,6 +1,6 @@
 import { expect } from "../../../test/chai-workarounds";
+import type { KState } from "../../kpuzzle";
 
-import type { KStateData } from "../../kpuzzle/KState";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import {
   reid3x3x3ToTwizzleBinary,
@@ -8,7 +8,7 @@ import {
 } from "./binary3x3x3";
 import { bufferToSpacedHex } from "./hex";
 
-function stateForAlg(alg: string): KStateData {
+function stateForAlg(alg: string): KState {
   return experimental3x3x3KPuzzle.algToTransformation(alg).toKState();
 }
 

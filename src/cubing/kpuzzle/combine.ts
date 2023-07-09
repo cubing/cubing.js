@@ -39,11 +39,13 @@ export function combineTransformationData(
         orbitDefinition,
         transformationData1,
         orbitName,
+        false,
       );
       const orbit2View = new KTransformationOrbitView(
         orbitDefinition,
         transformationData1,
         orbitName,
+        false,
       );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
@@ -101,11 +103,13 @@ export function applyTransformationDataToStateData(
         orbitDefinition,
         stateData,
         orbitName,
+        false,
       );
       const orbit2View = new KTransformationOrbitView(
         orbitDefinition,
         transformationData,
         orbitName,
+        false,
       );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {

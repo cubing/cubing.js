@@ -87,7 +87,7 @@ export class KPuzzle {
       ((): boolean => {
         for (const orbitView of this.startState().orbitViews()) {
           // TODO: handle an "is default" case?
-          const orbitDef = orbitView.getDefinition();
+          const orbitDef = orbitView.orbitDefinition;
           const pieces = new Array(orbitDef.numPieces).fill(false);
           for (const piece of orbitView.getPieces()) {
             pieces[piece] = true;

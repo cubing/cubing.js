@@ -1,5 +1,6 @@
 import { KState } from ".";
 import type { Alg, Move } from "../alg";
+import { offsetMod } from "../alg/cubing-private";
 import {
   invertTransformation,
   isTransformationDataIdentical,
@@ -122,7 +123,10 @@ export class KTransformation {
     );
   }
 
-  public orbitView(orbitName: string): KTransformationOrbitView {
+  public orbitView(
+    orbitName: string,
+    mutable: boolean = false,
+  ): KTransformationOrbitView {
     const orbitDef = this.kpuzzle.definition.orbits[orbitName];
     if (!orbitDef) {
       throw "Invalid orbit name for KTransformation.";
@@ -131,36 +135,31 @@ export class KTransformation {
       orbitDef,
       this.transformationData,
       orbitName,
+      mutable,
     );
   }
 
-  public *orbitViews(): Generator<KTransformationOrbitView> {
+  public *orbitViews(
+    mutable: boolean = false,
+  ): Generator<KTransformationOrbitView> {
     for (const orbitName in this.kpuzzle.definition.orbits) {
-      yield this.orbitView(orbitName);
+      yield this.orbitView(orbitName, mutable);
     }
   }
 }
 
 // TODO: Combine some of the implementation with `KStateOrbitView`?
 export class KTransformationOrbitView {
-  #orbitDef: KPuzzleOrbitDefinition;
   #transformationData: KTransformationData;
   #orbitName: string;
   constructor(
-    orbitDef: KPuzzleOrbitDefinition,
+    public readonly orbitDefinition: KPuzzleOrbitDefinition,
     transformation: KTransformationData,
     orbitName: string,
+    public readonly mutable: boolean,
   ) {
-    if (!(orbitName in orbitDef)) {
-      throw "Invalid orbit name for KTransformation.";
-    }
-    this.#orbitDef = orbitDef;
     this.#transformationData = transformation;
     this.#orbitName = orbitName;
-  }
-
-  getDefinition(): KPuzzleOrbitDefinition {
-    return this.#orbitDef;
   }
 
   #orbit(): KTransformationOrbitData | undefined {
@@ -183,8 +182,12 @@ export class KTransformationOrbitView {
     return this.#orbit()?.permutation?.[index] ?? index;
   }
 
-  // TODO: prevent write by default.
   setPermutation(index: number, value: number) {
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set permutation for a non-mutable `KTransformationOrbitView`.",
+      );
+    }
     this.#ensureOrbitPermutation()[index] = value;
   }
 
@@ -192,8 +195,16 @@ export class KTransformationOrbitView {
     return this.#orbit()?.orientation?.[index] ?? index;
   }
 
-  // TODO: prevent write by default.
+  // Automatically mods `value` into the appropriate range.
   setOrientation(index: number, value: number) {
-    this.#ensureOrbitOrientation()[index] = value;
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set piece for a non-mutable `KTransformationOrbitView`.",
+      );
+    }
+    this.#ensureOrbitOrientation()[index] = offsetMod(
+      value,
+      this.orbitDefinition.numOrientations,
+    );
   }
 }

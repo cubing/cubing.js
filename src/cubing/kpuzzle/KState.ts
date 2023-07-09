@@ -10,6 +10,7 @@ import type {
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
+import { offsetMod } from "../alg/cubing-private";
 
 export class KState {
   constructor(
@@ -87,38 +88,36 @@ export class KState {
     return this.kpuzzle.definition.experimentalIsStateSolved(this, options);
   }
 
-  public orbitView(orbitName: string): KStateOrbitView {
+  public orbitView(
+    orbitName: string,
+    mutable: boolean = false,
+  ): KStateOrbitView {
     const orbitDef = this.kpuzzle.definition.orbits[orbitName];
     if (!orbitDef) {
       throw "Invalid orbit name for KState.";
     }
-    return new KStateOrbitView(orbitDef, this.stateData, orbitName);
+    return new KStateOrbitView(orbitDef, this.stateData, orbitName, mutable);
   }
 
-  public *orbitViews(): Generator<KStateOrbitView> {
+  public *orbitViews(mutable: boolean = false): Generator<KStateOrbitView> {
     for (const orbitName in this.kpuzzle.definition.orbits) {
-      yield this.orbitView(orbitName);
+      yield this.orbitView(orbitName, mutable);
     }
   }
 }
 
 // TODO: Combine some of the implementation with `KTransformationOrbitView`?
 export class KStateOrbitView {
-  #orbitDef: KPuzzleOrbitDefinition;
   #stateData: KStateData;
   #orbitName: string;
   constructor(
-    orbitDef: KPuzzleOrbitDefinition,
+    public readonly orbitDefinition: KPuzzleOrbitDefinition,
     stateData: KStateData,
     orbitName: string,
+    public readonly mutable: boolean,
   ) {
-    this.#orbitDef = orbitDef;
     this.#stateData = stateData;
     this.#orbitName = orbitName;
-  }
-
-  getDefinition(): KPuzzleOrbitDefinition {
-    return this.#orbitDef;
   }
 
   #orbit(): KStateOrbitData | undefined {
@@ -141,13 +140,17 @@ export class KStateOrbitView {
     return this.#orbit()?.pieces?.[index] ?? index;
   }
 
-  // TODO: prevent write by default.
   setPiece(index: number, value: number) {
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set piece for a non-mutable `KStateOrbitView`.",
+      );
+    }
     this.#ensureOrbitPieces()[index] = value;
   }
 
   *getPieces(): Generator<number> {
-    const numPieces = this.getDefinition().numPieces;
+    const numPieces = this.orbitDefinition.numPieces;
     for (let i = 0; i < numPieces; i++) {
       yield this.getPiece(i);
     }
@@ -157,8 +160,16 @@ export class KStateOrbitView {
     return this.#orbit()?.orientation?.[index] ?? index;
   }
 
-  // TODO: prevent write by default.
+  // Automatically mods `value` into the appropriate range.
   setOrientation(index: number, value: number) {
-    this.#ensureOrbitOrientation()[index] = value;
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set orientation for a non-mutable `KStateOrbitView`.",
+      );
+    }
+    this.#ensureOrbitOrientation()[index] = offsetMod(
+      value,
+      this.orbitDefinition.numOrientations,
+    );
   }
 }

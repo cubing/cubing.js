@@ -182,7 +182,7 @@ class PuzzleStateEditor {
     return piece[orientation];
   }
 
-  getPieceByFacelet({ pieceIndex: position, orbit: type }: Facelet) {
+  getPieceByFacelet({ pieceIndex: position, orbitName: type }: Facelet) {
     return this.pieces.get(type)![position];
   }
 
@@ -197,7 +197,7 @@ class PuzzleStateEditor {
 
     const { orbits } = this.kpuzzle.definition;
 
-    const { numOrientations } = orbits[facelet.orbit];
+    const { numOrientations } = orbits[facelet.orbitName];
 
     for (let i = 0; i < numOrientations - 1; i++) {
       const facelet = this.getFaceletByOrientation(piece, i);
@@ -209,7 +209,7 @@ class PuzzleStateEditor {
       );
     }
 
-    const stateOrbit = this.state.stateData[facelet.orbit];
+    const stateOrbit = this.state.stateData[facelet.orbitName];
     stateOrbit.orientation[facelet.pieceIndex] = offsetMod(
       stateOrbit.orientation[facelet.pieceIndex] - 1,
       numOrientations,
@@ -228,7 +228,7 @@ class PuzzleStateEditor {
 
     const offset = facelet2.orientationIndex - facelet1.orientationIndex;
     const { orbits } = this.kpuzzle.definition;
-    const { numOrientations } = orbits[facelet1.orbit];
+    const { numOrientations } = orbits[facelet1.orbitName];
     for (let i = 0; i < numOrientations; i++) {
       const facelet = this.getFaceletByOrientation(piece1, i);
 
@@ -242,13 +242,20 @@ class PuzzleStateEditor {
       );
     }
 
-    const stateOrbit = this.state.stateData[facelet1.orbit];
-    const piece1Index = stateOrbit.pieces[facelet1.pieceIndex];
-    const piece1Orientation = stateOrbit.orientation[facelet1.pieceIndex];
-    const piece2Index = stateOrbit.pieces[facelet2.pieceIndex];
-    const piece2Orientation = stateOrbit.orientation[facelet2.pieceIndex];
+    // TODO: do we check that the orbits match?
+    const orbitView = this.state.orbitView(facelet1.orbitName);
 
-    stateOrbit.pieces[facelet1.pieceIndex] = piece2Index;
+    const piece1Index = orbitView.getPiece(facelet1.pieceIndex);
+    const piece1Orientation = orbitView.getOrientation(
+      facelet1.orientationIndex,
+    );
+    const piece2Index = orbitView.getPiece(facelet2.pieceIndex);
+    const piece2Orientation = orbitView.getOrientation(
+      facelet2.orientationIndex,
+    );
+
+    orbitView.setPiece(facelet1.pieceIndex, piece2Index);
+    orbitView.setOrientation(facelet1.pieceIndex);
     stateOrbit.orientation[facelet1.pieceIndex] = offsetMod(
       piece2Orientation - offset,
       numOrientations,
@@ -266,13 +273,13 @@ class PuzzleStateEditor {
 }
 
 class Facelet {
-  orbit: string;
+  orbitName: string;
   pieceIndex: number;
   orientationIndex: number;
   element: HTMLOrSVGImageElement;
 
-  constructor(type: string, position: number, orientation: number) {
-    this.orbit = type;
+  constructor(orbitName: string, position: number, orientation: number) {
+    this.orbitName = orbitName;
     this.orientationIndex = orientation;
     this.pieceIndex = position;
     this.element = document.getElementById(
@@ -284,7 +291,7 @@ class Facelet {
   }
 
   getId() {
-    return `${this.orbit}-l${this.pieceIndex}-o${this.orientationIndex}`;
+    return `${this.orbitName}-l${this.pieceIndex}-o${this.orientationIndex}`;
   }
 
   async deselect() {
@@ -308,7 +315,7 @@ class Facelet {
       case "swap": {
         if (
           puzzle.selectedFacelet &&
-          puzzle.selectedFacelet.orbit === this.orbit
+          puzzle.selectedFacelet.orbitName === this.orbitName
         ) {
           puzzle.swap(puzzle.selectedFacelet, this);
           puzzle.selectedFacelet.deselect();

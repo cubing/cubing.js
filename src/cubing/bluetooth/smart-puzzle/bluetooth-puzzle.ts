@@ -1,5 +1,5 @@
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
-import type { KStateData } from "../../kpuzzle/KState";
+import type { KState } from "../../kpuzzle";
 import {
   BasicRotationTransformer,
   type StreamTransformer,
@@ -14,7 +14,7 @@ export interface AlgLeafEvent {
   latestAlgLeaf: AlgLeaf;
   timeStamp: number;
   debug?: Record<string, unknown>;
-  state?: KStateData;
+  state?: KState;
   quaternion?: any; // TODO: Unused
 }
 
@@ -54,7 +54,7 @@ export abstract class BluetoothPuzzle extends EventTarget {
   public abstract disconnect(): void; // TODO: Can we make this reutrn (async) on success?
 
   // TODO: require subclasses to implement this?
-  public async getState(): Promise<KStateData> {
+  public async getState(): Promise<KState> {
     throw new Error("cannot get state");
   }
 
