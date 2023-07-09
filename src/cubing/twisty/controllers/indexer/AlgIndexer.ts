@@ -1,6 +1,6 @@
 import type { Move } from "../../../alg/alg-nodes";
 import type { KTransformation } from "../../../kpuzzle";
-import type { KState } from "../../../kpuzzle/KState";
+import type { KStateData } from "../../../kpuzzle/KState";
 import { arrayEqualsCompare } from "../../model/helpers";
 import type {
   Direction,
@@ -71,7 +71,7 @@ export function currentMoveInfoEquals(
 export interface AlgIndexer {
   getAnimLeaf(index: number): AnimatedLeafAlgNode | null;
   indexToMoveStartTimestamp(index: number): Timestamp;
-  stateAtIndex(index: number, startSTate?: KState): KState;
+  stateAtIndex(index: number, startSTate?: KStateData): KStateData;
   transformationAtIndex(index: number): KTransformation;
   numAnimatedLeaves(): number;
   timestampToIndex(timestamp: Timestamp): number;
@@ -79,7 +79,7 @@ export interface AlgIndexer {
   moveDuration(index: number): number;
   timestampToPosition?: (
     timestamp: Timestamp,
-    startState?: KState,
+    startState?: KStateData,
   ) => PuzzlePosition;
   currentMoveInfo?: (timestamp: Timestamp) => CurrentMoveInfo;
 }

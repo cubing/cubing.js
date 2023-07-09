@@ -1,6 +1,7 @@
-import type { KState } from "./KState";
-
 // Note that it makes sense to use `field?: OptionalIntegerArray` to indicate
+
+import type { KState } from ".";
+
 // that a field may be missing *or* that it may be set to the value `undefined`.
 export type OptionalIntegerArray = (number | undefined)[] | undefined;
 

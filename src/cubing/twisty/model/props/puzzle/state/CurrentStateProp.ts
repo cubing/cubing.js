@@ -1,5 +1,5 @@
 import type { KTransformation } from "../../../../../kpuzzle";
-import type { KState } from "../../../../../kpuzzle/KState";
+import type { KStateData } from "../../../../../kpuzzle/KState";
 import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { CurrentLeavesSimplified } from "./CurrentLeavesSimplified";
@@ -13,9 +13,9 @@ interface CurrentTransformationPropInputs {
 // TODO: Make this so we don't have to handle the finishing moves?
 export class CurrentStateProp extends TwistyPropDerived<
   CurrentTransformationPropInputs,
-  KState
+  KStateData
 > {
-  derive(inputs: CurrentTransformationPropInputs): KState {
+  derive(inputs: CurrentTransformationPropInputs): KStateData {
     let transformation: KTransformation = inputs.indexer.transformationAtIndex(
       inputs.currentLeavesSimplified.stateIndex,
     );

@@ -1,6 +1,6 @@
 import { Alg } from "../../../../cubing/alg";
 import type { KStateData } from "../../../../cubing/kpuzzle";
-import { KState } from "../../../../cubing/kpuzzle/KState";
+import { KStateData } from "../../../../cubing/kpuzzle/KState";
 import {
   binaryComponentsToReid3x3x3,
   reid3x3x3ToBinaryComponents,
@@ -110,7 +110,7 @@ class App {
   }
 
   setKStateData(kstateData: KStateData): void {
-    this.setState(new KState(experimental3x3x3KPuzzle, kstateData));
+    this.setState(new KStateData(experimental3x3x3KPuzzle, kstateData));
   }
 
   setReidString(s: string): void {
@@ -129,7 +129,7 @@ class App {
     this.setState(twizzleBinaryToReid3x3x3(spacedHexToBuffer(s)));
   }
 
-  setState(state: KState): void {
+  setState(state: KStateData): void {
     this.state = state;
     (async () => {
       (await this.svg).draw(state);

@@ -1,6 +1,6 @@
 import { Alg, Move, TraversalUp } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
-import type { KState } from "../../../kpuzzle/KState";
+import type { KStateData } from "../../../kpuzzle/KState";
 import { experimentalCountAnimatedLeaves } from "../../../notation";
 import type { Duration, Timestamp } from "../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
@@ -39,7 +39,7 @@ export class SimpleAlgIndexer implements AlgIndexer {
     return i;
   }
 
-  public stateAtIndex(index: number): KState {
+  public stateAtIndex(index: number): KStateData {
     return this.kpuzzle
       .startState()
       .applyTransformation(this.transformationAtIndex(index));

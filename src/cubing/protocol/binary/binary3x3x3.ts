@@ -101,6 +101,8 @@ export function reid3x3x3ToBinaryComponents(
 ): Binary3x3x3Components {
   const normedState = experimentalNormalize3x3x3Orientation(state);
 
+  const edgeView = normedState.orbitView("EDGES");
+
   const epLex = permutationToLex(
     12, // state.kpuzzle.definition.orbits["EDGES"].numPieces,
     normedState.stateData["EDGES"]?.pieces,

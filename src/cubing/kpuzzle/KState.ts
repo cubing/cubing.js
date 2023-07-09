@@ -88,7 +88,11 @@ export class KState {
   }
 
   public orbitView(orbitName: string): KStateOrbitView {
-    return new KStateOrbitView(this, orbitName);
+    const orbitDef = this.kpuzzle.definition.orbits[orbitName];
+    if (!orbitDef) {
+      throw "Invalid orbit name for KState.";
+    }
+    return new KStateOrbitView(orbitDef, this.stateData, orbitName);
   }
 
   public *orbitViews(): Generator<KStateOrbitView> {
@@ -99,27 +103,30 @@ export class KState {
 }
 
 // TODO: Combine some of the implementation with `KTransformationOrbitView`?
-class KStateOrbitView {
-  #state: KState;
+export class KStateOrbitView {
+  #orbitDef: KPuzzleOrbitDefinition;
+  #stateData: KStateData;
   #orbitName: string;
-  constructor(state: KState, orbitName: string) {
-    if (!(orbitName in state.kpuzzle.definition.orbits)) {
-      throw "Invalid orbit name for KState.";
-    }
-    this.#state = state;
+  constructor(
+    orbitDef: KPuzzleOrbitDefinition,
+    stateData: KStateData,
+    orbitName: string,
+  ) {
+    this.#orbitDef = orbitDef;
+    this.#stateData = stateData;
     this.#orbitName = orbitName;
   }
 
   getDefinition(): KPuzzleOrbitDefinition {
-    return this.#state.kpuzzle.definition.orbits[this.#orbitName];
+    return this.#orbitDef;
   }
 
   #orbit(): KStateOrbitData | undefined {
-    return this.#state.stateData[this.#orbitName];
+    return this.#stateData[this.#orbitName];
   }
 
   #ensureOrbit(): KStateOrbitData {
-    return (this.#state.stateData[this.#orbitName] ??= {});
+    return (this.#stateData[this.#orbitName] ??= {});
   }
 
   #ensureOrbitPieces(): (number | undefined)[] {
@@ -134,14 +141,23 @@ class KStateOrbitView {
     return this.#orbit()?.pieces?.[index] ?? index;
   }
 
+  // TODO: prevent write by default.
   setPiece(index: number, value: number) {
     this.#ensureOrbitPieces()[index] = value;
+  }
+
+  *getPieces(): Generator<number> {
+    const numPieces = this.getDefinition().numPieces;
+    for (let i = 0; i < numPieces; i++) {
+      yield this.getPiece(i);
+    }
   }
 
   getOrientation(index: number): number {
     return this.#orbit()?.orientation?.[index] ?? index;
   }
 
+  // TODO: prevent write by default.
   setOrientation(index: number, value: number) {
     this.#ensureOrbitOrientation()[index] = value;
   }

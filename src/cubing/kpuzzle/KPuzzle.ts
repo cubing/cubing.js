@@ -1,3 +1,4 @@
+import { KState } from ".";
 import { Alg, Move } from "../alg";
 import type { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
 import { algToTransformation } from "./calculate";
@@ -6,9 +7,7 @@ import type {
   KPuzzleDefinition,
   KTransformationData,
 } from "./KPuzzleDefinition";
-import { KState } from "./KState";
 import { KTransformation } from "./KTransformation";
-import { getPermOrPieceAtIndex } from "./sparse";
 
 export type KTransformationSource = Alg | Move | string | KTransformation;
 
@@ -86,14 +85,11 @@ export class KPuzzle {
   canConvertStateToUniqueTransformation(): boolean {
     return (this.#cachedCanConvertStateToUniqueTransformation ??=
       ((): boolean => {
-        for (const [orbitName, orbitDefinition] of Object.entries(
-          this.definition.orbits,
-        )) {
-          const pieces = new Array(orbitDefinition.numPieces).fill(false);
-          const startStateOrbit =
-            this.definition.startStateData[orbitName]?.pieces;
-          for (let i = 0; i < orbitDefinition.numPieces; i++) {
-            const piece = getPermOrPieceAtIndex(i, startStateOrbit);
+        for (const orbitView of this.startState().orbitViews()) {
+          // TODO: handle an "is default" case?
+          const orbitDef = orbitView.getDefinition();
+          const pieces = new Array(orbitDef.numPieces).fill(false);
+          for (const piece of orbitView.getPieces()) {
             pieces[piece] = true;
           }
           for (const piece of pieces) {

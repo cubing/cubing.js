@@ -123,7 +123,15 @@ export class KTransformation {
   }
 
   public orbitView(orbitName: string): KTransformationOrbitView {
-    return new KTransformationOrbitView(this, orbitName);
+    const orbitDef = this.kpuzzle.definition.orbits[orbitName];
+    if (!orbitDef) {
+      throw "Invalid orbit name for KTransformation.";
+    }
+    return new KTransformationOrbitView(
+      orbitDef,
+      this.transformationData,
+      orbitName,
+    );
   }
 
   public *orbitViews(): Generator<KTransformationOrbitView> {
@@ -134,27 +142,33 @@ export class KTransformation {
 }
 
 // TODO: Combine some of the implementation with `KStateOrbitView`?
-class KTransformationOrbitView {
-  #transformation: KTransformation;
+export class KTransformationOrbitView {
+  #orbitDef: KPuzzleOrbitDefinition;
+  #transformationData: KTransformationData;
   #orbitName: string;
-  constructor(transformation: KTransformation, orbitName: string) {
-    if (!(orbitName in transformation.kpuzzle.definition.orbits)) {
+  constructor(
+    orbitDef: KPuzzleOrbitDefinition,
+    transformation: KTransformationData,
+    orbitName: string,
+  ) {
+    if (!(orbitName in orbitDef)) {
       throw "Invalid orbit name for KTransformation.";
     }
-    this.#transformation = transformation;
+    this.#orbitDef = orbitDef;
+    this.#transformationData = transformation;
     this.#orbitName = orbitName;
   }
 
   getDefinition(): KPuzzleOrbitDefinition {
-    return this.#transformation.kpuzzle.definition.orbits[this.#orbitName];
+    return this.#orbitDef;
   }
 
   #orbit(): KTransformationOrbitData | undefined {
-    return this.#transformation.transformationData[this.#orbitName];
+    return this.#transformationData[this.#orbitName];
   }
 
   #ensureOrbit(): KTransformationOrbitData {
-    return (this.#transformation.transformationData[this.#orbitName] ??= {});
+    return (this.#transformationData[this.#orbitName] ??= {});
   }
 
   #ensureOrbitPermutation(): (number | undefined)[] {
@@ -169,6 +183,7 @@ class KTransformationOrbitView {
     return this.#orbit()?.permutation?.[index] ?? index;
   }
 
+  // TODO: prevent write by default.
   setPermutation(index: number, value: number) {
     this.#ensureOrbitPermutation()[index] = value;
   }
@@ -177,6 +192,7 @@ class KTransformationOrbitView {
     return this.#orbit()?.orientation?.[index] ?? index;
   }
 
+  // TODO: prevent write by default.
   setOrientation(index: number, value: number) {
     this.#ensureOrbitOrientation()[index] = value;
   }

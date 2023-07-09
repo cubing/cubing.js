@@ -1,5 +1,5 @@
 import type { KPuzzle } from "../../../kpuzzle";
-import type { KState } from "../../../kpuzzle/KState";
+import type { KStateData } from "../../../kpuzzle/KState";
 import { getOriAtIndex, getPermOrPieceAtIndex } from "../../../kpuzzle/sparse";
 import type {
   FaceletMeshStickeringMask,
@@ -137,12 +137,20 @@ export class KPuzzleSVGWrapper {
     }
   }
 
-  public drawState(state: KState, nextState?: KState, fraction?: number): void {
+  public drawState(
+    state: KStateData,
+    nextState?: KStateData,
+    fraction?: number,
+  ): void {
     this.draw(state, nextState, fraction);
   }
 
   // TODO: save definition in the constructor?
-  public draw(state: KState, nextState?: KState, fraction?: number): void {
+  public draw(
+    state: KStateData,
+    nextState?: KStateData,
+    fraction?: number,
+  ): void {
     const transformation = state.experimentalToTransformation();
     const nextTransformation = nextState?.experimentalToTransformation();
     if (!transformation) {

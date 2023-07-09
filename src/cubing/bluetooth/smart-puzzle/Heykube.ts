@@ -2,7 +2,7 @@
 
 import { Move } from "../../alg";
 import type { KPuzzle } from "../../kpuzzle";
-import type { KState } from "../../kpuzzle/KState";
+import type { KStateData } from "../../kpuzzle/KState";
 import {
   experimentalBinaryComponentsToReid3x3x3,
   experimentalTwizzleBinaryToBinaryComponents,
@@ -102,7 +102,7 @@ export class HeykubeCube extends BluetoothPuzzle {
     });
   }
 
-  private decodeState(dv: DataView): { state: KState; latestMove: Move } {
+  private decodeState(dv: DataView): { state: KStateData; latestMove: Move } {
     const moves = [
       new Move("U"),
       new Move("U'"),
@@ -148,7 +148,7 @@ export class HeykubeCube extends BluetoothPuzzle {
     };
   }
 
-  public override async getState(): Promise<KState> {
+  public override async getState(): Promise<KStateData> {
     const b1 = await this.stateCharacteristic.readValue();
     return this.decodeState(b1).state;
   }

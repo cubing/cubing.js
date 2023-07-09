@@ -1,6 +1,6 @@
 import type { Alg, Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
-import type { KState } from "../../../../kpuzzle/KState";
+import type { KStateData } from "../../../../kpuzzle/KState";
 import type { Duration, Timestamp } from "../../AnimationTypes";
 import type { AlgIndexer } from "../AlgIndexer";
 import {
@@ -52,7 +52,7 @@ export class TreeAlgIndexer implements AlgIndexer {
     throw new Error(`Out of algorithm: index ${index}`);
   }
 
-  public stateAtIndex(index: number, startState?: KState): KState {
+  public stateAtIndex(index: number, startState?: KStateData): KStateData {
     this.walker.moveByIndex(index);
     return (startState ?? this.kpuzzle.startState()).applyTransformation(
       this.walker.st,

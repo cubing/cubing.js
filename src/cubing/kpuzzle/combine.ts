@@ -1,10 +1,11 @@
 import { isOrbitTransformationDataIdentityUncached } from "./calculate";
-import { getOriAtIndex, getPermOrPieceAtIndex } from "./cubing-private";
 import type {
   KPuzzleDefinition,
   KStateData,
   KTransformationData,
 } from "./KPuzzleDefinition";
+import { KStateOrbitView } from "./KState";
+import { KTransformationOrbitView } from "./KTransformation";
 
 export function combineTransformationData(
   definition: KPuzzleDefinition,
@@ -33,11 +34,21 @@ export function combineTransformationData(
       newTransformationData[orbitName] = orbit2;
     } else {
       const newPerm = new Array(orbitDefinition.numPieces);
+      // TODO: handle "default" cases.
+      const orbit1View = new KTransformationOrbitView(
+        orbitDefinition,
+        transformationData1,
+        orbitName,
+      );
+      const orbit2View = new KTransformationOrbitView(
+        orbitDefinition,
+        transformationData1,
+        orbitName,
+      );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPerm[idx] = getPermOrPieceAtIndex(
-            getPermOrPieceAtIndex(idx, orbit2.permutation),
-            orbit1.permutation,
+          newPerm[idx] = orbit1View.getPermutation(
+            orbit2View.getPermutation(idx),
           );
         }
         newTransformationData[orbitName] = {
@@ -48,15 +59,11 @@ export function combineTransformationData(
         const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newOri[idx] =
-            (getOriAtIndex(
-              getPermOrPieceAtIndex(idx, orbit2.permutation),
-              orbit1.orientation,
-            ) +
-              getOriAtIndex(idx, orbit2.orientation)) %
+            (orbit1View.getOrientation(orbit2View.getPermutation(idx)) +
+              orbit2View.getOrientation(idx)) %
             orbitDefinition.numOrientations;
-          newPerm[idx] = getPermOrPieceAtIndex(
-            getPermOrPieceAtIndex(idx, orbit2.permutation),
-            orbit1.permutation,
+          newPerm[idx] = orbit1View.getPermutation(
+            orbit2View.getPermutation(idx),
           );
         }
         newTransformationData[orbitName] = {
@@ -89,12 +96,20 @@ export function applyTransformationDataToStateData(
       newStateData[orbitName] = orbit1;
     } else {
       const newPieces = new Array(orbitDefinition.numPieces);
+      // TODO: handle "default" cases.
+      const orbit1View = new KStateOrbitView(
+        orbitDefinition,
+        stateData,
+        orbitName,
+      );
+      const orbit2View = new KTransformationOrbitView(
+        orbitDefinition,
+        transformationData,
+        orbitName,
+      );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPieces[idx] = getPermOrPieceAtIndex(
-            getPermOrPieceAtIndex(idx, orbit2.permutation),
-            orbit1?.pieces,
-          );
+          newPieces[idx] = orbit1View.getPiece(orbit2View.getPermutation(idx));
         }
         newStateData[orbitName] = {
           pieces: newPieces,
@@ -104,16 +119,10 @@ export function applyTransformationDataToStateData(
         const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newOri[idx] =
-            (getOriAtIndex(
-              getPermOrPieceAtIndex(idx, orbit2.permutation),
-              orbit1?.orientation,
-            ) +
-              getOriAtIndex(idx, orbit2.orientation)) %
+            (orbit1View.getOrientation(orbit2View.getPermutation(idx)) +
+              orbit2View.getOrientation(idx)) %
             orbitDefinition.numOrientations;
-          newPieces[idx] = getPermOrPieceAtIndex(
-            getPermOrPieceAtIndex(idx, orbit2.permutation),
-            orbit1?.pieces,
-          );
+          newPieces[idx] = orbit1View.getPiece(orbit2View.getPermutation(idx));
         }
         newStateData[orbitName] = {
           pieces: newPieces,

@@ -1,11 +1,11 @@
-import type { KState } from "../../../../../kpuzzle/KState";
+import type { KStateData } from "../../../../../kpuzzle/KState";
 import type { PuzzlePosition } from "../../../../controllers/AnimationTypes";
 import type { CurrentMoveInfo } from "../../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 
 export interface LegacyPositionPropInputs {
   currentMoveInfo: CurrentMoveInfo;
-  state: KState;
+  state: KStateData;
 }
 
 // TODO: This exist as a convenience for old `Twisty3D` implementations. Get rid of this.
