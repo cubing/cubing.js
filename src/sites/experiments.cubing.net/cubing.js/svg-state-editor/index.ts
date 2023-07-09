@@ -1,10 +1,6 @@
 import { offsetMod } from "../../../../cubing/alg/cubing-private";
 import { KState, type KPuzzle } from "../../../../cubing/kpuzzle";
-import type {
-  KPuzzleOrbitDefinition,
-  KStateOrbitData,
-  OptionalIntegerArray,
-} from "../../../../cubing/kpuzzle/KPuzzleDefinition";
+
 import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
 import { defToString, stateToString } from "../3x3x3-formats/convert";
 
@@ -209,11 +205,8 @@ class PuzzleStateEditor {
       );
     }
 
-    const stateOrbit = this.state.stateData[facelet.orbitName];
-    stateOrbit.orientation[facelet.pieceIndex] = offsetMod(
-      stateOrbit.orientation[facelet.pieceIndex] - 1,
-      numOrientations,
-    );
+    const orbitView = this.state.orbitView(facelet.orbitName, true);
+    orbitView.setOrientationDeltaAt(facelet.pieceIndex, -1);
     this.displayStateText();
     flash(facelet.element);
   }
@@ -245,27 +238,20 @@ class PuzzleStateEditor {
     // TODO: do we check that the orbits match?
     const orbitView = this.state.orbitView(facelet1.orbitName);
 
-    const piece1Index = orbitView.getPiece(facelet1.pieceIndex);
-    const piece1Orientation = orbitView.getOrientation(
+    const piece1Index = orbitView.getPieceAt(facelet1.pieceIndex);
+    const piece1Orientation = orbitView.getOrientationAt(
       facelet1.orientationIndex,
     );
-    const piece2Index = orbitView.getPiece(facelet2.pieceIndex);
-    const piece2Orientation = orbitView.getOrientation(
+    const piece2Index = orbitView.getPieceAt(facelet2.pieceIndex);
+    const piece2Orientation = orbitView.getOrientationAt(
       facelet2.orientationIndex,
     );
 
-    orbitView.setPiece(facelet1.pieceIndex, piece2Index);
-    orbitView.setOrientation(facelet1.pieceIndex);
-    stateOrbit.orientation[facelet1.pieceIndex] = offsetMod(
-      piece2Orientation - offset,
-      numOrientations,
-    );
+    orbitView.setPieceAt(facelet1.pieceIndex, piece2Index);
+    orbitView.setOrientationAt(facelet1.pieceIndex, piece2Orientation - offset);
+    orbitView.setPieceAt(facelet2.pieceIndex, piece1Index);
+    orbitView.setOrientationAt(facelet2.pieceIndex, piece1Orientation + offset);
 
-    stateOrbit.pieces[facelet2.pieceIndex] = piece1Index;
-    stateOrbit.orientation[facelet2.pieceIndex] = offsetMod(
-      piece1Orientation + offset,
-      numOrientations,
-    );
     this.displayStateText();
     flash(facelet1.element);
     flash(facelet2.element);

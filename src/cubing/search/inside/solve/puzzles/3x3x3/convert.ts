@@ -17,7 +17,7 @@ LFRB
          |51|52|53|
 */
 
-import type { KStateData } from "../../../../../kpuzzle/KState";
+import type { KState } from "../../../../../kpuzzle";
 
 const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
 const reidCornerOrder = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
@@ -98,26 +98,29 @@ function rotateLeft(s: string, i: number): string {
   return s.slice(i) + s.slice(0, i);
 }
 
-function toReid333Struct(state: KStateData): string[][] {
+function toReid333Struct(state: KState): string[][] {
   const output: string[][] = [[], []];
+  const centersView = state.orbitView("CENTERS");
   for (let i = 0; i < 6; i++) {
-    if (state.stateData["CENTERS"].pieces[i] !== i) {
+    if (centersView.getPieceAt(i) !== i) {
       throw new Error("non-oriented puzzles are not supported");
     }
   }
+  const edgesView = state.orbitView("EDGES");
   for (let i = 0; i < 12; i++) {
     output[0].push(
       rotateLeft(
-        reidEdgeOrder[state.stateData["EDGES"].pieces[i]],
-        state.stateData["EDGES"].orientation[i],
+        reidEdgeOrder[edgesView.getPieceAt(i)],
+        edgesView.getOrientationAt(i),
       ),
     );
   }
+  const cornersView = state.orbitView("EDGES");
   for (let i = 0; i < 8; i++) {
     output[1].push(
       rotateLeft(
-        reidCornerOrder[state.stateData["CORNERS"].pieces[i]],
-        state.stateData["CORNERS"].orientation[i],
+        reidCornerOrder[cornersView.getPieceAt(i)],
+        cornersView.getOrientationAt(i),
       ),
     );
   }
@@ -131,7 +134,7 @@ function toReid333Struct(state: KStateData): string[][] {
 //     .join(" ");
 // }
 
-export function toMin2PhaseState(state: KStateData): string {
+export function toMin2PhaseState(state: KState): string {
   const reid = toReid333Struct(state);
   return map.map(([orbit, perm, ori]) => reid[orbit][perm][ori]).join("");
 }

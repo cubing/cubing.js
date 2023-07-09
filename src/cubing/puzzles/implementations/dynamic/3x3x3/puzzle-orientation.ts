@@ -4,9 +4,9 @@ import { experimental3x3x3KPuzzle } from "../../../cubing-private";
 
 export function puzzleOrientation3x3x3Idx(state: KState): [number, number] {
   const orbitView = state.orbitView("CENTERS");
-  const idxU = orbitView.getPiece(0);
-  const idxD = orbitView.getPiece(5);
-  const unadjustedIdxL = orbitView.getPiece(1);
+  const idxU = orbitView.getPieceAt(0);
+  const idxD = orbitView.getPieceAt(5);
+  const unadjustedIdxL = orbitView.getPieceAt(1);
   let idxL = unadjustedIdxL;
   if (idxU < unadjustedIdxL) {
     idxL--;

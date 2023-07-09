@@ -49,8 +49,8 @@ export function combineTransformationData(
       );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPerm[idx] = orbit1View.getPermutation(
-            orbit2View.getPermutation(idx),
+          newPerm[idx] = orbit1View.getPermutationAt(
+            orbit2View.getPermutationAt(idx),
           );
         }
         newTransformationData[orbitName] = {
@@ -61,11 +61,11 @@ export function combineTransformationData(
         const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newOri[idx] =
-            (orbit1View.getOrientation(orbit2View.getPermutation(idx)) +
-              orbit2View.getOrientation(idx)) %
+            (orbit1View.getOrientationAt(orbit2View.getPermutationAt(idx)) +
+              orbit2View.getOrientationAt(idx)) %
             orbitDefinition.numOrientations;
-          newPerm[idx] = orbit1View.getPermutation(
-            orbit2View.getPermutation(idx),
+          newPerm[idx] = orbit1View.getPermutationAt(
+            orbit2View.getPermutationAt(idx),
           );
         }
         newTransformationData[orbitName] = {
@@ -113,7 +113,9 @@ export function applyTransformationDataToStateData(
       );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPieces[idx] = orbit1View.getPiece(orbit2View.getPermutation(idx));
+          newPieces[idx] = orbit1View.getPieceAt(
+            orbit2View.getPermutationAt(idx),
+          );
         }
         newStateData[orbitName] = {
           pieces: newPieces,
@@ -123,10 +125,12 @@ export function applyTransformationDataToStateData(
         const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newOri[idx] =
-            (orbit1View.getOrientation(orbit2View.getPermutation(idx)) +
-              orbit2View.getOrientation(idx)) %
+            (orbit1View.getOrientationAt(orbit2View.getPermutationAt(idx)) +
+              orbit2View.getOrientationAt(idx)) %
             orbitDefinition.numOrientations;
-          newPieces[idx] = orbit1View.getPiece(orbit2View.getPermutation(idx));
+          newPieces[idx] = orbit1View.getPieceAt(
+            orbit2View.getPermutationAt(idx),
+          );
         }
         newStateData[orbitName] = {
           pieces: newPieces,

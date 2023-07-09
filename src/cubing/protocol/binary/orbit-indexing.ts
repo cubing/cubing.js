@@ -16,7 +16,7 @@ export function orientationsToMask(
   const { orbitDefinition } = orbitView;
   for (let i = 0; i < orbitDefinition.numPieces; i++) {
     val *= orbitDefinition.numOrientations;
-    val += orbitView.getOrientation(i);
+    val += orbitView.getOrientationAt(i);
   }
   return val;
 }
@@ -42,7 +42,7 @@ export function permutationToLex(orbitView: KTransformationOrbitView): number {
   for (let i = 0; i < numPieces - 1; i++) {
     lexicographicIdx = lexicographicIdx * (numPieces - i);
     for (let j = i + 1; j < numPieces; j++) {
-      if (orbitView.getPermutation(i) > orbitView.getPermutation(j)) {
+      if (orbitView.getPermutationAt(i) > orbitView.getPermutationAt(j)) {
         lexicographicIdx += 1;
       }
     }

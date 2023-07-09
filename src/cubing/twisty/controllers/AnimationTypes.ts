@@ -1,5 +1,5 @@
 import type { Move } from "../../alg";
-import type { KStateData } from "../../kpuzzle/KState";
+import type { KState } from "../../kpuzzle";
 
 export type MillisecondTimestamp = number;
 
@@ -29,7 +29,7 @@ export interface MoveInProgress {
 }
 
 export type PuzzlePosition = {
-  state: KStateData;
+  state: KState;
   movesInProgress: MoveInProgress[];
 };
 

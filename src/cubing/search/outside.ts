@@ -1,7 +1,5 @@
 import { Alg } from "../alg";
-import type { KPuzzle } from "../kpuzzle";
-// import { preInitialize222 } from "../implementations/2x2x2";
-import type { KStateData } from "../kpuzzle/KState";
+import type { KPuzzle, KState } from "../kpuzzle";
 import type { PrefetchLevel } from "./inside/api";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
@@ -87,32 +85,32 @@ export async function randomScrambleStringForEvent(
 }
 
 export async function experimentalSolve3x3x3IgnoringCenters(
-  state: KStateData,
+  state: KState,
 ): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.insideAPI.solve333ToString(state.stateData));
 }
 
-export async function experimentalSolve2x2x2(state: KStateData): Promise<Alg> {
+export async function experimentalSolve2x2x2(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.insideAPI.solve222ToString(state.stateData));
 }
 
-export async function solveSkewb(state: KStateData): Promise<Alg> {
+export async function solveSkewb(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(
     await cwi.insideAPI.solveSkewbToString(state.stateData),
   );
 }
 
-export async function solvePyraminx(state: KStateData): Promise<Alg> {
+export async function solvePyraminx(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(
     await cwi.insideAPI.solvePyraminxToString(state.stateData),
   );
 }
 
-export async function solveMegaminx(state: KStateData): Promise<Alg> {
+export async function solveMegaminx(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(
     await cwi.insideAPI.solveMegaminxToString(state.stateData),
@@ -121,13 +119,13 @@ export async function solveMegaminx(state: KStateData): Promise<Alg> {
 
 export interface SolveTwsearchOptions {
   moveSubset?: string[];
-  startState?: KStateData;
+  startState?: KState;
   minDepth?: number;
 }
 
 export async function solveTwsearch(
   kpuzzle: KPuzzle,
-  state: KStateData,
+  state: KState,
   options?: SolveTwsearchOptions,
 ): Promise<Alg> {
   const { startState, ...otherOptions } = options ?? {};

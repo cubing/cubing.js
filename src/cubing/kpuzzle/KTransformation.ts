@@ -14,6 +14,7 @@ import type {
   KPuzzleOrbitDefinition,
   KTransformationData,
   KTransformationOrbitData,
+  OrbitName,
 } from "./KPuzzleDefinition";
 
 export class KTransformation {
@@ -151,11 +152,11 @@ export class KTransformation {
 // TODO: Combine some of the implementation with `KStateOrbitView`?
 export class KTransformationOrbitView {
   #transformationData: KTransformationData;
-  #orbitName: string;
+  #orbitName: OrbitName;
   constructor(
     public readonly orbitDefinition: KPuzzleOrbitDefinition,
     transformation: KTransformationData,
-    orbitName: string,
+    orbitName: OrbitName,
     public readonly mutable: boolean,
   ) {
     this.#transformationData = transformation;
@@ -178,11 +179,11 @@ export class KTransformationOrbitView {
     return (this.#ensureOrbit().orientation ??= []);
   }
 
-  getPermutation(index: number): number {
+  getPermutationAt(index: number): number {
     return this.#orbit()?.permutation?.[index] ?? index;
   }
 
-  setPermutation(index: number, value: number) {
+  setPermutationAt(index: number, value: number) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set permutation for a non-mutable `KTransformationOrbitView`.",
@@ -191,12 +192,21 @@ export class KTransformationOrbitView {
     this.#ensureOrbitPermutation()[index] = value;
   }
 
-  getOrientation(index: number): number {
+  setPermutation(permutation: Iterable<number | undefined>) {
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set permutation for a non-mutable `KStateOrbitView`.",
+      );
+    }
+    this.#ensureOrbit().permutation = [...permutation];
+  }
+
+  getOrientationAt(index: number): number {
     return this.#orbit()?.orientation?.[index] ?? index;
   }
 
   // Automatically mods `value` into the appropriate range.
-  setOrientation(index: number, value: number) {
+  setOrientationAt(index: number, value: number) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set piece for a non-mutable `KTransformationOrbitView`.",
@@ -206,5 +216,20 @@ export class KTransformationOrbitView {
       value,
       this.orbitDefinition.numOrientations,
     );
+  }
+
+  // `delta` may be negative.
+  // Automatically mods `value` into the appropriate range.
+  setOrientationDeltaAt(idx: number, delta: number) {
+    this.setOrientationAt(idx, this.getOrientationAt(idx) + delta);
+  }
+
+  setOrientation(orientation: Iterable<number | undefined>) {
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set orientations for a non-mutable `KStateOrbitView`.",
+      );
+    }
+    this.#ensureOrbit().orientation = [...orientation];
   }
 }

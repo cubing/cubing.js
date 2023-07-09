@@ -1,13 +1,12 @@
 import { Alg, keyToMove } from "../alg";
-import type { KPuzzle } from "../kpuzzle";
-import type { KStateData } from "../kpuzzle/KState";
+import type { KPuzzle, KState } from "../kpuzzle";
 import { puzzles } from "../puzzles";
 import { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
 
 /** @category Keyboard Puzzles */
 export class KeyboardPuzzle extends BluetoothPuzzle {
   private puzzle: Promise<KPuzzle> = puzzles["3x3x3"].kpuzzle();
-  private state: Promise<KStateData> = (async () =>
+  private state: Promise<KState> = (async () =>
     (await this.puzzle).startState())();
 
   listener: (e: KeyboardEvent) => Promise<void>;
@@ -28,7 +27,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
     this.target.removeEventListener("keydown", this.listener);
   }
 
-  public override async getState(): Promise<KStateData> {
+  public override async getState(): Promise<KState> {
     return this.state;
   }
 

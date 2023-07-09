@@ -6,7 +6,8 @@ export function puzzleOrientation2x2x2Idx(state: KState): number {
 
   const inverseOrbitView = inverse.orbitView("CORNERS");
   return (
-    inverseOrbitView.getPermutation(6 ) * 3 + inverseOrbitView.getOrientation(6)
+    inverseOrbitView.getPermutationAt(6) * 3 +
+    inverseOrbitView.getOrientationAt(6)
   );
 }
 

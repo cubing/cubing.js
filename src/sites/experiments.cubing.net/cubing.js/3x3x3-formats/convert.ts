@@ -1,9 +1,14 @@
 import type {
   KPuzzleDefinition,
-  KStateOrbitData,
+  KStateData,
+  OrbitName,
 } from "../../../../cubing/kpuzzle/KPuzzleDefinition";
 import { KState } from "../../../../cubing/kpuzzle";
-import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
+import {
+  experimental3x3x3KPuzzle,
+  experimentalCube3x3x3KPuzzleDefinition,
+} from "../../../../cubing/puzzles/cubing-private";
+import { KStateOrbitView } from "../../../../cubing/kpuzzle/KState";
 
 function neatStringify(data: any): string {
   return JSON.stringify(data, null, "  ")
@@ -57,22 +62,16 @@ for (const orbit of orbits) {
 
 export function kpuzzleToReidString(state: KState): string {
   const pieces: string[] = [];
-
-  const addOrbit = (orbitName: string): void => {
-    for (let i = 0; i < state.stateData[orbitName].pieces.length; i++) {
+  for (const orbitView of state.orbitViews()) {
+    for (let i = 0; i < orbitView.orbitDefinition.numPieces; i++) {
       pieces.push(
         rotateLeft(
-          pieceNames[orbitName][state.stateData[orbitName].pieces[i]],
-          state.stateData[orbitName].orientation[i],
+          pieceNames[orbitView.orbitName][orbitView.getPieceAt(i)],
+          orbitView.getOrientationAt(i),
         ),
       );
     }
-  };
-
-  for (const orbit of orbits) {
-    addOrbit(orbit);
   }
-
   return pieces.join(" ");
 }
 
@@ -117,22 +116,24 @@ export function stickersToKPuzzle(stickers: number[]): KState {
 export function reidStringToKState(s: string): KState {
   const pieces = s.split(" ");
 
-  const orbit = (pieces: string[]): KStateOrbitData => {
-    const orbitState: KStateOrbitData = {
-      pieces: [],
-      orientation: [],
-    };
-    for (const piece of pieces) {
-      orbitState.pieces.push(pieceMap[piece].piece);
-      orbitState.orientation.push(pieceMap[piece].orientation);
-    }
-    return orbitState;
+  const stateData: KStateData = {};
+  const orbit = (orbitName: OrbitName, n: number, offset: number): void => {
+    const orbitView = new KStateOrbitView(
+      experimentalCube3x3x3KPuzzleDefinition.orbits[orbitName],
+      stateData,
+      orbitName,
+      true,
+    );
+    orbitView.setOrientation(
+      pieces.slice(offset, n + offset).map((s) => pieceMap[s].piece),
+    );
+    orbitView.setOrientation(
+      pieces.slice(offset, n + offset).map((s) => pieceMap[s].orientation),
+    );
   };
 
-  const stateData = {
-    EDGES: orbit(pieces.slice(0, 12)),
-    CORNERS: orbit(pieces.slice(12, 20)),
-    CENTERS: orbit(pieces.slice(20, 26)),
-  };
+  orbit("EDGES", 12, 0);
+  orbit("CORNERS", 8, 12);
+  orbit("CENTERS", 6, 20);
   return new KState(experimental3x3x3KPuzzle, stateData);
 }

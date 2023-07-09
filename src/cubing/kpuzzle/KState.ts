@@ -8,6 +8,7 @@ import type {
   KStateOrbitData,
   KTransformationData,
   KTransformationOrbitData,
+  OrbitName,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 import { offsetMod } from "../alg/cubing-private";
@@ -109,23 +110,21 @@ export class KState {
 // TODO: Combine some of the implementation with `KTransformationOrbitView`?
 export class KStateOrbitView {
   #stateData: KStateData;
-  #orbitName: string;
   constructor(
     public readonly orbitDefinition: KPuzzleOrbitDefinition,
     stateData: KStateData,
-    orbitName: string,
+    public readonly orbitName: OrbitName,
     public readonly mutable: boolean,
   ) {
     this.#stateData = stateData;
-    this.#orbitName = orbitName;
   }
 
   #orbit(): KStateOrbitData | undefined {
-    return this.#stateData[this.#orbitName];
+    return this.#stateData[this.orbitName];
   }
 
   #ensureOrbit(): KStateOrbitData {
-    return (this.#stateData[this.#orbitName] ??= {});
+    return (this.#stateData[this.orbitName] ??= {});
   }
 
   #ensureOrbitPieces(): (number | undefined)[] {
@@ -136,40 +135,64 @@ export class KStateOrbitView {
     return (this.#ensureOrbit().orientation ??= []);
   }
 
-  getPiece(index: number): number {
-    return this.#orbit()?.pieces?.[index] ?? index;
+  getPieceAt(idx: number): number {
+    return this.#orbit()?.pieces?.[idx] ?? idx;
   }
 
-  setPiece(index: number, value: number) {
+  setPieceAt(idx: number, value: number) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set piece for a non-mutable `KStateOrbitView`.",
       );
     }
-    this.#ensureOrbitPieces()[index] = value;
+    this.#ensureOrbitPieces()[idx] = value;
   }
 
   *getPieces(): Generator<number> {
     const numPieces = this.orbitDefinition.numPieces;
     for (let i = 0; i < numPieces; i++) {
-      yield this.getPiece(i);
+      yield this.getPieceAt(i);
     }
   }
 
-  getOrientation(index: number): number {
-    return this.#orbit()?.orientation?.[index] ?? index;
+  setPieces(pieces: Iterable<number | undefined>) {
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set pieces for a non-mutable `KStateOrbitView`.",
+      );
+    }
+    this.#ensureOrbit().pieces = [...pieces];
+  }
+
+  getOrientationAt(idx: number): number {
+    return this.#orbit()?.orientation?.[idx] ?? idx;
   }
 
   // Automatically mods `value` into the appropriate range.
-  setOrientation(index: number, value: number) {
+  setOrientationAt(idx: number, value: number) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set orientation for a non-mutable `KStateOrbitView`.",
       );
     }
-    this.#ensureOrbitOrientation()[index] = offsetMod(
+    this.#ensureOrbitOrientation()[idx] = offsetMod(
       value,
       this.orbitDefinition.numOrientations,
     );
+  }
+
+  // `delta` may be negative.
+  // Automatically mods `value` into the appropriate range.
+  setOrientationDeltaAt(idx: number, delta: number) {
+    this.setOrientationAt(idx, this.getOrientationAt(idx) + delta);
+  }
+
+  setOrientation(orientation: Iterable<number | undefined>) {
+    if (!this.mutable) {
+      throw new Error(
+        "Tried to set orientations for a non-mutable `KStateOrbitView`.",
+      );
+    }
+    this.#ensureOrbit().orientation = [...orientation];
   }
 }

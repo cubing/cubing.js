@@ -255,8 +255,8 @@ export class StickeringManager {
       const orbitView = transformation.orbitView(orbitName);
       for (let i = 0; i < orbitDef.numPieces; i++) {
         if (
-          orbitView.getPermutation(i) !== i ||
-          orbitView.getOrientation(i) !== 0
+          orbitView.getPermutationAt(i) !== i ||
+          orbitView.getOrientationAt(i) !== 0
         ) {
           newPieceSet.stickerings.get(orbitName)![i] = true;
         }

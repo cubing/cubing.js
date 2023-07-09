@@ -3,6 +3,7 @@ export type {
   KPuzzleDefinition,
   KStateData,
   KTransformationData,
+  OrbitName,
 } from "./KPuzzleDefinition";
 export { KState } from "./KState";
 export { KTransformation } from "./KTransformation";

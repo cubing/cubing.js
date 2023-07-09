@@ -162,9 +162,9 @@ export class KPuzzleSVGWrapper {
           const id = this.elementID(orbitName, idx, orientation);
           const fromCur = this.elementID(
             orbitName,
-            curOrbitView.getPermutation(idx),
+            curOrbitView.getPermutationAt(idx),
             (orbitDefinition.numOrientations -
-              curOrbitView.getOrientation(idx) +
+              curOrbitView.getOrientationAt(idx) +
               orientation) %
               orbitDefinition.numOrientations,
           );
@@ -172,9 +172,9 @@ export class KPuzzleSVGWrapper {
           if (nextOrbitView) {
             const fromNext = this.elementID(
               orbitName,
-              nextOrbitView.getPermutation(idx),
+              nextOrbitView.getPermutationAt(idx),
               (orbitDefinition.numOrientations -
-                nextOrbitView.getOrientation(idx) +
+                nextOrbitView.getOrientationAt(idx) +
                 orientation) %
                 orbitDefinition.numOrientations,
             );
