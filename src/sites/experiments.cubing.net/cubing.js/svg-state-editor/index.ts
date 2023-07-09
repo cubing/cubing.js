@@ -1,5 +1,10 @@
 import { offsetMod } from "../../../../cubing/alg/cubing-private";
 import { KState, type KPuzzle } from "../../../../cubing/kpuzzle";
+import type {
+  KPuzzleOrbitDefinition,
+  KStateOrbitData,
+  OptionalIntegerArray,
+} from "../../../../cubing/kpuzzle/KPuzzleDefinition";
 import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
 import { defToString, stateToString } from "../3x3x3-formats/convert";
 

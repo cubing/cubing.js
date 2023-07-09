@@ -8,6 +8,7 @@ import {
 export function puzzleOrientation2x2x2Idx(state: KState): number {
   const inverse = state.experimentalToTransformation()!.invert();
 
+  const orbitView = state.orbitView("CORNERS");
   const inverseDFL = inverse.transformationData["CORNERS"];
   return (
     getPermOrPieceAtIndex(6, inverseDFL.permutation) * 3 +

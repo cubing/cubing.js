@@ -1,18 +1,22 @@
 import type { KState } from "./KState";
 
+// Note that it makes sense to use `field?: OptionalIntegerArray` to indicate
+// that a field may be missing *or* that it may be set to the value `undefined`.
+export type OptionalIntegerArray = (number | undefined)[] | undefined;
+
 // TODO: Use a list instead of an object for performance?
 export type KTransformationData = Record<string, KTransformationOrbitData>;
 export interface KTransformationOrbitData {
-  permutation?: number[];
-  orientation?: number[];
+  permutation?: OptionalIntegerArray;
+  orientation?: OptionalIntegerArray;
 }
 
 // TODO: Use a list instead of an object for performance?
 export type KStateData = Partial<Record<string, KStateOrbitData>>;
 export interface KStateOrbitData {
-  pieces?: number[];
-  orientation?: number[];
-  orientationMod?: number[];
+  pieces?: OptionalIntegerArray;
+  orientation?: OptionalIntegerArray;
+  // orientationMod?: OptionalIntegerArray;
 }
 
 export interface KPuzzleOrbitDefinition {

@@ -1,3 +1,4 @@
+import { KState } from ".";
 import type { Alg, Move } from "../alg";
 import {
   invertTransformation,
@@ -8,8 +9,11 @@ import {
 import { combineTransformationData } from "./combine";
 import { constructIdentityTransformationDataUncached } from "./construct";
 import type { KPuzzle, KTransformationSource } from "./KPuzzle";
-import type { KTransformationData } from "./KPuzzleDefinition";
-import { KState } from "./KState";
+import type {
+  KPuzzleOrbitDefinition,
+  KTransformationData,
+  KTransformationOrbitData,
+} from "./KPuzzleDefinition";
 
 export class KTransformation {
   constructor(
@@ -116,5 +120,64 @@ export class KTransformation {
         amount,
       ),
     );
+  }
+
+  public orbitView(orbitName: string): KTransformationOrbitView {
+    return new KTransformationOrbitView(this, orbitName);
+  }
+
+  public *orbitViews(): Generator<KTransformationOrbitView> {
+    for (const orbitName in this.kpuzzle.definition.orbits) {
+      yield this.orbitView(orbitName);
+    }
+  }
+}
+
+// TODO: Combine some of the implementation with `KStateOrbitView`?
+class KTransformationOrbitView {
+  #transformation: KTransformation;
+  #orbitName: string;
+  constructor(transformation: KTransformation, orbitName: string) {
+    if (!(orbitName in transformation.kpuzzle.definition.orbits)) {
+      throw "Invalid orbit name for KTransformation.";
+    }
+    this.#transformation = transformation;
+    this.#orbitName = orbitName;
+  }
+
+  getDefinition(): KPuzzleOrbitDefinition {
+    return this.#transformation.kpuzzle.definition.orbits[this.#orbitName];
+  }
+
+  #orbit(): KTransformationOrbitData | undefined {
+    return this.#transformation.transformationData[this.#orbitName];
+  }
+
+  #ensureOrbit(): KTransformationOrbitData {
+    return (this.#transformation.transformationData[this.#orbitName] ??= {});
+  }
+
+  #ensureOrbitPermutation(): (number | undefined)[] {
+    return (this.#ensureOrbit().permutation ??= []);
+  }
+
+  #ensureOrbitOrientation(): (number | undefined)[] {
+    return (this.#ensureOrbit().orientation ??= []);
+  }
+
+  getPermutation(index: number): number {
+    return this.#orbit()?.permutation?.[index] ?? index;
+  }
+
+  setPermutation(index: number, value: number) {
+    this.#ensureOrbitPermutation()[index] = value;
+  }
+
+  getOrientation(index: number): number {
+    return this.#orbit()?.orientation?.[index] ?? index;
+  }
+
+  setOrientation(index: number, value: number) {
+    this.#ensureOrbitOrientation()[index] = value;
   }
 }

@@ -10,7 +10,7 @@ export function isEquivalentTranformationIgnoringCENTERS(
     EDGES: t1.stateData.EDGES,
     CORNERS: t1.stateData.CORNERS,
     CENTERS: {
-      pieces: t1.stateData.CENTERS.pieces,
+      pieces: t1.stateData.CENTERS?.pieces,
       orientation: new Array(6).fill(0),
     },
   }).experimentalToTransformation()!;
@@ -18,7 +18,7 @@ export function isEquivalentTranformationIgnoringCENTERS(
     EDGES: t2.stateData.EDGES,
     CORNERS: t2.stateData.CORNERS,
     CENTERS: {
-      pieces: t2.stateData.CENTERS.pieces,
+      pieces: t2.stateData.CENTERS?.pieces,
       orientation: new Array(6).fill(0),
     },
   }).experimentalToTransformation()!;

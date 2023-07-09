@@ -3,7 +3,9 @@ import type { Alg, Move } from "../alg";
 import { applyTransformationDataToStateData } from "./combine";
 import type { KTransformationSource } from "./KPuzzle";
 import type {
+  KPuzzleOrbitDefinition,
   KStateData,
+  KStateOrbitData,
   KTransformationData,
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
@@ -83,5 +85,64 @@ export class KState {
       );
     }
     return this.kpuzzle.definition.experimentalIsStateSolved(this, options);
+  }
+
+  public orbitView(orbitName: string): KStateOrbitView {
+    return new KStateOrbitView(this, orbitName);
+  }
+
+  public *orbitViews(): Generator<KStateOrbitView> {
+    for (const orbitName in this.kpuzzle.definition.orbits) {
+      yield this.orbitView(orbitName);
+    }
+  }
+}
+
+// TODO: Combine some of the implementation with `KTransformationOrbitView`?
+class KStateOrbitView {
+  #state: KState;
+  #orbitName: string;
+  constructor(state: KState, orbitName: string) {
+    if (!(orbitName in state.kpuzzle.definition.orbits)) {
+      throw "Invalid orbit name for KState.";
+    }
+    this.#state = state;
+    this.#orbitName = orbitName;
+  }
+
+  getDefinition(): KPuzzleOrbitDefinition {
+    return this.#state.kpuzzle.definition.orbits[this.#orbitName];
+  }
+
+  #orbit(): KStateOrbitData | undefined {
+    return this.#state.stateData[this.#orbitName];
+  }
+
+  #ensureOrbit(): KStateOrbitData {
+    return (this.#state.stateData[this.#orbitName] ??= {});
+  }
+
+  #ensureOrbitPieces(): (number | undefined)[] {
+    return (this.#ensureOrbit().pieces ??= []);
+  }
+
+  #ensureOrbitOrientation(): (number | undefined)[] {
+    return (this.#ensureOrbit().orientation ??= []);
+  }
+
+  getPiece(index: number): number {
+    return this.#orbit()?.pieces?.[index] ?? index;
+  }
+
+  setPiece(index: number, value: number) {
+    this.#ensureOrbitPieces()[index] = value;
+  }
+
+  getOrientation(index: number): number {
+    return this.#orbit()?.orientation?.[index] ?? index;
+  }
+
+  setOrientation(index: number, value: number) {
+    this.#ensureOrbitOrientation()[index] = value;
   }
 }
