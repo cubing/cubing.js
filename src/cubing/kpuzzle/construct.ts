@@ -1,3 +1,4 @@
+import { KTransformation } from ".";
 import type { Move } from "../alg";
 import { repeatTransformationUncached } from "./calculate";
 import type { KPuzzle } from "./KPuzzle";
@@ -37,6 +38,7 @@ function constructIdentityOrbitTransformation(
   return orbitTransformation;
 }
 
+// TODO: remove this?
 export function constructIdentityTransformationDataUncached(
   definition: KPuzzleDefinition,
 ): KTransformationData {
@@ -57,7 +59,7 @@ export function constructIdentityTransformationDataUncached(
 export function moveToTransformationUncached(
   kpuzzle: KPuzzle,
   move: Move,
-): KTransformationData {
+): KTransformation {
   const quantumKey = move.quantum.toString();
   let quantumMoveDefinition = kpuzzle.definition.moves[quantumKey] as
     | KTransformationData
@@ -76,8 +78,7 @@ export function moveToTransformationUncached(
 
   if (quantumMoveDefinition) {
     return repeatTransformationUncached(
-      kpuzzle,
-      quantumMoveDefinition,
+      new KTransformation(kpuzzle, quantumMoveDefinition),
       move.amount,
     );
   }
@@ -86,7 +87,7 @@ export function moveToTransformationUncached(
   // Note: this doesn't handle multiples.
   const moveDefinition = kpuzzle.definition.moves[move.toString()];
   if (moveDefinition) {
-    return moveDefinition;
+    return new KTransformation(kpuzzle, moveDefinition);
   }
 
   // Handle e.g. `y2'` if `y2` is defined.
@@ -94,7 +95,10 @@ export function moveToTransformationUncached(
   const inverseMoveDefinition =
     kpuzzle.definition.moves[move.invert().toString()];
   if (inverseMoveDefinition) {
-    return repeatTransformationUncached(kpuzzle, inverseMoveDefinition, -1);
+    return repeatTransformationUncached(
+      new KTransformation(kpuzzle, inverseMoveDefinition),
+      -1,
+    );
   }
 
   throw new Error(`Invalid move for KPuzzle (${kpuzzle.name()}): ${move}`);

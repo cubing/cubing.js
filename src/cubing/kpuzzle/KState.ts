@@ -8,6 +8,7 @@ import type {
   KStateOrbitData,
   KTransformationData,
   KTransformationOrbitData,
+  OptionalIntegerArray,
   OrbitName,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
@@ -155,13 +156,17 @@ export class KStateOrbitView {
     }
   }
 
-  setPieces(pieces: Iterable<number | undefined>) {
+  getPiecesRaw(): OptionalIntegerArray {
+    return this.#orbit()?.pieces;
+  }
+
+  setPiecesRaw(pieces: OptionalIntegerArray) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set pieces for a non-mutable `KStateOrbitView`.",
       );
     }
-    this.#ensureOrbit().pieces = [...pieces];
+    this.#ensureOrbit().pieces = pieces;
   }
 
   getOrientationAt(idx: number): number {
@@ -187,12 +192,33 @@ export class KStateOrbitView {
     this.setOrientationAt(idx, this.getOrientationAt(idx) + delta);
   }
 
-  setOrientation(orientation: Iterable<number | undefined>) {
+  *getOrientation(): Generator<number> {
+    const numPieces = this.orbitDefinition.numPieces;
+    for (let i = 0; i < numPieces; i++) {
+      yield this.getOrientationAt(i);
+    }
+  }
+
+  getOrientationRaw(): OptionalIntegerArray {
+    return this.#orbit()?.orientation;
+  }
+
+  // Shares the references with the passed-in value!
+  setOrientationRaw(orientation: OptionalIntegerArray) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set orientations for a non-mutable `KStateOrbitView`.",
       );
     }
-    this.#ensureOrbit().orientation = [...orientation];
+    this.#ensureOrbit().orientation = orientation;
+  }
+
+  // Set permutation and orientation from another orbit view. Shares references!
+  setFrom(otherOrbitView: KStateOrbitView) {
+    if (!this.mutable) {
+      throw new Error("Tried to set from a non-mutable `KStateOrbitView`.");
+    }
+    this.setPiecesRaw(otherOrbitView.getPiecesRaw());
+    this.setOrientationRaw(otherOrbitView.getOrientationRaw());
   }
 }

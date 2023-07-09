@@ -1,13 +1,9 @@
-import { KState } from ".";
+import { KState, KTransformation } from ".";
 import { Alg, Move } from "../alg";
 import type { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
 import { algToTransformation } from "./calculate";
 import { moveToTransformationUncached } from "./construct";
-import type {
-  KPuzzleDefinition,
-  KTransformationData,
-} from "./KPuzzleDefinition";
-import { KTransformation } from "./KTransformation";
+import type { KPuzzleDefinition } from "./KPuzzleDefinition";
 
 export type KTransformationSource = Alg | Move | string | KTransformation;
 
@@ -30,16 +26,18 @@ export class KPuzzle {
     return KTransformation.experimentalConstructIdentity(this);
   }
 
-  #moveToTransformationDataCache = new Map<string, KTransformationData>();
+  #moveToTransformationCache = new Map<string, KTransformation>();
   moveToTransformation(move: Move | string): KTransformation {
     if (typeof move === "string") {
       move = new Move(move);
     }
     const cacheKey = move.toString();
-    const cachedTransformationData: KTransformationData | undefined =
-      this.#moveToTransformationDataCache.get(cacheKey);
-    if (cachedTransformationData) {
-      return new KTransformation(this, cachedTransformationData);
+    const cachedTransformation: KTransformation | undefined =
+      this.#moveToTransformationCache.get(cacheKey);
+    if (cachedTransformation) {
+      // TODO: clone better?
+      // TODO: handle cached identity status?
+      return new KTransformation(this, cachedTransformation.transformationData);
     }
 
     if (this.experimentalPGNotation) {
@@ -47,13 +45,16 @@ export class KPuzzle {
       if (!transformationData) {
         throw new Error(`could not map to internal move: ${move}`);
       }
-      this.#moveToTransformationDataCache.set(cacheKey, transformationData);
+      this.#moveToTransformationCache.set(
+        cacheKey,
+        new KTransformation(this, transformationData),
+      );
       return new KTransformation(this, transformationData);
     }
 
-    const transformationData = moveToTransformationUncached(this, move);
-    this.#moveToTransformationDataCache.set(cacheKey, transformationData);
-    return new KTransformation(this, transformationData);
+    const transformation = moveToTransformationUncached(this, move);
+    this.#moveToTransformationCache.set(cacheKey, transformation);
+    return new KTransformation(this, transformation.transformationData);
   }
 
   algToTransformation(alg: Alg | string): KTransformation {

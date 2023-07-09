@@ -100,62 +100,54 @@ export function invertTransformation(
     const { orbitDefinition } = orbitView;
     if (isOrbitTransformationDataIdentityUncached(orbitView)) {
       // leave empty!
-    } else if (orbitDefinition.numOrientations === 1) {
-      const newPerm = new Array(orbitDefinition.numPieces);
-      for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-        newPerm[orbitTransformationData.permutation[idx]] = idx;
-      }
-      newTransformationData[orbitName] = {
-        permutation: newPerm,
-        orientation: orbitTransformationData.orientation,
-      };
     } else {
-      const newPerm = new Array(orbitDefinition.numPieces);
-      const newOri = new Array(orbitDefinition.numPieces);
-      for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-        const fromIdx = orbitTransformationData.permutation[idx];
-        newPerm[fromIdx] = idx;
-        newOri[fromIdx] =
-          (orbitDefinition.numOrientations -
-            orbitTransformationData.orientation[idx] +
-            orbitDefinition.numOrientations) %
-          orbitDefinition.numOrientations;
+      const invserseOrbitView = inverseTransformation.orbitView(
+        orbitView.orbitName,
+      );
+      if (orbitDefinition.numOrientations === 1) {
+        for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
+          invserseOrbitView.setPermutationAt(
+            orbitView.getPermutationAt(idx),
+            idx,
+          );
+        }
+      } else {
+        for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
+          const fromIdx = orbitView.getPermutationAt(idx);
+          orbitView.setPermutationAt(fromIdx, idx);
+          orbitView.setOrientationDeltaAt(
+            fromIdx,
+            -orbitView.getOrientationAt(idx),
+          );
+        }
       }
-      newTransformationData[orbitName] = {
-        permutation: newPerm,
-        orientation: newOri,
-      };
     }
   }
-  return newTransformationData;
+  return inverseTransformation;
 }
 
 export function repeatTransformationUncached(
-  kpuzzle: KPuzzle,
-  transformationData: KTransformationData,
+  transformation: KTransformation,
   amount: number,
-): KTransformationData {
+): KTransformation {
   // This is used for move construction, so we optimize for the quantum move case.
   if (amount === 1) {
-    return transformationData;
+    return transformation;
   }
   if (amount < 0) {
     return repeatTransformationUncached(
-      kpuzzle,
-      invertTransformation(kpuzzle, transformationData),
+      invertTransformation(transformation),
       -amount,
     );
   }
   if (amount === 0) {
     // TODO
-    const { transformationData } = kpuzzle.identityTransformation();
-    return transformationData;
+    return transformation.kpuzzle.identityTransformation();
   }
-  let halfish = transformationData;
+  let halfish = transformation;
   if (amount !== 2) {
     halfish = repeatTransformationUncached(
-      kpuzzle,
-      transformationData,
+      transformation,
       Math.floor(amount / 2),
     );
   }
@@ -169,7 +161,7 @@ export function repeatTransformationUncached(
   } else {
     return combineTransformationData(
       kpuzzle.definition,
-      transformationData,
+      transformation,
       twiceHalfish,
     );
   }

@@ -7,8 +7,7 @@ import {
   repeatTransformationUncached,
   transformationRepetitionOrder,
 } from "./calculate";
-import { combineTransformationData } from "./combine";
-import { constructIdentityTransformationDataUncached } from "./construct";
+import { combineTransformations } from "./combine";
 import type { KPuzzle, KTransformationSource } from "./KPuzzle";
 import type {
   KPuzzleOrbitDefinition,
@@ -47,10 +46,7 @@ export class KTransformation {
 
   /** @deprecated */
   static experimentalConstructIdentity(kpuzzle: KPuzzle) {
-    const transformation = new KTransformation(
-      kpuzzle,
-      constructIdentityTransformationDataUncached(kpuzzle.definition),
-    );
+    const transformation = new KTransformation(kpuzzle, {});
     transformation.#cachedIsIdentity = true;
     return transformation;
   }
@@ -79,14 +75,7 @@ export class KTransformation {
       return new KTransformation(this.kpuzzle, this.transformationData);
     }
 
-    return new KTransformation(
-      this.kpuzzle,
-      combineTransformationData(
-        this.kpuzzle.definition,
-        this.transformationData,
-        t2.transformationData,
-      ),
-    );
+    return new KTransformation(this.kpuzzle, combineTransformations(this, t2));
   }
 
   applyMove(move: Move | string): KTransformation {
@@ -107,14 +96,7 @@ export class KTransformation {
   }
 
   selfMultiply(amount: number): KTransformation {
-    return new KTransformation(
-      this.kpuzzle,
-      repeatTransformationUncached(
-        this.kpuzzle,
-        this.transformationData,
-        amount,
-      ),
-    );
+    return repeatTransformationUncached(this, amount);
   }
 
   public orbitView(
@@ -183,13 +165,24 @@ export class KTransformationOrbitView {
     this.#ensureOrbitPermutation()[index] = value;
   }
 
-  setPermutation(permutation: Iterable<number | undefined>) {
+  *getPermutation(): Generator<number> {
+    const numPieces = this.orbitDefinition.numPieces;
+    for (let i = 0; i < numPieces; i++) {
+      yield this.getPermutationAt(i);
+    }
+  }
+
+  getPermutationRaw(): (number | undefined)[] | undefined {
+    return this.#orbit()?.permutation;
+  }
+
+  setPermutationRaw(permutation: (number | undefined)[] | undefined) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set permutation for a non-mutable `KStateOrbitView`.",
       );
     }
-    this.#ensureOrbit().permutation = [...permutation];
+    this.#ensureOrbit().permutation = permutation;
   }
 
   getOrientationAt(index: number): number {
@@ -215,12 +208,32 @@ export class KTransformationOrbitView {
     this.setOrientationAt(idx, this.getOrientationAt(idx) + delta);
   }
 
-  setOrientation(orientation: Iterable<number | undefined>) {
+  *getOrientation(): Generator<number> {
+    const numPieces = this.orbitDefinition.numPieces;
+    for (let i = 0; i < numPieces; i++) {
+      yield this.getOrientationAt(i);
+    }
+  }
+
+  getOrientationRaw(): (number | undefined)[] | undefined {
+    return this.#orbit()?.orientation;
+  }
+
+  setOrientationRaw(orientation: (number | undefined)[] | undefined) {
     if (!this.mutable) {
       throw new Error(
         "Tried to set orientations for a non-mutable `KStateOrbitView`.",
       );
     }
-    this.#ensureOrbit().orientation = [...orientation];
+    this.#ensureOrbit().orientation = orientation;
+  }
+
+  // Set permutation and orientation from another orbit view.
+  setFrom(otherOrbitView: KTransformationOrbitView) {
+    if (!this.mutable) {
+      throw new Error("Tried to set from a non-mutable `KStateOrbitView`.");
+    }
+    this.setPermutationRaw(otherOrbitView.getPermutationRaw());
+    this.setOrientationRaw(otherOrbitView.getOrientationRaw());
   }
 }

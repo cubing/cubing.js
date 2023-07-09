@@ -5,26 +5,25 @@ import type {
   KTransformationData,
 } from "./KPuzzleDefinition";
 import { KStateOrbitView } from "./KState";
-import { KTransformationOrbitView } from "./KTransformation";
+import { KTransformation, KTransformationOrbitView } from "./KTransformation";
 
-export function combineTransformationData(
-  definition: KPuzzleDefinition,
-  transformationData1: KTransformationData,
-  transformationData2: KTransformationData,
+export function combineTransformations(
+  transformation1: KTransformation,
+  transformation2: KTransformation,
 ): KTransformationData {
-  const newTransformationData = {} as KTransformationData;
+  const { definition } = transformation1.kpuzzle;
+  const combinedTransformation = new KTransformation(
+    transformation1.kpuzzle,
+    {},
+  );
   for (const orbitName in definition.orbits) {
-    const orbitDefinition = definition.orbits[orbitName];
-    const orbit1 = transformationData1[orbitName];
-    const orbit2 = transformationData2[orbitName];
-    if (
-      isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.numOrientations,
-        orbit2,
-      )
-    ) {
+    const orbitView1 = transformation1.orbitView(orbitName);
+    const orbitView2 = transformation2.orbitView(orbitName);
+    const combinedOrbitView = combinedTransformation.orbitView(orbitName);
+    if (isOrbitTransformationDataIdentityUncached(orbitView2)) {
       // common case for big cubes
-      newTransformationData[orbitName] = orbit1;
+      combinedOrbitView.setPermutationRaw(orbitView1.getPermutation());
+      newTransformationData[orbitName] = orbitView1; // TODO: handle when `orbitView1` is the identity.
     } else if (
       isOrbitTransformationDataIdentityUncached(
         orbitDefinition.numOrientations,
