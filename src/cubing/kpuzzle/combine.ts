@@ -36,6 +36,10 @@ export function combineTransformations(
             orbitView1.getOrientationAt(orbitView2.getPermutationAt(idx)) +
               orbitView2.getOrientationAt(idx),
           );
+          combinedOrbitView.setPermutationAt(
+            idx,
+            orbitView1.getPermutationAt(orbitView2.getPermutationAt(idx)),
+          );
         }
       }
     }
