@@ -817,14 +817,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         .experimentalToTransformation()!
         .isIdentical(transformation)
     ) {
-      for (const orbit in this.stickers) {
-        const pieces = this.stickers[orbit];
-        const pos2 = transformation.transformationData[orbit];
+      for (const orbitName in this.stickers) {
+        const pieces = this.stickers[orbitName];
+        const orbitView = transformation.orbitView(orbitName);
         const orin = pieces.length;
         if (orin === 1) {
           const pieces2 = pieces[0];
           for (let i = 0; i < pieces2.length; i++) {
-            const ni = pos2.permutation[i];
+            const ni = orbitView.getPermutationAt(i);
             if (this.textured) {
               colormods += pieces2[i].setTexture(filler, pieces2[ni]);
             } else {
@@ -835,8 +835,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {
-              const nori = (ori + orin - pos2.orientation[i]) % orin;
-              const ni = pos2.permutation[i];
+              const nori = (ori + orin - orbitView.getOrientationAt(i)) % orin;
+              const ni = orbitView.getPermutationAt(i);
               if (this.textured) {
                 colormods += pieces2[i].setTexture(filler, pieces[nori][ni]);
               } else {
@@ -894,17 +894,17 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         ax.order;
       this.movingObj.rotateOnAxis(turnNormal, angle);
       if (this.lastMoveTransformation !== quantumTransformation) {
-        for (const orbit in this.stickers) {
-          const pieces = this.stickers[orbit];
+        for (const orbitName in this.stickers) {
+          const pieces = this.stickers[orbitName];
           const orin = pieces.length;
-          const bmv = quantumTransformation.transformationData[orbit];
+          const orbitView = quantumTransformation.orbitView(orbitName);
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {
               const p2 = pieces2[i];
-              const ni = bmv.permutation[i];
+              const ni = orbitView.getPermutationAt(i);
               let tv = 0;
-              if (ni !== i || bmv.orientation[i] !== 0) {
+              if (ni !== i || orbitView.getOrientationAt(i) !== 0) {
                 tv = 1;
               }
               if (tv !== p2.twistVal) {

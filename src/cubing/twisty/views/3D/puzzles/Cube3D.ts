@@ -794,13 +794,14 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
   public onPositionChange(p: PuzzlePosition): void {
     const reid333 = p.state;
-    for (const orbit in pieceDefs) {
-      const pieces = pieceDefs[orbit];
+    for (const orbitName in pieceDefs) {
+      const reid333OrbitView = reid333.orbitView(orbitName);
+      const pieces = pieceDefs[orbitName];
       for (let i = 0; i < pieces.length; i++) {
-        const j = reid333.stateData[orbit].pieces[i];
-        this.pieces[orbit][j].matrix.copy(pieceDefs[orbit][i].matrix);
-        this.pieces[orbit][j].matrix.multiply(
-          orientationRotation[orbit][reid333.stateData[orbit].orientation[i]],
+        const j = reid333OrbitView.getPieceAt(i);
+        this.pieces[orbitName][j].matrix.copy(pieceDefs[orbitName][i].matrix);
+        this.pieces[orbitName][j].matrix.multiply(
+          orientationRotation[orbitName][reid333OrbitView.getOrientationAt(i)],
         );
       }
       for (const moveProgress of p.movesInProgress) {
@@ -818,14 +819,11 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
           const quantumTransformation = this.kpuzzle.moveToTransformation(
             move.modified({ amount: 1 }),
           );
-          const k =
-            quantumTransformation.transformationData[orbit].permutation[i];
-          if (
-            i !== k ||
-            quantumTransformation.transformationData[orbit].orientation[i] !== 0
-          ) {
-            const j = reid333.stateData[orbit].pieces[i];
-            this.pieces[orbit][j].matrix.premultiply(moveMatrix);
+          const orbitView = quantumTransformation.orbitView(orbitName);
+          const k = orbitView.getPermutationAt(i);
+          if (i !== k || orbitView.getOrientationAt(i) !== 0) {
+            const j = reid333OrbitView.getPieceAt(i);
+            this.pieces[orbitName][j].matrix.premultiply(moveMatrix);
           }
         }
       }
