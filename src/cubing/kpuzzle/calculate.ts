@@ -18,27 +18,26 @@ import type {
   KTransformationData,
   KPuzzleDefinition,
 } from "./KPuzzleDefinition";
-import { KTransformation } from "./KTransformation";
+import { KTransformation, KTransformationOrbitView } from "./KTransformation";
 
 export function isOrbitTransformationDataIdentityUncached(
-  numOrientations: number,
-  orbitTransformationData: KTransformationOrbitData,
+  orbitView: KTransformationOrbitView,
 ): boolean {
+  // TODO: optimize when `orbitView` has empty data.
+
   // TODO
   // if (o === lasto) {
   //   return true;
   // }
-  const { permutation } = orbitTransformationData;
-  const numPieces = permutation.length;
+  const { numPieces } = orbitView.orbitDefinition;
   for (let idx = 0; idx < numPieces; idx++) {
-    if (permutation[idx] !== idx) {
+    if (orbitView.getPermutationAt(idx) !== idx) {
       return false;
     }
   }
-  if (numOrientations > 1) {
-    const { orientation } = orbitTransformationData;
+  if (orbitView.orbitDefinition.numOrientations > 1) {
     for (let idx = 0; idx < numPieces; idx++) {
-      if (orientation[idx] !== 0) {
+      if (orbitView.getOrientationAt(idx) !== 0) {
         return false;
       }
     }
@@ -48,26 +47,23 @@ export function isOrbitTransformationDataIdentityUncached(
 }
 
 export function isOrbitTransformationDataIdentical(
-  orbitDefinition: KPuzzleOrbitDefinition,
-  orbitTransformationData1: KTransformationOrbitData,
-  orbitTransformationData2: KTransformationOrbitData,
+  orbitView1: KTransformationOrbitView,
+  orbitView2: KTransformationOrbitView,
   options: {
     ignoreOrientation?: boolean;
     ignorePermutation?: boolean;
   } = {},
 ): boolean {
-  for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
+  for (let idx = 0; idx < orbitView1.orbitDefinition.numPieces; idx++) {
     if (
       !options?.ignoreOrientation &&
-      orbitTransformationData1.orientation[idx] !==
-        orbitTransformationData2.orientation[idx]
+      orbitView1.getOrientationAt(idx) !== orbitView2.getOrientationAt(idx)
     ) {
       return false;
     }
     if (
       !options?.ignorePermutation &&
-      orbitTransformationData1.permutation[idx] !==
-        orbitTransformationData2.permutation[idx]
+      orbitView1.getPermutationAt(idx) !== orbitView2.getPermutationAt(idx)
     ) {
       return false;
     }
@@ -76,18 +72,14 @@ export function isOrbitTransformationDataIdentical(
 }
 
 export function isTransformationDataIdentical(
-  kpuzzle: KPuzzle,
-  transformationData1: KTransformationData,
-  transformationData2: KTransformationData,
+  transformation1: KTransformation,
+  transformation2: KTransformation,
 ): boolean {
-  for (const [orbitName, orbitDefinition] of Object.entries(
-    kpuzzle.definition.orbits,
-  )) {
+  for (const orbitName in transformation1.kpuzzle.definition.orbits) {
     if (
       !isOrbitTransformationDataIdentical(
-        orbitDefinition,
-        transformationData1[orbitName],
-        transformationData2[orbitName],
+        transformation1.orbitView(orbitName),
+        transformation2.orbitView(orbitName),
       )
     ) {
       return false;
@@ -97,21 +89,17 @@ export function isTransformationDataIdentical(
 }
 
 export function invertTransformation(
-  kpuzzle: KPuzzle,
-  transformationData: KTransformationData,
-): KTransformationData {
-  const newTransformationData: KTransformationData = {};
-  for (const orbitName in kpuzzle.definition.orbits) {
-    const orbitDefinition: KPuzzleOrbitDefinition =
-      kpuzzle.definition.orbits[orbitName];
-    const orbitTransformationData = transformationData[orbitName];
-    if (
-      isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.numOrientations,
-        orbitTransformationData,
-      )
-    ) {
-      newTransformationData[orbitName] = orbitTransformationData;
+  transformation: KTransformation,
+): KTransformation {
+  const inverseTransformation: KTransformation = new KTransformation(
+    transformation.kpuzzle,
+    {},
+  );
+
+  for (const orbitView of transformation.orbitViews()) {
+    const { orbitDefinition } = orbitView;
+    if (isOrbitTransformationDataIdentityUncached(orbitView)) {
+      // leave empty!
     } else if (orbitDefinition.numOrientations === 1) {
       const newPerm = new Array(orbitDefinition.numPieces);
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {

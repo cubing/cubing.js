@@ -31,10 +31,7 @@ export class KTransformation {
   }
 
   invert(): KTransformation {
-    return new KTransformation(
-      this.kpuzzle,
-      invertTransformation(this.kpuzzle, this.transformationData),
-    );
+    return invertTransformation(this);
   }
 
   // For optimizations, we want to make it cheap to rely on optimizations when a
@@ -59,11 +56,7 @@ export class KTransformation {
   }
 
   isIdentical(t2: KTransformation): boolean {
-    return isTransformationDataIdentical(
-      this.kpuzzle,
-      this.transformationData,
-      t2.transformationData,
-    );
+    return isTransformationDataIdentical(this, t2);
   }
 
   // Convenience function
@@ -152,23 +145,21 @@ export class KTransformation {
 // TODO: Combine some of the implementation with `KStateOrbitView`?
 export class KTransformationOrbitView {
   #transformationData: KTransformationData;
-  #orbitName: OrbitName;
   constructor(
     public readonly orbitDefinition: KPuzzleOrbitDefinition,
-    transformation: KTransformationData,
-    orbitName: OrbitName,
+    transformationData: KTransformationData,
+    public readonly orbitName: OrbitName,
     public readonly mutable: boolean,
   ) {
-    this.#transformationData = transformation;
-    this.#orbitName = orbitName;
+    this.#transformationData = transformationData;
   }
 
   #orbit(): KTransformationOrbitData | undefined {
-    return this.#transformationData[this.#orbitName];
+    return this.#transformationData[this.orbitName];
   }
 
   #ensureOrbit(): KTransformationOrbitData {
-    return (this.#transformationData[this.#orbitName] ??= {});
+    return (this.#transformationData[this.orbitName] ??= {});
   }
 
   #ensureOrbitPermutation(): (number | undefined)[] {
