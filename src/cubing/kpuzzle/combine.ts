@@ -1,16 +1,11 @@
-import { isOrbitTransformationDataIdentityUncached } from "./calculate";
-import type {
-  KPuzzleDefinition,
-  KStateData,
-  KTransformationData,
-} from "./KPuzzleDefinition";
-import { KStateOrbitView } from "./KState";
-import { KTransformation, KTransformationOrbitView } from "./KTransformation";
+import { KState } from "./KState";
+import { KTransformation } from "./KTransformation";
+import { isOrbitTransformationIdentityUncached } from "./calculate";
 
 export function combineTransformations(
   transformation1: KTransformation,
   transformation2: KTransformation,
-): KTransformationData {
+): KTransformation {
   const { definition } = transformation1.kpuzzle;
   const combinedTransformation = new KTransformation(
     transformation1.kpuzzle,
@@ -19,124 +14,73 @@ export function combineTransformations(
   for (const orbitName in definition.orbits) {
     const orbitView1 = transformation1.orbitView(orbitName);
     const orbitView2 = transformation2.orbitView(orbitName);
-    const combinedOrbitView = combinedTransformation.orbitView(orbitName);
-    if (isOrbitTransformationDataIdentityUncached(orbitView2)) {
+    const combinedOrbitView = combinedTransformation.orbitView(orbitName, true);
+    if (isOrbitTransformationIdentityUncached(orbitView2)) {
       // common case for big cubes
-      combinedOrbitView.setPermutationRaw(orbitView1.getPermutation());
-      newTransformationData[orbitName] = orbitView1; // TODO: handle when `orbitView1` is the identity.
-    } else if (
-      isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.numOrientations,
-        orbit1,
-      )
-    ) {
-      newTransformationData[orbitName] = orbit2;
+      combinedOrbitView.setFrom(orbitView1);
+    } else if (isOrbitTransformationIdentityUncached(orbitView1)) {
+      combinedOrbitView.setFrom(orbitView2);
     } else {
-      const newPerm = new Array(orbitDefinition.numPieces);
-      // TODO: handle "default" cases.
-      const orbit1View = new KTransformationOrbitView(
-        orbitDefinition,
-        transformationData1,
-        orbitName,
-        false,
-      );
-      const orbit2View = new KTransformationOrbitView(
-        orbitDefinition,
-        transformationData1,
-        orbitName,
-        false,
-      );
+      const { orbitDefinition } = orbitView1;
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPerm[idx] = orbit1View.getPermutationAt(
-            orbit2View.getPermutationAt(idx),
+          combinedOrbitView.setPermutationAt(
+            idx,
+            orbitView1.getPermutationAt(orbitView2.getPermutationAt(idx)),
           );
         }
-        newTransformationData[orbitName] = {
-          permutation: newPerm,
-          orientation: orbit1.orientation,
-        };
       } else {
-        const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newOri[idx] =
-            (orbit1View.getOrientationAt(orbit2View.getPermutationAt(idx)) +
-              orbit2View.getOrientationAt(idx)) %
-            orbitDefinition.numOrientations;
-          newPerm[idx] = orbit1View.getPermutationAt(
-            orbit2View.getPermutationAt(idx),
+          combinedOrbitView.setOrientationAt(
+            idx,
+            orbitView1.getOrientationAt(orbitView2.getPermutationAt(idx)) +
+              orbitView2.getOrientationAt(idx),
           );
         }
-        newTransformationData[orbitName] = {
-          permutation: newPerm,
-          orientation: newOri,
-        };
       }
     }
   }
-  return newTransformationData;
+  return combinedTransformation;
 }
 
-export function applyTransformationDataToStateData(
-  definition: KPuzzleDefinition,
-  stateData: KStateData,
-  transformationData: KTransformationData,
-): KStateData {
-  const newStateData = {} as KStateData;
-  for (const orbitName in definition.orbits) {
-    const orbitDefinition = definition.orbits[orbitName];
-    const orbit1 = stateData[orbitName];
-    const orbit2 = transformationData[orbitName];
-    if (
-      isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.numOrientations,
-        orbit2,
-      )
-    ) {
+export function applyTransformationToState(
+  originalState: KState,
+  transformation: KTransformation,
+): KState {
+  const newState = new KState(originalState.kpuzzle, {});
+  for (const stateOrbitView of originalState.orbitViews()) {
+    const { orbitDefinition, orbitName } = stateOrbitView;
+    const transformationOrbitView = transformation.orbitView(orbitName);
+    const newStateOrbitView = newState.orbitView(orbitName, true);
+    if (isOrbitTransformationIdentityUncached(transformationOrbitView)) {
       // common case for big cubes
-      newStateData[orbitName] = orbit1;
+      newStateOrbitView.setFrom(stateOrbitView);
     } else {
-      const newPieces = new Array(orbitDefinition.numPieces);
-      // TODO: handle "default" cases.
-      const orbit1View = new KStateOrbitView(
-        orbitDefinition,
-        stateData,
-        orbitName,
-        false,
-      );
-      const orbit2View = new KTransformationOrbitView(
-        orbitDefinition,
-        transformationData,
-        orbitName,
-        false,
-      );
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newPieces[idx] = orbit1View.getPieceAt(
-            orbit2View.getPermutationAt(idx),
+          newStateOrbitView.setPieceAt(
+            idx,
+            transformationOrbitView.getPermutationAt(idx),
           );
         }
-        newStateData[orbitName] = {
-          pieces: newPieces,
-          orientation: orbit1?.orientation,
-        };
+        // Skip setting orientation (since `numOrientations` is 1.)
       } else {
-        const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
-          newOri[idx] =
-            (orbit1View.getOrientationAt(orbit2View.getPermutationAt(idx)) +
-              orbit2View.getOrientationAt(idx)) %
-            orbitDefinition.numOrientations;
-          newPieces[idx] = orbit1View.getPieceAt(
-            orbit2View.getPermutationAt(idx),
+          newStateOrbitView.setPieceAt(
+            idx,
+            stateOrbitView.getPieceAt(
+              transformationOrbitView.getPermutationAt(idx),
+            ),
+          );
+          newStateOrbitView.setOrientationAt(
+            idx,
+            stateOrbitView.getOrientationAt(
+              transformationOrbitView.getPermutationAt(idx),
+            ) + transformationOrbitView.getOrientationAt(idx),
           );
         }
-        newStateData[orbitName] = {
-          pieces: newPieces,
-          orientation: newOri,
-        };
       }
     }
   }
-  return newStateData;
+  return newState;
 }

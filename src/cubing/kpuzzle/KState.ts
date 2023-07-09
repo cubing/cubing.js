@@ -1,6 +1,6 @@
 import type { KPuzzle } from "./KPuzzle";
 import type { Alg, Move } from "../alg";
-import { applyTransformationDataToStateData } from "./combine";
+import { applyTransformationToState } from "./combine";
 import type { KTransformationSource } from "./KPuzzle";
 import type {
   KPuzzleOrbitDefinition,
@@ -28,12 +28,10 @@ export class KState {
   }
 
   static fromTransformation(transformation: KTransformation): KState {
-    const newStateData = applyTransformationDataToStateData(
-      transformation.kpuzzle.definition,
-      transformation.kpuzzle.definition.startStateData,
-      transformation.transformationData,
+    return applyTransformationToState(
+      transformation.kpuzzle.startState(),
+      transformation,
     );
-    return new KState(transformation.kpuzzle, newStateData);
   }
 
   // Convenience function
@@ -46,12 +44,7 @@ export class KState {
     if (transformation.isIdentityTransformation()) {
       return new KState(this.kpuzzle, this.stateData);
     }
-    const newStateData = applyTransformationDataToStateData(
-      this.kpuzzle.definition,
-      this.stateData,
-      transformation.transformationData,
-    );
-    return new KState(this.kpuzzle, newStateData);
+    return applyTransformationToState(this, transformation);
   }
 
   applyMove(move: Move | string): KState {

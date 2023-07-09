@@ -10,17 +10,12 @@ import {
   TraversalDownUp,
 } from "../alg";
 import { functionFromTraversal } from "../alg";
-import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
-import type {
-  KPuzzleOrbitDefinition,
-  KTransformationOrbitData,
-  KTransformationData,
-  KPuzzleDefinition,
-} from "./KPuzzleDefinition";
+import type { KPuzzleDefinition } from "./KPuzzleDefinition";
 import { KTransformation, KTransformationOrbitView } from "./KTransformation";
+import { combineTransformations } from "./combine";
 
-export function isOrbitTransformationDataIdentityUncached(
+export function isOrbitTransformationIdentityUncached(
   orbitView: KTransformationOrbitView,
 ): boolean {
   // TODO: optimize when `orbitView` has empty data.
@@ -46,7 +41,7 @@ export function isOrbitTransformationDataIdentityUncached(
   return true;
 }
 
-export function isOrbitTransformationDataIdentical(
+export function isOrbitTransformationIdentical(
   orbitView1: KTransformationOrbitView,
   orbitView2: KTransformationOrbitView,
   options: {
@@ -71,13 +66,13 @@ export function isOrbitTransformationDataIdentical(
   return true;
 }
 
-export function isTransformationDataIdentical(
+export function isTransformationIdentical(
   transformation1: KTransformation,
   transformation2: KTransformation,
 ): boolean {
   for (const orbitName in transformation1.kpuzzle.definition.orbits) {
     if (
-      !isOrbitTransformationDataIdentical(
+      !isOrbitTransformationIdentical(
         transformation1.orbitView(orbitName),
         transformation2.orbitView(orbitName),
       )
@@ -98,7 +93,7 @@ export function invertTransformation(
 
   for (const orbitView of transformation.orbitViews()) {
     const { orbitDefinition } = orbitView;
-    if (isOrbitTransformationDataIdentityUncached(orbitView)) {
+    if (isOrbitTransformationIdentityUncached(orbitView)) {
       // leave empty!
     } else {
       const invserseOrbitView = inverseTransformation.orbitView(
@@ -151,19 +146,11 @@ export function repeatTransformationUncached(
       Math.floor(amount / 2),
     );
   }
-  const twiceHalfish = combineTransformationData(
-    kpuzzle.definition,
-    halfish,
-    halfish,
-  );
+  const twiceHalfish = combineTransformations(halfish, halfish);
   if (amount % 2 === 0) {
     return twiceHalfish;
   } else {
-    return combineTransformationData(
-      kpuzzle.definition,
-      transformation,
-      twiceHalfish,
-    );
+    return combineTransformations(transformation, twiceHalfish);
   }
 }
 
@@ -186,14 +173,7 @@ class AlgToTransformationTraversal extends TraversalDownUp<
   }
   traverseGrouping(grouping: Grouping, kpuzzle: KPuzzle): KTransformation {
     const algTransformation = this.traverseAlg(grouping.alg, kpuzzle);
-    return new KTransformation(
-      kpuzzle,
-      repeatTransformationUncached(
-        kpuzzle,
-        algTransformation.transformationData,
-        grouping.amount,
-      ),
-    );
+    return repeatTransformationUncached(algTransformation, grouping.amount);
   }
   traverseMove(move: Move, kpuzzle: KPuzzle): KTransformation {
     return kpuzzle.moveToTransformation(move);
@@ -257,13 +237,11 @@ function gcd(a: number, b: number): number {
 
 /* calculate the order of a particular transformation. */
 export function transformationRepetitionOrder(
-  definition: KPuzzleDefinition,
   transformation: KTransformation,
 ): number {
   let order: number = 1;
-  for (const orbitName in definition.orbits) {
-    const orbitDefinition = definition.orbits[orbitName];
-    const transformationOrbit = transformation.transformationData[orbitName];
+  for (const orbitView of transformation.orbitViews()) {
+    const { orbitDefinition } = orbitView;
     const orbitPieces = new Array(orbitDefinition.numPieces);
     for (let startIdx = 0; startIdx < orbitDefinition.numPieces; startIdx++) {
       if (!orbitPieces[startIdx]) {
@@ -273,9 +251,9 @@ export function transformationRepetitionOrder(
         for (;;) {
           orbitPieces[currentIdx] = true;
           orientationSum =
-            orientationSum + transformationOrbit.orientation[currentIdx];
+            orientationSum + orbitView.getOrientationAt(currentIdx);
           cycleLength = cycleLength + 1;
-          currentIdx = transformationOrbit.permutation[currentIdx];
+          currentIdx = orbitView.getPermutationAt(currentIdx);
           if (currentIdx === startIdx) {
             break;
           }

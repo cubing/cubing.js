@@ -3,7 +3,7 @@ import type { Alg, Move } from "../alg";
 import { offsetMod } from "../alg/cubing-private";
 import {
   invertTransformation,
-  isTransformationDataIdentical,
+  isTransformationIdentical,
   repeatTransformationUncached,
   transformationRepetitionOrder,
 } from "./calculate";
@@ -52,7 +52,7 @@ export class KTransformation {
   }
 
   isIdentical(t2: KTransformation): boolean {
-    return isTransformationDataIdentical(this, t2);
+    return isTransformationIdentical(this, t2);
   }
 
   // Convenience function
@@ -75,7 +75,7 @@ export class KTransformation {
       return new KTransformation(this.kpuzzle, this.transformationData);
     }
 
-    return new KTransformation(this.kpuzzle, combineTransformations(this, t2));
+    return combineTransformations(this, t2);
   }
 
   applyMove(move: Move | string): KTransformation {
@@ -92,7 +92,7 @@ export class KTransformation {
   }
 
   repetitionOrder(): number {
-    return transformationRepetitionOrder(this.kpuzzle.definition, this);
+    return transformationRepetitionOrder(this);
   }
 
   selfMultiply(amount: number): KTransformation {
