@@ -5,8 +5,8 @@
       Twizzle Explorer is a program for exploring some twisty puzzles.
       Fundamentally, it creates and manipulates a permutation representation of
       a specific subset of twisty puzzles; from this, it provides a simulator of
-      these puzzles, integration with ksolve, twsearch, and GAP, as well as
-      basic algorithms such as Schreier-Sims.
+      these puzzles, integration with ksolve, twsearch, GAP, and Mathematica, as
+      well as basic algorithms such as Schreier-Sims.
     </p>
     <p>
       The puzzles it supports are those that can be created by starting with one
@@ -219,18 +219,18 @@
       you to independently enable or disable specific subtypes of edges or
       centers). The block moves option indicates preference for outer block
       moves over slice moves. The optimize checkbox attempts to simplify the
-      permutation representation of the puzzle when generating ksolve or GAP
-      output, which may make some operations in those programs much faster. The
-      all moves option generates moves of all slices, including (for instance)
-      slice moves on the 3x3x3; normally the center slice moves of puzzles with
-      an odd number of layers are omitted. The no ori option omits orientation
-      information. The vertex move option is for tetrahedron and indicates outer
-      face moves should be avoided. The 3D option affects the type of SVG
-      generated in the actions dropdown. The last two checkboxes affect 3D
-      rendering; the side-by-side checkbox switches between showing the back at
-      full size to the right, or showing the back smaller and in the upper right
-      corner. The show foundation checkbox renders the back of stickers in
-      black.
+      permutation representation of the puzzle when generating ksolve, GAP, or
+      Mathematica output, which may make some operations in those programs much
+      faster. The all moves option generates moves of all slices, including (for
+      instance) slice moves on the 3x3x3; normally the center slice moves of
+      puzzles with an odd number of layers are omitted. The no ori option omits
+      orientation information. The vertex move option is for tetrahedron and
+      indicates outer face moves should be avoided. The 3D option affects the
+      type of SVG generated in the actions dropdown. The last two checkboxes
+      affect 3D rendering; the side-by-side checkbox switches between showing
+      the back at full size to the right, or showing the back smaller and in the
+      upper right corner. The show foundation checkbox renders the back of
+      stickers in black.
     </p>
     <p>
       The actions in the action dropdown are as follows. The ksolve option
@@ -239,10 +239,10 @@
       works). The Schreier-Sims option runs that algorithm to calculate the
       state space of the puzzle; for large puzzles this may take a very long
       time. The canon sequence option runs a canonical sequence analysis; this
-      does not (yet) take into account rotation reductions. The GAP option
-      generates a permutation representation suitable for use in GAP. The SVG
-      option generates an SVG image of the puzzle (but only in the solved
-      state).
+      does not (yet) take into account rotation reductions. The GAP and
+      Mathematica options generate a permutation representation suitable for use
+      in the respective programs. The SVG option generates an SVG image of the
+      puzzle (but only in the solved state).
     </p>
     <p>
       On the right side of the main display is the large algorithm textbox that
@@ -289,6 +289,7 @@
 -v, --verbose:  be more verbose
 --ksolve:  generate ksolve output
 --gap:  generate gap output
+--mathematica:  generate mathematica output
 --svg:  generate svg output
 --ss:  execute the Schreier-Sims algorithm
 --canon:  do the canonical analysis
