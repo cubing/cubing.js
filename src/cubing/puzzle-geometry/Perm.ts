@@ -135,6 +135,23 @@ export class Perm {
     return cyc.join("");
   }
 
+  public toMathematica(): string {
+    const cyc = new Array<string>();
+    const seen = new Array<boolean>(this.n);
+    for (let i = 0; i < this.p.length; i++) {
+      if (seen[i] || this.p[i] === i) {
+        continue;
+      }
+      const incyc = new Array<number>();
+      for (let j = i; !seen[j]; j = this.p[j]) {
+        incyc.push(1 + j);
+        seen[j] = true;
+      }
+      cyc.push(`{${incyc.join(",")}}`);
+    }
+    return `Cycles[{${cyc.join(",")}}]`;
+  }
+
   public order(): number {
     let r = 1;
     const seen = new Array<boolean>(this.n);
