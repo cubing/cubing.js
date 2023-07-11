@@ -18,6 +18,7 @@ let dosvg = false;
 let doss = false;
 let doksolve = false;
 let dogap = false;
+let domathematica = false;
 let docanon = false;
 let do3d = false;
 if (globalThis.process && process.argv && process.argv.length <= 2) {
@@ -28,6 +29,7 @@ Options:
 --ksolve: write ksolve (tws) file
 --svg: write SVG (default is flat; --3d makes it 3D)
 --gap: write gap
+--mathematica: write mathematica
 --ss: execute Schrier-Sims calculation
 --3d: use 3D format for SVG file
 --canon: write canonical string analysis
@@ -98,6 +100,8 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
       dosvg = true;
     } else if (option === "--gap") {
       dogap = true;
+    } else if (option === "--mathematica") {
+      domathematica = true;
     } else if (option === "--ss") {
       doss = true;
     } else if (option === "--3d") {
@@ -188,6 +192,8 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
   }
   if (dogap) {
     console.log(pg.writegap());
+  } else if (domathematica) {
+    console.log(pg.writemathematica());
   } else if (doksolve) {
     console.log(pg.writeksolve()); // TODO: Update arguments
   } else if (dosvg) {

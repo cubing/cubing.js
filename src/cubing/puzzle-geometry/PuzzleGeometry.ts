@@ -2357,6 +2357,30 @@ export class PuzzleGeometry {
     return this.header("# ") + r.join("\n");
   }
 
+  public writemathematica(): string {
+    // write out a set of generators in mathematica syntax
+    const os = this.getOrbitsDef(false);
+    const r = [];
+    const mvs = [];
+    r.push(`(* ${this.header("").trim()} *)`);
+    for (let i = 0; i < os.moveops.length; i++) {
+      let movename = `m${externalName(this.notationMapper, os.movenames[i])}`;
+      let doinv = false;
+      if (movename[movename.length - 1] === "'") {
+        movename = movename.substring(0, movename.length - 1);
+        doinv = true;
+      }
+      mvs.push(movename);
+      if (doinv) {
+        r.push(`${movename}=${os.moveops[i].toPerm().inv().toMathematica()};`);
+      } else {
+        r.push(`${movename}=${os.moveops[i].toPerm().toMathematica()};`);
+      }
+    }
+    r.push(`gen={${mvs.join(",")}};`);
+    return r.join("\n");
+  }
+
   public writeksolve(name: string = "PuzzleGeometryPuzzle"): string {
     const od = this.getOrbitsDef(false);
     return (

@@ -219,6 +219,10 @@ class SelectUI {
         this.app.showText((await this.app.puzzleGeometry()).writegap());
         break;
       }
+      case "mathematica": {
+        this.app.showText((await this.app.puzzleGeometry()).writemathematica());
+        break;
+      }
       case "ss": {
         const lines: string[] = [];
         (await this.app.puzzleGeometry()).writeSchreierSims((line) =>
