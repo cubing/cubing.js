@@ -126,11 +126,11 @@ export class Perm {
         continue;
       }
       const incyc = new Array<number>();
-      for (let j = i; !seen[j]; j = this.p[j]) {
+      for (let j = this.p[i]; !seen[j]; j = this.p[j]) {
         incyc.push(1 + j);
         seen[j] = true;
       }
-      cyc.push(`(${incyc.join(",")})`);
+      cyc.push(`(${incyc.reverse().join(",")})`);
     }
     return cyc.join("");
   }
