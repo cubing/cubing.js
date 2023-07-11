@@ -85,6 +85,7 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
   let argp = 2;
   const optionlist = [];
   let showargs = true;
+  let pascalcomment = false;
   while (argp < process.argv.length && process.argv[argp][0] === "-") {
     const option = process.argv[argp++];
     if (option === "--verbose" || option === "-v") {
@@ -102,6 +103,7 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
       dogap = true;
     } else if (option === "--mathematica") {
       domathematica = true;
+      pascalcomment = true;
     } else if (option === "--ss") {
       doss = true;
     } else if (option === "--3d") {
@@ -157,7 +159,11 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
   }
   let puzzleDescription: PuzzleDescription;
   if (showargs) {
-    console.log(`# ${process.argv.join(" ")}`);
+    if (pascalcomment) {
+      console.log(`(* ${process.argv.join(" ")} *)`);
+    } else {
+      console.log(`# ${process.argv.join(" ")}`);
+    }
   }
   if (desc !== undefined) {
     const parsed = parsePuzzleDescription(desc);
