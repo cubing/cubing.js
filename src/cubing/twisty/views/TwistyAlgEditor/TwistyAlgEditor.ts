@@ -53,18 +53,15 @@ function pasteIntoTextArea(
   const { selectionStart, selectionEnd } = textArea;
 
   const textPrecedingSelection = oldValue.slice(0, selectionStart);
-  const textFollowingSelection = oldValue.slice(selectionEnd);
-
   // Does the last line end in a comment?
   // Note that we want the match to include "R U R'\n//hello there" but not "// hello there\nR U R'"
   const selectionStartsInExistingComment =
     textPrecedingSelection.match(/\/\/[^\n]*$/);
 
-  const pasteCreatesStartingComment =
-    oldValue[selectionStart - 1] === "/" && pastedText[0] === "/"; // Pasting "/ This is “weird”." at the end of "R U R' /"
-
   // Replace smart quotes that are not in comments.
   let correctedPastedText = pastedText;
+  const pasteCreatesStartingComment =
+    oldValue[selectionStart - 1] === "/" && pastedText[0] === "/"; // Pasting "/ This is “weird”." at the end of "R U R' /"
   if (selectionStartsInExistingComment || pasteCreatesStartingComment) {
     const indexOfFirstNewline = pastedText.indexOf("\n");
     if (indexOfFirstNewline !== -1) {
@@ -77,19 +74,68 @@ function pasteIntoTextArea(
     correctedPastedText = replaceSmartQuotesOutsideComments(pastedText);
   }
 
-  function adoptIfValid(candidate: string): boolean {
-    const valid = !!maybeParse(
-      textPrecedingSelection + candidate + textFollowingSelection,
-    );
-    if (valid) {
-      correctedPastedText = candidate;
+  // TODO: allow the selection to start in an existing comment. For example, support pasting "\nU" at the end of "R // hi" to produce "R // hi\nU".
+  if (selectionStartsInExistingComment) {
+    // Try to do our best.
+    if (
+      !maybeParse(
+        `${textPrecedingSelection}${correctedPastedText}${oldValue.slice(
+          selectionEnd,
+        )}`,
+      ) &&
+      maybeParse(
+        `${textPrecedingSelection}${correctedPastedText} ${oldValue.slice(
+          selectionEnd,
+        )}`,
+      )
+    ) {
+      correctedPastedText += " ";
     }
-    return valid;
-  }
+  } else {
+    const maybeParsed = maybeParse(correctedPastedText);
+    // If pasting a full well-formed alg, try to add a space before/after, but *only if* this produces a valid alg.
+    // This allows us to "do what you meant" in a lot of cases (e.g. pasting "U" before "L" in "R L'" to produce "R U L'"), while still allowing "non-semantic" pasting (e.g. pasting "' R" over " L" in "U L'" to create "U' R'").
+    if (maybeParsed) {
+      const selectionAtTextStart = selectionStart === 0;
+      const selectionAtTextEnd = selectionEnd === oldValue.length;
 
-  adoptIfValid(correctedPastedText) ||
-    adoptIfValid(`${correctedPastedText} `) ||
-    adoptIfValid(` ${correctedPastedText}`);
+      const spaceBefore = oldValue[selectionStart - 1] === " ";
+      const selectionAtLineStart =
+        selectionAtTextStart || oldValue[selectionStart - 1] === "\n";
+      const spaceAfter = oldValue[selectionEnd] === " ";
+      const selectionAtLineEnd =
+        selectionAtTextEnd || oldValue[selectionEnd] === "\n";
+
+      let respace = false;
+      if (selectionAtLineStart) {
+        respace = !spaceAfter && !selectionAtLineEnd;
+      } else if (selectionAtLineEnd) {
+        respace = !spaceBefore; // We would also check `selectionAtLineStart`, but that's already handled by the previous clause due to symmetry.
+      } else {
+        respace = spaceBefore !== spaceAfter;
+      }
+      if (respace) {
+        // TypeScript is not smart enough to pick up that this clause only runs when `maybeParsed` is truthy, so we use `as Alg` explicitly.
+        let maybeCorrectedPastedText = (maybeParsed as Alg).toString();
+        if (spaceAfter || selectionAtLineEnd) {
+          maybeCorrectedPastedText = ` ${maybeCorrectedPastedText}`;
+        } else {
+          maybeCorrectedPastedText += " ";
+        }
+        // Only respace if it creates a valid alg.
+        // This allows you to paste "L" over the "R" in "U R'" without unexpected reformatting.
+        if (
+          maybeParse(
+            textPrecedingSelection +
+              maybeCorrectedPastedText +
+              oldValue.slice(selectionEnd),
+          )
+        ) {
+          correctedPastedText = maybeCorrectedPastedText;
+        }
+      }
+    }
+  }
 
   textArea.setRangeText(
     correctedPastedText,
