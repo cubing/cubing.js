@@ -62,6 +62,7 @@ describe("pasteIntoTextArea", () => {
     expect(mockPaste("R L2 // '’", 2, 2, "U’")).to.equal("R U' L2 // '’");
     expect(mockPaste("R L2 // '’", 1, 1, "U’")).to.equal("R U' L2 // '’");
     expect(mockPaste("R L2 // '’", 1, 2, "U’")).to.equal("R U' L2 // '’");
+    expect(mockPaste("R D", 1, 1, "’")).to.equal("R' D");
     expect(mockPaste("R L2", 1, 2, "U’ // It’s fancy!\n")).to.equal(
       "R U' // It’s fancy!\nL2",
     );

@@ -105,6 +105,14 @@ export function pasteIntoTextArea(
     (tryAddSpaceBefore && adoptSpacingIfValid(" ", "")) || // Paste "U" after "R'" in "R' L'" to create "R' U L'"
     (tryAddSpaceAfter && adoptSpacingIfValid("", " ")); // Paste "U" before "L'" in "R' L'" to create "R' U L'"
 
-  // TODO: use "select" or "preserve" (https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setRangeText#selectmode)
-  textArea.setRangeText(replacement, selectionStart, selectionEnd, "end");
+  // `execCommand` is under-specced and deprecated, but it's more likely to allow undo and preserve history.
+  const execCommandSuccess = document.execCommand(
+    "insertText",
+    false,
+    replacement,
+  );
+  if (!execCommandSuccess) {
+    // TODO: use "select" or "preserve" (https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setRangeText#selectmode)
+    textArea.setRangeText(replacement, selectionStart, selectionEnd, "end");
+  }
 }
