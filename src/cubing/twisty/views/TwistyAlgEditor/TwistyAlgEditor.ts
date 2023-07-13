@@ -32,21 +32,32 @@ const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
 type TwistyPlayerAlgProp = "alg" | "setupAlg";
 
+// Returns whether the paste was successful.
 function pasteIntoTextArea(
   textArea: HTMLTextAreaElement,
   text: string,
 ): boolean {
-  console.log("pasteInto");
   const selection = globalThis.getSelection();
+  console.log(
+    "anchorNode",
+    selection?.anchorNode,
+    selection?.containsNode(textArea),
+    selection?.containsNode(textArea, true),
+  );
   const firstRange = selection?.getRangeAt(0);
-  console.log(selection?.getRangeAt(0));
-  console.log(firstRange?.commonAncestorContainer, textArea);
-  if (firstRange?.commonAncestorContainer !== textArea) {
+  if (!firstRange) {
     return false;
   }
+  // We would now test that `firstRange` lies inside `textArea`. However, this
+  // is difficult (impossible?) because we would normally do this with
+  // `firstRange?.commonAncestorContainer`, which doesn't have insight into
+  // custom elements. So we rely on `pasteIntoTextArea` being called only for a
+  // `"paste"` event on the correct element.
+  console.log(firstRange);
   const { startOffset, endOffset } = firstRange;
   const { value } = textArea;
   textArea.value = value.slice(0, startOffset) + text + value.slice(endOffset);
+  console.log(startOffset, endOffset, value);
   return true;
 }
 
@@ -141,6 +152,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       if (newText && pasteIntoTextArea(this.#textarea, newText)) {
         console.log("preventing default");
         e.preventDefault();
+        this.onInput();
       }
     });
   }
