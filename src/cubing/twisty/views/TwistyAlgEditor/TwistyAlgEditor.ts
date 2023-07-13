@@ -32,33 +32,117 @@ const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
 type TwistyPlayerAlgProp = "alg" | "setupAlg";
 
+function maybeParse(str: string): Alg | null {
+  try {
+    return Alg.fromString(str);
+  } catch {
+    return null;
+  }
+}
+
+function replaceSmartQuotesOutsideComments(str: string): string {
+  return str.replaceAll(/’(?![^\n]*\/\/)/g, "'");
+}
+
 // Returns whether the paste was successful.
 function pasteIntoTextArea(
   textArea: HTMLTextAreaElement,
-  text: string,
-): boolean {
-  const selection = globalThis.getSelection();
-  console.log(
-    "anchorNode",
-    selection?.anchorNode,
-    selection?.containsNode(textArea),
-    selection?.containsNode(textArea, true),
-  );
-  const firstRange = selection?.getRangeAt(0);
-  if (!firstRange) {
-    return false;
+  pastedText: string,
+): void {
+  const { value: oldValue } = textArea;
+  const { selectionStart, selectionEnd } = textArea;
+
+  const textPrecedingSelection = oldValue.slice(0, selectionStart);
+  // Does the last line end in a comment?
+  // Note that we want the match to include "R U R'\n//hello there" but not "// hello there\nR U R'"
+  const selectionStartsInExistingComment =
+    textPrecedingSelection.match(/\/\/[^\n]*$/);
+
+  // Replace smart quotes that are not in comments.
+  let correctedPastedText = pastedText;
+  const pasteCreatesStartingComment =
+    oldValue[selectionStart - 1] === "/" && pastedText[0] === "/"; // Pasting "/ This is “weird”." at the end of "R U R' /"
+  if (selectionStartsInExistingComment || pasteCreatesStartingComment) {
+    const indexOfFirstNewline = pastedText.indexOf("\n");
+    if (indexOfFirstNewline !== -1) {
+      pastedText.slice(0, indexOfFirstNewline) +
+        replaceSmartQuotesOutsideComments(
+          pastedText.slice(indexOfFirstNewline),
+        );
+    }
+  } else {
+    correctedPastedText = replaceSmartQuotesOutsideComments(pastedText);
   }
-  // We would now test that `firstRange` lies inside `textArea`. However, this
-  // is difficult (impossible?) because we would normally do this with
-  // `firstRange?.commonAncestorContainer`, which doesn't have insight into
-  // custom elements. So we rely on `pasteIntoTextArea` being called only for a
-  // `"paste"` event on the correct element.
-  console.log(firstRange);
-  const { startOffset, endOffset } = firstRange;
-  const { value } = textArea;
-  textArea.value = value.slice(0, startOffset) + text + value.slice(endOffset);
-  console.log(startOffset, endOffset, value);
-  return true;
+
+  // TODO: allow the selection to start in an existing comment. For example, support pasting "\nU" at the end of "R // hi" to produce "R // hi\nU".
+  if (selectionStartsInExistingComment) {
+    // Try to do our best.
+    if (
+      !maybeParse(
+        `${textPrecedingSelection}${correctedPastedText}${oldValue.slice(
+          selectionEnd,
+        )}`,
+      ) &&
+      maybeParse(
+        `${textPrecedingSelection}${correctedPastedText} ${oldValue.slice(
+          selectionEnd,
+        )}`,
+      )
+    ) {
+      correctedPastedText += " ";
+    }
+  } else {
+    const maybeParsed = maybeParse(correctedPastedText);
+    // If pasting a full well-formed alg, try to add a space before/after, but *only if* this produces a valid alg.
+    // This allows us to "do what you meant" in a lot of cases (e.g. pasting "U" before "L" in "R L'" to produce "R U L'"), while still allowing "non-semantic" pasting (e.g. pasting "' R" over " L" in "U L'" to create "U' R'").
+    if (maybeParsed) {
+      const selectionAtTextStart = selectionStart === 0;
+      const selectionAtTextEnd = selectionEnd === oldValue.length;
+
+      const spaceBefore = oldValue[selectionStart - 1] === " ";
+      const selectionAtLineStart =
+        selectionAtTextStart || oldValue[selectionStart - 1] === "\n";
+      const spaceAfter = oldValue[selectionEnd] === " ";
+      const selectionAtLineEnd =
+        selectionAtTextEnd || oldValue[selectionEnd] === "\n";
+
+      let respace = false;
+      if (selectionAtLineStart) {
+        respace = !spaceAfter && !selectionAtLineEnd;
+      } else if (selectionAtLineEnd) {
+        respace = !spaceBefore; // We would also check `selectionAtLineStart`, but that's already handled by the previous clause due to symmetry.
+      } else {
+        respace = spaceBefore !== spaceAfter;
+      }
+      if (respace) {
+        // TypeScript is not smart enough to pick up that this clause only runs when `maybeParsed` is truthy, so we use `as Alg` explicitly.
+        let maybeCorrectedPastedText = (maybeParsed as Alg).toString();
+        if (spaceAfter || selectionAtLineEnd) {
+          maybeCorrectedPastedText = ` ${maybeCorrectedPastedText}`;
+        } else {
+          maybeCorrectedPastedText += " ";
+        }
+        // Only respace if it creates a valid alg.
+        // This allows you to paste "L" over the "R" in "U R'" without unexpected reformatting.
+        if (
+          maybeParse(
+            textPrecedingSelection +
+              maybeCorrectedPastedText +
+              oldValue.slice(selectionEnd),
+          )
+        ) {
+          correctedPastedText = maybeCorrectedPastedText;
+        }
+      }
+    }
+  }
+
+  textArea.setRangeText(
+    correctedPastedText,
+    selectionStart,
+    selectionEnd,
+    "end",
+  );
 }
 
 /** @category Other Custom Elements */
@@ -147,10 +231,9 @@ export class TwistyAlgEditor extends ManagedCustomElement {
   connectedCallback(): void {
     console.log(this.#textarea);
     this.#textarea.addEventListener("paste", (e) => {
-      const newText = e.clipboardData?.getData("text").replaceAll("’", "'");
-      console.log({ newText });
-      if (newText && pasteIntoTextArea(this.#textarea, newText)) {
-        console.log("preventing default");
+      const text = e.clipboardData?.getData("text");
+      if (text) {
+        pasteIntoTextArea(this.#textarea, text);
         e.preventDefault();
         this.onInput();
       }
