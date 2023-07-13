@@ -32,6 +32,8 @@ const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
 type TwistyPlayerAlgProp = "alg" | "setupAlg";
 
+const COMMENT_DELIMITER = "//";
+
 function maybeParse(str: string): Alg | null {
   try {
     return Alg.fromString(str);
@@ -40,8 +42,27 @@ function maybeParse(str: string): Alg | null {
   }
 }
 
+// If there is no occurence, the original string is returned in the first entry.
+// If there is, the delimiter is included at the start of the second entry.
+function splitBeforeOnFirstOccurrence(
+  str: string,
+  delimiter: string,
+): [before: string, after: string] {
+  const idx = str.indexOf(delimiter);
+  if (idx === -1) {
+    return [str, ""];
+  }
+  return [str.slice(0, idx), str.slice(idx)];
+}
+
 function replaceSmartQuotesOutsideComments(str: string): string {
-  return str.replaceAll(/’(?![^\n]*\/\/)/g, "'");
+  const linesOut = [];
+  for (const line of str.split("\n")) {
+    let [before, after] = splitBeforeOnFirstOccurrence(line, COMMENT_DELIMITER);
+    before = before.replaceAll("’", "'");
+    linesOut.push(before + after);
+  }
+  return linesOut.join("\n");
 }
 
 // Returns whether the paste was successful.
@@ -53,97 +74,74 @@ function pasteIntoTextArea(
   const { selectionStart, selectionEnd } = textArea;
 
   const textPrecedingSelection = oldValue.slice(0, selectionStart);
+  const textFollowingSelection = oldValue.slice(selectionEnd);
+
   // Does the last line end in a comment?
   // Note that we want the match to include "R U R'\n//hello there" but not "// hello there\nR U R'"
   const selectionStartsInExistingComment =
     textPrecedingSelection.match(/\/\/[^\n]*$/);
-
-  // Replace smart quotes that are not in comments.
-  let correctedPastedText = pastedText;
   const pasteCreatesStartingComment =
     oldValue[selectionStart - 1] === "/" && pastedText[0] === "/"; // Pasting "/ This is “weird”." at the end of "R U R' /"
-  if (selectionStartsInExistingComment || pasteCreatesStartingComment) {
-    const indexOfFirstNewline = pastedText.indexOf("\n");
-    if (indexOfFirstNewline !== -1) {
-      pastedText.slice(0, indexOfFirstNewline) +
-        replaceSmartQuotesOutsideComments(
-          pastedText.slice(indexOfFirstNewline),
-        );
-    }
+  const pasteStartsWithCommentText =
+    selectionStartsInExistingComment || pasteCreatesStartingComment;
+
+  const pasteEndsWithComment = pastedText.match(/\/\/[^\n]*$/);
+
+  // Replace smart quotes that are not in comments.
+  let replacement = pastedText;
+  if (pasteStartsWithCommentText) {
+    const [before, after] = splitBeforeOnFirstOccurrence(pastedText, "\n");
+    replacement = before + replaceSmartQuotesOutsideComments(after);
   } else {
-    correctedPastedText = replaceSmartQuotesOutsideComments(pastedText);
+    replacement = replaceSmartQuotesOutsideComments(pastedText);
   }
 
-  // TODO: allow the selection to start in an existing comment. For example, support pasting "\nU" at the end of "R // hi" to produce "R // hi\nU".
-  if (selectionStartsInExistingComment) {
-    // Try to do our best.
-    if (
-      !maybeParse(
-        `${textPrecedingSelection}${correctedPastedText}${oldValue.slice(
-          selectionEnd,
-        )}`,
-      ) &&
-      maybeParse(
-        `${textPrecedingSelection}${correctedPastedText} ${oldValue.slice(
-          selectionEnd,
-        )}`,
-      )
-    ) {
-      correctedPastedText += " ";
-    }
-  } else {
-    const maybeParsed = maybeParse(correctedPastedText);
-    // If pasting a full well-formed alg, try to add a space before/after, but *only if* this produces a valid alg.
-    // This allows us to "do what you meant" in a lot of cases (e.g. pasting "U" before "L" in "R L'" to produce "R U L'"), while still allowing "non-semantic" pasting (e.g. pasting "' R" over " L" in "U L'" to create "U' R'").
-    if (maybeParsed) {
-      const selectionAtTextStart = selectionStart === 0;
-      const selectionAtTextEnd = selectionEnd === oldValue.length;
+  /** Note: at this point, we would want to test which of the following produces
+   * a valid alg:
+   *
+   * - No changes to `correctedPastedText`.
+   * - Add a space prefix.
+   * - Add a space suffix.
+   *
+   * However, the puzzle is not synchronously available to us, so we can't tell
+   * whether pasting "U" before "R" should create "UR" (Megaminx) or "U R"
+   * (3x3x3). So we optimistically assume the pasted alg is self-contained
+   * (which is the case if it's a fully valid alg on its own) and try to perform
+   * the latter directly.
+   */
 
-      const spaceBefore = oldValue[selectionStart - 1] === " ";
-      const selectionAtLineStart =
-        selectionAtTextStart || oldValue[selectionStart - 1] === "\n";
-      const spaceAfter = oldValue[selectionEnd] === " ";
-      const selectionAtLineEnd =
-        selectionAtTextEnd || oldValue[selectionEnd] === "\n";
+  const tryAddSpaceBefore =
+    !pasteStartsWithCommentText &&
+    selectionStart !== 0 && // Not at text start
+    !["\n", " "].includes(replacement[0]) &&
+    !["\n", " "].includes(oldValue[selectionStart - 1]); // Not at line start, no space before
+  const tryAddSpaceAfter =
+    !pasteEndsWithComment &&
+    selectionEnd !== oldValue.length && // Not at text end
+    !(["\n", " "] as (string | undefined)[]).includes(replacement.at(-1)) &&
+    !["\n", " "].includes(oldValue[selectionEnd]); // Not at line end, no space after
 
-      let respace = false;
-      if (selectionAtLineStart) {
-        respace = !spaceAfter && !selectionAtLineEnd;
-      } else if (selectionAtLineEnd) {
-        respace = !spaceBefore; // We would also check `selectionAtLineStart`, but that's already handled by the previous clause due to symmetry.
-      } else {
-        respace = spaceBefore !== spaceAfter;
-      }
-      if (respace) {
-        // TypeScript is not smart enough to pick up that this clause only runs when `maybeParsed` is truthy, so we use `as Alg` explicitly.
-        let maybeCorrectedPastedText = (maybeParsed as Alg).toString();
-        if (spaceAfter || selectionAtLineEnd) {
-          maybeCorrectedPastedText = ` ${maybeCorrectedPastedText}`;
-        } else {
-          maybeCorrectedPastedText += " ";
-        }
-        // Only respace if it creates a valid alg.
-        // This allows you to paste "L" over the "R" in "U R'" without unexpected reformatting.
-        if (
-          maybeParse(
-            textPrecedingSelection +
-              maybeCorrectedPastedText +
-              oldValue.slice(selectionEnd),
-          )
-        ) {
-          correctedPastedText = maybeCorrectedPastedText;
-        }
-      }
+  function adoptSpacingIfValid(prefix: string, suffix: string): boolean {
+    const candidate = prefix + replacement + suffix;
+    const valid = !!maybeParse(
+      textPrecedingSelection + candidate + textFollowingSelection,
+    );
+    if (valid) {
+      replacement = candidate;
     }
+    return valid;
   }
 
-  textArea.setRangeText(
-    correctedPastedText,
-    selectionStart,
-    selectionEnd,
-    "end",
-  );
+  // Here, we try possible space insertions. We use `||` for short-circuit logic, to adopt the first valid one.
+  (tryAddSpaceBefore && tryAddSpaceAfter && adoptSpacingIfValid(" ", " ")) || // Paste "R U R' U'" over " " in "F F'" to create "F R U R' U' F'"
+    (tryAddSpaceBefore && adoptSpacingIfValid(" ", "")) || // Paste "U" after "R'" in "R' L'" to create "R' U L'"
+    (tryAddSpaceAfter && adoptSpacingIfValid("", " ")); // Paste "U" before "L'" in "R' L'" to create "R' U L'"
+
+  // TODO: use "select" or "preserve" (https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setRangeText#selectmode)
+  textArea.setRangeText(replacement, selectionStart, selectionEnd, "end");
 }
+
+export const pasteIntoTextAreaForTesting = pasteIntoTextArea;
 
 /** @category Other Custom Elements */
 export class TwistyAlgEditor extends ManagedCustomElement {
@@ -229,7 +227,6 @@ export class TwistyAlgEditor extends ManagedCustomElement {
   }
 
   connectedCallback(): void {
-    console.log(this.#textarea);
     this.#textarea.addEventListener("paste", (e) => {
       const text = e.clipboardData?.getData("text");
       if (text) {
