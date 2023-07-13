@@ -24,7 +24,7 @@ import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { TwistyPlayer } from "../TwistyPlayer";
 import { type HighlightInfo, TwistyAlgEditorModel } from "./model";
-import { pasteIntoTextAreaForTesting } from "./paste";
+import { pasteIntoTextArea } from "./paste";
 import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
@@ -120,7 +120,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     this.#textarea.addEventListener("paste", (e) => {
       const text = e.clipboardData?.getData("text");
       if (text) {
-        pasteIntoTextAreaForTesting(this.#textarea, text);
+        pasteIntoTextArea(this.#textarea, text);
         e.preventDefault();
         this.onInput();
       }

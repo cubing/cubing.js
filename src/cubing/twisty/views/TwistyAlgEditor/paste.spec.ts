@@ -1,6 +1,6 @@
 import { expect } from "../../../../test/chai-workarounds";
 
-import { pasteIntoTextAreaForTesting } from "./paste";
+import { pasteIntoTextArea } from "./paste";
 
 function createMockTextArea(
   originalValue: string,
@@ -41,7 +41,7 @@ function mockPaste(
     selectionStart,
     selectionEnd,
   );
-  pasteIntoTextAreaForTesting(mockTextArea, pastedText);
+  pasteIntoTextArea(mockTextArea, pastedText);
   return mockTextArea.value;
 }
 

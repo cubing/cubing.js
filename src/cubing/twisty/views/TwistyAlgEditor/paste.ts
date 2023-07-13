@@ -34,7 +34,7 @@ function replaceSmartQuotesOutsideComments(str: string): string {
 }
 
 // Returns whether the paste was successful.
-function pasteIntoTextArea(
+export function pasteIntoTextArea(
   textArea: HTMLTextAreaElement,
   pastedText: string,
 ): void {
@@ -108,5 +108,3 @@ function pasteIntoTextArea(
   // TODO: use "select" or "preserve" (https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setRangeText#selectmode)
   textArea.setRangeText(replacement, selectionStart, selectionEnd, "end");
 }
-
-export const pasteIntoTextAreaForTesting = pasteIntoTextArea;
