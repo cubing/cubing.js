@@ -18,7 +18,7 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 
 const AMOUNT_REGEX = /^(\d+)?('?)/;
 const MOVE_START_REGEX = /^[_\dA-Za-z]/; // TODO: Handle slash
-const QUANTUM_MOVE_REGEX = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
+const QUANTUM_MOVE_REGEX = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)/;
 const COMMENT_TEXT_REGEX = /^[^\n]*/;
 const SQUARE1_PAIR_START_REGEX = /^(-?\d+), ?/; // TODO: match up with other whitespace handling?
 const SQUARE1_PAIR_END_REGEX = /^(-?\d+)\)/; // TODO: match up with other whitespace handling?

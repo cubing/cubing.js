@@ -314,6 +314,19 @@ describe("Parser", () => {
       Ex.TriplePause,
     );
   });
+
+  it("rejects suffixes without families", () => {
+    expect(() => {
+      Alg.fromString("R U 2'");
+    }).to.throw("internal parsing error");
+    expect(() => {
+      Alg.fromString("R U '");
+    }).to.throw("Unexpected character: '");
+    expect(() => {
+      Alg.fromString("R U 2");
+    }).to.throw("internal parsing error");
+  });
+
   // it("round-trips all alg types through a string", () => {
   //   // Update this based on the length of AllAlgParts.
   //   for (const a of Ex.AllAlgParts) {
