@@ -12,6 +12,7 @@ export type KStateData = Record<string, KStateOrbitData>;
 export interface KStateOrbitData {
   pieces: number[];
   orientation: number[];
+  orientationMod: number[];
 }
 
 export interface KPuzzleOrbitDefinition {
