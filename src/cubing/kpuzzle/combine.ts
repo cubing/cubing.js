@@ -89,17 +89,13 @@ export function applyTransformationDataToStateData(
           pieces: newPieces,
           orientation: stateOrbit.orientation, // copy all 0
         };
-        if (stateOrbit.orientationMod) {
-          newOrbitData.orientationMod = stateOrbit.orientationMod; // copy all 0
-        }
         newStateData[orbitName] = newOrbitData;
       } else {
         const newOrientation = new Array(orbitDefinition.numPieces);
-        const newOrientationMod: number[] | undefined = new Array(
-          orbitDefinition.numPieces,
-        )
-          ? new Array(orbitDefinition.numPieces)
-          : undefined;
+        const newOrientationMod: number[] | undefined =
+          stateOrbit.orientationMod
+            ? new Array(orbitDefinition.numPieces)
+            : undefined;
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           const transformationIdx = transformationOrbit.permutation[idx];
           let mod = orbitDefinition.numOrientations;
