@@ -7,7 +7,7 @@ interface PieceFacelets {
   [orientation: number]: Facelet;
 }
 
-type Mode = "swap" | "twist";
+type Mode = "swap" | "twist" | "ignore_orientation";
 
 function flash(elem: Element) {
   elem.animate([{ opacity: 0.25 }, { opacity: 1 }], {
@@ -258,6 +258,31 @@ class PuzzleStateEditor {
     flash(facelet1.element);
     flash(facelet2.element);
   }
+
+  async ignoreOrientation(facelet: Facelet) {
+    // const piece = this.getPieceByFacelet(facelet);
+
+    const { orbits } = this.kpuzzle.definition;
+
+    const { numPieces } = orbits[facelet.orbit];
+
+    // for (let i = 0; i < numOrientations - 1; i++) {
+    //   const facelet = this.getFaceletByOrientation(piece, i);
+    //   const facelet2Orientation =
+    //     (numOrientations + facelet.orientationIndex + 1) % numOrientations;
+    //   this.swapFaceletFills(
+    //     facelet,
+    //     this.getFaceletByOrientation(piece, facelet2Orientation),
+    //   );
+    // }
+
+    const stateOrbit = this.state.stateData[facelet.orbit];
+    stateOrbit.orientationMod ??= new Array(numPieces).fill(0);
+    stateOrbit.orientationMod[facelet.pieceIndex] =
+      1 - stateOrbit.orientationMod[facelet.pieceIndex];
+    this.displayStateText();
+    flash(facelet.element);
+  }
 }
 
 class Facelet {
@@ -316,6 +341,11 @@ class Facelet {
       }
       case "twist": {
         puzzle.twist(this);
+        e.preventDefault();
+        break;
+      }
+      case "ignore_orientation": {
+        puzzle.ignoreOrientation(this);
         e.preventDefault();
         break;
       }
