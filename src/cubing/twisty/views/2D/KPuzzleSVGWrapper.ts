@@ -47,6 +47,7 @@ export class KPuzzleSVGWrapper {
     public kpuzzle: KPuzzle,
     svgSource: string,
     experimentalStickeringMask?: StickeringMask,
+    private showUnknownOrientations: boolean = false,
   ) {
     if (!svgSource) {
       throw new Error(`No SVG definition for puzzle type: ${kpuzzle.name()}`);
@@ -134,6 +135,10 @@ export class KPuzzleSVGWrapper {
       const id = hintElem.getAttribute(DATA_COPY_ID_ATTRIBUTE);
       hintElem.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
     }
+
+    if (this.showUnknownOrientations) {
+      this.drawState(this.kpuzzle.startState());
+    }
   }
 
   public drawState(state: KState, nextState?: KState, fraction?: number): void {
@@ -213,14 +218,29 @@ export class KPuzzleSVGWrapper {
             singleColor = true; // TODO: Avoid redundant work during move.
           }
           if (singleColor) {
-            this.gradients[id].children[0].setAttribute(
-              "stop-color",
-              this.originalColors[fromCur],
-            );
-            this.gradients[id].children[0].setAttribute("offset", "100%");
-            this.gradients[id].children[1].setAttribute("offset", "100%");
-            this.gradients[id].children[2].setAttribute("offset", "100%");
-            this.gradients[id].children[3].setAttribute("offset", "100%");
+            if (
+              this.showUnknownOrientations &&
+              curStateOrbit.orientationMod?.[idx] === 1
+            ) {
+              this.gradients[id].children[0].setAttribute("stop-color", "#000");
+              this.gradients[id].children[0].setAttribute("offset", "5%");
+              this.gradients[id].children[1].setAttribute("offset", "5%");
+              this.gradients[id].children[2].setAttribute("offset", "20%");
+              this.gradients[id].children[3].setAttribute("offset", "20%");
+              this.gradients[id].children[3].setAttribute(
+                "stop-color",
+                this.originalColors[fromCur],
+              );
+            } else {
+              this.gradients[id].children[0].setAttribute(
+                "stop-color",
+                this.originalColors[fromCur],
+              );
+              this.gradients[id].children[0].setAttribute("offset", "100%");
+              this.gradients[id].children[1].setAttribute("offset", "100%");
+              this.gradients[id].children[2].setAttribute("offset", "100%");
+              this.gradients[id].children[3].setAttribute("offset", "100%");
+            }
           }
           // this.gradients[id]
           // this.elementByID(id).style.fill = this.originalColors[from];
