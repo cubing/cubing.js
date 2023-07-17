@@ -2,6 +2,7 @@ import { isOrbitTransformationDataIdentityUncached } from "./calculate";
 import type {
   KPuzzleDefinition,
   KStateData,
+  KStateOrbitData,
   KTransformationData,
 } from "./KPuzzleDefinition";
 
@@ -84,31 +85,43 @@ export function applyTransformationDataToStateData(
           newPieces[idx] =
             stateOrbit.pieces[transformationOrbit.permutation[idx]];
         }
-        newStateData[orbitName] = {
+        const newOrbitData: KStateOrbitData = {
           pieces: newPieces,
           orientation: stateOrbit.orientation, // copy all 0
-          orientationMod: stateOrbit.orientationMod, // copy all 0
         };
+        if (stateOrbit.orientationMod) {
+          newOrbitData.orientationMod = stateOrbit.orientationMod; // copy all 0
+        }
+        newStateData[orbitName] = newOrbitData;
       } else {
         const newOrientation = new Array(orbitDefinition.numPieces);
-        const newOrientationMod = new Array(orbitDefinition.numPieces);
+        const newOrientationMod: number[] | undefined = new Array(
+          orbitDefinition.numPieces,
+        )
+          ? new Array(orbitDefinition.numPieces)
+          : undefined;
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           const transformationIdx = transformationOrbit.permutation[idx];
-          const orientationMod = stateOrbit.orientationMod[transformationIdx];
-          newOrientationMod[idx] = orientationMod;
-          const mod = orientationMod || orbitDefinition.numOrientations;
+          let mod = orbitDefinition.numOrientations;
+          if (stateOrbit.orientationMod) {
+            const orientationMod = stateOrbit.orientationMod[transformationIdx];
+            newOrientationMod![idx] = orientationMod;
+            mod = orientationMod || orbitDefinition.numOrientations;
+          }
           newOrientation[idx] =
             (stateOrbit.orientation[transformationIdx] +
               transformationOrbit.orientation[idx]) %
             mod; // We don't have to use `modIntoRange` (assuming input is well-formed), because we're adding.
-
           newPieces[idx] = stateOrbit.pieces[transformationIdx];
         }
-        newStateData[orbitName] = {
+        const newOrbitData: KStateOrbitData = {
           pieces: newPieces,
           orientation: newOrientation,
-          orientationMod: newOrientationMod,
         };
+        if (newOrientationMod) {
+          newOrbitData.orientationMod = newOrientationMod;
+        }
+        newStateData[orbitName] = newOrbitData;
       }
     }
   }

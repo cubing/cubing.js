@@ -57,6 +57,7 @@ function giikerStateStr(giikerState: number[]): string {
 const Reid333SolvedCenters = {
   pieces: [0, 1, 2, 3, 4, 5],
   orientation: [0, 0, 0, 0, 0, 0],
+  orientationMod: [1, 1, 1, 1, 1, 1], // TODO
 };
 
 const epGiiKERtoReid333: number[] = [4, 8, 0, 9, 5, 1, 3, 7, 6, 10, 2, 11];

@@ -12,7 +12,10 @@ export type KStateData = Record<string, KStateOrbitData>;
 export interface KStateOrbitData {
   pieces: number[];
   orientation: number[];
-  orientationMod: number[];
+  // Entry values must be either a proper factor of `orbitDefinition.numOrientations` (*excluding* `orbitDefinition.numOrientations` itself) or 0.
+  // An entry value of 0 indicates the default (`orbitDefinition.numOrientations`).
+  // If this field is missing, this means all values are the default.
+  orientationMod?: number[];
 }
 
 export interface KPuzzleOrbitDefinition {
