@@ -82,6 +82,13 @@ export interface KStateOrbitData {
    *   orientation mod of 4. As documented above, this can be recorded with a
    *   `.orientationMod` of `[0, 0, 0, 0, 0, 0]`, or equivalently by omitting
    *   the `.orientationMod` field.
+   * - When modeling a real 3x3x3 speedcube, it is common to have a logo on a
+   *   single sticker. If you want to model the exact visually distinguishable
+   *   states of such a puzzles, it is possible to use an `.orientationMod` such
+   *   as `[0, 1, 1, 1, 1, 1]`. For example, this can make it easy to find an
+   *   alg for a given case "while keeping the logo the same", without placing
+   *   more restrictions on other centers (which could make the search slower or
+   *   produce longer solutions).
    *
    * For those with a mathematical background, you may notice a relationship to
    * the concept of a coset (https://en.wikipedia.org/wiki/Coset). For example,
