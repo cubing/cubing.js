@@ -14,19 +14,6 @@ export const cube3x3x3SVG = `<?xml version="1.0" encoding="UTF-8"?>
         <rect x="0" y="0" width="1" height="0.5" stroke="black" stroke-width="0.04px" style="opacity: 0.3;" />
     </g>
   </defs>
-
-<!--        0 1 2 3 4 5 6 7 8 9 10 11  -->
-<!--        | | | | | | | | | | | |<-  -->
-<!--    0 -       . . .                -->
-<!--    1 -       . . .                -->
-<!--    2 -       . . .                -->
-<!--    3 - . . . . . . . . . . . .    -->
-<!--    4 - . . . . . . . . . . . .    -->
-<!--    5 - . . . . . . . . . . . .    -->
-<!--    6 -       . . .                -->
-<!--    7 -       . . .                -->
-<!--    8 -       . . .                -->
-
   <g id="puzzle" transform="translate(5,40) scale(40)">
     <!-- Hints -->
     <use data-copy-id="CORNERS-l0-o1" href="#sticker-thin-v" transform="translate(6.5,2.1)" style="fill: red"/>
