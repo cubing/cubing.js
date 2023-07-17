@@ -23,20 +23,20 @@ export const cube2x2x2LLSVG = `<?xml version="1.0" encoding="UTF-8"?>
     <polygon id="CORNERS-l3-o2" style="fill: orange" transform="translate(18, 206) scale(-1, 1) translate(-18, -206) " points="-16 128 32 128 32 252 -16 204"></polygon>
   </g>
   <g style="opacity: 0">
-    <use id="CORNERS-l4-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l4-o1" xlink:href="#sticker" style="fill: limegreen"/>
-    <use id="CORNERS-l4-o2" xlink:href="#sticker" style="fill: red"/>
+    <use id="CORNERS-l4-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l4-o1" href="#sticker" style="fill: limegreen"/>
+    <use id="CORNERS-l4-o2" href="#sticker" style="fill: red"/>
 
-    <use id="CORNERS-l5-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l5-o1" xlink:href="#sticker" style="fill: orange"/>
-    <use id="CORNERS-l5-o2" xlink:href="#sticker" style="fill: limegreen"/>
+    <use id="CORNERS-l5-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l5-o1" href="#sticker" style="fill: orange"/>
+    <use id="CORNERS-l5-o2" href="#sticker" style="fill: limegreen"/>
 
-    <use id="CORNERS-l6-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l6-o1" xlink:href="#sticker" style="fill: #26f"/>
-    <use id="CORNERS-l6-o2" xlink:href="#sticker"  style="fill: orange"/>
+    <use id="CORNERS-l6-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l6-o1" href="#sticker" style="fill: #26f"/>
+    <use id="CORNERS-l6-o2" href="#sticker"  style="fill: orange"/>
 
-    <use id="CORNERS-l7-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l7-o1" xlink:href="#sticker" style="fill: red"/>
-    <use id="CORNERS-l7-o2" xlink:href="#sticker" style="fill: #26f"/>
+    <use id="CORNERS-l7-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l7-o1" href="#sticker" style="fill: red"/>
+    <use id="CORNERS-l7-o2" href="#sticker" style="fill: #26f"/>
   </g>
 </svg>`;

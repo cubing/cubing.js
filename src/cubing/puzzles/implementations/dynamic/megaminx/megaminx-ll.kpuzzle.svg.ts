@@ -47,171 +47,171 @@ export const megaminxLLSVG = `<?xml version="1.0" encoding="UTF-8"?>
     </g>
     <g opacity="0">
       <g><title>U</title>
-      <polygon id="CENTERS-l0-o1" xlink:href="#bogus" style="fill: white"/>
-      <polygon id="CENTERS-l0-o2" xlink:href="#bogus" style="fill: white"/>
-      <polygon id="CENTERS-l0-o3" xlink:href="#bogus" style="fill: white"/>
-      <polygon id="CENTERS-l0-o4" xlink:href="#bogus" style="fill: white"/>
+      <polygon id="CENTERS-l0-o1" href="#bogus" style="fill: white"/>
+      <polygon id="CENTERS-l0-o2" href="#bogus" style="fill: white"/>
+      <polygon id="CENTERS-l0-o3" href="#bogus" style="fill: white"/>
+      <polygon id="CENTERS-l0-o4" href="#bogus" style="fill: white"/>
       </g><g><title>F</title>
-      <polygon id="EDGES-l8-o0" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="EDGES-l2-o0" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CENTERS-l2-o0" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CENTERS-l2-o1" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CENTERS-l2-o2" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CENTERS-l2-o3" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CENTERS-l2-o4" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="EDGES-l27-o1" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CORNERS-l19-o1" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CORNERS-l8-o0" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="EDGES-l3-o0" xlink:href="#bogus" style="fill: limegreen"/>
-      <polygon id="CORNERS-l3-o2" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="EDGES-l8-o0" href="#bogus" style="fill: limegreen"/>
+      <polygon id="EDGES-l2-o0" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o0" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o1" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o2" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o3" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o4" href="#bogus" style="fill: limegreen"/>
+      <polygon id="EDGES-l27-o1" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CORNERS-l19-o1" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CORNERS-l8-o0" href="#bogus" style="fill: limegreen"/>
+      <polygon id="EDGES-l3-o0" href="#bogus" style="fill: limegreen"/>
+      <polygon id="CORNERS-l3-o2" href="#bogus" style="fill: limegreen"/>
       </g><g><title>L</title>
-      <polygon id="EDGES-l5-o1" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="EDGES-l8-o1" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CENTERS-l3-o0" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CENTERS-l3-o1" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CENTERS-l3-o2" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CENTERS-l3-o3" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CENTERS-l3-o4" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="EDGES-l4-o1" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CORNERS-l3-o1" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CORNERS-l4-o0" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="EDGES-l10-o1" xlink:href="#bogus" style="fill: #660099"/>
-      <polygon id="CORNERS-l5-o2" xlink:href="#bogus" style="fill: #660099"/>
+      <polygon id="EDGES-l5-o1" href="#bogus" style="fill: #660099"/>
+      <polygon id="EDGES-l8-o1" href="#bogus" style="fill: #660099"/>
+      <polygon id="CENTERS-l3-o0" href="#bogus" style="fill: #660099"/>
+      <polygon id="CENTERS-l3-o1" href="#bogus" style="fill: #660099"/>
+      <polygon id="CENTERS-l3-o2" href="#bogus" style="fill: #660099"/>
+      <polygon id="CENTERS-l3-o3" href="#bogus" style="fill: #660099"/>
+      <polygon id="CENTERS-l3-o4" href="#bogus" style="fill: #660099"/>
+      <polygon id="EDGES-l4-o1" href="#bogus" style="fill: #660099"/>
+      <polygon id="CORNERS-l3-o1" href="#bogus" style="fill: #660099"/>
+      <polygon id="CORNERS-l4-o0" href="#bogus" style="fill: #660099"/>
+      <polygon id="EDGES-l10-o1" href="#bogus" style="fill: #660099"/>
+      <polygon id="CORNERS-l5-o2" href="#bogus" style="fill: #660099"/>
       </g><g><title>BL</title>
-      <polygon id="EDGES-l14-o1" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="EDGES-l5-o0" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CENTERS-l4-o0" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CENTERS-l4-o1" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CENTERS-l4-o2" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CENTERS-l4-o3" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CENTERS-l4-o4" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="EDGES-l12-o1" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CORNERS-l5-o1" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CORNERS-l10-o0" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="EDGES-l16-o0" xlink:href="#bogus" style="fill: yellow"/>
-      <polygon id="CORNERS-l11-o2" xlink:href="#bogus" style="fill: yellow"/>
+      <polygon id="EDGES-l14-o1" href="#bogus" style="fill: yellow"/>
+      <polygon id="EDGES-l5-o0" href="#bogus" style="fill: yellow"/>
+      <polygon id="CENTERS-l4-o0" href="#bogus" style="fill: yellow"/>
+      <polygon id="CENTERS-l4-o1" href="#bogus" style="fill: yellow"/>
+      <polygon id="CENTERS-l4-o2" href="#bogus" style="fill: yellow"/>
+      <polygon id="CENTERS-l4-o3" href="#bogus" style="fill: yellow"/>
+      <polygon id="CENTERS-l4-o4" href="#bogus" style="fill: yellow"/>
+      <polygon id="EDGES-l12-o1" href="#bogus" style="fill: yellow"/>
+      <polygon id="CORNERS-l5-o1" href="#bogus" style="fill: yellow"/>
+      <polygon id="CORNERS-l10-o0" href="#bogus" style="fill: yellow"/>
+      <polygon id="EDGES-l16-o0" href="#bogus" style="fill: yellow"/>
+      <polygon id="CORNERS-l11-o2" href="#bogus" style="fill: yellow"/>
       </g><g><title>BR</title>
-      <polygon id="EDGES-l21-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="EDGES-l14-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CENTERS-l5-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CENTERS-l5-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CENTERS-l5-o2" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CENTERS-l5-o3" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CENTERS-l5-o4" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="EDGES-l18-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CORNERS-l11-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CORNERS-l13-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="EDGES-l28-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
-      <polygon id="CORNERS-l12-o2" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="EDGES-l21-o0" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="EDGES-l14-o0" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o0" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o1" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o2" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o3" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o4" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="EDGES-l18-o1" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CORNERS-l11-o1" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CORNERS-l13-o0" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="EDGES-l28-o1" href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CORNERS-l12-o2" href="#bogus" style="fill: rgb(34, 102, 255)"/>
       </g><g><title>R</title>
-      <polygon id="CORNERS-l19-o2" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="EDGES-l19-o1" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="CENTERS-l1-o0" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="CENTERS-l1-o1" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="CENTERS-l1-o2" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="CENTERS-l1-o3" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="CENTERS-l1-o4" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="EDGES-l2-o1" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="EDGES-l21-o1" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="CORNERS-l12-o1" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="EDGES-l15-o1" xlink:href="#bogus" style="fill: red"/>
-      <polygon id="CORNERS-l14-o0" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CORNERS-l19-o2" href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l19-o1" href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o0" href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o1" href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o2" href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o3" href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o4" href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l2-o1" href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l21-o1" href="#bogus" style="fill: red"/>
+      <polygon id="CORNERS-l12-o1" href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l15-o1" href="#bogus" style="fill: red"/>
+      <polygon id="CORNERS-l14-o0" href="#bogus" style="fill: red"/>
       </g><g><title>C</title>
-      <polygon id="CORNERS-l8-o1" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="EDGES-l9-o1" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CORNERS-l19-o0" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="EDGES-l19-o0" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CENTERS-l6-o0" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CENTERS-l6-o1" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CENTERS-l6-o2" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CENTERS-l6-o3" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CENTERS-l6-o4" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="EDGES-l27-o0" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="EDGES-l29-o1" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CORNERS-l14-o2" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CORNERS-l16-o1" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="EDGES-l22-o0" xlink:href="#bogus" style="fill: #ffffd0"/>
-      <polygon id="CORNERS-l17-o2" xlink:href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CORNERS-l8-o1" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="EDGES-l9-o1" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CORNERS-l19-o0" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="EDGES-l19-o0" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CENTERS-l6-o0" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CENTERS-l6-o1" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CENTERS-l6-o2" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CENTERS-l6-o3" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CENTERS-l6-o4" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="EDGES-l27-o0" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="EDGES-l29-o1" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CORNERS-l14-o2" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CORNERS-l16-o1" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="EDGES-l22-o0" href="#bogus" style="fill: #ffffd0"/>
+      <polygon id="CORNERS-l17-o2" href="#bogus" style="fill: #ffffd0"/>
       </g><g><title>A</title>
-      <polygon id="CORNERS-l4-o1" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="EDGES-l13-o1" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CORNERS-l3-o0" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="EDGES-l3-o1" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CENTERS-l7-o0" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CENTERS-l7-o1" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CENTERS-l7-o2" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CENTERS-l7-o3" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CENTERS-l7-o4" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="EDGES-l4-o0" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="EDGES-l9-o0" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CORNERS-l8-o2" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CORNERS-l17-o1" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="EDGES-l11-o0" xlink:href="#bogus" style="fill: #3399ff"/>
-      <polygon id="CORNERS-l9-o2" xlink:href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CORNERS-l4-o1" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="EDGES-l13-o1" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CORNERS-l3-o0" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="EDGES-l3-o1" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CENTERS-l7-o0" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CENTERS-l7-o1" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CENTERS-l7-o2" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CENTERS-l7-o3" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CENTERS-l7-o4" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="EDGES-l4-o0" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="EDGES-l9-o0" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CORNERS-l8-o2" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CORNERS-l17-o1" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="EDGES-l11-o0" href="#bogus" style="fill: #3399ff"/>
+      <polygon id="CORNERS-l9-o2" href="#bogus" style="fill: #3399ff"/>
       </g><g><title>I</title>
-      <polygon id="CORNERS-l5-o0" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="EDGES-l12-o0" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CORNERS-l4-o2" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="EDGES-l13-o0" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CENTERS-l8-o0" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CENTERS-l8-o1" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CENTERS-l8-o2" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CENTERS-l8-o3" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CENTERS-l8-o4" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="EDGES-l10-o0" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="EDGES-l23-o0" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CORNERS-l9-o1" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CORNERS-l18-o2" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="EDGES-l17-o0" xlink:href="#bogus" style="fill: #ff6633"/>
-      <polygon id="CORNERS-l10-o1" xlink:href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CORNERS-l5-o0" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="EDGES-l12-o0" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CORNERS-l4-o2" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="EDGES-l13-o0" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CENTERS-l8-o0" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CENTERS-l8-o1" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CENTERS-l8-o2" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CENTERS-l8-o3" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CENTERS-l8-o4" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="EDGES-l10-o0" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="EDGES-l23-o0" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CORNERS-l9-o1" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CORNERS-l18-o2" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="EDGES-l17-o0" href="#bogus" style="fill: #ff6633"/>
+      <polygon id="CORNERS-l10-o1" href="#bogus" style="fill: #ff6633"/>
       </g><g><title>BF</title>
-      <polygon id="CORNERS-l11-o0" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="EDGES-l18-o0" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CORNERS-l10-o2" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="EDGES-l17-o1" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CENTERS-l10-o0" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CENTERS-l10-o1" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CENTERS-l10-o2" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CENTERS-l10-o3" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CENTERS-l10-o4" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="EDGES-l16-o1" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="EDGES-l20-o0" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CORNERS-l18-o1" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CORNERS-l15-o2" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="EDGES-l24-o1" xlink:href="#bogus" style="fill: #99ff00"/>
-      <polygon id="CORNERS-l13-o1" xlink:href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CORNERS-l11-o0" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="EDGES-l18-o0" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CORNERS-l10-o2" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="EDGES-l17-o1" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CENTERS-l10-o0" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CENTERS-l10-o1" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CENTERS-l10-o2" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CENTERS-l10-o3" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CENTERS-l10-o4" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="EDGES-l16-o1" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="EDGES-l20-o0" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CORNERS-l18-o1" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CORNERS-l15-o2" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="EDGES-l24-o1" href="#bogus" style="fill: #99ff00"/>
+      <polygon id="CORNERS-l13-o1" href="#bogus" style="fill: #99ff00"/>
       </g><g><title>E</title>
-      <polygon id="CORNERS-l12-o0" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="EDGES-l15-o0" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CORNERS-l13-o2" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="EDGES-l24-o0" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CENTERS-l9-o0" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CENTERS-l9-o1" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CENTERS-l9-o2" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CENTERS-l9-o3" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CENTERS-l9-o4" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="EDGES-l28-o0" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="EDGES-l25-o0" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CORNERS-l15-o1" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CORNERS-l16-o2" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="EDGES-l29-o0" xlink:href="#bogus" style="fill: #ff66cc"/>
-      <polygon id="CORNERS-l14-o1" xlink:href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CORNERS-l12-o0" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="EDGES-l15-o0" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CORNERS-l13-o2" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="EDGES-l24-o0" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CENTERS-l9-o0" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CENTERS-l9-o1" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CENTERS-l9-o2" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CENTERS-l9-o3" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CENTERS-l9-o4" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="EDGES-l28-o0" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="EDGES-l25-o0" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CORNERS-l15-o1" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CORNERS-l16-o2" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="EDGES-l29-o0" href="#bogus" style="fill: #ff66cc"/>
+      <polygon id="CORNERS-l14-o1" href="#bogus" style="fill: #ff66cc"/>
       </g><g><title>D</title>
-      <polygon id="CORNERS-l17-o0" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="EDGES-l11-o1" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CORNERS-l16-o0" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="EDGES-l25-o1" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CENTERS-l11-o0" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CENTERS-l11-o1" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CENTERS-l11-o2" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CENTERS-l11-o3" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CENTERS-l11-o4" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="EDGES-l22-o1" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="EDGES-l20-o1" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CORNERS-l15-o0" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CORNERS-l18-o0" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="EDGES-l23-o1" xlink:href="#bogus" style="fill: #999999"/>
-      <polygon id="CORNERS-l9-o0" xlink:href="#bogus" style="fill: #999999"/>
+      <polygon id="CORNERS-l17-o0" href="#bogus" style="fill: #999999"/>
+      <polygon id="EDGES-l11-o1" href="#bogus" style="fill: #999999"/>
+      <polygon id="CORNERS-l16-o0" href="#bogus" style="fill: #999999"/>
+      <polygon id="EDGES-l25-o1" href="#bogus" style="fill: #999999"/>
+      <polygon id="CENTERS-l11-o0" href="#bogus" style="fill: #999999"/>
+      <polygon id="CENTERS-l11-o1" href="#bogus" style="fill: #999999"/>
+      <polygon id="CENTERS-l11-o2" href="#bogus" style="fill: #999999"/>
+      <polygon id="CENTERS-l11-o3" href="#bogus" style="fill: #999999"/>
+      <polygon id="CENTERS-l11-o4" href="#bogus" style="fill: #999999"/>
+      <polygon id="EDGES-l22-o1" href="#bogus" style="fill: #999999"/>
+      <polygon id="EDGES-l20-o1" href="#bogus" style="fill: #999999"/>
+      <polygon id="CORNERS-l15-o0" href="#bogus" style="fill: #999999"/>
+      <polygon id="CORNERS-l18-o0" href="#bogus" style="fill: #999999"/>
+      <polygon id="EDGES-l23-o1" href="#bogus" style="fill: #999999"/>
+      <polygon id="CORNERS-l9-o0" href="#bogus" style="fill: #999999"/>
       </g>
     </g>
   </g>

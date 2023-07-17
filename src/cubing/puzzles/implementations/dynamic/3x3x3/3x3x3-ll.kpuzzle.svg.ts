@@ -37,72 +37,72 @@ export const cube3x3x3LLSVG = `<?xml version="1.0" encoding="UTF-8"?>
   </g>
   <g style="opacity: 0">
     <!-- CORNERS -->
-    <use id="CORNERS-l4-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l4-o1" xlink:href="#sticker" style="fill: limegreen"/>
-    <use id="CORNERS-l4-o2" xlink:href="#sticker" style="fill: red"/>
+    <use id="CORNERS-l4-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l4-o1" href="#sticker" style="fill: limegreen"/>
+    <use id="CORNERS-l4-o2" href="#sticker" style="fill: red"/>
 
-    <use id="CORNERS-l5-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l5-o1" xlink:href="#sticker" style="fill: orange"/>
-    <use id="CORNERS-l5-o2" xlink:href="#sticker" style="fill: limegreen"/>
+    <use id="CORNERS-l5-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l5-o1" href="#sticker" style="fill: orange"/>
+    <use id="CORNERS-l5-o2" href="#sticker" style="fill: limegreen"/>
 
-    <use id="CORNERS-l6-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l6-o1" xlink:href="#sticker" style="fill: #26f"/>
-    <use id="CORNERS-l6-o2" xlink:href="#sticker"  style="fill: orange"/>
+    <use id="CORNERS-l6-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l6-o1" href="#sticker" style="fill: #26f"/>
+    <use id="CORNERS-l6-o2" href="#sticker"  style="fill: orange"/>
 
-    <use id="CORNERS-l7-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CORNERS-l7-o1" xlink:href="#sticker" style="fill: red"/>
-    <use id="CORNERS-l7-o2" xlink:href="#sticker" style="fill: #26f"/>
+    <use id="CORNERS-l7-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CORNERS-l7-o1" href="#sticker" style="fill: red"/>
+    <use id="CORNERS-l7-o2" href="#sticker" style="fill: #26f"/>
 
     <!-- EDGES -->
-    <use id="EDGES-l4-o0"  xlink:href="#sticker" style="fill: yellow"/>
-    <use id="EDGES-l4-o1"  xlink:href="#sticker" style="fill: limegreen"/>
+    <use id="EDGES-l4-o0"  href="#sticker" style="fill: yellow"/>
+    <use id="EDGES-l4-o1"  href="#sticker" style="fill: limegreen"/>
 
-    <use id="EDGES-l5-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="EDGES-l5-o1" xlink:href="#sticker" style="fill: red"/>
+    <use id="EDGES-l5-o0" href="#sticker" style="fill: yellow"/>
+    <use id="EDGES-l5-o1" href="#sticker" style="fill: red"/>
 
-    <use id="EDGES-l6-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="EDGES-l6-o1" xlink:href="#sticker" style="fill: #26f"/>
+    <use id="EDGES-l6-o0" href="#sticker" style="fill: yellow"/>
+    <use id="EDGES-l6-o1" href="#sticker" style="fill: #26f"/>
 
-    <use id="EDGES-l7-o0"  xlink:href="#sticker" style="fill: yellow"/>
-    <use id="EDGES-l7-o1"  xlink:href="#sticker" style="fill: orange"/>
+    <use id="EDGES-l7-o0"  href="#sticker" style="fill: yellow"/>
+    <use id="EDGES-l7-o1"  href="#sticker" style="fill: orange"/>
 
-    <use id="EDGES-l8-o0"  xlink:href="#sticker" style="fill: limegreen"/>
-    <use id="EDGES-l8-o1"  xlink:href="#sticker" style="fill: red"/>
+    <use id="EDGES-l8-o0"  href="#sticker" style="fill: limegreen"/>
+    <use id="EDGES-l8-o1"  href="#sticker" style="fill: red"/>
 
-    <use id="EDGES-l9-o0"  xlink:href="#sticker" style="fill: limegreen"/>
-    <use id="EDGES-l9-o1"  xlink:href="#sticker" style="fill: orange"/>
+    <use id="EDGES-l9-o0"  href="#sticker" style="fill: limegreen"/>
+    <use id="EDGES-l9-o1"  href="#sticker" style="fill: orange"/>
 
-    <use id="EDGES-l10-o0" xlink:href="#sticker" style="fill: #26f"/>
-    <use id="EDGES-l10-o1" xlink:href="#sticker" style="fill: red"/>
+    <use id="EDGES-l10-o0" href="#sticker" style="fill: #26f"/>
+    <use id="EDGES-l10-o1" href="#sticker" style="fill: red"/>
 
-    <use id="EDGES-l11-o0" xlink:href="#sticker" style="fill: #26f"/>
-    <use id="EDGES-l11-o1" xlink:href="#sticker" style="fill: orange"/>
+    <use id="EDGES-l11-o0" href="#sticker" style="fill: #26f"/>
+    <use id="EDGES-l11-o1" href="#sticker" style="fill: orange"/>
 
     <!-- CENTERS -->
     <!-- TODO: Allow the same sticker to be reused for multiple orientations -->
-    <use id="CENTERS-l1-o0" xlink:href="#sticker" style="fill: orange"/>
-    <use id="CENTERS-l1-o1" xlink:href="#sticker" style="fill: orange"/>
-    <use id="CENTERS-l1-o2" xlink:href="#sticker" style="fill: orange"/>
-    <use id="CENTERS-l1-o3" xlink:href="#sticker" style="fill: orange"/>
+    <use id="CENTERS-l1-o0" href="#sticker" style="fill: orange"/>
+    <use id="CENTERS-l1-o1" href="#sticker" style="fill: orange"/>
+    <use id="CENTERS-l1-o2" href="#sticker" style="fill: orange"/>
+    <use id="CENTERS-l1-o3" href="#sticker" style="fill: orange"/>
 
-    <use id="CENTERS-l2-o0" xlink:href="#sticker" style="fill: limegreen"/>
-    <use id="CENTERS-l2-o1" xlink:href="#sticker" style="fill: limegreen"/>
-    <use id="CENTERS-l2-o2" xlink:href="#sticker" style="fill: limegreen"/>
-    <use id="CENTERS-l2-o3" xlink:href="#sticker" style="fill: limegreen"/>
+    <use id="CENTERS-l2-o0" href="#sticker" style="fill: limegreen"/>
+    <use id="CENTERS-l2-o1" href="#sticker" style="fill: limegreen"/>
+    <use id="CENTERS-l2-o2" href="#sticker" style="fill: limegreen"/>
+    <use id="CENTERS-l2-o3" href="#sticker" style="fill: limegreen"/>
 
-    <use id="CENTERS-l3-o0" xlink:href="#sticker" style="fill: red"/>
-    <use id="CENTERS-l3-o1" xlink:href="#sticker" style="fill: red"/>
-    <use id="CENTERS-l3-o2" xlink:href="#sticker" style="fill: red"/>
-    <use id="CENTERS-l3-o3" xlink:href="#sticker" style="fill: red"/>
+    <use id="CENTERS-l3-o0" href="#sticker" style="fill: red"/>
+    <use id="CENTERS-l3-o1" href="#sticker" style="fill: red"/>
+    <use id="CENTERS-l3-o2" href="#sticker" style="fill: red"/>
+    <use id="CENTERS-l3-o3" href="#sticker" style="fill: red"/>
 
-    <use id="CENTERS-l4-o0" xlink:href="#sticker" style="fill: #26f"/>
-    <use id="CENTERS-l4-o1" xlink:href="#sticker" style="fill: #26f"/>
-    <use id="CENTERS-l4-o2" xlink:href="#sticker" style="fill: #26f"/>
-    <use id="CENTERS-l4-o3" xlink:href="#sticker" style="fill: #26f"/>
+    <use id="CENTERS-l4-o0" href="#sticker" style="fill: #26f"/>
+    <use id="CENTERS-l4-o1" href="#sticker" style="fill: #26f"/>
+    <use id="CENTERS-l4-o2" href="#sticker" style="fill: #26f"/>
+    <use id="CENTERS-l4-o3" href="#sticker" style="fill: #26f"/>
 
-    <use id="CENTERS-l5-o0" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CENTERS-l5-o1" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CENTERS-l5-o2" xlink:href="#sticker" style="fill: yellow"/>
-    <use id="CENTERS-l5-o3" xlink:href="#sticker" style="fill: yellow"/>
+    <use id="CENTERS-l5-o0" href="#sticker" style="fill: yellow"/>
+    <use id="CENTERS-l5-o1" href="#sticker" style="fill: yellow"/>
+    <use id="CENTERS-l5-o2" href="#sticker" style="fill: yellow"/>
+    <use id="CENTERS-l5-o3" href="#sticker" style="fill: yellow"/>
   </g>
 </svg>`;
