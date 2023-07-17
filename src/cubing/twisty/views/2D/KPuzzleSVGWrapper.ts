@@ -142,18 +142,15 @@ export class KPuzzleSVGWrapper {
 
   // TODO: save definition in the constructor?
   public draw(state: KState, nextState?: KState, fraction?: number): void {
-    const transformation = state.experimentalToTransformation();
     const nextTransformation = nextState?.experimentalToTransformation();
-    if (!transformation) {
+    if (!state) {
       throw new Error("Distinguishable pieces are not handled for SVG yet!");
     }
 
-    for (const orbitName in transformation.kpuzzle.definition.orbits) {
-      const orbitDefinition =
-        transformation.kpuzzle.definition.orbits[orbitName];
+    for (const orbitName in state.kpuzzle.definition.orbits) {
+      const orbitDefinition = state.kpuzzle.definition.orbits[orbitName];
 
-      const curTransformationOrbit =
-        transformation.transformationData[orbitName];
+      const curStateOrbit = state.stateData[orbitName];
       const nextTransformationOrbit = nextTransformation
         ? nextTransformation.transformationData[orbitName]
         : null;
@@ -166,9 +163,9 @@ export class KPuzzleSVGWrapper {
           const id = this.elementID(orbitName, idx, orientation);
           const fromCur = this.elementID(
             orbitName,
-            curTransformationOrbit.permutation[idx],
+            curStateOrbit.pieces[idx],
             (orbitDefinition.numOrientations -
-              curTransformationOrbit.orientation[idx] +
+              curStateOrbit.orientation[idx] +
               orientation) %
               orbitDefinition.numOrientations,
           );
@@ -192,9 +189,9 @@ export class KPuzzleSVGWrapper {
               "stop-color",
               this.originalColors[fromCur],
             );
-            this.gradients[id].children[1].setAttribute(
-              "stop-color",
-              this.originalColors[fromCur],
+            this.gradients[id].children[0].setAttribute(
+              "offset",
+              `${Math.max(easedBackwardsPercent - 5, 0)}%`,
             );
             this.gradients[id].children[1].setAttribute(
               "offset",
@@ -202,21 +199,13 @@ export class KPuzzleSVGWrapper {
             );
             this.gradients[id].children[2].setAttribute(
               "offset",
-              `${Math.max(easedBackwardsPercent - 5, 0)}%`,
+              `${easedBackwardsPercent}%`,
             );
             this.gradients[id].children[3].setAttribute(
               "offset",
               `${easedBackwardsPercent}%`,
             );
-            this.gradients[id].children[4].setAttribute(
-              "offset",
-              `${easedBackwardsPercent}%`,
-            );
-            this.gradients[id].children[4].setAttribute(
-              "stop-color",
-              this.originalColors[fromNext],
-            );
-            this.gradients[id].children[5].setAttribute(
+            this.gradients[id].children[3].setAttribute(
               "stop-color",
               this.originalColors[fromNext],
             );
@@ -228,14 +217,10 @@ export class KPuzzleSVGWrapper {
               "stop-color",
               this.originalColors[fromCur],
             );
-            this.gradients[id].children[1].setAttribute(
-              "stop-color",
-              this.originalColors[fromCur],
-            );
+            this.gradients[id].children[0].setAttribute("offset", "100%");
             this.gradients[id].children[1].setAttribute("offset", "100%");
             this.gradients[id].children[2].setAttribute("offset", "100%");
             this.gradients[id].children[3].setAttribute("offset", "100%");
-            this.gradients[id].children[4].setAttribute("offset", "100%");
           }
           // this.gradients[id]
           // this.elementByID(id).style.fill = this.originalColors[from];
@@ -253,11 +238,9 @@ export class KPuzzleSVGWrapper {
     grad.setAttribute("r", "70.7107%"); // TODO: Adapt to puzzle.
     const stopDefs = [
       { offset: 0, color: originalColor },
-      { offset: 0, color: originalColor },
       { offset: 0, color: "black" },
       { offset: 0, color: "black" },
       { offset: 0, color: originalColor },
-      { offset: 100, color: originalColor },
     ];
     for (const stopDef of stopDefs) {
       const stop = document.createElementNS(xmlns, "stop");
