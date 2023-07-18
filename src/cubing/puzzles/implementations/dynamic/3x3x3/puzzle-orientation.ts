@@ -65,6 +65,7 @@ export function experimentalIs3x3x3Solved(
   if (options.ignorePuzzleOrientation) {
     state = normalize3x3x3Orientation(state);
   }
+  // TODO(orientationMod)
   if (options.ignoreCenterOrientation) {
     state = new KState(state.kpuzzle, {
       EDGES: state.stateData.EDGES,

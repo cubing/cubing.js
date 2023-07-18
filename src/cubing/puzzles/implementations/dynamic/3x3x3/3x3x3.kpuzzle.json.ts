@@ -19,6 +19,7 @@ export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
     CENTERS: {
       pieces: [0, 1, 2, 3, 4, 5],
       orientation: [0, 0, 0, 0, 0, 0],
+      orientationMod: [1, 1, 1, 1, 1, 1],
     },
   },
   moves: {

@@ -1,4 +1,4 @@
-import { KState } from "../../kpuzzle";
+import { KState, type KStateData } from "../../kpuzzle";
 import {
   experimental3x3x3KPuzzle,
   experimentalNormalize3x3x3Orientation,
@@ -96,6 +96,18 @@ function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
   return components.poIdxU !== 7;
 }
 
+function hasFullMOData(centerOrientationModData: number[] | undefined): 0 | 1 {
+  if (!centerOrientationModData) {
+    return 1;
+  }
+  for (let i = 0; i < 6; i++) {
+    if (centerOrientationModData[i] !== 0) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
 export function reid3x3x3ToBinaryComponents(
   state: KState,
 ): Binary3x3x3Components {
@@ -112,11 +124,11 @@ export function reid3x3x3ToBinaryComponents(
     normedState.stateData["CORNERS"].orientation,
   );
   const [poIdxU, poIdxL] = experimentalPuzzleOrientation3x3x3Idx(state);
-  const moSupport = 1; // Required for now.
-  const moMask = orientationsToMask(
-    4,
-    normedState.stateData["CENTERS"].orientation,
-  );
+
+  const moSupport = hasFullMOData(state.stateData["CENTERS"].orientationMod); // Required for now.
+  const moMask = moSupport
+    ? orientationsToMask(4, normedState.stateData["CENTERS"].orientation)
+    : 0;
 
   return {
     epLex,
@@ -177,11 +189,7 @@ export function twizzleBinaryToBinaryComponents(
 export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
 ): KState {
-  if (components.moSupport !== 1) {
-    throw new Error("Must support center orientation.");
-  }
-
-  const normedState = new KState(experimental3x3x3KPuzzle, {
+  const stateData: KStateData = {
     EDGES: {
       pieces: lexToPermutation(12, components.epLex),
       orientation: maskToOrientations(2, 12, components.eoMask),
@@ -194,7 +202,11 @@ export function binaryComponentsToReid3x3x3(
       pieces: identityPermutation(6),
       orientation: maskToOrientations(4, 6, components.moMask),
     },
-  });
+  };
+  if (!components.moSupport) {
+    stateData.CENTERS.orientationMod = new Array(6).fill(1);
+  }
+  const normedState = new KState(experimental3x3x3KPuzzle, stateData);
 
   if (!supportsPuzzleOrientation(components)) {
     return normedState;
