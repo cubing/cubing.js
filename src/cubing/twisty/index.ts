@@ -33,4 +33,4 @@ export type { AlgIndexer } from "./controllers/indexer/AlgIndexer";
 export { SimpleAlgIndexer } from "./controllers/indexer/SimpleAlgIndexer";
 export { TreeAlgIndexer } from "./controllers/indexer/tree/TreeAlgIndexer";
 
-export { KPuzzleSVGWrapper as ExperimentalKPuzzleSVGWrapper } from "./views/2D/KPuzzleSVGWrapper";
+export { TwistyAnimatedSVG as ExperimentalSVGAnimator } from "./views/2D/TwistyAnimatedSVG";

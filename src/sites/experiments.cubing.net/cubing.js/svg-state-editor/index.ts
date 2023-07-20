@@ -1,7 +1,7 @@
 import { offsetMod } from "../../../../cubing/alg/cubing-private";
 import { KState, type KPuzzle } from "../../../../cubing/kpuzzle";
 import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
-import { KPuzzleSVGWrapper } from "../../../../cubing/twisty/views/2D/KPuzzleSVGWrapper";
+import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG";
 import { defToString, stateToString } from "../3x3x3-formats/convert";
 
 interface PieceFacelets {
@@ -109,7 +109,7 @@ class PuzzleStateEditor {
   selectedFacelet: Facelet | null;
   pieces = new Map<string, { [position: number]: PieceFacelets }>();
 
-  kpuzzleSVGWrapper: KPuzzleSVGWrapper;
+  svgAnimator: TwistyAnimatedSVG;
   svgString: string;
   kpuzzle: KPuzzle;
   state: KState;
@@ -132,7 +132,7 @@ class PuzzleStateEditor {
   }
 
   private displayState() {
-    this.kpuzzleSVGWrapper.drawState(this.state);
+    this.svgAnimator.drawState(this.state);
     this.displayStateText();
   }
 
@@ -145,13 +145,13 @@ class PuzzleStateEditor {
 
     const wrapper = document.querySelector("#puzzle")!;
     wrapper.innerHTML = "";
-    this.kpuzzleSVGWrapper = new KPuzzleSVGWrapper(
+    this.svgAnimator = new TwistyAnimatedSVG(
       kpuzzle,
       svgString,
       undefined,
       true,
     );
-    wrapper.appendChild(this.kpuzzleSVGWrapper.wrapperElement);
+    wrapper.appendChild(this.svgAnimator.wrapperElement);
     document.querySelector("svg")!.removeAttribute("width");
     document.querySelector("svg")!.removeAttribute("height");
 

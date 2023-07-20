@@ -13,7 +13,7 @@ import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
-import { KPuzzleSVGWrapper } from "./KPuzzleSVGWrapper";
+import { TwistyAnimatedSVG } from "./TwistyAnimatedSVG";
 import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
 
 export interface Twisty2DPuzzleOptions {
@@ -25,7 +25,7 @@ export class Twisty2DPuzzle
   extends ManagedCustomElement
   implements PositionListener
 {
-  public svgWrapper: KPuzzleSVGWrapper;
+  public svgWrapper: TwistyAnimatedSVG;
   private scheduler = new RenderScheduler(this.render.bind(this));
   #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
   constructor(
@@ -114,7 +114,7 @@ export class Twisty2DPuzzle
     if (!this.kpuzzle) {
       return; // TODO
     }
-    this.svgWrapper = new KPuzzleSVGWrapper(
+    this.svgWrapper = new TwistyAnimatedSVG(
       this.kpuzzle,
       this.svgSource!,
       stickeringMask,

@@ -1,12 +1,12 @@
 import { Alg } from "../../../../cubing/alg";
 import type { KPuzzle } from "../../../../cubing/kpuzzle";
 import { puzzles } from "../../../../cubing/puzzles";
-import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
+import { ExperimentalSVGAnimator } from "../../../../cubing/twisty";
 
 class SVGDisplay {
-  private svg: ExperimentalKPuzzleSVGWrapper;
+  private svg: ExperimentalSVGAnimator;
   constructor(private kpuzzle: KPuzzle, svg: string) {
-    this.svg = new ExperimentalKPuzzleSVGWrapper(kpuzzle, svg);
+    this.svg = new ExperimentalSVGAnimator(kpuzzle, svg);
   }
 
   public element(): HTMLElement {

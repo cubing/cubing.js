@@ -9,7 +9,7 @@ import {
 } from "../../../../cubing/protocol/binary/binary3x3x3";
 import { cube3x3x3 } from "../../../../cubing/puzzles";
 import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
-import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
+import { ExperimentalSVGAnimator } from "../../../../cubing/twisty";
 import {
   kpuzzleToReidString,
   kpuzzleToStickers,
@@ -34,7 +34,7 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 class App {
   state = experimental3x3x3KPuzzle.startState();
   svg = (async () => {
-    return new ExperimentalKPuzzleSVGWrapper(
+    return new ExperimentalSVGAnimator(
       experimental3x3x3KPuzzle,
       await cube3x3x3.svg(),
     );

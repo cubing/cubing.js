@@ -36,7 +36,7 @@ const colorMaps: Partial<
   invisible: "#00000000",
 };
 
-export class KPuzzleSVGWrapper {
+export class TwistyAnimatedSVG {
   public wrapperElement: HTMLElement;
   public svgElement: SVGElement;
   public gradientDefs: SVGDefsElement;
