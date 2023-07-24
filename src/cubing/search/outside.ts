@@ -163,7 +163,7 @@ interface SearchOutsideDebugGlobals {
   forceNewWorkerForEveryScramble: boolean;
 }
 export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
-  logPerf: false,
+  logPerf: true,
   scramblePrefetchLevel: "auto",
   forceStringWorker: false,
   disableStringWorker: false,
