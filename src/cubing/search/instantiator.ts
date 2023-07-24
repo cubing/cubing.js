@@ -217,13 +217,17 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
     try {
       const worker = await fn();
       if (warnOnSuccess) {
-        console.warn(
-          `Module worker instantiation required ${description}. \`cubing.js\` ${warnOnSuccess} not support this fallback in the future.`,
-        );
+        if (searchOutsideDebugGlobals.showWorkerInstantiationWarnings) {
+          console.warn(
+            `Module worker instantiation required ${description}. \`cubing.js\` ${warnOnSuccess} not support this fallback in the future.`,
+          );
+        }
       }
       return worker;
     } catch {
-      console.warn(`${failed(description)}, falling back.`);
+      if (searchOutsideDebugGlobals.showWorkerInstantiationWarnings) {
+        console.warn(`${failed(description)}, falling back.`);
+      }
     }
   }
 

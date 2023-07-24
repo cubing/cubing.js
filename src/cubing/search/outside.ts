@@ -161,6 +161,7 @@ interface SearchOutsideDebugGlobals {
   forceStringWorker: boolean;
   disableStringWorker: boolean;
   forceNewWorkerForEveryScramble: boolean;
+  showWorkerInstantiationWarnings: boolean;
 }
 export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   logPerf: true,
@@ -168,6 +169,7 @@ export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   forceStringWorker: false,
   disableStringWorker: false,
   forceNewWorkerForEveryScramble: false,
+  showWorkerInstantiationWarnings: true,
 };
 
 export function setSearchDebug(
@@ -196,5 +198,9 @@ export function setSearchDebug(
   if ("forceNewWorkerForEveryScramble" in options) {
     searchOutsideDebugGlobals.forceNewWorkerForEveryScramble =
       !!options.forceNewWorkerForEveryScramble;
+  }
+  if ("showWorkerInstantiationWarnings" in options) {
+    searchOutsideDebugGlobals.showWorkerInstantiationWarnings =
+      !!options.showWorkerInstantiationWarnings;
   }
 }
