@@ -62,7 +62,7 @@ export class OrbitCoordinatesRequestProp extends TwistyPropSource<
       newValue.latitude = Math.min(Math.max(newValue.latitude, -90), 90);
     }
     if (typeof newValue.longitude !== "undefined") {
-      newValue.longitude = modIntoRange(newValue.longitude, 360, -180);
+      newValue.longitude = modIntoRange(newValue.longitude, 180, -180);
     }
     return newValue;
   }
