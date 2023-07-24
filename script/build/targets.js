@@ -279,7 +279,7 @@ export const binTarget = {
         "src/bin/import-restrictions-mermaid-diagram.ts",
         "src/bin/scramble.ts",
         {
-          in: "src/cubing/search-worker-entry.js",
+          in: "src/cubing/search/worker-workarounds/search-worker-entry.js",
           out: "search-worker-entry.js",
         },
       ],

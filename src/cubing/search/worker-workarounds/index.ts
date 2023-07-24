@@ -1,4 +1,4 @@
-import { exposeAPI } from "./search/worker-guard";
+import { exposeAPI } from "./worker-guard";
 
 export async function searchWorkerURLImportMetaResolve(): Promise<string> {
   // Note:
@@ -22,7 +22,7 @@ export function searchWorkerURLNewURLImportMetaURL(): URL {
 // Workaround for `esbuild`: https://github.com/evanw/esbuild/issues/312#issuecomment-1092195778
 export async function searchWorkerURLEsbuildWorkaround(): Promise<string> {
   exposeAPI.expose = false;
-  return (await import("./search-worker-entry")).WORKER_ENTRY_FILE_URL;
+  return (await import("./search-worker-entry.js")).WORKER_ENTRY_FILE_URL;
 }
 
 export function instantiateSearchWorkerURLNewURLImportMetaURL(): Worker {

@@ -9,7 +9,7 @@ import {
   searchWorkerURLEsbuildWorkaround,
   searchWorkerURLImportMetaResolve,
   searchWorkerURLNewURLImportMetaURL,
-} from "../search-worker-workarounds";
+} from "./worker-workarounds";
 
 export interface WorkerOutsideAPI {
   terminate: () => void; // `node` can return a `Promise` with an exit code, but we match the web worker API.

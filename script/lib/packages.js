@@ -19,4 +19,9 @@ export const packageEntryPoints = packageNames.map((p) =>
 );
 
 export const packageEntryPointsWithSearchWorkerEntry =
-  packageEntryPoints.concat(["./src/cubing/search-worker-entry.js"]);
+  packageEntryPoints.concat([
+    {
+      in: "src/cubing/search/worker-workarounds/search-worker-entry.js",
+      out: "search-worker-entry.js",
+    },
+  ]);
