@@ -14,9 +14,9 @@ import { Alg } from "cubing/alg";
 import { KState } from "cubing/kpuzzle";
 import { cube2x2x2 } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
-import { experimentalSolveTwsearch, setDebug } from "cubing/search";
+import { experimentalSolveTwsearch, setSearchDebug } from "cubing/search";
 
-setDebug({ disableStringWorker: true });
+setSearchDebug({ disableStringWorker: true });
 
 (async () => {
   (await randomScrambleForEvent("222")).log();

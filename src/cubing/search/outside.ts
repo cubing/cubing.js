@@ -170,7 +170,9 @@ export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   forceNewWorkerForEveryScramble: false,
 };
 
-export function setDebug(options: Partial<SearchOutsideDebugGlobals>): void {
+export function setSearchDebug(
+  options: Partial<SearchOutsideDebugGlobals>,
+): void {
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
     searchOutsideDebugGlobals.logPerf = logPerf;

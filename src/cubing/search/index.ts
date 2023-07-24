@@ -4,7 +4,7 @@ export {
   solveSkewb,
   solvePyraminx,
   solveMegaminx,
-  setDebug,
+  setSearchDebug,
   solveTwsearch as experimentalSolveTwsearch,
 } from "./outside";
 
