@@ -1,6 +1,7 @@
 // To run this file directly:
 // bun run src/bin/scramble.ts -- <program args>
 
+import { eventInfo } from "../cubing/puzzles";
 import { randomScrambleForEvent } from "../cubing/scramble";
 import { setSearchDebug } from "../cubing/search";
 
@@ -14,4 +15,11 @@ Example: scramble 333`);
 }
 
 setSearchDebug({ logPerf: false }); // TODO: why doesn't this work?
-console.log((await randomScrambleForEvent(eventID)).toString());
+const scramble = await randomScrambleForEvent(eventID);
+console.log(scramble.toString());
+
+const url = new URL("https://alpha.twizzle.net/edit/");
+const puzzleID = eventInfo(eventID)?.puzzleID;
+puzzleID && url.searchParams.set("puzzle", puzzleID);
+url.searchParams.set("alg", scramble.toString());
+console.log("\n🔗 " + url.toString());
