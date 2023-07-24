@@ -39,16 +39,3 @@ export function tempDir() {
   // TODO: When can we use `??=`?
   return (cachedTempDir = cachedTempDir ? cachedTempDir : tempDirUncached());
 }
-
-// We write using a temp file and move it, so that the target file only ever
-// contains the full intended contents.
-// This avoids issues like https://github.com/cubing/cubing.js/pull/138
-export function writeSyncUsingTempFile(
-  tempFilename,
-  finalDestination,
-  fileContents,
-) {
-  const tempFilePath = join(tempDir(), tempFilename);
-  writeFileSync(tempFilePath, fileContents);
-  renameSync(tempFilePath, finalDestination);
-}

@@ -21,7 +21,6 @@ import {
   packageEntryPointsWithSearchWorkerEntry,
   searchWorkerEsbuildWorkaroundEntry,
 } from "../lib/packages.js";
-import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
 const PUBLISH_WITH_PRIVATE_FIELDS = true;
@@ -136,69 +135,6 @@ export async function build(target, dev) {
     target.builtYet = true;
   }
 }
-
-let latestBuildSymbol = null;
-const SEARCH_WORKER_PATH =
-  "./src/cubing/search/search-worker-inside-generated-string.js";
-export const searchWorkerTarget = {
-  name: "search-worker",
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (dev) => {
-    const buildSymbol = Symbol("esbuild");
-    latestBuildSymbol = buildSymbol;
-
-    const writeFile = async (buildResult) => {
-      if (latestBuildSymbol !== buildSymbol) {
-        console.warn("Stale `esbuild`?!");
-        return;
-      }
-      const { contents } = buildResult.outputFiles[0];
-      const contentsString = new TextDecoder("utf-8").decode(contents);
-      if (typeof contentsString !== "string") {
-        throw new Error(
-          "Unexpected non-string for the decoded search worker source.",
-        );
-      }
-      const workerContents = `export const workerSource = ${JSON.stringify(
-        contentsString,
-      )};`;
-      console.log("Writing:", SEARCH_WORKER_PATH);
-      writeSyncUsingTempFile(
-        "search-worker-inside-generated-string.js",
-        SEARCH_WORKER_PATH,
-        workerContents,
-      );
-    };
-
-    let watch = dev;
-    if (dev) {
-      watch = {
-        onRebuild(error, result) {
-          if (error) {
-            console.error("Watch build failed:", error);
-          } else {
-            writeFile(result);
-          }
-        },
-      };
-    }
-
-    const initialBuildResult = await esbuild.build({
-      entryPoints: ["./src/cubing/search/inside/search-worker-js-entry.js"],
-      format: "cjs",
-      target: "es2020",
-      bundle: true,
-      write: false,
-      logLevel: "info",
-      external: ["node:*"],
-      minify: !dev,
-    });
-    // Note that we finish writing the initial built file before we return.
-    // This means that the file is in place before any dependent steps(like Snowpack) start.
-    await writeFile(initialBuildResult);
-  },
-};
 
 export const staticPackageMetadataTarget = {
   name: "static-package-metadata",
