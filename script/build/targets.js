@@ -19,6 +19,7 @@ import { execPromise, spawnPromise } from "../lib/execPromise.js";
 import {
   packageEntryPoints,
   packageEntryPointsWithSearchWorkerEntry,
+  searchWorkerEsbuildWorkaroundEntry,
 } from "../lib/packages.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
@@ -278,10 +279,7 @@ export const binTarget = {
         "src/bin/puzzle-geometry-bin.ts",
         "src/bin/import-restrictions-mermaid-diagram.ts",
         "src/bin/scramble.ts",
-        {
-          in: "src/cubing/search/worker-workarounds/search-worker-entry.js",
-          out: "search-worker-entry.js",
-        },
+        searchWorkerEsbuildWorkaroundEntry,
       ],
       outdir: "dist/bin/",
       format: "esm",
