@@ -1,9 +1,9 @@
-import { nodeEndpointPort } from "../../vendor/apache/comlink-everywhere/inside/index";
-import { exposeAPI } from "./worker-guard";
+import { nodeEndpointPort } from "./vendor/apache/comlink-everywhere/inside/index";
+import { exposeAPI } from "./search/worker-guard";
 
 if (exposeAPI.expose) {
   (async () => {
-    await import("../inside");
+    await import("./search/inside");
 
     // Workaround for `node`
     const messagePort = globalThis.postMessage

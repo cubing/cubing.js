@@ -9,7 +9,7 @@ import {
   searchWorkerURLEsbuildWorkaround,
   searchWorkerURLImportMetaResolve,
   searchWorkerURLNewURLImportMetaURL,
-} from "./worker-workarounds";
+} from "../search-worker-workarounds";
 
 export interface WorkerOutsideAPI {
   terminate: () => void; // `node` can return a `Promise` with an exit code, but we match the web worker API.
@@ -19,8 +19,38 @@ export interface InsideOutsideAPI {
   outsideAPI: WorkerOutsideAPI;
 }
 
-export async function instantiateModuleWorker(
+function probablyCrossOrigin(workerEntryFileURL: URL): boolean {
+  try {
+    const scriptOrigin = globalThis.location?.origin;
+    const workerOrigin = workerEntryFileURL.origin;
+    return (
+      !!scriptOrigin &&
+      scriptOrigin !== null &&
+      !!workerOrigin &&
+      workerOrigin !== null &&
+      scriptOrigin !== workerOrigin
+    );
+  } catch {
+    return false;
+  }
+}
+
+async function instantiateModuleWorker(
   workerEntryFileURL: string | URL,
+): Promise<InsideOutsideAPI> {
+  // We need the `import.meta.url` base for `bun`.
+  const url = new URL(workerEntryFileURL, import.meta.url);
+  const tryTrampolineFirst = probablyCrossOrigin(url);
+  try {
+    return instantiateModuleWorkerAttempt(url, tryTrampolineFirst);
+  } catch {
+    return instantiateModuleWorkerAttempt(url, !tryTrampolineFirst);
+  }
+}
+
+async function instantiateModuleWorkerAttempt(
+  workerEntryFileURL: URL,
+  crossOriginTrampoline: boolean,
 ): Promise<InsideOutsideAPI> {
   // rome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
@@ -28,8 +58,8 @@ export async function instantiateModuleWorker(
       if (!workerEntryFileURL) {
         reject(new Error("Could not get worker entry file URL."));
       }
-      let url: string | URL;
-      if (globalThis.Worker) {
+      let url: URL = workerEntryFileURL;
+      if (crossOriginTrampoline) {
         // Standard browser-like environment.
         const importSrc = `import ${JSON.stringify(
           workerEntryFileURL.toString(),
@@ -37,10 +67,7 @@ export async function instantiateModuleWorker(
         const blob = new Blob([importSrc], {
           type: "text/javascript",
         });
-        url = URL.createObjectURL(blob);
-      } else {
-        // We need to keep the original entry file URL, but we have to wrap it in the `URL` class.
-        url = new URL(workerEntryFileURL);
+        url = new URL(URL.createObjectURL(blob));
       }
 
       const worker = (await constructWorker(url, {

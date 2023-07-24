@@ -277,6 +277,11 @@ export const binTarget = {
         "src/bin/order.ts",
         "src/bin/puzzle-geometry-bin.ts",
         "src/bin/import-restrictions-mermaid-diagram.ts",
+        "src/bin/scramble.ts",
+        {
+          in: "src/cubing/search-worker-entry.js",
+          out: "search-worker-entry.js",
+        },
       ],
       outdir: "dist/bin/",
       format: "esm",
@@ -284,6 +289,7 @@ export const binTarget = {
       bundle: true,
       logLevel: "info",
       sourcemap: dev,
+      splitting: true, // We need this so that `search-worker-entry.js` exists in the output and can be used by other binaries without importing duplicate copies of some code.
       //
       external,
       supported: {
