@@ -173,10 +173,6 @@ export async function mapToAllWorkers(
 }
 
 async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
-  if (searchOutsideDebugGlobals.forceStringWorker) {
-    console.warn("The `forceStringWorker` workaround is no longer supported.");
-  }
-
   function failed(methodDescription?: string) {
     return `Module worker instantiation${
       methodDescription ? ` ${methodDescription}` : ""

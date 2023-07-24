@@ -158,7 +158,6 @@ export async function solveTwsearch(
 interface SearchOutsideDebugGlobals {
   logPerf: boolean;
   scramblePrefetchLevel: `${PrefetchLevel}`;
-  forceStringWorker: boolean;
   disableStringWorker: boolean;
   forceNewWorkerForEveryScramble: boolean;
   showWorkerInstantiationWarnings: boolean;
@@ -166,7 +165,6 @@ interface SearchOutsideDebugGlobals {
 export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   logPerf: true,
   scramblePrefetchLevel: "auto",
-  forceStringWorker: false,
   disableStringWorker: false,
   forceNewWorkerForEveryScramble: false,
   showWorkerInstantiationWarnings: true,
@@ -187,9 +185,6 @@ export function setSearchDebug(
         scramblePrefetchLevel as PrefetchLevel,
       ),
     );
-  }
-  if ("forceStringWorker" in options) {
-    searchOutsideDebugGlobals.forceStringWorker = !!options.forceStringWorker;
   }
   if ("disableStringWorker" in options) {
     searchOutsideDebugGlobals.disableStringWorker =
