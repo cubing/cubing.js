@@ -120,10 +120,33 @@
             href="https://www.worldcubeassociation.org/regulations/scrambles/">the official scramble program</a>.</li>
         </li>
       </ul>
-      Also:
+      </p>
+    </section>
+
+    <section id="file-server">
+      <h1><a href="#file-server-required">Using a file server</a></h1>
+      <p>
+        If you want to generate scrambles using <code>cubing.js</code>, please
+        ensure the page is accessed from a server using a URL that starts with one of the following:
       <ul>
-        <li>This code requires the page to be accessed from a server (either from the internet or
-          <code>localhost</code>). It will not work for <code>file://</code> URLs, due to browser security restrictions.
+        <li>☑️ <code>http://</code></li>
+        <li>☑️ <code>https://</code></li>
+      </ul>
+      Scramble generation will not work in Google
+      Chrome if your browser is showing a file from your file system using a URL
+      that starts with:
+      <ul>
+        <li>🙅 <code>file://</code></li>
+      </ul>
+      </p>
+      <p>
+        If you need to use a file server for local development, you may find one of the following commands useful:
+      <ul>
+        <li>
+          <code>python3 -m <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Tools_and_setup/set_up_a_local_testing_server#using_python">http.server</a></code>
+        </li>
+        <li><code>npx <a href="https://www.npmjs.com/package/serve">serve</a></code></li>
+        <li><code><a href="https://caddyserver.com/">caddy</a> file-server --listen :8000 --browse</code></li>
       </ul>
       </p>
     </section>

@@ -174,8 +174,8 @@ export async function mapToAllWorkers(
 
 async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
   if (globalThis.location?.protocol === "file:") {
-    console.error(
-      "This current web page is loaded from the local filesystem (the URL starts with `file:`). In all modern browser, `cubing.js` is unable to generate scrambles in this situation. See: https://js.cubing.net/cubing/scramble/#random-scramble",
+    console.warn(
+      "This current web page is loaded from the local filesystem (a URL that starts with `file://`). In this situation, `cubing.js` may be unable to generate scrambles or perform searches in some browsers. See: https://js.cubing.net/cubing/scramble/#file-server-required",
     );
   }
 
