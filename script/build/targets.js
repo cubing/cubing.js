@@ -218,6 +218,7 @@ export const binTarget = {
         searchWorkerEsbuildWorkaroundEntry,
       ],
       outdir: "dist/bin/",
+      chunkNames: "chunks/[name]-[hash]",
       format: "esm",
       target: "es2020",
       bundle: true,
