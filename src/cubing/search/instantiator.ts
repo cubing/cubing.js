@@ -23,13 +23,7 @@ function probablyCrossOrigin(workerEntryFileURL: URL): boolean {
   try {
     const scriptOrigin = globalThis.location?.origin;
     const workerOrigin = workerEntryFileURL.origin;
-    return (
-      !!scriptOrigin &&
-      scriptOrigin !== null &&
-      !!workerOrigin &&
-      workerOrigin !== null &&
-      scriptOrigin !== workerOrigin
-    );
+    return !!scriptOrigin && !!workerOrigin && scriptOrigin !== workerOrigin;
   } catch {
     return false;
   }
