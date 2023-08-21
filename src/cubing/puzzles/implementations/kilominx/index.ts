@@ -1,7 +1,7 @@
 import type { PuzzleLoader } from "../..";
 import { getCached } from "../../async/lazy-cached";
 import {
-  asyncGetKPuzzle,
+  asyncGetKPuzzleByDesc,
   descAsyncGetPuzzleGeometry,
 } from "../../customPGPuzzleLoader";
 
@@ -12,7 +12,7 @@ export const kilominx: PuzzleLoader = {
   id: "kilominx",
   fullName: "Kilominx",
   kpuzzle: getCached(() =>
-    asyncGetKPuzzle(KILOMINX_PUZZLE_DESCRIPTION, {
+    asyncGetKPuzzleByDesc(KILOMINX_PUZZLE_DESCRIPTION, {
       includeCenterOrbits: false,
       includeEdgeOrbits: false,
     }),

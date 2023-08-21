@@ -1,7 +1,10 @@
-import { KPuzzle, type KPuzzleDefinition } from "../kpuzzle";
+import { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
-import { puzzleSpecificSimplifyOptionsPromise } from "./async/async-pg3d";
+import {
+  asyncGetKPuzzle,
+  puzzleSpecificSimplifyOptionsPromise,
+} from "./async/async-pg3d";
 import type { PuzzleLoader } from "./PuzzleLoader";
 
 // TODO: modify this to handle TwistyPlayer options
@@ -18,22 +21,12 @@ export async function descAsyncGetPuzzleGeometry(
   });
 }
 
-// TODO: dedup with `cubing/puzzles`
-export async function asyncGetKPuzzle(
+export async function asyncGetKPuzzleByDesc(
   desc: PuzzleDescriptionString,
   options?: { includeCenterOrbits?: boolean; includeEdgeOrbits?: boolean },
 ): Promise<KPuzzle> {
-  const pg = await descAsyncGetPuzzleGeometry(desc, options);
-  const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
-  kpuzzleDefinition.name = `description: ${desc}`;
-  const puzzleGeometry = await import("../puzzle-geometry");
-  const pgNotation = new puzzleGeometry.ExperimentalPGNotation(
-    pg,
-    pg.getOrbitsDef(true),
-  );
-  return new KPuzzle(kpuzzleDefinition, {
-    experimentalPGNotation: pgNotation,
-  });
+  const pgPromise = descAsyncGetPuzzleGeometry(desc, options);
+  return asyncGetKPuzzle(pgPromise, `description: ${desc}`);
 }
 
 // TODO: Can we avoid relying on IDs to deduplicate work at higher levels?
@@ -50,7 +43,7 @@ export function customPGPuzzleLoader(
   const customID = nextCustomID++;
   let cachedKPuzzle: Promise<KPuzzle> | null = null;
   const kpuzzlePromiseFn = async () => {
-    return (cachedKPuzzle ??= asyncGetKPuzzle(desc));
+    return (cachedKPuzzle ??= asyncGetKPuzzleByDesc(desc));
   };
   const puzzleLoader: PuzzleLoader = {
     id: `custom-${customID}`,

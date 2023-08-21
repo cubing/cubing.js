@@ -12,6 +12,7 @@ import {
   SkewbNotationMapper,
   TetraminxNotationMapper,
 } from "./notation-mapping";
+import { remapKPuzzleDefinition } from "./notation-mapping/NotationMapper";
 import {
   type BaseFaceCount,
   type FaceBasedOrientationDescription,
@@ -3304,5 +3305,11 @@ export class PGNotation {
     );
     const r = PGOrbitsDef.transformToKTransformationData(this.orbitNames, pgmv);
     return r;
+  }
+
+  remapKPuzzleDefinition(
+    kpuzzleDefinition: KPuzzleDefinition,
+  ): KPuzzleDefinition {
+    return remapKPuzzleDefinition(kpuzzleDefinition, this.pg.notationMapper);
   }
 }

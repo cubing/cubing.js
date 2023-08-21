@@ -42,7 +42,7 @@ export async function asyncGetKPuzzle(
     pg,
     pg.getOrbitsDef(true),
   );
-  return new KPuzzle(kpuzzleDefinition, {
+  return new KPuzzle(pgNotation.remapKPuzzleDefinition(kpuzzleDefinition), {
     experimentalPGNotation: pgNotation,
   });
 }

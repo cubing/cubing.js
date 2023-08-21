@@ -14,12 +14,28 @@ export function remapKPuzzleDefinition(
     ...internalDefinition,
     moves: {},
   };
-  for (const [internalMoveName, moveTransformation] of Object.entries(
+  for (const [internalMoveName, transformationData] of Object.entries(
     internalDefinition.moves,
   )) {
-    externalDefinition.moves[
-      notationMapper.notationToExternal(new Move(internalMoveName))!.toString()
-    ] = moveTransformation;
+    let prefix = internalMoveName;
+    let suffix = "";
+    if (["v", "w"].includes(internalMoveName.at(-1)!)) {
+      prefix = internalMoveName.slice(0, -1);
+      suffix = internalMoveName.slice(-1);
+    }
+    const externalPrefix = notationMapper.notationToExternal(
+      Move.fromString(prefix),
+    );
+    if (!externalPrefix) {
+      continue;
+    }
+    const externalMoveName = externalPrefix + suffix;
+    if (!externalMoveName) {
+      throw new Error(
+        `Missing external move name for: ${internalMoveName.toString()}`,
+      );
+    }
+    externalDefinition.moves[externalMoveName.toString()] = transformationData;
   }
   return externalDefinition;
 }
