@@ -4,7 +4,7 @@ import type { KState } from "./KState";
 export type KTransformationData = Record<string, KTransformationOrbitData>;
 export interface KTransformationOrbitData {
   permutation: number[];
-  orientation: number[];
+  orientation: number[]; // TODO: `orientation_delta`
 }
 
 // TODO: Use a list instead of an object for performance?
