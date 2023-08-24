@@ -822,7 +822,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             quantumTransformation.transformationData[orbit].permutation[i];
           if (
             i !== k ||
-            quantumTransformation.transformationData[orbit].orientation[i] !== 0
+            quantumTransformation.transformationData[orbit].orientation_delta[
+              i
+            ] !== 0
           ) {
             const j = reid333.stateData[orbit].pieces[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);

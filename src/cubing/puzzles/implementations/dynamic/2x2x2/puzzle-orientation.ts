@@ -5,7 +5,7 @@ export function puzzleOrientation2x2x2Idx(state: KState): number {
   const inverse = state.experimentalToTransformation()!.invert();
 
   const inverseDFL = inverse.transformationData["CORNERS"];
-  return inverseDFL.permutation[6] * 3 + inverseDFL.orientation[6];
+  return inverseDFL.permutation[6] * 3 + inverseDFL.orientation_delta[6];
 }
 
 const puzzleOrientationCacheRaw: {

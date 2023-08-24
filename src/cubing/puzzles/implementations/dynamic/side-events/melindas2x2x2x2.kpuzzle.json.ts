@@ -23,7 +23,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
           54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Ry: {
@@ -34,7 +34,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
           54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Rz: {
@@ -45,7 +45,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
           54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Lx: {
@@ -56,7 +56,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           54, 55, 53, 36, 39, 37, 38, 32, 34, 35, 33, 60, 62, 63, 61, 56, 59,
           57, 58, 40, 42, 43, 41, 44, 47, 45, 46,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Ly: {
@@ -67,7 +67,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 60, 61, 62, 63, 48, 49,
           50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Lz: {
@@ -78,7 +78,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           55, 53, 54, 56, 58, 59, 57, 40, 43, 41, 42, 32, 35, 33, 34, 48, 50,
           51, 49, 60, 63, 61, 62, 44, 46, 47, 45,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Mx: {
@@ -89,7 +89,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           37, 38, 39, 40, 41, 42, 43, 32, 34, 35, 33, 60, 62, 63, 61, 52, 53,
           54, 55, 56, 57, 58, 59, 44, 47, 45, 46,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     My: {
@@ -100,7 +100,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           37, 38, 39, 40, 41, 42, 43, 33, 32, 35, 34, 21, 20, 23, 22, 52, 53,
           54, 55, 56, 57, 58, 59, 49, 48, 51, 50,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Mz: {
@@ -111,7 +111,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           37, 38, 39, 40, 41, 42, 43, 62, 61, 63, 60, 22, 21, 23, 20, 52, 53,
           54, 55, 56, 57, 58, 59, 27, 25, 24, 26,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Ox: {
@@ -122,7 +122,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           54, 55, 53, 36, 39, 37, 38, 44, 45, 46, 47, 48, 49, 50, 51, 56, 59,
           57, 58, 40, 42, 43, 41, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Oy: {
@@ -133,7 +133,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           40, 43, 42, 13, 12, 15, 14, 44, 45, 46, 47, 48, 49, 50, 51, 57, 56,
           59, 58, 29, 28, 31, 30, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     Oz: {
@@ -144,7 +144,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           1, 3, 0, 15, 13, 12, 14, 44, 45, 46, 47, 48, 49, 50, 51, 39, 37, 36,
           38, 42, 41, 43, 40, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     U2: {
@@ -155,7 +155,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 48, 49, 50, 51, 52, 53,
           54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     D2: {
@@ -166,7 +166,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 24, 25, 26, 27, 28, 29,
           30, 31, 16, 17, 18, 19, 20, 21, 22, 23,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     F2: {
@@ -177,7 +177,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           23, 16, 17, 18, 19, 40, 41, 42, 43, 44, 45, 46, 47, 4, 5, 6, 7, 0, 1,
           2, 3, 56, 57, 58, 59, 60, 61, 62, 63,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     B2: {
@@ -188,7 +188,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           36, 37, 38, 39, 28, 29, 30, 31, 24, 25, 26, 27, 48, 49, 50, 51, 52,
           53, 54, 55, 12, 13, 14, 15, 8, 9, 10, 11,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     y2: {
@@ -199,7 +199,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29,
           30, 31, 16, 17, 18, 19, 20, 21, 22, 23,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
     z2: {
@@ -210,7 +210,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
           22, 23, 16, 17, 18, 19, 28, 29, 30, 31, 24, 25, 26, 27, 4, 5, 6, 7, 0,
           1, 2, 3, 12, 13, 14, 15, 8, 9, 10, 11,
         ],
-        orientation,
+        orientation_delta: orientation,
       },
     },
   },

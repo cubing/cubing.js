@@ -36,7 +36,7 @@ export function isOrbitTransformationDataIdentityUncached(
     }
   }
   if (numOrientations > 1) {
-    const { orientation } = orbitTransformationData;
+    const { orientation_delta: orientation } = orbitTransformationData;
     for (let idx = 0; idx < numPieces; idx++) {
       if (orientation[idx] !== 0) {
         return false;
@@ -59,8 +59,8 @@ export function isOrbitTransformationDataIdentical(
   for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
     if (
       !options?.ignoreOrientation &&
-      orbitTransformationData1.orientation[idx] !==
-        orbitTransformationData2.orientation[idx]
+      orbitTransformationData1.orientation_delta[idx] !==
+        orbitTransformationData2.orientation_delta[idx]
     ) {
       return false;
     }
@@ -119,7 +119,7 @@ export function invertTransformation(
       }
       newTransformationData[orbitName] = {
         permutation: newPerm,
-        orientation: orbitTransformationData.orientation,
+        orientation_delta: orbitTransformationData.orientation_delta,
       };
     } else {
       const newPerm = new Array(orbitDefinition.numPieces);
@@ -129,13 +129,13 @@ export function invertTransformation(
         newPerm[fromIdx] = idx;
         newOri[fromIdx] =
           (orbitDefinition.numOrientations -
-            orbitTransformationData.orientation[idx] +
+            orbitTransformationData.orientation_delta[idx] +
             orbitDefinition.numOrientations) %
           orbitDefinition.numOrientations;
       }
       newTransformationData[orbitName] = {
         permutation: newPerm,
-        orientation: newOri,
+        orientation_delta: newOri,
       };
     }
   }
@@ -293,7 +293,7 @@ export function transformationRepetitionOrder(
         for (;;) {
           orbitPieces[currentIdx] = true;
           orientationSum =
-            orientationSum + transformationOrbit.orientation[currentIdx];
+            orientationSum + transformationOrbit.orientation_delta[currentIdx];
           cycleLength = cycleLength + 1;
           currentIdx = transformationOrbit.permutation[currentIdx];
           if (currentIdx === startIdx) {

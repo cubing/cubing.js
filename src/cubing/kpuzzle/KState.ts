@@ -66,7 +66,7 @@ export class KState {
     for (const [orbitName, stateOrbitData] of Object.entries(this.stateData)) {
       const transformationOrbit: KTransformationOrbitData = {
         permutation: stateOrbitData.pieces,
-        orientation: stateOrbitData.orientation,
+        orientation_delta: stateOrbitData.orientation,
       };
       transformationData[orbitName] = transformationOrbit;
     }

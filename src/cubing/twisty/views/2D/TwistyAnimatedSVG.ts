@@ -180,7 +180,7 @@ export class TwistyAnimatedSVG {
               orbitName,
               nextTransformationOrbit.permutation[idx],
               (orbitDefinition.numOrientations -
-                nextTransformationOrbit.orientation[idx] +
+                nextTransformationOrbit.orientation_delta[idx] +
                 orientation) %
                 orbitDefinition.numOrientations,
             );
