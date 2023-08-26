@@ -37,13 +37,12 @@ function rotateLeft(s: string, i: number): string {
 const pieceMap: { [s: string]: PieceInfo } = {};
 // TODO: Condense the for loops.
 
-const orbits = Object.keys(experimental3x3x3KPuzzle.definition.orbits);
-for (const orbit of orbits) {
-  pieceNames[orbit].forEach((piece, idx) => {
+for (const orbitDefinition of experimental3x3x3KPuzzle.definition.orbits) {
+  pieceNames[orbitDefinition.orbitName].forEach((piece, idx) => {
     const numOri =
-      orbit === "CENTERS"
+      orbitDefinition.orbitName === "CENTERS"
         ? 1
-        : experimental3x3x3KPuzzle.definition.orbits[orbit].numOrientations;
+        : orbitDefinition.numOrientations;
     for (let i = 0; i < numOri; i++) {
       const name = rotateLeft(piece, i);
       pieceMap[name] = { piece: idx, orientation: i };
@@ -58,19 +57,21 @@ for (const orbit of orbits) {
 export function kpuzzleToReidString(state: KPattern): string {
   const pieces: string[] = [];
 
-  const addOrbit = (orbitName: string): void => {
-    for (let i = 0; i < state.stateData[orbitName].pieces.length; i++) {
+  for (const orbitDefinition of state.kpuzzle.definition.orbits) {
+    for (
+      let i = 0;
+      i < state.stateData[orbitDefinition.orbitName].pieces.length;
+      i++
+    ) {
       pieces.push(
         rotateLeft(
-          pieceNames[orbitName][state.stateData[orbitName].pieces[i]],
-          state.stateData[orbitName].orientation[i],
+          pieceNames[orbitDefinition.orbitName][
+            state.stateData[orbitDefinition.orbitName].pieces[i]
+          ],
+          state.stateData[orbitDefinition.orbitName].orientation[i],
         ),
       );
     }
-  };
-
-  for (const orbit of orbits) {
-    addOrbit(orbit);
   }
 
   return pieces.join(" ");

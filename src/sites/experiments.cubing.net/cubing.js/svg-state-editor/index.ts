@@ -200,8 +200,9 @@ class PuzzleStateEditor {
   }
 
   async twist(facelet: Facelet) {
-    const { orbits } = this.kpuzzle.definition;
-    const { numOrientations } = orbits[facelet.orbit];
+    const { numOrientations } = this.kpuzzle.lookupOrbitDefinition(
+      facelet.orbit,
+    );
 
     const stateOrbit = this.state.stateData[facelet.orbit];
     stateOrbit.orientation[facelet.pieceIndex] = offsetMod(
@@ -221,8 +222,9 @@ class PuzzleStateEditor {
     }
 
     const offset = facelet2.orientationIndex - facelet1.orientationIndex;
-    const { orbits } = this.kpuzzle.definition;
-    const { numOrientations } = orbits[facelet1.orbit];
+    const { numOrientations } = this.kpuzzle.lookupOrbitDefinition(
+      facelet1.orbit,
+    );
 
     const stateOrbit = this.state.stateData[facelet1.orbit];
     const piece1Index = stateOrbit.pieces[facelet1.pieceIndex];
@@ -247,8 +249,7 @@ class PuzzleStateEditor {
   }
 
   async ignoreOrientation(facelet: Facelet) {
-    const { orbits } = this.kpuzzle.definition;
-    const { numPieces } = orbits[facelet.orbit];
+    const { numPieces } = this.kpuzzle.lookupOrbitDefinition(facelet.orbit);
 
     const stateOrbit = this.state.stateData[facelet.orbit];
     stateOrbit.orientationMod ??= new Array(numPieces).fill(0);

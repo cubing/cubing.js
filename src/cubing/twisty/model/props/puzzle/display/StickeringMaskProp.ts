@@ -21,9 +21,9 @@ async function fullStickeringMask(
 ): Promise<ExperimentalStickeringMask> {
   const { definition } = await puzzleLoader.kpuzzle();
   const fullStickeringMask: ExperimentalStickeringMask = { orbits: {} };
-  for (const [orbitName, orbitDef] of Object.entries(definition.orbits)) {
-    fullStickeringMask.orbits[orbitName] = {
-      pieces: new Array(orbitDef.numPieces).fill(r),
+  for (const orbitDefinition of definition.orbits) {
+    fullStickeringMask.orbits[orbitDefinition.orbitName] = {
+      pieces: new Array(orbitDefinition.numPieces).fill(r),
     };
   }
   return fullStickeringMask;

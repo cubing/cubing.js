@@ -28,6 +28,9 @@ export function isOrbitTransformationDataIdentityUncached(
   // if (o === lasto) {
   //   return true;
   // }
+  if (!orbitTransformationData.permutation) {
+    console.log(orbitTransformationData);
+  }
   const { permutation } = orbitTransformationData;
   const numPieces = permutation.length;
   for (let idx = 0; idx < numPieces; idx++) {
@@ -80,14 +83,12 @@ export function isTransformationDataIdentical(
   transformationData1: KTransformationData,
   transformationData2: KTransformationData,
 ): boolean {
-  for (const [orbitName, orbitDefinition] of Object.entries(
-    kpuzzle.definition.orbits,
-  )) {
+  for (const orbitDefinition of kpuzzle.definition.orbits) {
     if (
       !isOrbitTransformationDataIdentical(
         orbitDefinition,
-        transformationData1[orbitName],
-        transformationData2[orbitName],
+        transformationData1[orbitDefinition.orbitName],
+        transformationData2[orbitDefinition.orbitName],
       )
     ) {
       return false;
@@ -101,23 +102,23 @@ export function invertTransformation(
   transformationData: KTransformationData,
 ): KTransformationData {
   const newTransformationData: KTransformationData = {};
-  for (const orbitName in kpuzzle.definition.orbits) {
-    const orbitDefinition: KPuzzleOrbitDefinition =
-      kpuzzle.definition.orbits[orbitName];
-    const orbitTransformationData = transformationData[orbitName];
+  for (const orbitDefinition of kpuzzle.definition.orbits) {
+    const orbitTransformationData =
+      transformationData[orbitDefinition.orbitName];
     if (
       isOrbitTransformationDataIdentityUncached(
         orbitDefinition.numOrientations,
         orbitTransformationData,
       )
     ) {
-      newTransformationData[orbitName] = orbitTransformationData;
+      newTransformationData[orbitDefinition.orbitName] =
+        orbitTransformationData;
     } else if (orbitDefinition.numOrientations === 1) {
       const newPerm = new Array(orbitDefinition.numPieces);
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         newPerm[orbitTransformationData.permutation[idx]] = idx;
       }
-      newTransformationData[orbitName] = {
+      newTransformationData[orbitDefinition.orbitName] = {
         permutation: newPerm,
         orientationDelta: orbitTransformationData.orientationDelta,
       };
@@ -133,7 +134,7 @@ export function invertTransformation(
             orbitDefinition.numOrientations) %
           orbitDefinition.numOrientations;
       }
-      newTransformationData[orbitName] = {
+      newTransformationData[orbitDefinition.orbitName] = {
         permutation: newPerm,
         orientationDelta: newOri,
       };
@@ -254,9 +255,11 @@ export const algToTransformation = functionFromTraversal(
 export function canConvertStateToUniqueTransformationUncached(
   definition: KPuzzleDefinition,
 ): boolean {
-  for (const [orbitName, orbitDefinition] of Object.entries(definition)) {
+  for (const orbitDefinition of definition.orbits) {
     const pieces = new Array(orbitDefinition.numPieces).fill(false);
-    for (const piece of this.definition.defaultPattern[orbitName].pieces) {
+    for (const piece of this.definition.defaultPattern[
+      orbitDefinition.orbitName
+    ].pieces) {
       pieces[piece] = true;
     }
     for (const piece of pieces) {
@@ -281,9 +284,9 @@ export function transformationRepetitionOrder(
   transformation: KTransformation,
 ): number {
   let order: number = 1;
-  for (const orbitName in definition.orbits) {
-    const orbitDefinition = definition.orbits[orbitName];
-    const transformationOrbit = transformation.transformationData[orbitName];
+  for (const orbitDefinition of definition.orbits) {
+    const transformationOrbit =
+      transformation.transformationData[orbitDefinition.orbitName];
     const orbitPieces = new Array(orbitDefinition.numPieces);
     for (let startIdx = 0; startIdx < orbitDefinition.numPieces; startIdx++) {
       if (!orbitPieces[startIdx]) {

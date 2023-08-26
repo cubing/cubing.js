@@ -5,9 +5,7 @@ const range = orientation.map((_, i) => i);
 
 export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
   name: "Melinda's 2x2x2x2",
-  orbits: {
-    CORNERS: { numPieces: 64, numOrientations: 1 },
-  },
+  orbits: [{ orbitName: "CORNERS", numPieces: 64, numOrientations: 1 }],
   defaultPattern: {
     CORNERS: {
       pieces: range,

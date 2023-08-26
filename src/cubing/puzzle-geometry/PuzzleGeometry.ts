@@ -2791,7 +2791,7 @@ export class PuzzleGeometry {
 
   public getScramble(n: number = 0): KTransformationData {
     const od = this.getOrbitsDef(false);
-    return od.transformToKTransformationData(od.getScrambleTransformation(n));
+    return od.toKTransformationData(od.getScrambleTransformation(n));
   }
 
   public getMovesAsPerms(): Perm[] {

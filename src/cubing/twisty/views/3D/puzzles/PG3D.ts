@@ -768,19 +768,22 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   setStickeringMask(stickeringMask: ExperimentalStickeringMask): void {
     this.params.stickeringMask = stickeringMask;
     if (stickeringMask.specialBehaviour !== "picture") {
-      for (const orbitName in this.kpuzzle.definition.orbits) {
-        const { numPieces, numOrientations: orientations } =
-          this.kpuzzle.definition.orbits[orbitName];
+      for (const orbitDefinition of this.kpuzzle.definition.orbits) {
+        // This isn't strictly necessary, but it keeps the following lines more
+        // readable by fitting each `for` loop onto a single line when running
+        // `make format`.
+        const { numPieces, numOrientations } = orbitDefinition;
         for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
-          for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
+          for (let faceletIdx = 0; faceletIdx < numOrientations; faceletIdx++) {
             const faceletStickeringMask = experimentalGetFaceletStickeringMask(
               stickeringMask,
-              orbitName,
+              orbitDefinition.orbitName,
               pieceIdx,
               faceletIdx,
               false,
             );
-            const stickerDef = this.stickers[orbitName][faceletIdx][pieceIdx];
+            const stickerDef =
+              this.stickers[orbitDefinition.orbitName][faceletIdx][pieceIdx];
             if (
               this.textured &&
               this.hintMaterialDisposable &&

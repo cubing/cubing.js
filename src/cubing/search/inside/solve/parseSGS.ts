@@ -59,29 +59,29 @@ export function parseSGS(kpuzzle: KPuzzle, sgs: string): SGSCachedData {
     );
   }
   const processedPieces: Record<string, boolean[]> = {};
-  for (const orbitName in kpuzzle.definition.orbits) {
-    const orbitDefinition = kpuzzle.definition.orbits[orbitName];
-    processedPieces[orbitName] = new Array(orbitDefinition.numPieces).fill(
-      false,
-    );
+  for (const orbitDefinition of kpuzzle.definition.orbits) {
+    processedPieces[orbitDefinition.orbitName] = new Array(
+      orbitDefinition.numPieces,
+    ).fill(false);
   }
   for (let i = subgroupSizes.length - 1; i >= 0; i--) {
     const pieceOrdering: PieceReference[] = [];
     for (let j = subgroupAlgOffsets[i]; j < subgroupAlgOffsets[i + 1]; j++) {
       const transformation = sgsActions[j].transformation;
-      for (const orbitName in kpuzzle.definition.orbits) {
-        const orbitDefinition = kpuzzle.definition.orbits[orbitName];
+      for (const orbitDefinition of kpuzzle.definition.orbits) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           if (
-            transformation.transformationData[orbitName].permutation[idx] !==
-              idx ||
-            transformation.transformationData[orbitName].orientationDelta[
-              idx
-            ] !== 0
+            transformation.transformationData[orbitDefinition.orbitName]
+              .permutation[idx] !== idx ||
+            transformation.transformationData[orbitDefinition.orbitName]
+              .orientationDelta[idx] !== 0
           ) {
-            if (!processedPieces[orbitName][idx]) {
-              pieceOrdering.push({ orbitName: orbitName, permutationIdx: idx });
-              processedPieces[orbitName][idx] = true;
+            if (!processedPieces[orbitDefinition.orbitName][idx]) {
+              pieceOrdering.push({
+                orbitName: orbitDefinition.orbitName,
+                permutationIdx: idx,
+              });
+              processedPieces[orbitDefinition.orbitName][idx] = true;
             }
           }
         }

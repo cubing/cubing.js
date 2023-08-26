@@ -139,12 +139,14 @@ export interface KTransformationOrbitData {
 }
 
 export interface KPuzzleOrbitDefinition {
+  orbitName: string;
   numPieces: number;
   numOrientations: number;
 }
+
 export interface KPuzzleDefinition {
   name: string;
-  orbits: Record<string, KPuzzleOrbitDefinition>;
+  orbits: KPuzzleOrbitDefinition[];
   defaultPattern: KPatternData;
   moves: Record<string, KTransformationData>;
   derivedMoves?: Record<string, string>;

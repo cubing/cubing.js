@@ -73,16 +73,18 @@ export class TwistyAnimatedSVG {
     this.gradientDefs = document.createElementNS(xmlns, "defs");
     svgElem.insertBefore(this.gradientDefs, svgElem.firstChild);
 
-    for (const orbitName in kpuzzle.definition.orbits) {
-      const orbitDefinition = kpuzzle.definition.orbits[orbitName];
-
+    for (const orbitDefinition of kpuzzle.definition.orbits) {
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
           let orientation = 0;
           orientation < orbitDefinition.numOrientations;
           orientation++
         ) {
-          const id = this.elementID(orbitName, idx, orientation);
+          const id = this.elementID(
+            orbitDefinition.orbitName,
+            idx,
+            orientation,
+          );
           const elem = this.elementByID(id);
 
           let originalColor: string = elem?.style.fill;
@@ -94,7 +96,7 @@ export class TwistyAnimatedSVG {
               if (!a) {
                 return;
               }
-              const orbitStickeringMask = a[orbitName];
+              const orbitStickeringMask = a[orbitDefinition.orbitName];
               if (!orbitStickeringMask) {
                 return;
               }
@@ -156,12 +158,10 @@ export class TwistyAnimatedSVG {
       throw new Error("Distinguishable pieces are not handled for SVG yet!");
     }
 
-    for (const orbitName in state.kpuzzle.definition.orbits) {
-      const orbitDefinition = state.kpuzzle.definition.orbits[orbitName];
-
-      const curStateOrbit = state.stateData[orbitName];
+    for (const orbitDefinition of state.kpuzzle.definition.orbits) {
+      const curStateOrbit = state.stateData[orbitDefinition.orbitName];
       const nextTransformationOrbit = nextTransformation
-        ? nextTransformation.transformationData[orbitName]
+        ? nextTransformation.transformationData[orbitDefinition.orbitName]
         : null;
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
@@ -169,9 +169,13 @@ export class TwistyAnimatedSVG {
           orientation < orbitDefinition.numOrientations;
           orientation++
         ) {
-          const id = this.elementID(orbitName, idx, orientation);
+          const id = this.elementID(
+            orbitDefinition.orbitName,
+            idx,
+            orientation,
+          );
           const fromCur = this.elementID(
-            orbitName,
+            orbitDefinition.orbitName,
             curStateOrbit.pieces[idx],
             (orbitDefinition.numOrientations -
               curStateOrbit.orientation[idx] +
@@ -181,7 +185,7 @@ export class TwistyAnimatedSVG {
           let singleColor = false;
           if (nextTransformationOrbit) {
             const fromNext = this.elementID(
-              orbitName,
+              orbitDefinition.orbitName,
               nextTransformationOrbit.permutation[idx],
               (orbitDefinition.numOrientations -
                 nextTransformationOrbit.orientationDelta[idx] +

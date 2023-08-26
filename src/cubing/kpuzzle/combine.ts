@@ -12,10 +12,9 @@ export function combineTransformationData(
   transformationData2: KTransformationData,
 ): KTransformationData {
   const newTransformationData = {} as KTransformationData;
-  for (const orbitName in definition.orbits) {
-    const orbitDefinition = definition.orbits[orbitName];
-    const orbit1 = transformationData1[orbitName];
-    const orbit2 = transformationData2[orbitName];
+  for (const orbitDefinition of definition.orbits) {
+    const orbit1 = transformationData1[orbitDefinition.orbitName];
+    const orbit2 = transformationData2[orbitDefinition.orbitName];
     if (
       isOrbitTransformationDataIdentityUncached(
         orbitDefinition.numOrientations,
@@ -23,21 +22,21 @@ export function combineTransformationData(
       )
     ) {
       // common case for big cubes
-      newTransformationData[orbitName] = orbit1;
+      newTransformationData[orbitDefinition.orbitName] = orbit1;
     } else if (
       isOrbitTransformationDataIdentityUncached(
         orbitDefinition.numOrientations,
         orbit1,
       )
     ) {
-      newTransformationData[orbitName] = orbit2;
+      newTransformationData[orbitDefinition.orbitName] = orbit2;
     } else {
       const newPerm = new Array(orbitDefinition.numPieces);
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newPerm[idx] = orbit1.permutation[orbit2.permutation[idx]];
         }
-        newTransformationData[orbitName] = {
+        newTransformationData[orbitDefinition.orbitName] = {
           permutation: newPerm,
           orientationDelta: orbit1.orientationDelta,
         };
@@ -50,7 +49,7 @@ export function combineTransformationData(
             orbitDefinition.numOrientations;
           newPerm[idx] = orbit1.permutation[orbit2.permutation[idx]];
         }
-        newTransformationData[orbitName] = {
+        newTransformationData[orbitDefinition.orbitName] = {
           permutation: newPerm,
           orientationDelta: newOri,
         };
@@ -66,10 +65,9 @@ export function applyTransformationDataToStateData(
   transformationData: KTransformationData,
 ): KPatternData {
   const newStateData = {} as KPatternData;
-  for (const orbitName in definition.orbits) {
-    const orbitDefinition = definition.orbits[orbitName];
-    const stateOrbit = stateData[orbitName];
-    const transformationOrbit = transformationData[orbitName];
+  for (const orbitDefinition of definition.orbits) {
+    const stateOrbit = stateData[orbitDefinition.orbitName];
+    const transformationOrbit = transformationData[orbitDefinition.orbitName];
     if (
       isOrbitTransformationDataIdentityUncached(
         orbitDefinition.numOrientations,
@@ -77,7 +75,7 @@ export function applyTransformationDataToStateData(
       )
     ) {
       // common case for big cubes
-      newStateData[orbitName] = stateOrbit;
+      newStateData[orbitDefinition.orbitName] = stateOrbit;
     } else {
       const newPieces = new Array(orbitDefinition.numPieces);
       if (orbitDefinition.numOrientations === 1) {
@@ -89,7 +87,7 @@ export function applyTransformationDataToStateData(
           pieces: newPieces,
           orientation: stateOrbit.orientation, // copy all 0
         };
-        newStateData[orbitName] = newOrbitData;
+        newStateData[orbitDefinition.orbitName] = newOrbitData;
       } else {
         const newOrientation = new Array(orbitDefinition.numPieces);
         const newOrientationMod: number[] | undefined =
@@ -117,7 +115,7 @@ export function applyTransformationDataToStateData(
         if (newOrientationMod) {
           newOrbitData.orientationMod = newOrientationMod;
         }
-        newStateData[orbitName] = newOrbitData;
+        newStateData[orbitDefinition.orbitName] = newOrbitData;
       }
     }
   }

@@ -112,7 +112,7 @@ describe("PuzzleGeometry-Puzzles", () => {
         sep,
         pg.cubies.length,
         sep,
-        Object.getOwnPropertyNames(kpuzzleDefinition.orbits).length,
+        kpuzzleDefinition.orbits.length,
         sep,
         Object.getOwnPropertyNames(kpuzzleDefinition.moves).length,
         sep,

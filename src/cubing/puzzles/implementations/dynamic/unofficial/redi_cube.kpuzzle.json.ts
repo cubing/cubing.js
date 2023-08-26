@@ -2,10 +2,10 @@ import type { KPuzzleDefinition } from "../../../../kpuzzle";
 
 export const rediCubeJSON: KPuzzleDefinition = {
   name: "redi_cube",
-  orbits: {
-    EDGES: { numPieces: 12, numOrientations: 2 },
-    CORNERS: { numPieces: 8, numOrientations: 3 },
-  },
+  orbits: [
+    { orbitName: "EDGES", numPieces: 12, numOrientations: 2 },
+    { orbitName: "CORNERS", numPieces: 8, numOrientations: 3 },
+  ],
   defaultPattern: {
     EDGES: {
       pieces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],

@@ -41,12 +41,9 @@ export function constructIdentityTransformationDataUncached(
   definition: KPuzzleDefinition,
 ): KTransformationData {
   const transformation = {} as KTransformationData;
-  for (const [orbitName, orbitDefinition] of Object.entries(
-    definition.orbits,
-  )) {
-    transformation[orbitName] = constructIdentityOrbitTransformation(
-      orbitDefinition.numPieces,
-    );
+  for (const orbitDefinition of definition.orbits) {
+    transformation[orbitDefinition.orbitName] =
+      constructIdentityOrbitTransformation(orbitDefinition.numPieces);
   }
   if (FREEZE) {
     Object.freeze(transformation); // TODO

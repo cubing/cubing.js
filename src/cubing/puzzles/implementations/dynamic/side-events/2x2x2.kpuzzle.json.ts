@@ -2,9 +2,7 @@ import type { KPuzzleDefinition } from "../../../../kpuzzle";
 
 export const cube2x2x2JSON: KPuzzleDefinition = {
   name: "2x2x2",
-  orbits: {
-    CORNERS: { numPieces: 8, numOrientations: 3 },
-  },
+  orbits: [{ orbitName: "CORNERS", numPieces: 8, numOrientations: 3 }],
   defaultPattern: {
     CORNERS: {
       pieces: [0, 1, 2, 3, 4, 5, 6, 7],

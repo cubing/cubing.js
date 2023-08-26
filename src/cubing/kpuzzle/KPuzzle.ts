@@ -4,6 +4,7 @@ import { algToTransformation } from "./calculate";
 import { moveToTransformationUncached } from "./construct";
 import type {
   KPuzzleDefinition,
+  KPuzzleOrbitDefinition,
   KTransformationData,
 } from "./KPuzzleDefinition";
 import { KPattern } from "./KPattern";
@@ -20,6 +21,24 @@ export class KPuzzle {
     },
   ) {
     this.experimentalPGNotation = options?.experimentalPGNotation;
+  }
+
+  #indexedOrbits: Record<string, KPuzzleOrbitDefinition> | undefined;
+  // Note: this function is needed much more rarely than you might think. Most
+  // operations related to orbits require iterating through all of them, for
+  // which the following is better:
+  //
+  //    for (const orbitDefinition of kpuzzle.definition.orbits) { // …
+  //    }
+  lookupOrbitDefinition(orbitName: string): KPuzzleOrbitDefinition {
+    this.#indexedOrbits ||= (() => {
+      const indexedOrbits: Record<string, KPuzzleOrbitDefinition> = {};
+      for (const orbitDefinition of this.definition.orbits) {
+        indexedOrbits[orbitDefinition.orbitName] = orbitDefinition;
+      }
+      return indexedOrbits;
+    })();
+    return this.#indexedOrbits[orbitName];
   }
 
   name(): string {
@@ -85,12 +104,11 @@ export class KPuzzle {
   canConvertStateToUniqueTransformation(): boolean {
     return (this.#cachedCanConvertStateToUniqueTransformation ??=
       ((): boolean => {
-        for (const [orbitName, orbitDefinition] of Object.entries(
-          this.definition.orbits,
-        )) {
+        for (const orbitDefinition of this.definition.orbits) {
           const pieces = new Array(orbitDefinition.numPieces).fill(false);
-          for (const piece of this.definition.defaultPattern[orbitName]
-            .pieces) {
+          for (const piece of this.definition.defaultPattern[
+            orbitDefinition.orbitName
+          ].pieces) {
             pieces[piece] = true;
           }
           for (const piece of pieces) {

@@ -10,13 +10,13 @@ const t18: KTransformationOrbitData = {
 
 export const clockJSON: KPuzzleDefinition = {
   name: "clock",
-  orbits: {
-    DIALS: { numPieces: 18, numOrientations: 12 },
-    FACES: { numPieces: 18, numOrientations: 1 },
-    FRAME: { numPieces: 1, numOrientations: 2 },
-    HOUR_MARKS: { numPieces: 18, numOrientations: 4 },
-    PEG_CAPS: { numPieces: 8, numOrientations: 12 },
-  },
+  orbits: [
+    { orbitName: "DIALS", numPieces: 18, numOrientations: 12 },
+    { orbitName: "FACES", numPieces: 18, numOrientations: 1 },
+    { orbitName: "FRAME", numPieces: 1, numOrientations: 2 },
+    { orbitName: "HOUR_MARKS", numPieces: 18, numOrientations: 4 },
+    { orbitName: "PEG_CAPS", numPieces: 8, numOrientations: 12 },
+  ],
   defaultPattern: {
     DIALS: {
       pieces: p18,

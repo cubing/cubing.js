@@ -1,5 +1,11 @@
 import { Move } from "../alg";
 import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle"; // TODO
+import type {
+  KPatternData,
+  KPatternOrbitData,
+  KPuzzleOrbitDefinition,
+  KTransformationOrbitData,
+} from "../kpuzzle/KPuzzleDefinition";
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
@@ -42,21 +48,31 @@ export class PGOrbitsDef {
     public forcenames: boolean[],
   ) {}
 
-  public transformToKTransformationData(t: PGTransform): KTransformationData {
-    const mp: { [orbitName: string]: any } = {};
-    for (let j = 0; j < this.orbitnames.length; j++) {
-      mp[this.orbitnames[j]] = t.orbits[j].toKPuzzle();
+  public toKTransformationData(t: PGTransform): KTransformationData {
+    const ktransformationData: KTransformationData = {};
+    for (let i = 0; i < this.orbitnames.length; i++) {
+      ktransformationData[this.orbitnames[i]] =
+        t.orbits[i].toKTransformationOrbitData();
     }
-    return mp;
+    return ktransformationData;
   }
 
+  public toKPatternData(t: PGTransform): KPatternData {
+    const kpatternData: KPatternData = {};
+    for (let i = 0; i < this.orbitnames.length; i++) {
+      kpatternData[this.orbitnames[i]] = t.orbits[i].toKPatternOrbitData();
+    }
+    return kpatternData;
+  }
+
+  // TODO: remove this
   public static transformToKTransformationData(
     orbitnames: string[],
     t: PGTransform,
   ): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
-      mp[orbitnames[j]] = t.orbits[j].toKPuzzle();
+      mp[orbitnames[j]] = t.orbits[j].toKTransformationOrbitData();
     }
     return mp;
   }
@@ -147,31 +163,31 @@ export class PGOrbitsDef {
 
   // TODO: return type.
   public toKPuzzleDefinition(includemoves: boolean): KPuzzleDefinition {
-    const orbits: KPuzzleDefinition["orbits"] = {};
-    const start: KPuzzleDefinition["defaultPattern"] = {};
+    const orbits: KPuzzleOrbitDefinition[] = [];
+    const defaultPatternData: KPatternData = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
-      orbits[this.orbitnames[i]] = {
+      orbits.push({
+        orbitName: this.orbitnames[i],
         numPieces: this.orbitdefs[i].size,
         numOrientations: this.orbitdefs[i].mod,
-      };
-      const startTransformation = this.solved.orbits[i].toKPuzzle();
-      start[this.orbitnames[i]] = {
-        pieces: startTransformation.permutation,
-        orientation: startTransformation.orientationDelta,
+      });
+      const defaultPatternFrom =
+        this.solved.orbits[i].toKTransformationOrbitData();
+      defaultPatternData[this.orbitnames[i]] = {
+        pieces: defaultPatternFrom.permutation,
+        orientation: defaultPatternFrom.orientationDelta,
       };
     }
     const moves: { [moveName: string]: any } = {};
     if (includemoves) {
       for (let i = 0; i < this.movenames.length; i++) {
-        moves[this.movenames[i]] = this.transformToKTransformationData(
-          this.moveops[i],
-        );
+        moves[this.movenames[i]] = this.toKTransformationData(this.moveops[i]);
       }
     }
     return {
       name: `PG3D #${++lastGlobalDefinitionCounter}`,
       orbits,
-      defaultPattern: start,
+      defaultPattern: defaultPatternData,
       moves,
     };
   }
@@ -364,7 +380,7 @@ export class PGOrbitsDef {
 }
 
 export class PGOrbit {
-  private static kcache: Record<string, number[]>[] = [];
+  private static ktransformationCache: KTransformationOrbitData[] = [];
 
   public static e(n: number, mod: number): PGOrbit {
     return new PGOrbit(iota(n), zeros(n), mod);
@@ -542,22 +558,31 @@ export class PGOrbit {
     }
   }
 
-  // TODO: return type
-  public toKPuzzle(): Record<string, number[]> {
+  public toKTransformationOrbitData(): KTransformationOrbitData {
     const n = this.perm.length;
     if (this.isIdentity()) {
-      if (!PGOrbit.kcache[n]) {
-        PGOrbit.kcache[n] = {
+      if (!PGOrbit.ktransformationCache[n]) {
+        PGOrbit.ktransformationCache[n] = {
           permutation: iota(n),
           orientationDelta: zeros(n),
         };
       }
-      return PGOrbit.kcache[n];
+      return PGOrbit.ktransformationCache[n];
     } else {
       return { permutation: this.perm, orientationDelta: this.ori };
     }
   }
+
+  public toKPatternOrbitData(): KPatternOrbitData {
+    const n = this.perm.length;
+    return {
+      pieces: this.perm,
+      orientation: this.ori,
+      orientationMod: zeros(n),
+    };
+  }
 }
+
 export class PGTransformBase {
   constructor(public orbits: PGOrbit[]) {}
   public internalMul(b: PGTransformBase): PGOrbit[] {

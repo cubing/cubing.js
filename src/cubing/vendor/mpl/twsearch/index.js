@@ -82,9 +82,9 @@ function serializeDefToTws(kpuzzle, options) {
   const def = kpuzzle.definition;
   outputLines.push(`Name ${sanitize(def.name ?? "CustomPuzzle")}`);
   outputLines.push(BLANK_LINE);
-  for (const [orbitName, orbitInfo] of Object.entries(def.orbits)) {
+  for (const orbitDefinition of def.orbits) {
     outputLines.push(
-      `Set ${sanitize(orbitName)} ${orbitInfo.numPieces} ${orbitInfo.numOrientations}`
+      `Set ${sanitize(orbitDefinition.orbitName)} ${orbitDefinition.numPieces} ${orbitDefinition.numOrientations}`
     );
   }
   outputLines.push(BLANK_LINE);
@@ -92,10 +92,10 @@ function serializeDefToTws(kpuzzle, options) {
   if (options?.startState) {
     outputLines.push(options?.startState);
   } else {
-    for (const [orbitName, orbitDef] of Object.entries(def.defaultPattern)) {
+    for (const [orbitName, orbitData] of Object.entries(def.defaultPattern)) {
       outputLines.push(sanitize(orbitName));
-      outputLines.push(orbitDef.pieces.join(" "));
-      outputLines.push(orbitDef.orientation.join(" "));
+      outputLines.push(orbitData.pieces.join(" "));
+      outputLines.push(orbitData.orientation.join(" "));
     }
   }
   outputLines.push(END);

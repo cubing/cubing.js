@@ -127,12 +127,12 @@ function mutatingRandomizeOrbit(
 ): void {
   randomPermuteInPlace(state.stateData[orbitName].pieces);
 
-  const orbitDef = kpuzzle.definition.orbits[orbitName];
+  const orbitDefinition = kpuzzle.lookupOrbitDefinition(orbitName);
   const ori = state.stateData[orbitName].orientation;
 
   let sum = 0;
-  for (let i = 0; i < orbitDef.numPieces; i++) {
-    const o = randomUIntBelow(orbitDef.numOrientations);
+  for (let i = 0; i < orbitDefinition.numPieces; i++) {
+    const o = randomUIntBelow(orbitDefinition.numOrientations);
     ori[i] = o;
     sum += o;
   }
@@ -141,9 +141,10 @@ function mutatingRandomizeOrbit(
   if (options && "orientationSum" in options) {
     // console.log("sfdsf", options!.orientationSum),
     ori[0] =
-      (((ori[0] + options.orientationSum! - sum) % orbitDef.numOrientations) +
-        orbitDef.numOrientations) %
-      orbitDef.numOrientations;
+      (((ori[0] + options.orientationSum! - sum) %
+        orbitDefinition.numOrientations) +
+        orbitDefinition.numOrientations) %
+      orbitDefinition.numOrientations;
   }
 }
 
