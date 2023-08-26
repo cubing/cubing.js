@@ -75,7 +75,7 @@ export function parseSGS(kpuzzle: KPuzzle, sgs: string): SGSCachedData {
           if (
             transformation.transformationData[orbitName].permutation[idx] !==
               idx ||
-            transformation.transformationData[orbitName].orientation_delta[
+            transformation.transformationData[orbitName].orientationDelta[
               idx
             ] !== 0
           ) {
@@ -98,7 +98,7 @@ export function parseSGS(kpuzzle: KPuzzle, sgs: string): SGSCachedData {
             loc.permutationIdx
           ]
         } ${
-          transformation.transformationData[loc.orbitName].orientation_delta[
+          transformation.transformationData[loc.orbitName].orientationDelta[
             loc.permutationIdx
           ]
         }`;

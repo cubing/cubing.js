@@ -835,7 +835,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {
-              const nori = (ori + orin - pos2.orientation_delta[i]) % orin;
+              const nori = (ori + orin - pos2.orientationDelta[i]) % orin;
               const ni = pos2.permutation[i];
               if (this.textured) {
                 colormods += pieces2[i].setTexture(filler, pieces[nori][ni]);
@@ -904,7 +904,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               const p2 = pieces2[i];
               const ni = bmv.permutation[i];
               let tv = 0;
-              if (ni !== i || bmv.orientation_delta[i] !== 0) {
+              if (ni !== i || bmv.orientationDelta[i] !== 0) {
                 tv = 1;
               }
               if (tv !== p2.twistVal) {

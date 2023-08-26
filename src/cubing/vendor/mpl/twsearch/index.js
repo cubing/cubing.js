@@ -59,7 +59,7 @@ function serializeMoveTransformation(name, t) {
   for (const [orbitName, orbitData] of Object.entries(t)) {
     outputLines.push(sanitize(orbitName));
     outputLines.push(orbitData.permutation.join(" "));
-    outputLines.push(orbitData.orientation_delta.join(" "));
+    outputLines.push(orbitData.orientationDelta.join(" "));
   }
   outputLines.push(END);
   outputLines.push(BLANK_LINE);

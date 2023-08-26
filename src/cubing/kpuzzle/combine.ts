@@ -39,20 +39,20 @@ export function combineTransformationData(
         }
         newTransformationData[orbitName] = {
           permutation: newPerm,
-          orientation_delta: orbit1.orientation_delta,
+          orientationDelta: orbit1.orientationDelta,
         };
       } else {
         const newOri = new Array(orbitDefinition.numPieces);
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newOri[idx] =
-            (orbit1.orientation_delta[orbit2.permutation[idx]] +
-              orbit2.orientation_delta[idx]) %
+            (orbit1.orientationDelta[orbit2.permutation[idx]] +
+              orbit2.orientationDelta[idx]) %
             orbitDefinition.numOrientations;
           newPerm[idx] = orbit1.permutation[orbit2.permutation[idx]];
         }
         newTransformationData[orbitName] = {
           permutation: newPerm,
-          orientation_delta: newOri,
+          orientationDelta: newOri,
         };
       }
     }
@@ -106,7 +106,7 @@ export function applyTransformationDataToStateData(
           }
           newOrientation[idx] =
             (stateOrbit.orientation[transformationIdx] +
-              transformationOrbit.orientation_delta[idx]) %
+              transformationOrbit.orientationDelta[idx]) %
             mod; // We don't have to use `modIntoRange` (assuming input is well-formed), because we're adding.
           newPieces[idx] = stateOrbit.pieces[transformationIdx];
         }

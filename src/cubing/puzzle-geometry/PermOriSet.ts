@@ -157,7 +157,7 @@ export class PGOrbitsDef {
       const startTransformation = this.solved.orbits[i].toKPuzzle();
       start[this.orbitnames[i]] = {
         pieces: startTransformation.permutation,
-        orientation: startTransformation.orientation_delta,
+        orientation: startTransformation.orientationDelta,
       };
     }
     const moves: { [moveName: string]: any } = {};
@@ -549,12 +549,12 @@ export class PGOrbit {
       if (!PGOrbit.kcache[n]) {
         PGOrbit.kcache[n] = {
           permutation: iota(n),
-          orientation_delta: zeros(n),
+          orientationDelta: zeros(n),
         };
       }
       return PGOrbit.kcache[n];
     } else {
-      return { permutation: this.perm, orientation_delta: this.ori };
+      return { permutation: this.perm, orientationDelta: this.ori };
     }
   }
 }

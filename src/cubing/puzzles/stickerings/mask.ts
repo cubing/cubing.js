@@ -255,8 +255,7 @@ export class StickeringManager {
       for (let i = 0; i < orbitDef.numPieces; i++) {
         if (
           transformation.transformationData[orbitName].permutation[i] !== i ||
-          transformation.transformationData[orbitName].orientation_delta[i] !==
-            0
+          transformation.transformationData[orbitName].orientationDelta[i] !== 0
         ) {
           newPieceSet.stickerings.get(orbitName)![i] = true;
         }

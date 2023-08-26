@@ -26,7 +26,7 @@ function constructIdentityOrbitTransformation(
   }
   const orbitTransformation = {
     permutation: newPermutation,
-    orientation_delta: newOrientation,
+    orientationDelta: newOrientation,
   };
   if (FREEZE) {
     Object.freeze(newPermutation); // TODO

@@ -20,31 +20,31 @@ export const rediCubeJSON: KPuzzleDefinition = {
     F: {
       EDGES: {
         permutation: [8, 0, 2, 3, 4, 5, 6, 7, 1, 9, 10, 11],
-        orientation_delta: [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        orientationDelta: [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
       },
       CORNERS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [1, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [1, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     x: {
       EDGES: {
         permutation: [4, 8, 0, 9, 6, 10, 2, 11, 5, 7, 1, 3],
-        orientation_delta: [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+        orientationDelta: [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0],
       },
       CORNERS: {
         permutation: [4, 0, 3, 5, 7, 6, 2, 1],
-        orientation_delta: [2, 1, 2, 1, 1, 2, 1, 2],
+        orientationDelta: [2, 1, 2, 1, 1, 2, 1, 2],
       },
     },
     y: {
       EDGES: {
         permutation: [1, 2, 3, 0, 5, 6, 7, 4, 10, 8, 11, 9],
-        orientation_delta: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
       },
       CORNERS: {
         permutation: [1, 2, 3, 0, 7, 4, 5, 6],
-        orientation_delta: [0, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
   },

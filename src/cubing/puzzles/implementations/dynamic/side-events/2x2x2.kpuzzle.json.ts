@@ -15,19 +15,19 @@ export const cube2x2x2JSON: KPuzzleDefinition = {
     U: {
       CORNERS: {
         permutation: [1, 2, 3, 0, 4, 5, 6, 7],
-        orientation_delta: [0, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     x: {
       CORNERS: {
         permutation: [4, 0, 3, 5, 7, 6, 2, 1],
-        orientation_delta: [2, 1, 2, 1, 1, 2, 1, 2],
+        orientationDelta: [2, 1, 2, 1, 1, 2, 1, 2],
       },
     },
     y: {
       CORNERS: {
         permutation: [1, 2, 3, 0, 7, 4, 5, 6],
-        orientation_delta: [0, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
   },

@@ -5,7 +5,7 @@ const p18 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 const o18 = new Array(18).fill(0);
 const t18: KTransformationOrbitData = {
   permutation: p18,
-  orientation_delta: o18,
+  orientationDelta: o18,
 };
 
 export const clockJSON: KPuzzleDefinition = {
@@ -40,46 +40,46 @@ export const clockJSON: KPuzzleDefinition = {
     UL_PLUS_: {
       DIALS: {
         permutation: p18,
-        orientation_delta: [
+        orientationDelta: [
           1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0,
         ],
       },
       FACES: t18,
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: t18,
       PEG_CAPS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [1, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [1, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     U_PLUS_: {
       DIALS: {
         permutation: p18,
-        orientation_delta: [
+        orientationDelta: [
           1, 1, 1, 1, 1, 1, 0, 0, 0, 11, 0, 11, 0, 0, 0, 0, 0, 0,
         ],
       },
       FACES: t18,
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: t18,
       PEG_CAPS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [1, 1, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [1, 1, 0, 0, 0, 0, 0, 0],
       },
     },
     ALL_PLUS_: {
       DIALS: {
         permutation: p18,
-        orientation_delta: [
+        orientationDelta: [
           1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 0, 11, 0, 0, 0, 11, 0, 11,
         ],
       },
       FACES: t18,
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: t18,
       PEG_CAPS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [1, 1, 1, 1, 0, 0, 0, 0],
+        orientationDelta: [1, 1, 1, 1, 0, 0, 0, 0],
       },
     },
     y2: {
@@ -87,24 +87,24 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           9, 10, 11, 12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8,
         ],
-        orientation_delta: o18,
+        orientationDelta: o18,
       },
       FACES: {
         permutation: [
           9, 10, 11, 12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8,
         ],
-        orientation_delta: o18,
+        orientationDelta: o18,
       },
-      FRAME: { permutation: [0], orientation_delta: [1] },
+      FRAME: { permutation: [0], orientationDelta: [1] },
       HOUR_MARKS: {
         permutation: [
           9, 10, 11, 12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8,
         ],
-        orientation_delta: o18,
+        orientationDelta: o18,
       },
       PEG_CAPS: {
         permutation: [4, 5, 6, 7, 0, 1, 2, 3],
-        orientation_delta: [0, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     z: {
@@ -112,7 +112,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           6, 3, 0, 7, 4, 1, 8, 5, 2, 11, 14, 17, 10, 13, 16, 9, 12, 15,
         ],
-        orientation_delta: [
+        orientationDelta: [
           3, 3, 3, 3, 3, 3, 3, 3, 3, -3, -3, -3, -3, -3, -3, -3, -3, -3,
         ],
       },
@@ -120,20 +120,20 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           6, 3, 0, 7, 4, 1, 8, 5, 2, 11, 14, 17, 10, 13, 16, 9, 12, 15,
         ],
-        orientation_delta: o18,
+        orientationDelta: o18,
       },
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: {
         permutation: [
           6, 3, 0, 7, 4, 1, 8, 5, 2, 11, 14, 17, 10, 13, 16, 9, 12, 15,
         ],
-        orientation_delta: [
+        orientationDelta: [
           1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         ],
       },
       PEG_CAPS: {
         permutation: [3, 0, 1, 2, 5, 6, 7, 4],
-        orientation_delta: [0, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     // TODO: define this as `z2 y2`
@@ -142,7 +142,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
         ],
-        orientation_delta: [
+        orientationDelta: [
           6, 6, 6, 6, 6, 6, 6, 6, 6, -6, -6, -6, -6, -6, -6, -6, -6, -6,
         ],
       },
@@ -150,69 +150,69 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
         ],
-        orientation_delta: [
+        orientationDelta: [
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ],
       },
       FRAME: {
         permutation: [0],
-        orientation_delta: [1],
+        orientationDelta: [1],
       },
       HOUR_MARKS: {
         permutation: [
           17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
         ],
-        orientation_delta: [
+        orientationDelta: [
           2, 2, 2, 2, 2, 2, 2, 2, 2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
         ],
       },
       PEG_CAPS: {
         permutation: [6, 7, 4, 5, 2, 3, 0, 1],
-        orientation_delta: [0, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     UL: {
       // TODO: define "pin up" as something other than a normal move.
       DIALS: t18,
       FACES: t18,
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: t18,
       PEG_CAPS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [1, 0, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [1, 0, 0, 0, 0, 0, 0, 0],
       },
     },
     UR: {
       // TODO: define "pin up" as something other than a normal move.
       DIALS: t18,
       FACES: t18,
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: t18,
       PEG_CAPS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [0, 1, 0, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 1, 0, 0, 0, 0, 0, 0],
       },
     },
     DL: {
       // TODO: define "pin up" as something other than a normal move.
       DIALS: t18,
       FACES: t18,
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: t18,
       PEG_CAPS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [0, 0, 0, 1, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 0, 1, 0, 0, 0, 0],
       },
     },
     DR: {
       // TODO: define "pin up" as something other than a normal move.
       DIALS: t18,
       FACES: t18,
-      FRAME: { permutation: [0], orientation_delta: [0] },
+      FRAME: { permutation: [0], orientationDelta: [0] },
       HOUR_MARKS: t18,
       PEG_CAPS: {
         permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientation_delta: [0, 0, 1, 0, 0, 0, 0, 0],
+        orientationDelta: [0, 0, 1, 0, 0, 0, 0, 0],
       },
     },
   },

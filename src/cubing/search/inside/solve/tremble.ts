@@ -163,7 +163,7 @@ export class TrembleSolver {
         const loc = cubieSeq[i];
         const orbitName = loc.orbitName;
         const idx = loc.permutationIdx;
-        key += ` ${inverseTransformation.transformationData[orbitName].permutation[idx]} ${inverseTransformation.transformationData[orbitName].orientation_delta[idx]}`;
+        key += ` ${inverseTransformation.transformationData[orbitName].permutation[idx]} ${inverseTransformation.transformationData[orbitName].orientationDelta[idx]}`;
       }
       // console.log(key, step.lookup);
       const info = step.lookup[key];
@@ -183,7 +183,7 @@ export class TrembleSolver {
           if (
             transformation.transformationData[orbitName].permutation[idx] !==
               idx ||
-            transformation.transformationData[orbitName].orientation_delta[
+            transformation.transformationData[orbitName].orientationDelta[
               idx
             ] !== 0
           ) {
