@@ -147,7 +147,7 @@ export interface KPuzzleDefinition {
   orbits: Record<string, KPuzzleOrbitDefinition>;
   defaultPattern: KPatternData;
   moves: Record<string, KTransformationData>;
-  experimentalDerivedMoves?: Record<string, string>;
+  derivedMoves?: Record<string, string>;
   // Note: the options are intentionally required for now, since we haven't yet
   // figured out how to make sure there is no unexpected behaviour with the
   // defaults.

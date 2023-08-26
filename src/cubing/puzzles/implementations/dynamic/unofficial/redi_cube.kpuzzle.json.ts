@@ -48,7 +48,7 @@ export const rediCubeJSON: KPuzzleDefinition = {
       },
     },
   },
-  experimentalDerivedMoves: {
+  derivedMoves: {
     z: "[x: y]",
     UR: "[y: F]",
     U: "[y2: F]",

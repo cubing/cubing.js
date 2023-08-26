@@ -276,7 +276,7 @@ export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
       },
     },
   },
-  experimentalDerivedMoves: {
+  derivedMoves: {
     Uw: "u",
     Lw: "l",
     Fw: "f",

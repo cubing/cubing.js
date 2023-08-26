@@ -31,7 +31,7 @@ export const cube2x2x2JSON: KPuzzleDefinition = {
       },
     },
   },
-  experimentalDerivedMoves: {
+  derivedMoves: {
     z: "[x: y]",
     L: "[z: U]",
     F: "[x: U]",

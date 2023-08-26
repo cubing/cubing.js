@@ -214,7 +214,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
       },
     },
   },
-  experimentalDerivedMoves: {
+  derivedMoves: {
     x: "Lx Rx",
     // y2: "U2 D2", // TODO(https://github.com/cubing/cubing.js/issues/279)
     // z2: "F2 B2", // TODO(https://github.com/cubing/cubing.js/issues/279)

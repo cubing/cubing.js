@@ -113,7 +113,7 @@ function serializeDefToTws(kpuzzle, options) {
     }
   }
   for (const [moveName, moveAlgDef] of Object.entries(
-    def.experimentalDerivedMoves ?? {}
+    def.derivedMoves ?? {}
   )) {
     if (include(moveName)) {
       const transformation = kpuzzle.algToTransformation(moveAlgDef);

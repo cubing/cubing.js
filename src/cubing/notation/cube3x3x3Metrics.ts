@@ -35,9 +35,7 @@ function getCache(): Record<string, MoveType> {
   cache = {};
   const moveQuantumStrings = [
     ...Object.keys(experimentalCube3x3x3KPuzzleDefinition.moves),
-    ...Object.keys(
-      experimentalCube3x3x3KPuzzleDefinition.experimentalDerivedMoves!,
-    ),
+    ...Object.keys(experimentalCube3x3x3KPuzzleDefinition.derivedMoves!),
   ];
   for (const moveQuantumString of moveQuantumStrings) {
     cache[moveQuantumString] = uncachedMoveCount(moveQuantumString);

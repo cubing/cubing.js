@@ -216,7 +216,7 @@ export const clockJSON: KPuzzleDefinition = {
       },
     },
   },
-  experimentalDerivedMoves: {
+  derivedMoves: {
     UR_PLUS_: "[z': UL_PLUS_]",
     DR_PLUS_: "[z2: UL_PLUS_]",
     DL_PLUS_: "[z: UL_PLUS_]",

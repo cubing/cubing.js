@@ -64,8 +64,7 @@ export function moveToTransformationUncached(
     | undefined;
 
   if (!quantumMoveDefinition) {
-    const derivedFrom =
-      kpuzzle.definition.experimentalDerivedMoves?.[quantumKey];
+    const derivedFrom = kpuzzle.definition.derivedMoves?.[quantumKey];
 
     if (derivedFrom) {
       // TODO: avoid the round trip?
