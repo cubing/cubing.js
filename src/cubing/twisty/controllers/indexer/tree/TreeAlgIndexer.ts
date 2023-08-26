@@ -52,16 +52,16 @@ export class TreeAlgIndexer implements AlgIndexer {
     throw new Error(`Out of algorithm: index ${index}`);
   }
 
-  public stateAtIndex(index: number, startState?: KPattern): KPattern {
+  public patternAtIndex(index: number, startPattern?: KPattern): KPattern {
     this.walker.moveByIndex(index);
-    return (startState ?? this.kpuzzle.startState()).applyTransformation(
+    return (startPattern ?? this.kpuzzle.defaultPattern()).applyTransformation(
       this.walker.st,
     );
   }
 
-  // TransformAtIndex does not reflect the start state; it only reflects
-  // the change from the start state to the current move index.  If you
-  // want the actual state, use stateAtIndex.
+  // TransformAtIndex does not reflect the start pattern; it only reflects
+  // the change from the start pattern to the current move index.  If you
+  // want the actual pattern, use patternAtIndex.
   public transformationAtIndex(index: number): KTransformation {
     this.walker.moveByIndex(index);
     return this.walker.st;

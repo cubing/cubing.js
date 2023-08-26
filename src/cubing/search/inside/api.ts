@@ -235,29 +235,35 @@ export const insideAPI = {
     return (await insideAPI.randomScrambleForEvent(eventID)).toString();
   },
 
-  solve333ToString: async (stateData: KPatternData): Promise<string> => {
-    const state = new KPattern(await puzzles["3x3x3"].kpuzzle(), stateData);
-    return (await solve333(state)).toString();
+  solve333ToString: async (patternData: KPatternData): Promise<string> => {
+    const pattern = new KPattern(await puzzles["3x3x3"].kpuzzle(), patternData);
+    return (await solve333(pattern)).toString();
   },
 
-  solve222ToString: async (stateData: KPatternData): Promise<string> => {
-    const state = new KPattern(await puzzles["2x2x2"].kpuzzle(), stateData);
-    return (await solve222HTMSubOptimal(state)).toString();
+  solve222ToString: async (patternData: KPatternData): Promise<string> => {
+    const pattern = new KPattern(await puzzles["2x2x2"].kpuzzle(), patternData);
+    return (await solve222HTMSubOptimal(pattern)).toString();
   },
 
-  solveSkewbToString: async (stateData: KPatternData): Promise<string> => {
-    const state = new KPattern(await puzzles["skewb"].kpuzzle(), stateData);
-    return (await solveSkewb(state)).toString();
+  solveSkewbToString: async (patternData: KPatternData): Promise<string> => {
+    const pattern = new KPattern(await puzzles["skewb"].kpuzzle(), patternData);
+    return (await solveSkewb(pattern)).toString();
   },
 
-  solvePyraminxToString: async (stateData: KPatternData): Promise<string> => {
-    const state = new KPattern(await puzzles["pyraminx"].kpuzzle(), stateData);
-    return (await solvePyraminx(state)).toString();
+  solvePyraminxToString: async (patternData: KPatternData): Promise<string> => {
+    const pattern = new KPattern(
+      await puzzles["pyraminx"].kpuzzle(),
+      patternData,
+    );
+    return (await solvePyraminx(pattern)).toString();
   },
 
-  solveMegaminxToString: async (stateData: KPatternData): Promise<string> => {
-    const state = new KPattern(await puzzles["megaminx"].kpuzzle(), stateData);
-    return (await solveMegaminx(state)).toString();
+  solveMegaminxToString: async (patternData: KPatternData): Promise<string> => {
+    const pattern = new KPattern(
+      await puzzles["megaminx"].kpuzzle(),
+      patternData,
+    );
+    return (await solveMegaminx(pattern)).toString();
   },
 
   setDebugMeasurePerf: async (measure: boolean): Promise<void> => {
@@ -266,10 +272,10 @@ export const insideAPI = {
 
   solveTwsearchToString: async (
     def: KPuzzleDefinition,
-    stateData: KPatternData,
+    patternData: KPatternData,
     options?: TwsearchOptions,
   ): Promise<string> => {
-    return (await solveTwsearch(def, stateData, options)).toString();
+    return (await solveTwsearch(def, patternData, options)).toString();
   },
 };
 

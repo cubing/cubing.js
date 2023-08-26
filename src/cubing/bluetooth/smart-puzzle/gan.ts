@@ -53,7 +53,7 @@ const key11 = new Uint8Array([
 ]);
 
 // Clean-room reverse-engineered
-async function decryptState(
+async function decryptPattern(
   data: Uint8Array,
   aesKey: CryptoKey | null,
 ): Promise<Uint8Array> {
@@ -72,7 +72,7 @@ async function decryptState(
     return copy;
   }
 
-  throw new Error("Invalid Gan cube state");
+  throw new Error("Invalid Gan cube pattern");
 }
 
 class PhysicalState {
@@ -80,7 +80,7 @@ class PhysicalState {
     characteristic: BluetoothRemoteGATTCharacteristic,
     aesKey: CryptoKey | null,
   ): Promise<PhysicalState> {
-    const value = await decryptState(
+    const value = await decryptPattern(
       new Uint8Array((await characteristic.readValue()).buffer),
       aesKey,
     );
@@ -290,7 +290,7 @@ export class GanCube extends BluetoothPuzzle {
 
   public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
-  private state: KPattern;
+  private pattern: KPattern;
   private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
 
   private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
@@ -306,7 +306,7 @@ export class GanCube extends BluetoothPuzzle {
     private aesKey: CryptoKey | null,
   ) {
     super();
-    this.state = kpuzzle.startState();
+    this.pattern = kpuzzle.defaultPattern();
     this.startTrackingMoves();
   }
 
@@ -353,12 +353,12 @@ export class GanCube extends BluetoothPuzzle {
     }
     for (const move of physicalState.latestMoves(numInterveningMoves)) {
       // console.log(move);
-      this.state = this.state.applyMove(move);
+      this.pattern = this.pattern.applyMove(move);
       this.dispatchAlgLeaf({
         latestAlgLeaf: move,
         timeStamp: physicalState.timeStamp,
         debug: physicalState.debugInfo(),
-        state: this.state,
+        pattern: this.pattern,
         // quaternion: physicalState.rotQuat(),
       });
     }
@@ -375,8 +375,8 @@ export class GanCube extends BluetoothPuzzle {
     )[7];
   }
 
-  public override async getState(): Promise<KPattern> {
-    const arr: Uint8Array = await decryptState(
+  public override async getPattern(): Promise<KPattern> {
+    const arr: Uint8Array = await decryptPattern(
       new Uint8Array(await this.readFaceletStatus1Characteristic()),
       this.aesKey,
     );
@@ -389,7 +389,7 @@ export class GanCube extends BluetoothPuzzle {
       }
     }
 
-    const stateData: KPatternData = {
+    const patternData: KPatternData = {
       CORNERS: {
         pieces: [],
         orientation: [],
@@ -408,18 +408,18 @@ export class GanCube extends BluetoothPuzzle {
     for (const cornerMapping of gan356iCornerMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[cornerMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      stateData.CORNERS.pieces.push(pieceInfo.piece);
-      stateData.CORNERS.orientation.push(pieceInfo.orientation);
+      patternData.CORNERS.pieces.push(pieceInfo.piece);
+      patternData.CORNERS.orientation.push(pieceInfo.orientation);
     }
 
     for (const edgeMapping of gan356iEdgeMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[edgeMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      stateData.EDGES.pieces.push(pieceInfo.piece);
-      stateData.EDGES.orientation.push(pieceInfo.orientation);
+      patternData.EDGES.pieces.push(pieceInfo.piece);
+      patternData.EDGES.orientation.push(pieceInfo.orientation);
     }
 
-    return new KPattern(this.kpuzzle, stateData);
+    return new KPattern(this.kpuzzle, patternData);
   }
 
   public async faceletStatus1Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {

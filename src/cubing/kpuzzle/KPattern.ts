@@ -1,6 +1,6 @@
 import type { KPuzzle } from "./KPuzzle";
 import type { Alg, Move } from "../alg";
-import { applyTransformationDataToStateData } from "./combine";
+import { applyTransformationDataToKPatternData } from "./combine";
 import type { KTransformationSource } from "./KPuzzle";
 import type {
   KPatternData,
@@ -12,23 +12,23 @@ import { KTransformation } from "./KTransformation";
 export class KPattern {
   constructor(
     public readonly kpuzzle: KPuzzle,
-    public readonly stateData: KPatternData,
+    public readonly patternData: KPatternData,
   ) {}
 
   toJSON(): any {
     return {
       experimentalPuzzleName: this.kpuzzle.name(),
-      stateData: this.stateData,
+      patternData: this.patternData,
     };
   }
 
   static fromTransformation(transformation: KTransformation): KPattern {
-    const newStateData = applyTransformationDataToStateData(
+    const newPatternData = applyTransformationDataToKPatternData(
       transformation.kpuzzle.definition,
       transformation.kpuzzle.definition.defaultPattern,
       transformation.transformationData,
     );
-    return new KPattern(transformation.kpuzzle, newStateData);
+    return new KPattern(transformation.kpuzzle, newPatternData);
   }
 
   // Convenience function
@@ -39,14 +39,14 @@ export class KPattern {
 
   applyTransformation(transformation: KTransformation): KPattern {
     if (transformation.isIdentityTransformation()) {
-      return new KPattern(this.kpuzzle, this.stateData);
+      return new KPattern(this.kpuzzle, this.patternData);
     }
-    const newStateData = applyTransformationDataToStateData(
+    const newPatternData = applyTransformationDataToKPatternData(
       this.kpuzzle.definition,
-      this.stateData,
+      this.patternData,
       transformation.transformationData,
     );
-    return new KPattern(this.kpuzzle, newStateData);
+    return new KPattern(this.kpuzzle, newPatternData);
   }
 
   applyMove(move: Move | string): KPattern {
@@ -59,14 +59,16 @@ export class KPattern {
 
   /** @deprecated */
   experimentalToTransformation(): KTransformation | null {
-    if (!this.kpuzzle.canConvertStateToUniqueTransformation()) {
+    if (!this.kpuzzle.canConvertDefaultPatternToUniqueTransformation()) {
       return null;
     }
     const transformationData: KTransformationData = {};
-    for (const [orbitName, stateOrbitData] of Object.entries(this.stateData)) {
+    for (const [orbitName, patternOrbitData] of Object.entries(
+      this.patternData,
+    )) {
       const transformationOrbit: KTransformationOrbitData = {
-        permutation: stateOrbitData.pieces,
-        orientationDelta: stateOrbitData.orientation,
+        permutation: patternOrbitData.pieces,
+        orientationDelta: patternOrbitData.orientation,
       };
       transformationData[orbitName] = transformationOrbit;
     }
@@ -77,11 +79,11 @@ export class KPattern {
     ignorePuzzleOrientation: boolean;
     ignoreCenterOrientation: boolean;
   }): boolean {
-    if (!this.kpuzzle.definition.experimentalIsStateSolved) {
+    if (!this.kpuzzle.definition.experimentalIsPatternSolved) {
       throw new Error(
-        "`KPattern.experimentalIsSolved()` is not supported for this puzzle at the moment.",
+        "`KPattern.experimentalIsPatternSolved()` is not supported for this puzzle at the moment.",
       );
     }
-    return this.kpuzzle.definition.experimentalIsStateSolved(this, options);
+    return this.kpuzzle.definition.experimentalIsPatternSolved(this, options);
   }
 }

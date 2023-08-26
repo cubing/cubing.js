@@ -9,7 +9,7 @@ const postJSONInit: RequestInit = {
 };
 
 export interface TwsearchServerClientOptions {
-  startState?: KPattern;
+  startPattern?: KPattern;
   searchArgs?: {
     checkBeforeSolve?: "always" | "never" | "auto";
     randomStart?: boolean;
@@ -35,8 +35,8 @@ export async function solveTwsearchServer(
     ...postJSONInit,
     body: JSON.stringify({
       definition: kpuzzle.definition,
-      pattern: kpattern.stateData,
-      startState: options.startState,
+      pattern: kpattern.patternData,
+      startPattern: options.startPattern,
       searchArgs: options.searchArgs,
       // TODO: min depth
     }),

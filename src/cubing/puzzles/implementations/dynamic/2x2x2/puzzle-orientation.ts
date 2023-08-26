@@ -1,8 +1,8 @@
 import { Alg } from "../../../../alg";
 import type { KPuzzle, KPattern, KTransformation } from "../../../../kpuzzle";
 
-export function puzzleOrientation2x2x2Idx(state: KPattern): number {
-  const inverse = state.experimentalToTransformation()!.invert();
+export function puzzleOrientation2x2x2Idx(pattern: KPattern): number {
+  const inverse = pattern.experimentalToTransformation()!.invert();
 
   const inverseDFL = inverse.transformationData["CORNERS"];
   return inverseDFL.permutation[6] * 3 + inverseDFL.orientationDelta[6];
@@ -40,16 +40,16 @@ export function puzzleOrientation2x2x2Cache(
   return puzzleOrientationCacheRaw;
 }
 
-export function normalize2x2x2Orientation(state: KPattern): {
-  normalizedState: KPattern;
+export function normalize2x2x2Orientation(pattern: KPattern): {
+  normalizedPattern: KPattern;
   normalizationAlg: Alg;
 } {
-  const idx = puzzleOrientation2x2x2Idx(state);
-  const { transformation, alg } = puzzleOrientation2x2x2Cache(state.kpuzzle)[
+  const idx = puzzleOrientation2x2x2Idx(pattern);
+  const { transformation, alg } = puzzleOrientation2x2x2Cache(pattern.kpuzzle)[
     idx
   ];
   return {
-    normalizedState: state.applyTransformation(transformation),
+    normalizedPattern: pattern.applyTransformation(transformation),
     normalizationAlg: alg.invert(),
   };
 }
@@ -57,13 +57,13 @@ export function normalize2x2x2Orientation(state: KPattern): {
 // The `options` argument is required for now, because we haven't yet come up
 // with a general way to specify different kinds of solved for the same puzle.
 export function experimentalIs2x2x2Solved(
-  state: KPattern,
+  pattern: KPattern,
   options: {
     ignorePuzzleOrientation: boolean;
   },
 ): boolean {
   if (options.ignorePuzzleOrientation) {
-    state = normalize2x2x2Orientation(state).normalizedState;
+    pattern = normalize2x2x2Orientation(pattern).normalizedPattern;
   }
-  return !!state.experimentalToTransformation()!.isIdentityTransformation(); // TODO: Compare to start state instead?
+  return !!pattern.experimentalToTransformation()!.isIdentityTransformation(); // TODO: Compare to start pattern instead?
 }

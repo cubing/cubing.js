@@ -98,26 +98,26 @@ function rotateLeft(s: string, i: number): string {
   return s.slice(i) + s.slice(0, i);
 }
 
-function toReid333Struct(state: KPattern): string[][] {
+function toReid333Struct(pattern: KPattern): string[][] {
   const output: string[][] = [[], []];
   for (let i = 0; i < 6; i++) {
-    if (state.stateData["CENTERS"].pieces[i] !== i) {
+    if (pattern.patternData["CENTERS"].pieces[i] !== i) {
       throw new Error("non-oriented puzzles are not supported");
     }
   }
   for (let i = 0; i < 12; i++) {
     output[0].push(
       rotateLeft(
-        reidEdgeOrder[state.stateData["EDGES"].pieces[i]],
-        state.stateData["EDGES"].orientation[i],
+        reidEdgeOrder[pattern.patternData["EDGES"].pieces[i]],
+        pattern.patternData["EDGES"].orientation[i],
       ),
     );
   }
   for (let i = 0; i < 8; i++) {
     output[1].push(
       rotateLeft(
-        reidCornerOrder[state.stateData["CORNERS"].pieces[i]],
-        state.stateData["CORNERS"].orientation[i],
+        reidCornerOrder[pattern.patternData["CORNERS"].pieces[i]],
+        pattern.patternData["CORNERS"].orientation[i],
       ),
     );
   }
@@ -131,7 +131,7 @@ function toReid333Struct(state: KPattern): string[][] {
 //     .join(" ");
 // }
 
-export function toMin2PhaseState(state: KPattern): string {
-  const reid = toReid333Struct(state);
+export function toMin2PhasePattern(pattern: KPattern): string {
+  const reid = toReid333Struct(pattern);
   return map.map(([orbit, perm, ori]) => reid[orbit][perm][ori]).join("");
 }

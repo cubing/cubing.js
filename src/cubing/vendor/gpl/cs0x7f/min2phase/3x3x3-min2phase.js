@@ -2884,6 +2884,6 @@ createForClass("com.google.gwt.user.client.rpc", "XsrfToken", null),
 export const initialize = function () {
   init_0(false);
 };
-export const solveState = function (s) {
+export const solvePattern = function (s) {
   return $solution(new Search(), s);
 };

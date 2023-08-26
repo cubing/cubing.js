@@ -6,7 +6,7 @@ export interface MoveEvent {
   latestMove: any;
   timeStamp: number;
   // deno-lint-ignore no-explicit-any
-  state: any; // string
+  state: any; // string // TODO: rename to `pattern`
 }
 
 export interface BinaryMoveEvent {

@@ -899,17 +899,17 @@ var square1SolverGetRandomPosition = function () {
   return FullCube_randomCube();
 };
 
-var square1SolverGenerate = function (state) {
+var square1SolverGenerate = function (pattern) {
   var search_search = new Search_Search(); // Can this be factored out?
-  return Search_solution(search_search, state);
+  return Search_solution(search_search, pattern);
 };
 
 var square1SolverGetRandomScramble = function () {
-  var randomState = square1SolverGetRandomPosition();
-  var scrambleString = square1SolverGenerate(randomState);
+  var randomPattern = square1SolverGetRandomPosition();
+  var scrambleString = square1SolverGenerate(randomPattern);
 
   return {
-    state: randomState,
+    pattern: randomPattern,
     scramble_string: scrambleString,
   };
 };

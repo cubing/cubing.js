@@ -13,7 +13,7 @@ export const twsearchPromise: Promise<
 
 export interface TwsearchOptions {
   moveSubset?: string[];
-  startState?: KTransformationData;
+  startPattern?: KTransformationData;
   minDepth?: number;
   maxDepth?: number;
 }
@@ -29,15 +29,15 @@ function mustBeNaturalNumber(meaning: string, n: number): void {
 
 export async function solveTwsearch(
   def: KPuzzleDefinition,
-  stateData: KPatternData,
+  patternData: KPatternData,
   options?: TwsearchOptions,
 ): Promise<Alg> {
   const {
     setArg,
     setKPuzzleDefString,
     serializeDefToTws,
-    solveState,
-    serializeScrambleState,
+    solvePattern,
+    serializeScramblePattern,
   } = await twsearchPromise;
   const kpuzzle = new KPuzzle(def);
   setArg("--startprunedepth 5"); // TODO
@@ -94,5 +94,7 @@ export async function solveTwsearch(
     );
   }
 
-  return await solveState(serializeScrambleState("SearchState", stateData));
+  return await solvePattern(
+    serializeScramblePattern("SearchState", patternData),
+  );
 }

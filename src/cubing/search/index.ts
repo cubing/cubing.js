@@ -9,4 +9,4 @@ export {
 } from "./outside";
 
 // TODO: handle centers properly.
-export { random333State } from "./inside/solve/puzzles/3x3x3";
+export { random333Pattern } from "./inside/solve/puzzles/3x3x3";

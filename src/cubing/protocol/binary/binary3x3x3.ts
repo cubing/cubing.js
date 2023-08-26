@@ -15,16 +15,16 @@ import {
 
 // TODO: combine with `orientPuzzle`?
 export function reorientPuzzle(
-  state: KPattern,
+  pattern: KPattern,
   idxU: number,
   idxL: number,
 ): KPattern {
-  return state.applyTransformation(
+  return pattern.applyTransformation(
     experimentalPuzzleOrientation3x3x3Cache()[idxU][idxL].invert(),
   );
 }
 
-type Binary3x3x3State = ArrayBuffer;
+type Binary3x3x3Pattern = ArrayBuffer;
 
 // Bit lengths of the encoded components, in order.
 const BIT_LENGTHS = [29, 12, 16, 13, 3, 2, 1, 12];
@@ -109,25 +109,27 @@ function hasFullMOData(centerOrientationModData: number[] | undefined): 0 | 1 {
 }
 
 export function reid3x3x3ToBinaryComponents(
-  state: KPattern,
+  pattern: KPattern,
 ): Binary3x3x3Components {
-  const normedState = experimentalNormalize3x3x3Orientation(state);
+  const normedPattern = experimentalNormalize3x3x3Orientation(pattern);
 
-  const epLex = permutationToLex(normedState.stateData["EDGES"].pieces);
+  const epLex = permutationToLex(normedPattern.patternData["EDGES"].pieces);
   const eoMask = orientationsToMask(
     2,
-    normedState.stateData["EDGES"].orientation,
+    normedPattern.patternData["EDGES"].orientation,
   );
-  const cpLex = permutationToLex(normedState.stateData["CORNERS"].pieces);
+  const cpLex = permutationToLex(normedPattern.patternData["CORNERS"].pieces);
   const coMask = orientationsToMask(
     3,
-    normedState.stateData["CORNERS"].orientation,
+    normedPattern.patternData["CORNERS"].orientation,
   );
-  const [poIdxU, poIdxL] = experimentalPuzzleOrientation3x3x3Idx(state);
+  const [poIdxU, poIdxL] = experimentalPuzzleOrientation3x3x3Idx(pattern);
 
-  const moSupport = hasFullMOData(state.stateData["CENTERS"].orientationMod); // Required for now.
+  const moSupport = hasFullMOData(
+    pattern.patternData["CENTERS"].orientationMod,
+  ); // Required for now.
   const moMask = moSupport
-    ? orientationsToMask(4, normedState.stateData["CENTERS"].orientation)
+    ? orientationsToMask(4, normedPattern.patternData["CENTERS"].orientation)
     : 0;
 
   return {
@@ -144,7 +146,7 @@ export function reid3x3x3ToBinaryComponents(
 
 export function binaryComponentsToTwizzleBinary(
   components: Binary3x3x3Components,
-): Binary3x3x3State {
+): Binary3x3x3Pattern {
   const { epLex, eoMask, cpLex, coMask, poIdxU, poIdxL, moSupport, moMask } =
     components;
 
@@ -161,8 +163,11 @@ export function binaryComponentsToTwizzleBinary(
 }
 
 /** @category Binary 3x3x3 Format */
-export function reid3x3x3ToTwizzleBinary(state: KPattern): Binary3x3x3State {
-  const components: Binary3x3x3Components = reid3x3x3ToBinaryComponents(state);
+export function reid3x3x3ToTwizzleBinary(
+  pattern: KPattern,
+): Binary3x3x3Pattern {
+  const components: Binary3x3x3Components =
+    reid3x3x3ToBinaryComponents(pattern);
   return binaryComponentsToTwizzleBinary(components);
 }
 
@@ -189,7 +194,7 @@ export function twizzleBinaryToBinaryComponents(
 export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
 ): KPattern {
-  const stateData: KPatternData = {
+  const patternData: KPatternData = {
     EDGES: {
       pieces: lexToPermutation(12, components.epLex),
       orientation: maskToOrientations(2, 12, components.eoMask),
@@ -204,15 +209,15 @@ export function binaryComponentsToReid3x3x3(
     },
   };
   if (!components.moSupport) {
-    stateData.CENTERS.orientationMod = new Array(6).fill(1);
+    patternData.CENTERS.orientationMod = new Array(6).fill(1);
   }
-  const normedState = new KPattern(experimental3x3x3KPuzzle, stateData);
+  const normedPattern = new KPattern(experimental3x3x3KPuzzle, patternData);
 
   if (!supportsPuzzleOrientation(components)) {
-    return normedState;
+    return normedPattern;
   }
 
-  return reorientPuzzle(normedState, components.poIdxU, components.poIdxL);
+  return reorientPuzzle(normedPattern, components.poIdxU, components.poIdxL);
 }
 
 // Returns a list of error string.
@@ -255,7 +260,7 @@ export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): KPattern {
   const components = twizzleBinaryToBinaryComponents(buffy);
   const errors = validateComponents(components);
   if (errors.length !== 0) {
-    throw new Error(`Invalid binary state components: ${errors.join(", ")}`);
+    throw new Error(`Invalid binary pattern components: ${errors.join(", ")}`);
   }
   return binaryComponentsToReid3x3x3(components);
 }

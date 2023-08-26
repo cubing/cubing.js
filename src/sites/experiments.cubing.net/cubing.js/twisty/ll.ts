@@ -8,24 +8,26 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   {
     const svg = new TwistyAnimatedSVG(kpuzzle, llSVG);
-    const state = kpuzzle
+    const pattern = kpuzzle
       .algToTransformation("R U R' U' R' F R2 U' R' U' R U R' F'")
       .toKPattern();
-    svg.draw(state);
+    svg.draw(pattern);
     document.body.appendChild(svg.wrapperElement);
   }
 
   {
     const svg = new TwistyAnimatedSVG(kpuzzle, llSVG);
-    const state = kpuzzle.algToTransformation("((M' U')4 x y)3").toKPattern();
-    svg.draw(state);
+    const pattern = kpuzzle.algToTransformation("((M' U')4 x y)3").toKPattern();
+    svg.draw(pattern);
     document.body.appendChild(svg.wrapperElement);
   }
 
   {
     const svg = new TwistyAnimatedSVG(kpuzzle, llSVG);
-    const state = kpuzzle.algToTransformation("r U R' U R U2 r'").toKPattern();
-    svg.draw(state);
+    const pattern = kpuzzle
+      .algToTransformation("r U R' U R U2 r'")
+      .toKPattern();
+    svg.draw(pattern);
     document.body.appendChild(svg.wrapperElement);
   }
 });

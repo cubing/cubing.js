@@ -87,64 +87,68 @@ export async function randomScrambleStringForEvent(
 }
 
 export async function experimentalSolve3x3x3IgnoringCenters(
-  state: KPattern,
+  pattern: KPattern,
 ): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.insideAPI.solve333ToString(state.stateData));
-}
-
-export async function experimentalSolve2x2x2(state: KPattern): Promise<Alg> {
-  const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.insideAPI.solve222ToString(state.stateData));
-}
-
-export async function solveSkewb(state: KPattern): Promise<Alg> {
-  const cwi = await getCachedWorkerInstance();
   return Alg.fromString(
-    await cwi.insideAPI.solveSkewbToString(state.stateData),
+    await cwi.insideAPI.solve333ToString(pattern.patternData),
   );
 }
 
-export async function solvePyraminx(state: KPattern): Promise<Alg> {
+export async function experimentalSolve2x2x2(pattern: KPattern): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(
-    await cwi.insideAPI.solvePyraminxToString(state.stateData),
+    await cwi.insideAPI.solve222ToString(pattern.patternData),
   );
 }
 
-export async function solveMegaminx(state: KPattern): Promise<Alg> {
+export async function solveSkewb(pattern: KPattern): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(
-    await cwi.insideAPI.solveMegaminxToString(state.stateData),
+    await cwi.insideAPI.solveSkewbToString(pattern.patternData),
+  );
+}
+
+export async function solvePyraminx(pattern: KPattern): Promise<Alg> {
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(
+    await cwi.insideAPI.solvePyraminxToString(pattern.patternData),
+  );
+}
+
+export async function solveMegaminx(pattern: KPattern): Promise<Alg> {
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(
+    await cwi.insideAPI.solveMegaminxToString(pattern.patternData),
   );
 }
 
 export interface SolveTwsearchOptions {
   moveSubset?: string[];
-  startState?: KPattern;
+  startPattern?: KPattern;
   minDepth?: number;
 }
 
 export async function solveTwsearch(
   kpuzzle: KPuzzle,
-  state: KPattern,
+  pattern: KPattern,
   options?: SolveTwsearchOptions,
 ): Promise<Alg> {
-  const { startState, ...otherOptions } = options ?? {};
+  const { startPattern, ...otherOptions } = options ?? {};
   const apiOptions: TwsearchOptions = otherOptions;
-  if (startState) {
-    apiOptions.startState =
-      startState.experimentalToTransformation()!.transformationData;
+  if (startPattern) {
+    apiOptions.startPattern =
+      startPattern.experimentalToTransformation()!.transformationData;
   }
   const { ...def } = kpuzzle.definition;
-  delete def.experimentalIsStateSolved;
+  delete def.experimentalIsPatternSolved;
   // delete def.derivedMoves;
   const dedicatedWorker = await instantiateWorker();
   try {
     return Alg.fromString(
       await dedicatedWorker.insideAPI.solveTwsearchToString(
         def,
-        state.stateData,
+        pattern.patternData,
         apiOptions,
       ),
     );

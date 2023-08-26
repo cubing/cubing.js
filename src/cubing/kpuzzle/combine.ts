@@ -59,14 +59,14 @@ export function combineTransformationData(
   return newTransformationData;
 }
 
-export function applyTransformationDataToStateData(
+export function applyTransformationDataToKPatternData(
   definition: KPuzzleDefinition,
-  stateData: KPatternData,
+  patternData: KPatternData,
   transformationData: KTransformationData,
 ): KPatternData {
-  const newStateData = {} as KPatternData;
+  const newPatternData = {} as KPatternData;
   for (const orbitDefinition of definition.orbits) {
-    const stateOrbit = stateData[orbitDefinition.orbitName];
+    const patternOrbit = patternData[orbitDefinition.orbitName];
     const transformationOrbit = transformationData[orbitDefinition.orbitName];
     if (
       isOrbitTransformationDataIdentityUncached(
@@ -75,38 +75,39 @@ export function applyTransformationDataToStateData(
       )
     ) {
       // common case for big cubes
-      newStateData[orbitDefinition.orbitName] = stateOrbit;
+      newPatternData[orbitDefinition.orbitName] = patternOrbit;
     } else {
       const newPieces = new Array(orbitDefinition.numPieces);
       if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newPieces[idx] =
-            stateOrbit.pieces[transformationOrbit.permutation[idx]];
+            patternOrbit.pieces[transformationOrbit.permutation[idx]];
         }
         const newOrbitData: KPatternOrbitData = {
           pieces: newPieces,
-          orientation: stateOrbit.orientation, // copy all 0
+          orientation: patternOrbit.orientation, // copy all 0
         };
-        newStateData[orbitDefinition.orbitName] = newOrbitData;
+        newPatternData[orbitDefinition.orbitName] = newOrbitData;
       } else {
         const newOrientation = new Array(orbitDefinition.numPieces);
         const newOrientationMod: number[] | undefined =
-          stateOrbit.orientationMod
+          patternOrbit.orientationMod
             ? new Array(orbitDefinition.numPieces)
             : undefined;
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           const transformationIdx = transformationOrbit.permutation[idx];
           let mod = orbitDefinition.numOrientations;
-          if (stateOrbit.orientationMod) {
-            const orientationMod = stateOrbit.orientationMod[transformationIdx];
+          if (patternOrbit.orientationMod) {
+            const orientationMod =
+              patternOrbit.orientationMod[transformationIdx];
             newOrientationMod![idx] = orientationMod;
             mod = orientationMod || orbitDefinition.numOrientations;
           }
           newOrientation[idx] =
-            (stateOrbit.orientation[transformationIdx] +
+            (patternOrbit.orientation[transformationIdx] +
               transformationOrbit.orientationDelta[idx]) %
             mod; // We don't have to use `modIntoRange` (assuming input is well-formed), because we're adding.
-          newPieces[idx] = stateOrbit.pieces[transformationIdx];
+          newPieces[idx] = patternOrbit.pieces[transformationIdx];
         }
         const newOrbitData: KPatternOrbitData = {
           pieces: newPieces,
@@ -115,9 +116,9 @@ export function applyTransformationDataToStateData(
         if (newOrientationMod) {
           newOrbitData.orientationMod = newOrientationMod;
         }
-        newStateData[orbitDefinition.orbitName] = newOrbitData;
+        newPatternData[orbitDefinition.orbitName] = newOrbitData;
       }
     }
   }
-  return newStateData;
+  return newPatternData;
 }

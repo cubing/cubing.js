@@ -11,12 +11,12 @@ function neatStringify(data: any): string {
     .replace(/\n +(\d+)\n +/g, "$1");
 }
 
-export function stateToString(state: KPattern): string {
-  return neatStringify(state.stateData);
+export function patternToString(pattern: KPattern): string {
+  return neatStringify(pattern.patternData);
 }
 
-export function defToString(state: KPuzzleDefinition): string {
-  return neatStringify(state);
+export function defToString(pattern: KPuzzleDefinition): string {
+  return neatStringify(pattern);
 }
 
 const pieceNames: Record<string, string[]> = {
@@ -54,21 +54,21 @@ for (const orbitDefinition of experimental3x3x3KPuzzle.definition.orbits) {
   });
 }
 
-export function kpuzzleToReidString(state: KPattern): string {
+export function kpatternToReidString(pattern: KPattern): string {
   const pieces: string[] = [];
 
-  for (const orbitDefinition of state.kpuzzle.definition.orbits) {
+  for (const orbitDefinition of pattern.kpuzzle.definition.orbits) {
     for (
       let i = 0;
-      i < state.stateData[orbitDefinition.orbitName].pieces.length;
+      i < pattern.patternData[orbitDefinition.orbitName].pieces.length;
       i++
     ) {
       pieces.push(
         rotateLeft(
           pieceNames[orbitDefinition.orbitName][
-            state.stateData[orbitDefinition.orbitName].pieces[i]
+            pattern.patternData[orbitDefinition.orbitName].pieces[i]
           ],
-          state.stateData[orbitDefinition.orbitName].orientation[i],
+          pattern.patternData[orbitDefinition.orbitName].orientation[i],
         ),
       );
     }
@@ -107,11 +107,11 @@ export function stickersToReidString(stickers: number[]): string {
   return reidStringChars.join("");
 }
 
-export function kpuzzleToStickers(state: KPattern): number[] {
-  return reidStringToStickers(kpuzzleToReidString(state));
+export function patternToStickers(pattern: KPattern): number[] {
+  return reidStringToStickers(kpatternToReidString(pattern));
 }
 
-export function stickersToKPuzzle(stickers: number[]): KPattern {
+export function stickersToKPattern(stickers: number[]): KPattern {
   return reidStringToKPattern(stickersToReidString(stickers));
 }
 
@@ -119,21 +119,21 @@ export function reidStringToKPattern(s: string): KPattern {
   const pieces = s.split(" ");
 
   const orbit = (pieces: string[]): KPatternOrbitData => {
-    const orbitState: KPatternOrbitData = {
+    const patternData: KPatternOrbitData = {
       pieces: [],
       orientation: [],
     };
     for (const piece of pieces) {
-      orbitState.pieces.push(pieceMap[piece].piece);
-      orbitState.orientation.push(pieceMap[piece].orientation);
+      patternData.pieces.push(pieceMap[piece].piece);
+      patternData.orientation.push(pieceMap[piece].orientation);
     }
-    return orbitState;
+    return patternData;
   };
 
-  const stateData = {
+  const patternData = {
     EDGES: orbit(pieces.slice(0, 12)),
     CORNERS: orbit(pieces.slice(12, 20)),
     CENTERS: orbit(pieces.slice(20, 26)),
   };
-  return new KPattern(experimental3x3x3KPuzzle, stateData);
+  return new KPattern(experimental3x3x3KPuzzle, patternData);
 }

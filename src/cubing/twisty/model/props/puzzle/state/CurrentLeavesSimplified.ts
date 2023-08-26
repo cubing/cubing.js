@@ -8,7 +8,7 @@ interface CurrentLeavesSimplifiedPropInputs {
 }
 
 export interface CurrentLeavesSimplified {
-  stateIndex: number;
+  patternIndex: number;
   movesFinishing: Move[];
   movesFinished: Move[];
 }
@@ -22,7 +22,7 @@ export class CurrentLeavesSimplifiedProp extends TwistyPropDerived<
     inputs: CurrentLeavesSimplifiedPropInputs,
   ): CurrentLeavesSimplified {
     return {
-      stateIndex: inputs.currentMoveInfo.stateIndex,
+      patternIndex: inputs.currentMoveInfo.patternIndex,
       movesFinishing: inputs.currentMoveInfo.movesFinishing.map(
         (currentMoveInfo) => currentMoveInfo.move,
       ),
@@ -37,7 +37,7 @@ export class CurrentLeavesSimplifiedProp extends TwistyPropDerived<
     v2: CurrentLeavesSimplified,
   ): boolean {
     return (
-      v1.stateIndex === v2.stateIndex &&
+      v1.patternIndex === v2.patternIndex &&
       arrayEqualsCompare(
         v1.movesFinishing,
         v2.movesFinishing,

@@ -98,11 +98,11 @@ export class HeykubeCube extends BluetoothPuzzle {
     this.dispatchAlgLeaf({
       latestAlgLeaf: state.latestMove,
       timeStamp: event.timeStamp,
-      state: state.state,
+      pattern: state.pattern,
     });
   }
 
-  private decodeState(dv: DataView): { state: KPattern; latestMove: Move } {
+  private decodeState(dv: DataView): { pattern: KPattern; latestMove: Move } {
     const moves = [
       new Move("U"),
       new Move("U'"),
@@ -143,14 +143,14 @@ export class HeykubeCube extends BluetoothPuzzle {
     // console.log(components2, binaryComponentsToReid3x3x3(components2));
 
     return {
-      state: experimentalBinaryComponentsToReid3x3x3(components2),
+      pattern: experimentalBinaryComponentsToReid3x3x3(components2),
       latestMove: moves[b2[20] & 0b00001111]!,
     };
   }
 
-  public override async getState(): Promise<KPattern> {
+  public override async getPattern(): Promise<KPattern> {
     const b1 = await this.stateCharacteristic.readValue();
-    return this.decodeState(b1).state;
+    return this.decodeState(b1).pattern;
   }
 }
 

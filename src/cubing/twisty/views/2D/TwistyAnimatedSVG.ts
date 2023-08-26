@@ -139,27 +139,32 @@ export class TwistyAnimatedSVG {
     }
 
     if (this.showUnknownOrientations) {
-      this.drawState(this.kpuzzle.startState());
+      this.drawPattern(this.kpuzzle.defaultPattern());
     }
   }
 
-  public drawState(
-    state: KPattern,
-    nextState?: KPattern,
+  public drawPattern(
+    pattern: KPattern,
+    nextPattern?: KPattern,
     fraction?: number,
   ): void {
-    this.draw(state, nextState, fraction);
+    this.draw(pattern, nextPattern, fraction);
   }
 
   // TODO: save definition in the constructor?
-  public draw(state: KPattern, nextState?: KPattern, fraction?: number): void {
-    const nextTransformation = nextState?.experimentalToTransformation();
-    if (!state) {
+  public draw(
+    pattern: KPattern,
+    nextPattern?: KPattern,
+    fraction?: number,
+  ): void {
+    const nextTransformation = nextPattern?.experimentalToTransformation();
+    if (!pattern) {
       throw new Error("Distinguishable pieces are not handled for SVG yet!");
     }
 
-    for (const orbitDefinition of state.kpuzzle.definition.orbits) {
-      const curStateOrbit = state.stateData[orbitDefinition.orbitName];
+    for (const orbitDefinition of pattern.kpuzzle.definition.orbits) {
+      const currentPatternOrbit =
+        pattern.patternData[orbitDefinition.orbitName];
       const nextTransformationOrbit = nextTransformation
         ? nextTransformation.transformationData[orbitDefinition.orbitName]
         : null;
@@ -176,9 +181,9 @@ export class TwistyAnimatedSVG {
           );
           const fromCur = this.elementID(
             orbitDefinition.orbitName,
-            curStateOrbit.pieces[idx],
+            currentPatternOrbit.pieces[idx],
             (orbitDefinition.numOrientations -
-              curStateOrbit.orientation[idx] +
+              currentPatternOrbit.orientation[idx] +
               orientation) %
               orbitDefinition.numOrientations,
           );
@@ -195,7 +200,7 @@ export class TwistyAnimatedSVG {
             if (fromCur === fromNext) {
               singleColor = true; // TODO: Avoid redundant work during move.
             }
-            fraction = fraction || 0; // TODO Use the type system to tie this to nextState?
+            fraction = fraction || 0; // TODO Use the type system to tie this to nextPattern?
             const easedBackwardsPercent =
               100 * (1 - fraction * fraction * (2 - fraction * fraction)); // TODO: Move easing up the stack.
             this.gradients[id].children[0].setAttribute(
@@ -228,7 +233,7 @@ export class TwistyAnimatedSVG {
           if (singleColor) {
             if (
               this.showUnknownOrientations &&
-              curStateOrbit.orientationMod?.[idx] === 1
+              currentPatternOrbit.orientationMod?.[idx] === 1
             ) {
               this.gradients[id].children[0].setAttribute("stop-color", "#000");
               this.gradients[id].children[0].setAttribute("offset", "5%");

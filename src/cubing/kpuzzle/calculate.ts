@@ -252,7 +252,7 @@ export const algToTransformation = functionFromTraversal(
   AlgToTransformationTraversal,
 );
 
-export function canConvertStateToUniqueTransformationUncached(
+export function canConvertDefaultPatternToUniqueTransformationUncached(
   definition: KPuzzleDefinition,
 ): boolean {
   for (const orbitDefinition of definition.orbits) {

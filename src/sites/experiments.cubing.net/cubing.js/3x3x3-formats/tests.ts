@@ -5,7 +5,7 @@ import {
   reid3x3x3ToBinaryComponents,
 } from "../../../../cubing/protocol/binary/binary3x3x3";
 import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
-import { kpuzzleToReidString, kpuzzleToStickers } from "./convert";
+import { kpatternToReidString, patternToStickers } from "./convert";
 
 const tests: {
   name: string;
@@ -18,17 +18,19 @@ const tests: {
 }[] = [];
 
 function addTest(name: string, alg: string): void {
-  const state = experimental3x3x3KPuzzle.algToTransformation(alg).toKPattern();
+  const pattern = experimental3x3x3KPuzzle
+    .algToTransformation(alg)
+    .toKPattern();
   tests.push({
     name: name,
     alg: alg,
-    kpuzzle: state.stateData,
-    binaryComponents: reid3x3x3ToBinaryComponents(state),
+    kpuzzle: pattern.patternData,
+    binaryComponents: reid3x3x3ToBinaryComponents(pattern),
     binaryBytes: Array.from(
-      new Uint8Array(experimentalReid3x3x3ToTwizzleBinary(state)),
+      new Uint8Array(experimentalReid3x3x3ToTwizzleBinary(pattern)),
     ),
-    reidString: kpuzzleToReidString(state),
-    stickers: kpuzzleToStickers(state),
+    reidString: kpatternToReidString(pattern),
+    stickers: patternToStickers(pattern),
   });
 }
 

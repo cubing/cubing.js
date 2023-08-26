@@ -95,14 +95,14 @@ export class KPuzzle {
     }
   }
 
-  startState(): KPattern {
+  defaultPattern(): KPattern {
     return new KPattern(this, this.definition.defaultPattern);
   }
 
-  #cachedCanConvertStateToUniqueTransformation: boolean | undefined;
-  // TODO: Handle incomplete start state data
-  canConvertStateToUniqueTransformation(): boolean {
-    return (this.#cachedCanConvertStateToUniqueTransformation ??=
+  #cachedCanConvertDefaultPatternToUniqueTransformation: boolean | undefined;
+  // TODO: Handle incomplete default pattern data
+  canConvertDefaultPatternToUniqueTransformation(): boolean {
+    return (this.#cachedCanConvertDefaultPatternToUniqueTransformation ??=
       ((): boolean => {
         for (const orbitDefinition of this.definition.orbits) {
           const pieces = new Array(orbitDefinition.numPieces).fill(false);

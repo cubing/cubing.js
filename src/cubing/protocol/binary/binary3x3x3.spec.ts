@@ -8,66 +8,66 @@ import {
 } from "./binary3x3x3";
 import { bufferToSpacedHex } from "./hex";
 
-function stateForAlg(alg: string): KPattern {
+function patternForAlg(alg: string): KPattern {
   return experimental3x3x3KPuzzle.algToTransformation(alg).toKPattern();
 }
 
 const supersolved = new KPattern(
   experimental3x3x3KPuzzle,
-  structuredClone(experimental3x3x3KPuzzle.startState().stateData),
+  structuredClone(experimental3x3x3KPuzzle.defaultPattern().patternData),
 );
-delete supersolved.stateData["CENTERS"].orientationMod;
-function superStateForAlg(alg: string): KPattern {
+delete supersolved.patternData["CENTERS"].orientationMod;
+function superPatternForAlg(alg: string): KPattern {
   return supersolved.applyAlg(alg);
 }
 
 describe("Binary 3x3x3", () => {
   it("converts to binary", () => {
-    expect(reid3x3x3ToTwizzleBinary(stateForAlg(""))).to.deep.equal(
+    expect(reid3x3x3ToTwizzleBinary(patternForAlg(""))).to.deep.equal(
       new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
     );
-    expect(reid3x3x3ToTwizzleBinary(superStateForAlg(""))).to.deep.equal(
+    expect(reid3x3x3ToTwizzleBinary(superPatternForAlg(""))).to.deep.equal(
       new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0]),
     );
 
     // Superflip (without center rotation)
     expect(
       reid3x3x3ToTwizzleBinary(
-        superStateForAlg("((M' U')4 [U2, M' E2 M] x y)3"),
+        superPatternForAlg("((M' U')4 [U2, M' E2 M] x y)3"),
       ),
     ).to.deep.equal(new Uint8Array([0, 0, 0, 7, 255, 128, 0, 0, 0, 16, 0]));
 
     // Simple superflip (with center rotation)
     expect(
-      reid3x3x3ToTwizzleBinary(superStateForAlg("((M' U')4 x y)3")),
+      reid3x3x3ToTwizzleBinary(superPatternForAlg("((M' U')4 x y)3")),
     ).to.deep.equal(new Uint8Array([0, 0, 0, 7, 255, 128, 0, 0, 0, 26, 170]));
 
     // Swap last 2 edges and last 2 corner
     expect(
       reid3x3x3ToTwizzleBinary(
-        superStateForAlg("L2 F2 U' R2 U F2 L2 D2 L2 D2 L2 U B2 D B2 U'"),
+        superPatternForAlg("L2 F2 U' R2 U F2 L2 D2 L2 D2 L2 U B2 D B2 U'"),
       ),
     ).to.deep.equal(new Uint8Array([0, 0, 0, 8, 0, 0, 0, 128, 0, 16, 33]));
 
     // Rotate top center 180°
     expect(
-      reid3x3x3ToTwizzleBinary(superStateForAlg("(R' U' R U')5")),
+      reid3x3x3ToTwizzleBinary(superPatternForAlg("(R' U' R U')5")),
     ).to.deep.equal(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0]));
 
     // CO
     expect(
       reid3x3x3ToTwizzleBinary(
-        superStateForAlg("(L U L' U L U2 L' R' U' R U' R' U2' R z)4"),
+        superPatternForAlg("(L U L' U L U2 L' R' U' R U' R' U2' R z)4"),
       ),
     ).to.deep.equal(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 66, 128, 16, 0]));
   });
 
   it("handles rotations", () => {
-    expect(reid3x3x3ToTwizzleBinary(superStateForAlg("z y"))).to.deep.equal(
+    expect(reid3x3x3ToTwizzleBinary(superPatternForAlg("z y"))).to.deep.equal(
       new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 176, 0]),
     );
 
-    expect(reid3x3x3ToTwizzleBinary(superStateForAlg("x2 z'"))).to.deep.equal(
+    expect(reid3x3x3ToTwizzleBinary(superPatternForAlg("x2 z'"))).to.deep.equal(
       new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 1, 240, 0]),
     );
   });
@@ -101,60 +101,64 @@ describe("Binary 3x3x3", () => {
   });
 
   it("round-trips 3.47 WR scramble", () => {
-    const state = superStateForAlg(
+    const pattern = superPatternForAlg(
       "F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2",
     );
     expect(
-      twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(state)),
-    ).to.deep.equal(state);
+      twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(pattern)),
+    ).to.deep.equal(pattern);
   });
 
   it("round-trips 7.08 WR scramble", () => {
-    const state = superStateForAlg(
+    const pattern = superPatternForAlg(
       "D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R",
     );
     expect(
-      twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(state)),
-    ).to.deep.equal(state);
+      twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(pattern)),
+    ).to.deep.equal(pattern);
   });
 
   it("round-trips 7.08 WR scramble with extra orientation", () => {
-    const state = superStateForAlg(
+    const pattern = superPatternForAlg(
       "x D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R y",
     );
-    expect(state.stateData["CENTERS"].pieces).to.deep.equal([2, 5, 3, 0, 1, 4]);
+    expect(pattern.patternData["CENTERS"].pieces).to.deep.equal([
+      2, 5, 3, 0, 1, 4,
+    ]);
     expect(
-      twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(state)),
-    ).to.deep.equal(state);
+      twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(pattern)),
+    ).to.deep.equal(pattern);
   });
 });
 
 describe("puzzle orientation", () => {
   it("doesn't affect encoded permutation (relative to centers)", () => {
-    const state = superStateForAlg(
+    const pattern = superPatternForAlg(
       "D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R",
     );
-    expect(state.stateData["CENTERS"].pieces).to.deep.equal([0, 1, 2, 3, 4, 5]);
-    const rotatedState = superStateForAlg(
+    expect(pattern.patternData["CENTERS"].pieces).to.deep.equal([
+      0, 1, 2, 3, 4, 5,
+    ]);
+    const rotatedPattern = superPatternForAlg(
       "D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R x y",
     );
-    expect(rotatedState.stateData["CENTERS"].pieces).to.deep.equal([
+    expect(rotatedPattern.patternData["CENTERS"].pieces).to.deep.equal([
       2, 5, 3, 0, 1, 4,
     ]);
-    const buffy = new Uint8Array(reid3x3x3ToTwizzleBinary(rotatedState));
+    const buffy = new Uint8Array(reid3x3x3ToTwizzleBinary(rotatedPattern));
     buffy[8] ^= 0b00000001;
     buffy[9] ^= 0b01100000;
-    expect(twizzleBinaryToReid3x3x3(buffy)).to.deep.equal(state);
+    expect(twizzleBinaryToReid3x3x3(buffy)).to.deep.equal(pattern);
   });
 });
 
 describe("Hex", () => {
   it("conversion works", () => {
     expect(
-      bufferToSpacedHex(reid3x3x3ToTwizzleBinary(superStateForAlg(""))),
+      bufferToSpacedHex(reid3x3x3ToTwizzleBinary(superPatternForAlg(""))),
     ).to.deep.equal("00 00 00 00 00 00 00 00 00 10 00");
     expect(
-      bufferToSpacedHex(reid3x3x3ToTwizzleBinary(stateForAlg(""))),
+      bufferToSpacedHex(reid3x3x3ToTwizzleBinary(patternForAlg(""))),
     ).to.deep.equal("00 00 00 00 00 00 00 00 00 00 00");
   });
 });

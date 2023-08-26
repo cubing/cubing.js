@@ -804,7 +804,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const transformation = p.state.experimentalToTransformation();
+    const transformation = p.pattern.experimentalToTransformation();
     if (!transformation) {
       throw new Error("indistinguishable pieces are not supported by PG3D yet");
     }
@@ -816,7 +816,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (
       !this.lastPos ||
       this.#pendingStickeringUpdate ||
-      !this.lastPos.state
+      !this.lastPos.pattern
         .experimentalToTransformation()!
         .isIdentical(transformation)
     ) {

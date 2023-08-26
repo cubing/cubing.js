@@ -5,7 +5,7 @@ import { TwistyPropDerived } from "../../TwistyProp";
 
 export interface LegacyPositionPropInputs {
   currentMoveInfo: CurrentMoveInfo;
-  state: KPattern;
+  currentPattern: KPattern;
 }
 
 // TODO: This exist as a convenience for old `Twisty3D` implementations. Get rid of this.
@@ -15,7 +15,7 @@ export class LegacyPositionProp extends TwistyPropDerived<
 > {
   derive(inputs: LegacyPositionPropInputs): PuzzlePosition {
     return {
-      state: inputs.state,
+      pattern: inputs.currentPattern,
       movesInProgress: inputs.currentMoveInfo.currentMoves,
     };
   }

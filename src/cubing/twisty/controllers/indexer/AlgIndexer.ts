@@ -38,7 +38,7 @@ export function currentMoveArrayEquals(
 }
 
 export interface CurrentMoveInfo {
-  stateIndex: number;
+  patternIndex: number;
   // Note: some moves may not be part of the alg!
   currentMoves: CurrentMove[];
   // Moves that are reaching a fraction of 1 at this exact timestamp.
@@ -59,7 +59,7 @@ export function currentMoveInfoEquals(
 ): boolean {
   const eq =
     c1 === c2 ||
-    (c1.stateIndex === c2.stateIndex &&
+    (c1.patternIndex === c2.patternIndex &&
       currentMoveArrayEquals(c1.currentMoves, c2.currentMoves) &&
       currentMoveArrayEquals(c1.movesFinishing, c2.movesFinishing) &&
       currentMoveArrayEquals(c1.movesStarting, c2.movesStarting) &&
@@ -71,7 +71,7 @@ export function currentMoveInfoEquals(
 export interface AlgIndexer {
   getAnimLeaf(index: number): AnimatedLeafAlgNode | null;
   indexToMoveStartTimestamp(index: number): Timestamp;
-  stateAtIndex(index: number, startSTate?: KPattern): KPattern;
+  patternAtIndex(index: number, startPattern?: KPattern): KPattern;
   transformationAtIndex(index: number): KTransformation;
   numAnimatedLeaves(): number;
   timestampToIndex(timestamp: Timestamp): number;
@@ -79,7 +79,7 @@ export interface AlgIndexer {
   moveDuration(index: number): number;
   timestampToPosition?: (
     timestamp: Timestamp,
-    startState?: KPattern,
+    startPattern?: KPattern,
   ) => PuzzlePosition;
   currentMoveInfo?: (timestamp: Timestamp) => CurrentMoveInfo;
 }

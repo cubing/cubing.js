@@ -59,7 +59,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     });
 
     const resetButton = document.querySelector(
-      "#player-state-reset",
+      "#player-pattern-reset",
     ) as HTMLButtonElement;
     resetButton.addEventListener("click", () => {
       // twistyPlayer.experimentalSetStartStateOverride(null);

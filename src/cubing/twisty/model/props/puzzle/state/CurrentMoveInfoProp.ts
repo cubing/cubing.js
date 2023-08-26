@@ -46,7 +46,7 @@ export class CurrentMoveInfoProp extends TwistyPropDerived<
         inputs.detailedTimelineInfo.timestamp,
       );
       const currentMoveInfo: CurrentMoveInfo = {
-        stateIndex: idx,
+        patternIndex: idx,
         currentMoves: [],
         movesFinishing: [],
         movesFinished: [],

@@ -32,7 +32,7 @@ export async function preInitialize222(): Promise<void> {
 }
 
 export async function solve222HTMSubOptimal(
-  state: KPattern,
+  pattern: KPattern,
   maxDepth: number = 11,
 ): Promise<Alg> {
   mustBeInsideWorker();
@@ -40,7 +40,7 @@ export async function solve222HTMSubOptimal(
     (
       await cube2x2x2.kpuzzle()
     ).definition,
-    state.stateData,
+    pattern.patternData,
     {
       moveSubset: "UFLR".split(""), // TODO: <U, F, R>
       maxDepth,
@@ -51,17 +51,17 @@ export async function solve222HTMSubOptimal(
 // TODO: fix def consistency.
 // TODO: why is this ending up with the wrong rotation sometimes?
 export async function solve222HTMOptimal(
-  state: KPattern,
+  pattern: KPattern,
   maxDepth: number = 11,
 ): Promise<Alg> {
   mustBeInsideWorker();
-  const { normalizedState, normalizationAlg } =
-    experimentalNormalize2x2x2Orientation(state);
+  const { normalizedPattern, normalizationAlg } =
+    experimentalNormalize2x2x2Orientation(pattern);
   const orientedResult = await solveTwsearch(
     (
       await cube2x2x2.kpuzzle()
     ).definition,
-    normalizedState.stateData,
+    normalizedPattern.patternData,
     {
       moveSubset: "UFLR".split(""), // TODO: <U, F, R>
       maxDepth,
@@ -71,11 +71,11 @@ export async function solve222HTMOptimal(
 }
 
 async function hasHTMSolutionWithFewerMoves(
-  state: KPattern,
+  pattern: KPattern,
   filterMin: number,
 ): Promise<boolean> {
   try {
-    (await solve222HTMOptimal(state, filterMin - 1)).log();
+    (await solve222HTMOptimal(pattern, filterMin - 1)).log();
     return true;
   } catch (e) {
     if (e instanceof (await twsearchPromise).NoSolutionError) {
@@ -106,11 +106,11 @@ function isCancelling(alg: Alg): boolean {
 }
 
 // TODO: fix def consistency.
-export async function solve222ForScramble(state: KPattern): Promise<Alg> {
+export async function solve222ForScramble(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   return solveTwsearch(
     (await cube2x2x2.kpuzzle()).definition,
-    state.stateData,
+    pattern.patternData,
     {
       moveSubset: "UFLR".split(""),
       minDepth: 11,
@@ -122,13 +122,13 @@ export async function solve222ForScramble(state: KPattern): Promise<Alg> {
 function mutatingRandomizeOrbit(
   kpuzzle: KPuzzle,
   orbitName: string,
-  state: KPattern,
+  pattern: KPattern,
   options?: { orientationSum?: number },
 ): void {
-  randomPermuteInPlace(state.stateData[orbitName].pieces);
+  randomPermuteInPlace(pattern.patternData[orbitName].pieces);
 
   const orbitDefinition = kpuzzle.lookupOrbitDefinition(orbitName);
-  const ori = state.stateData[orbitName].orientation;
+  const ori = pattern.patternData[orbitName].orientation;
 
   let sum = 0;
   for (let i = 0; i < orbitDefinition.numPieces; i++) {
@@ -149,33 +149,30 @@ function mutatingRandomizeOrbit(
 }
 
 // TODO: Use SGS?
-export async function random222State(): Promise<KPattern> {
+export async function random222Pattern(): Promise<KPattern> {
   const kpuzzle = await puzzles["2x2x2"].kpuzzle();
-  const stateCopy: KPattern = new KPattern(
+  const patternCopy: KPattern = new KPattern(
     kpuzzle,
-    structuredClone(kpuzzle.startState().stateData),
+    structuredClone(kpuzzle.defaultPattern().patternData),
   ); // TODO
-  mutatingRandomizeOrbit(kpuzzle, "CORNERS", stateCopy, {
+  mutatingRandomizeOrbit(kpuzzle, "CORNERS", patternCopy, {
     orientationSum: 0,
   });
-  return stateCopy;
+  return patternCopy;
 }
 
 export async function random222Scramble(): Promise<Alg> {
-  let state = await random222State();
-  while (await hasHTMSolutionWithFewerMoves(state, 4)) {
-    console.info("Filtered out a 2x2x2 state!");
-    state = await random222State();
+  let pattern = await random222Pattern();
+  while (await hasHTMSolutionWithFewerMoves(pattern, 4)) {
+    console.info("Filtered out a 2x2x2 pattern!");
+    pattern = await random222Pattern();
   }
-  const inverseState = state
-    .experimentalToTransformation()!
-    .invert()
-    .toKPattern(); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
-  let sol = await solve222ForScramble(inverseState);
+
+  let sol = await solve222ForScramble(pattern);
   while (isCancelling(sol)) {
     // Rely on `--randomstart` to find us a non-cancelling with ≈2/3 probability.
-    // TODO: Check that this works for 100% of states.
-    sol = await solve222ForScramble(inverseState);
+    // TODO: Check that this works for 100% of patterns.
+    sol = await solve222ForScramble(pattern);
   }
 
   return sol;

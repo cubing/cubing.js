@@ -29,7 +29,7 @@ export interface MoveInProgress {
 }
 
 export type PuzzlePosition = {
-  state: KPattern;
+  pattern: KPattern;
   movesInProgress: MoveInProgress[];
 };
 

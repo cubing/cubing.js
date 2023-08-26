@@ -2,7 +2,7 @@ import { offsetMod } from "../../../../cubing/alg/cubing-private";
 import { KPattern, type KPuzzle } from "../../../../cubing/kpuzzle";
 import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
 import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG";
-import { defToString, stateToString } from "../3x3x3-formats/convert";
+import { defToString, patternToString } from "../3x3x3-formats/convert";
 
 interface PieceFacelets {
   [orientation: number]: Facelet;
@@ -28,14 +28,15 @@ function downloadJSONFile(jsonString: string, fileName: string) {
 
 class App {
   mode: Mode = "swap";
-  puzzle: Promise<PuzzleStateEditor>;
-  copyStateElem: HTMLTextAreaElement = document.querySelector("#copy-state")!;
+  puzzle: Promise<PuzzlePatternEditor>;
+  copyPatternElem: HTMLTextAreaElement =
+    document.querySelector("#copy-pattern")!;
   downloadDefElem: HTMLTextAreaElement =
     document.querySelector("#download-def")!;
-  downloadStateElem: HTMLTextAreaElement =
-    document.querySelector("#download-state")!;
-  stateElem: HTMLTextAreaElement = document.querySelector(
-    "#display-state-text",
+  downloadPatternElem: HTMLTextAreaElement =
+    document.querySelector("#download-pattern")!;
+  patternElem: HTMLTextAreaElement = document.querySelector(
+    "#display-pattern-text",
   )!;
 
   constructor() {
@@ -54,8 +55,8 @@ class App {
     const puzzle = new URL(location.href).searchParams.get("puzzle") || "3x3x3";
     if (puzzle) {
       if (puzzle in puzzles) {
-        this.puzzle = PuzzleStateEditor.createAsync(puzzles[puzzle], () =>
-          this.displayStateText(),
+        this.puzzle = PuzzlePatternEditor.createAsync(puzzles[puzzle], () =>
+          this.displayPatternText(),
         );
         puzzleSelect.value = puzzle;
       } else {
@@ -81,8 +82,10 @@ class App {
         });
       });
 
-    this.copyStateElem.addEventListener("click", async () => {
-      navigator.clipboard.writeText(stateToString((await this.puzzle).state));
+    this.copyPatternElem.addEventListener("click", async () => {
+      navigator.clipboard.writeText(
+        patternToString((await this.puzzle).pattern),
+      );
     });
 
     this.downloadDefElem.addEventListener("click", async () => {
@@ -90,57 +93,57 @@ class App {
       downloadJSONFile(defToString(def), `${def.name}.kpuzzle.json`);
     });
 
-    this.downloadStateElem.addEventListener("click", async () => {
+    this.downloadPatternElem.addEventListener("click", async () => {
       const puzzle = await this.puzzle;
-      const { kpuzzle, state } = puzzle;
+      const { kpuzzle, pattern } = puzzle;
       downloadJSONFile(
-        stateToString(state),
+        patternToString(pattern),
         `${kpuzzle.definition.name}.scramble.json`,
       );
     });
   }
 
-  async displayStateText() {
-    this.stateElem.value = stateToString((await this.puzzle).state);
+  async displayPatternText() {
+    this.patternElem.value = patternToString((await this.puzzle).pattern);
   }
 }
 
-class PuzzleStateEditor {
+class PuzzlePatternEditor {
   selectedFacelet: Facelet | null;
   pieces = new Map<string, { [position: number]: PieceFacelets }>();
 
   svgAnimator: TwistyAnimatedSVG;
   svgString: string;
   kpuzzle: KPuzzle;
-  state: KPattern;
+  pattern: KPattern;
 
-  private constructor(private displayStateText: () => void) {
-    this.displayStateText();
+  private constructor(private displayPatternText: () => void) {
+    this.displayPatternText();
   }
 
   static async createAsync(
     puzzle: PuzzleLoader,
-    displayStateText: () => void,
-  ): Promise<PuzzleStateEditor> {
+    displayPatternText: () => void,
+  ): Promise<PuzzlePatternEditor> {
     const [svgString, kpuzzle] = await Promise.all([
       puzzle.svg(),
       puzzle.kpuzzle(),
     ]);
-    const instance = new PuzzleStateEditor(displayStateText);
+    const instance = new PuzzlePatternEditor(displayPatternText);
     instance.setPuzzleSync(svgString, kpuzzle);
     return instance;
   }
 
-  private displayState() {
-    this.svgAnimator.drawState(this.state);
-    this.displayStateText();
+  private displayPattern() {
+    this.svgAnimator.drawPattern(this.pattern);
+    this.displayPatternText();
   }
 
   private async setPuzzleSync(svgString: string, kpuzzle: KPuzzle) {
     this.kpuzzle = kpuzzle;
-    this.state = new KPattern(
+    this.pattern = new KPattern(
       kpuzzle,
-      structuredClone(kpuzzle.startState().stateData),
+      structuredClone(kpuzzle.defaultPattern().patternData),
     );
 
     const wrapper = document.querySelector("#puzzle")!;
@@ -163,27 +166,27 @@ class PuzzleStateEditor {
   async setPuzzle(puzzle: PuzzleLoader) {
     const [svg, kpuzzle] = await Promise.all([puzzle.svg(), puzzle.kpuzzle()]);
     this.setPuzzleSync(svg, kpuzzle);
-    this.displayState();
+    this.displayPattern();
   }
 
   display() {
-    const { orbits } = this.kpuzzle.definition;
-
-    for (const orbitName in orbits) {
-      const orbitVal = orbits[orbitName];
-
+    for (const orbitDefinition of this.kpuzzle.definition.orbits) {
       for (
         let orientation = 0;
-        orientation < orbitVal.numOrientations;
+        orientation < orbitDefinition.numOrientations;
         orientation++
       ) {
-        for (let piece = 0; piece < orbitVal.numPieces; piece++) {
-          const facelet = new Facelet(orbitName, piece, orientation);
-          if (!this.pieces.get(orbitName)) {
-            this.pieces.set(orbitName, {});
+        for (let piece = 0; piece < orbitDefinition.numPieces; piece++) {
+          const facelet = new Facelet(
+            orbitDefinition.orbitName,
+            piece,
+            orientation,
+          );
+          if (!this.pieces.get(orbitDefinition.orbitName)) {
+            this.pieces.set(orbitDefinition.orbitName, {});
           }
-          this.pieces.get(orbitName)![piece] = {
-            ...this.pieces.get(orbitName)![piece],
+          this.pieces.get(orbitDefinition.orbitName)![piece] = {
+            ...this.pieces.get(orbitDefinition.orbitName)![piece],
             [orientation]: facelet,
           };
         }
@@ -204,12 +207,12 @@ class PuzzleStateEditor {
       facelet.orbit,
     );
 
-    const stateOrbit = this.state.stateData[facelet.orbit];
-    stateOrbit.orientation[facelet.pieceIndex] = offsetMod(
-      stateOrbit.orientation[facelet.pieceIndex] + 1,
+    const patternOrbit = this.pattern.patternData[facelet.orbit];
+    patternOrbit.orientation[facelet.pieceIndex] = offsetMod(
+      patternOrbit.orientation[facelet.pieceIndex] + 1,
       numOrientations,
     );
-    this.displayState();
+    this.displayPattern();
     flash(facelet.element);
   }
 
@@ -226,24 +229,24 @@ class PuzzleStateEditor {
       facelet1.orbit,
     );
 
-    const stateOrbit = this.state.stateData[facelet1.orbit];
-    const piece1Index = stateOrbit.pieces[facelet1.pieceIndex];
-    const piece1Orientation = stateOrbit.orientation[facelet1.pieceIndex];
-    const piece2Index = stateOrbit.pieces[facelet2.pieceIndex];
-    const piece2Orientation = stateOrbit.orientation[facelet2.pieceIndex];
+    const patternOrbit = this.pattern.patternData[facelet1.orbit];
+    const piece1Index = patternOrbit.pieces[facelet1.pieceIndex];
+    const piece1Orientation = patternOrbit.orientation[facelet1.pieceIndex];
+    const piece2Index = patternOrbit.pieces[facelet2.pieceIndex];
+    const piece2Orientation = patternOrbit.orientation[facelet2.pieceIndex];
 
-    stateOrbit.pieces[facelet1.pieceIndex] = piece2Index;
-    stateOrbit.orientation[facelet1.pieceIndex] = offsetMod(
+    patternOrbit.pieces[facelet1.pieceIndex] = piece2Index;
+    patternOrbit.orientation[facelet1.pieceIndex] = offsetMod(
       piece2Orientation - offset,
       numOrientations,
     );
 
-    stateOrbit.pieces[facelet2.pieceIndex] = piece1Index;
-    stateOrbit.orientation[facelet2.pieceIndex] = offsetMod(
+    patternOrbit.pieces[facelet2.pieceIndex] = piece1Index;
+    patternOrbit.orientation[facelet2.pieceIndex] = offsetMod(
       piece1Orientation + offset,
       numOrientations,
     );
-    this.displayState();
+    this.displayPattern();
     flash(facelet1.element);
     flash(facelet2.element);
   }
@@ -251,11 +254,11 @@ class PuzzleStateEditor {
   async ignoreOrientation(facelet: Facelet) {
     const { numPieces } = this.kpuzzle.lookupOrbitDefinition(facelet.orbit);
 
-    const stateOrbit = this.state.stateData[facelet.orbit];
-    stateOrbit.orientationMod ??= new Array(numPieces).fill(0);
-    stateOrbit.orientationMod[facelet.pieceIndex] =
-      1 - stateOrbit.orientationMod[facelet.pieceIndex];
-    this.displayState();
+    const patternOrbit = this.pattern.patternData[facelet.orbit];
+    patternOrbit.orientationMod ??= new Array(numPieces).fill(0);
+    patternOrbit.orientationMod[facelet.pieceIndex] =
+      1 - patternOrbit.orientationMod[facelet.pieceIndex];
+    this.displayPattern();
     flash(facelet.element);
   }
 }

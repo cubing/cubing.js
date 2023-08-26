@@ -326,7 +326,9 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       twistyPlayer.experimentalModel.currentLeavesSimplified.addFreshListener(
         async (currentLeavesSimplified: CurrentLeavesSimplified) => {
           const indexer = await twistyPlayer.experimentalModel.indexer.get();
-          const leaf = indexer.getAnimLeaf(currentLeavesSimplified.stateIndex);
+          const leaf = indexer.getAnimLeaf(
+            currentLeavesSimplified.patternIndex,
+          );
           this.highlightLeaf(leaf as Parsed<Move | Pause> | null);
         },
       );

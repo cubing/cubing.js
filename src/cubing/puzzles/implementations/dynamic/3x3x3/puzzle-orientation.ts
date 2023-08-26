@@ -2,10 +2,10 @@ import { Alg } from "../../../../alg";
 import { KPattern, KTransformation } from "../../../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../../cubing-private";
 
-export function puzzleOrientation3x3x3Idx(state: KPattern): [number, number] {
-  const idxU = state.stateData["CENTERS"].pieces[0];
-  const idxD = state.stateData["CENTERS"].pieces[5];
-  const unadjustedIdxL = state.stateData["CENTERS"].pieces[1];
+export function puzzleOrientation3x3x3Idx(pattern: KPattern): [number, number] {
+  const idxU = pattern.patternData["CENTERS"].pieces[0];
+  const idxD = pattern.patternData["CENTERS"].pieces[5];
+  const unadjustedIdxL = pattern.patternData["CENTERS"].pieces[1];
   let idxL = unadjustedIdxL;
   if (idxU < unadjustedIdxL) {
     idxL--;
@@ -47,34 +47,34 @@ export function puzzleOrientation3x3x3Cache(): KTransformation[][] {
   return puzzleOrientationCacheRaw;
 }
 
-export function normalize3x3x3Orientation(state: KPattern): KPattern {
-  const [idxU, idxL] = puzzleOrientation3x3x3Idx(state);
+export function normalize3x3x3Orientation(pattern: KPattern): KPattern {
+  const [idxU, idxL] = puzzleOrientation3x3x3Idx(pattern);
   const orientationTransformation = puzzleOrientation3x3x3Cache()[idxU][idxL];
-  return state.applyTransformation(orientationTransformation);
+  return pattern.applyTransformation(orientationTransformation);
 }
 
 // The `options` argument is required for now, because we haven't yet come up
 // with a general way to specify different kinds of solved for the same puzle.
 export function experimentalIs3x3x3Solved(
-  state: KPattern,
+  pattern: KPattern,
   options: {
     ignorePuzzleOrientation: boolean;
     ignoreCenterOrientation: boolean;
   },
 ): boolean {
   if (options.ignorePuzzleOrientation) {
-    state = normalize3x3x3Orientation(state);
+    pattern = normalize3x3x3Orientation(pattern);
   }
   // TODO(orientationMod)
   if (options.ignoreCenterOrientation) {
-    state = new KPattern(state.kpuzzle, {
-      EDGES: state.stateData.EDGES,
-      CORNERS: state.stateData.CORNERS,
+    pattern = new KPattern(pattern.kpuzzle, {
+      EDGES: pattern.patternData.EDGES,
+      CORNERS: pattern.patternData.CORNERS,
       CENTERS: {
-        pieces: state.stateData.CENTERS.pieces,
+        pieces: pattern.patternData.CENTERS.pieces,
         orientation: new Array(6).fill(0),
       },
     });
   }
-  return !!state.experimentalToTransformation()?.isIdentityTransformation(); // TODO: Compare to start state instead?
+  return !!pattern.experimentalToTransformation()?.isIdentityTransformation(); // TODO: Compare to start state instead?
 }

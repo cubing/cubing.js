@@ -38,11 +38,11 @@ export async function preInitializeFTO(): Promise<void> {
 }
 
 // TODO: centers
-export async function solveFTO(state: KPattern): Promise<Alg> {
+export async function solveFTO(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(
-    state,
+    pattern,
     TREMBLE_DEPTH,
     () => 3, // TODO: Attach quantum move order lookup to puzzle.
   );

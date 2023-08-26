@@ -11,11 +11,11 @@ import { cube3x3x3 } from "../../../../cubing/puzzles";
 import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
 import { ExperimentalSVGAnimator } from "../../../../cubing/twisty";
 import {
-  kpuzzleToReidString,
-  kpuzzleToStickers,
-  stateToString as kpatternToString,
+  kpatternToReidString,
+  patternToStickers,
+  patternToString as kpatternToString,
   reidStringToKPattern,
-  stickersToKPuzzle,
+  stickersToKPattern,
 } from "./convert";
 
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
@@ -32,7 +32,7 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 }
 
 class App {
-  state = experimental3x3x3KPuzzle.startState();
+  pattern = experimental3x3x3KPuzzle.defaultPattern();
   svg = (async () => {
     return new ExperimentalSVGAnimator(
       experimental3x3x3KPuzzle,
@@ -101,61 +101,61 @@ class App {
   }
 
   reset(): void {
-    this.setState(experimental3x3x3KPuzzle.startState());
+    this.setPattern(experimental3x3x3KPuzzle.defaultPattern());
   }
 
   applyAlg(s: string): void {
-    this.state = this.state.applyAlg(Alg.fromString(s));
-    this.setState(this.state);
+    this.pattern = this.pattern.applyAlg(Alg.fromString(s));
+    this.setPattern(this.pattern);
   }
 
   setKPatternData(kpatternData: KPatternData): void {
-    this.setState(new KPattern(experimental3x3x3KPuzzle, kpatternData));
+    this.setPattern(new KPattern(experimental3x3x3KPuzzle, kpatternData));
   }
 
   setReidString(s: string): void {
-    this.setState(reidStringToKPattern(s));
+    this.setPattern(reidStringToKPattern(s));
   }
 
   setStickers(s: string): void {
-    this.setState(stickersToKPuzzle(JSON.parse(s)));
+    this.setPattern(stickersToKPattern(JSON.parse(s)));
   }
 
   setComponents(s: string): void {
-    this.setState(binaryComponentsToReid3x3x3(JSON.parse(s)));
+    this.setPattern(binaryComponentsToReid3x3x3(JSON.parse(s)));
   }
 
   setBinary(s: string): void {
-    this.setState(twizzleBinaryToReid3x3x3(spacedHexToBuffer(s)));
+    this.setPattern(twizzleBinaryToReid3x3x3(spacedHexToBuffer(s)));
   }
 
-  setState(state: KPattern): void {
-    this.state = state;
+  setPattern(pattern: KPattern): void {
+    this.pattern = pattern;
     (async () => {
-      (await this.svg).draw(state);
+      (await this.svg).draw(pattern);
     })();
-    this.kpatternTextarea.value = kpatternToString(state);
-    this.reidStringTextarea.value = kpuzzleToReidString(state);
-    this.stickersTextarea.value = JSON.stringify(kpuzzleToStickers(state));
+    this.kpatternTextarea.value = kpatternToString(pattern);
+    this.reidStringTextarea.value = kpatternToReidString(pattern);
+    this.stickersTextarea.value = JSON.stringify(patternToStickers(pattern));
     this.componentsTextarea.value = JSON.stringify(
-      reid3x3x3ToBinaryComponents(state),
+      reid3x3x3ToBinaryComponents(pattern),
       null,
       "  ",
     );
     this.binaryTextarea.value = bufferToSpacedHex(
-      reid3x3x3ToTwizzleBinary(state),
+      reid3x3x3ToTwizzleBinary(pattern),
     );
-    this.orderElem.textContent = state
+    this.orderElem.textContent = pattern
       .experimentalToTransformation()!
       .repetitionOrder()
       .toString();
-    this.isSolvedIgnoringCenterOriElem.textContent = state
+    this.isSolvedIgnoringCenterOriElem.textContent = pattern
       .experimentalIsSolved({
         ignoreCenterOrientation: true,
         ignorePuzzleOrientation: true,
       })
       .toString();
-    this.isSolvedWithCenterOriElem.textContent = state
+    this.isSolvedWithCenterOriElem.textContent = pattern
       .experimentalIsSolved({
         ignoreCenterOrientation: false,
         ignorePuzzleOrientation: true,

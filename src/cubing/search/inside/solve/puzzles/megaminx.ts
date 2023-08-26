@@ -30,17 +30,19 @@ export async function preInitializeMegaminx(): Promise<void> {
 }
 
 // TODO: centers
-export async function solveMegaminx(state: KPattern): Promise<Alg> {
+export async function solveMegaminx(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  const stateDataWithoutMO: KPatternData = structuredClone(state.stateData);
-  stateDataWithoutMO.CENTERS.orientation = new Array(12).fill(0);
-  const stateWithoutMO = new KPattern(
+  const patternDataWithoutMO: KPatternData = structuredClone(
+    pattern.patternData,
+  );
+  patternDataWithoutMO.CENTERS.orientation = new Array(12).fill(0);
+  const patternWithoutMO = new KPattern(
     await (await searchDynamicSideEvents).cachedMegaminxKPuzzleWithoutMO(),
-    stateDataWithoutMO,
+    patternDataWithoutMO,
   );
   const alg = await trembleSolver.solve(
-    stateWithoutMO,
+    patternWithoutMO,
     TREMBLE_DEPTH,
     () => 5, // TODO: Attach quantum move order lookup to puzzle.
   );

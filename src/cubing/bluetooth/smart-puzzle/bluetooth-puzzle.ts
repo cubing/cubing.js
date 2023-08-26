@@ -14,7 +14,7 @@ export interface AlgLeafEvent {
   latestAlgLeaf: AlgLeaf;
   timeStamp: number;
   debug?: Record<string, unknown>;
-  state?: KPattern;
+  pattern?: KPattern;
   quaternion?: any; // TODO: Unused
 }
 
@@ -54,8 +54,8 @@ export abstract class BluetoothPuzzle extends EventTarget {
   public abstract disconnect(): void; // TODO: Can we make this reutrn (async) on success?
 
   // TODO: require subclasses to implement this?
-  public async getState(): Promise<KPattern> {
-    throw new Error("cannot get state");
+  public async getPattern(): Promise<KPattern> {
+    throw new Error("cannot get pattern");
   }
 
   public addAlgLeafListener(listener: (e: AlgLeafEvent) => void): void {

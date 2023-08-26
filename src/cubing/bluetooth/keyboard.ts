@@ -7,8 +7,8 @@ import { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
 /** @category Keyboard Puzzles */
 export class KeyboardPuzzle extends BluetoothPuzzle {
   private puzzle: Promise<KPuzzle> = puzzles["3x3x3"].kpuzzle();
-  private state: Promise<KPattern> = (async () =>
-    (await this.puzzle).startState())();
+  private pattern: Promise<KPattern> = (async () =>
+    (await this.puzzle).defaultPattern())();
 
   listener: (e: KeyboardEvent) => Promise<void>;
 
@@ -28,8 +28,8 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
     this.target.removeEventListener("keydown", this.listener);
   }
 
-  public override async getState(): Promise<KPattern> {
-    return this.state;
+  public override async getPattern(): Promise<KPattern> {
+    return this.pattern;
   }
 
   private async onKeyDown(e: KeyboardEvent): Promise<void> {
@@ -39,12 +39,12 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
 
     const algLeaf = keyToMove(e);
     if (algLeaf) {
-      const newState = (await this.state).applyAlg(new Alg([algLeaf])); // TODO
-      this.state = Promise.resolve(newState);
+      const newPattern = (await this.pattern).applyAlg(new Alg([algLeaf])); // TODO
+      this.pattern = Promise.resolve(newPattern);
       this.dispatchAlgLeaf({
         latestAlgLeaf: algLeaf,
         timeStamp: e.timeStamp,
-        state: newState,
+        pattern: newPattern,
       });
       e.preventDefault();
     }

@@ -1,2 +1,2 @@
 export function initialize(): void;
-export function solveState(state: string): string;
+export function solvePattern(pattern: string): string;

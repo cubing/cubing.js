@@ -156,7 +156,7 @@ export class GiiKERCube extends BluetoothPuzzle {
     this.server.disconnect();
   }
 
-  public override async getState(): Promise<KPattern> {
+  public override async getPattern(): Promise<KPattern> {
     return this.toReid333(
       new Uint8Array((await this.cubeCharacteristic.readValue()).buffer),
     );
@@ -169,7 +169,7 @@ export class GiiKERCube extends BluetoothPuzzle {
   }
 
   private toReid333(val: Uint8Array): KPattern {
-    const state: KPatternData = {
+    const patternData: KPatternData = {
       EDGES: {
         pieces: new Array(12),
         orientation: new Array(12),
@@ -183,20 +183,23 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     for (let i = 0; i < 12; i++) {
       const gi = epReid333toGiiKER[i];
-      state.EDGES.pieces[i] = epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
-      state.EDGES.orientation[i] =
-        this.getBit(val, gi + 112) ^ preEO[state.EDGES.pieces[i]] ^ postEO[i];
+      patternData.EDGES.pieces[i] =
+        epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
+      patternData.EDGES.orientation[i] =
+        this.getBit(val, gi + 112) ^
+        preEO[patternData.EDGES.pieces[i]] ^
+        postEO[i];
     }
     for (let i = 0; i < 8; i++) {
       const gi = cpReid333toGiiKER[i];
-      state.CORNERS.pieces[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
-      state.CORNERS.orientation[i] =
+      patternData.CORNERS.pieces[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
+      patternData.CORNERS.orientation[i] =
         (getNibble(val, gi + 8) * coFlip[gi] +
-          preCO[state.CORNERS.pieces[i]] +
+          preCO[patternData.CORNERS.pieces[i]] +
           postCO[i]) %
         3;
     }
-    return new KPattern(experimental3x3x3KPuzzle, state);
+    return new KPattern(experimental3x3x3KPuzzle, patternData);
   }
 
   private async onCubeCharacteristicChanged(event: any): Promise<void> {
@@ -224,7 +227,7 @@ export class GiiKERCube extends BluetoothPuzzle {
       debug: {
         stateStr: str,
       },
-      state: this.toReid333(val),
+      pattern: this.toReid333(val),
     });
   }
 

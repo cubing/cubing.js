@@ -39,19 +39,19 @@ export class SimpleAlgIndexer implements AlgIndexer {
     return i;
   }
 
-  public stateAtIndex(index: number): KPattern {
+  public patternAtIndex(index: number): KPattern {
     return this.kpuzzle
-      .startState()
+      .defaultPattern()
       .applyTransformation(this.transformationAtIndex(index));
   }
 
   public transformationAtIndex(index: number): KTransformation {
-    let state = this.kpuzzle.identityTransformation();
+    let pattern = this.kpuzzle.identityTransformation();
     for (const move of Array.from(this.moves.childAlgNodes()).slice(0, index)) {
       // TODO
-      state = state.applyMove(move as Move);
+      pattern = pattern.applyMove(move as Move);
     }
-    return state;
+    return pattern;
   }
 
   public algDuration(): Duration {

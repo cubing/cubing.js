@@ -79,11 +79,11 @@ export class TrembleSolver {
   // }
 
   public async solve(
-    state: KPattern,
+    pattern: KPattern,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
     quantumMoveOrder?: (quantumMove: QuantumMove) => number,
   ): Promise<Alg> {
-    const transformation = state.experimentalToTransformation();
+    const transformation = pattern.experimentalToTransformation();
     if (!transformation) {
       throw new Error(
         "distinguishable pieces are not supported in tremble solver yt",
@@ -196,7 +196,7 @@ export class TrembleSolver {
   }
 }
 
-export function randomStateFromSGS(
+export function randomPatternFromSGS(
   kpuzzle: KPuzzle,
   sgs: SGSCachedData,
 ): KPattern {

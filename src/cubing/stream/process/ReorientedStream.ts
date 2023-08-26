@@ -39,12 +39,12 @@ const rotationMap: Record<string, [Move, string]> = {
 };
 
 class OrientationTracker {
-  state = experimental3x3x3KPuzzle.startState();
+  pattern = experimental3x3x3KPuzzle.defaultPattern();
 
   processMove(move: Move): Move[] {
     // TODO: validation
     if ("xyz".includes(move.family)) {
-      this.state = this.state.applyMove(move);
+      this.pattern = this.pattern.applyMove(move);
       return [move];
     } else if (move.family.slice(-1) === "w") {
       const [rotation, family] = rotationMap[move.family.slice(-1)];
@@ -59,7 +59,7 @@ class OrientationTracker {
     } else {
       const faceIdx = faces.indexOf(move.family);
       const family =
-        faces[this.state.stateData["CENTERS"].pieces.indexOf(faceIdx)];
+        faces[this.pattern.patternData["CENTERS"].pieces.indexOf(faceIdx)];
       return [move.modified({ family })];
     }
   }

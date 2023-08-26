@@ -75,15 +75,15 @@ export class Twisty2DPuzzle
         if (position.movesInProgress[0].direction === Direction.Backwards) {
           partialMove = move.invert();
         }
-        const newState = position.state.applyMove(partialMove);
+        const newPattern = position.pattern.applyMove(partialMove);
         // TODO: move to render()
         this.svgWrapper.draw(
-          position.state,
-          newState,
+          position.pattern,
+          newPattern,
           position.movesInProgress[0].fraction,
         );
       } else {
-        this.svgWrapper.draw(position.state);
+        this.svgWrapper.draw(position.pattern);
         this.#cachedPosition = position;
       }
     } catch (e) {

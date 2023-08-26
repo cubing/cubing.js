@@ -40,7 +40,7 @@ var solveScramble = cwrap(
   stringArg,
   parseResult
 );
-var solveState = cwrap(
+var solvePattern = cwrap(
   "w_solveposition",
   "string",
   stringArg,
@@ -65,7 +65,7 @@ function serializeMoveTransformation(name, t) {
   outputLines.push(BLANK_LINE);
   return outputLines.join("\n");
 }
-function serializeScrambleState(name, t) {
+function serializeScramblePattern(name, t) {
   const outputLines = [];
   outputLines.push(`ScrambleState ${sanitize(name)}`);
   for (const [orbitName, orbitData] of Object.entries(t)) {
@@ -89,8 +89,8 @@ function serializeDefToTws(kpuzzle, options) {
   }
   outputLines.push(BLANK_LINE);
   outputLines.push("StartState");
-  if (options?.startState) {
-    outputLines.push(options?.startState);
+  if (options?.startPattern) {
+    outputLines.push(options?.startPattern);
   } else {
     for (const [orbitName, orbitData] of Object.entries(def.defaultPattern)) {
       outputLines.push(sanitize(orbitName));
@@ -131,9 +131,9 @@ export {
   NoSolutionError,
   serializeDefToTws,
   serializeMoveTransformation,
-  serializeScrambleState,
+   serializeScramblePattern,
   setArg,
   setKPuzzleDefString,
   solveScramble,
-  solveState
+   solvePattern
 };

@@ -102,24 +102,24 @@ export class SimultaneousMoveIndexer {
 
   public timestampToPosition(
     timestamp: Timestamp,
-    startState?: KPattern,
+    startPattern?: KPattern,
   ): PuzzlePosition {
     const currentMoveInfo = this.currentMoveInfo(timestamp);
 
-    let state =
-      startState ?? this.kpuzzle.identityTransformation().toKPattern();
+    let pattern =
+      startPattern ?? this.kpuzzle.identityTransformation().toKPattern();
     for (const leafWithRange of this.animLeaves.slice(
       0,
-      currentMoveInfo.stateIndex,
+      currentMoveInfo.patternIndex,
     )) {
       const move = leafWithRange.animLeaf.as(Move);
       if (move !== null) {
-        state = state.applyMove(move);
+        pattern = pattern.applyMove(move);
       }
     }
 
     return {
-      state,
+      pattern: pattern,
       movesInProgress: currentMoveInfo.currentMoves,
     };
   }
@@ -146,10 +146,10 @@ export class SimultaneousMoveIndexer {
     let latestStart: number = -Infinity; // TODO: is there a better way to accumulate this?
     let earliestEnd: number = Infinity; // TODO: is there a better way to accumulate this?
 
-    let stateIndex: number = 0;
+    let patternIndex: number = 0;
     for (const leafWithRange of this.animLeaves) {
       if (leafWithRange.end <= windowEarliestTimestamp) {
-        stateIndex++;
+        patternIndex++;
       } else if (leafWithRange.start > timestamp) {
         break;
       } else {
@@ -193,7 +193,7 @@ export class SimultaneousMoveIndexer {
       }
     }
     return {
-      stateIndex,
+      patternIndex: patternIndex,
       currentMoves,
       latestStart,
       earliestEnd,
@@ -203,16 +203,16 @@ export class SimultaneousMoveIndexer {
     };
   }
 
-  public stateAtIndex(index: number, startState?: KPattern): KPattern {
-    let state = startState ?? this.kpuzzle.startState();
+  public patternAtIndex(index: number, startPattern?: KPattern): KPattern {
+    let pattern = startPattern ?? this.kpuzzle.defaultPattern();
     for (let i = 0; i < this.animLeaves.length && i < index; i++) {
       const leafWithRange = this.animLeaves[i];
       const move = leafWithRange.animLeaf.as(Move);
       if (move !== null) {
-        state = state.applyMove(move);
+        pattern = pattern.applyMove(move);
       }
     }
-    return state;
+    return pattern;
   }
 
   public transformationAtIndex(index: number): KTransformation {

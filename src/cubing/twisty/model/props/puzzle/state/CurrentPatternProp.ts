@@ -11,13 +11,13 @@ interface CurrentTransformationPropInputs {
 }
 
 // TODO: Make this so we don't have to handle the finishing moves?
-export class CurrentStateProp extends TwistyPropDerived<
+export class CurrentPatternProp extends TwistyPropDerived<
   CurrentTransformationPropInputs,
   KPattern
 > {
   derive(inputs: CurrentTransformationPropInputs): KPattern {
     let transformation: KTransformation = inputs.indexer.transformationAtIndex(
-      inputs.currentLeavesSimplified.stateIndex,
+      inputs.currentLeavesSimplified.patternIndex,
     );
     transformation = inputs.anchoredStart.applyTransformation(transformation);
 

@@ -57,16 +57,16 @@ function validateAndSaveInput(
     document.querySelector("#set-search-alg") as HTMLButtonElement
   ).addEventListener("click", () => {
     const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
-    const newSearchState = kpuzzle
-      .startState()
+    const newSearchPattern = kpuzzle
+      .defaultPattern()
       .applyAlg(
         new Alg(
           (document.querySelector("#search-alg") as HTMLInputElement).value,
         ),
       );
-    const newSearchStateString = neatStringify(newSearchState.stateData);
-    searchElem.value = newSearchStateString;
-    localStorage[LOCALSTORAGE_SEARCH] = newSearchStateString;
+    const newSearchPatternString = neatStringify(newSearchPattern.patternData);
+    searchElem.value = newSearchPatternString;
+    localStorage[LOCALSTORAGE_SEARCH] = newSearchPatternString;
   });
   (
     document.querySelector("#reset-move-subset") as HTMLButtonElement
@@ -124,8 +124,8 @@ function validateAndSaveInput(
   searchElem.addEventListener("input", () =>
     validateAndSaveInput(searchElem, LOCALSTORAGE_SEARCH),
   );
-  function setSearch(state: KPatternData) {
-    searchElem.value = neatStringify(state);
+  function setSearch(pattern: KPatternData) {
+    searchElem.value = neatStringify(pattern);
     validateAndSaveInput(searchElem, LOCALSTORAGE_SEARCH);
   }
 
@@ -252,7 +252,7 @@ function validateAndSaveInput(
     const kpuzzle = await puzzle.kpuzzle();
     const def = kpuzzle.definition;
     setDef(def);
-    setSearch(kpuzzle.startState().stateData);
+    setSearch(kpuzzle.defaultPattern().patternData);
     location.reload();
   });
 })();
