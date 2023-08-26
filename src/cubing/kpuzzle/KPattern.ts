@@ -25,7 +25,7 @@ export class KPattern {
   static fromTransformation(transformation: KTransformation): KPattern {
     const newStateData = applyTransformationDataToStateData(
       transformation.kpuzzle.definition,
-      transformation.kpuzzle.definition.startStateData,
+      transformation.kpuzzle.definition.defaultPattern,
       transformation.transformationData,
     );
     return new KPattern(transformation.kpuzzle, newStateData);

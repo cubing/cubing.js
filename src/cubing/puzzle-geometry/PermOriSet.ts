@@ -148,7 +148,7 @@ export class PGOrbitsDef {
   // TODO: return type.
   public toKPuzzleDefinition(includemoves: boolean): KPuzzleDefinition {
     const orbits: KPuzzleDefinition["orbits"] = {};
-    const start: KPuzzleDefinition["startStateData"] = {};
+    const start: KPuzzleDefinition["defaultPattern"] = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
       orbits[this.orbitnames[i]] = {
         numPieces: this.orbitdefs[i].size,
@@ -171,7 +171,7 @@ export class PGOrbitsDef {
     return {
       name: `PG3D #${++lastGlobalDefinitionCounter}`,
       orbits,
-      startStateData: start,
+      defaultPattern: start,
       moves,
     };
   }

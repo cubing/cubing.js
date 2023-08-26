@@ -17,7 +17,7 @@ export const clockJSON: KPuzzleDefinition = {
     HOUR_MARKS: { numPieces: 18, numOrientations: 4 },
     PEG_CAPS: { numPieces: 8, numOrientations: 12 },
   },
-  startStateData: {
+  defaultPattern: {
     DIALS: {
       pieces: p18,
       orientation: o18,

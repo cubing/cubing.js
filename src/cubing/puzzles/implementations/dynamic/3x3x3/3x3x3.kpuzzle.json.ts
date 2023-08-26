@@ -7,7 +7,7 @@ export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
     CORNERS: { numPieces: 8, numOrientations: 3 },
     CENTERS: { numPieces: 6, numOrientations: 4 },
   },
-  startStateData: {
+  defaultPattern: {
     EDGES: {
       pieces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

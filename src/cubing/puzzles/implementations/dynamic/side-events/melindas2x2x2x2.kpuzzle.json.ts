@@ -8,7 +8,7 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
   orbits: {
     CORNERS: { numPieces: 64, numOrientations: 1 },
   },
-  startStateData: {
+  defaultPattern: {
     CORNERS: {
       pieces: range,
       orientation,

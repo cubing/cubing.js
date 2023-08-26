@@ -5,7 +5,7 @@ export const cube2x2x2JSON: KPuzzleDefinition = {
   orbits: {
     CORNERS: { numPieces: 8, numOrientations: 3 },
   },
-  startStateData: {
+  defaultPattern: {
     CORNERS: {
       pieces: [0, 1, 2, 3, 4, 5, 6, 7],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0],

@@ -77,7 +77,7 @@ export class KPuzzle {
   }
 
   startState(): KPattern {
-    return new KPattern(this, this.definition.startStateData);
+    return new KPattern(this, this.definition.defaultPattern);
   }
 
   #cachedCanConvertStateToUniqueTransformation: boolean | undefined;
@@ -89,7 +89,7 @@ export class KPuzzle {
           this.definition.orbits,
         )) {
           const pieces = new Array(orbitDefinition.numPieces).fill(false);
-          for (const piece of this.definition.startStateData[orbitName]
+          for (const piece of this.definition.defaultPattern[orbitName]
             .pieces) {
             pieces[piece] = true;
           }

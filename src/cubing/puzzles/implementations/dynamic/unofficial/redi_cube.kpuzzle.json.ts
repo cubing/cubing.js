@@ -6,7 +6,7 @@ export const rediCubeJSON: KPuzzleDefinition = {
     EDGES: { numPieces: 12, numOrientations: 2 },
     CORNERS: { numPieces: 8, numOrientations: 3 },
   },
-  startStateData: {
+  defaultPattern: {
     EDGES: {
       pieces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

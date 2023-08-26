@@ -92,7 +92,7 @@ function serializeDefToTws(kpuzzle, options) {
   if (options?.startState) {
     outputLines.push(options?.startState);
   } else {
-    for (const [orbitName, orbitDef] of Object.entries(def.startStateData)) {
+    for (const [orbitName, orbitDef] of Object.entries(def.defaultPattern)) {
       outputLines.push(sanitize(orbitName));
       outputLines.push(orbitDef.pieces.join(" "));
       outputLines.push(orbitDef.orientation.join(" "));
