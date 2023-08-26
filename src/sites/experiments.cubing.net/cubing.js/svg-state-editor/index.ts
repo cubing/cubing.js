@@ -1,5 +1,5 @@
 import { offsetMod } from "../../../../cubing/alg/cubing-private";
-import { KState, type KPuzzle } from "../../../../cubing/kpuzzle";
+import { KPattern, type KPuzzle } from "../../../../cubing/kpuzzle";
 import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
 import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG";
 import { defToString, stateToString } from "../3x3x3-formats/convert";
@@ -112,7 +112,7 @@ class PuzzleStateEditor {
   svgAnimator: TwistyAnimatedSVG;
   svgString: string;
   kpuzzle: KPuzzle;
-  state: KState;
+  state: KPattern;
 
   private constructor(private displayStateText: () => void) {
     this.displayStateText();
@@ -138,7 +138,7 @@ class PuzzleStateEditor {
 
   private async setPuzzleSync(svgString: string, kpuzzle: KPuzzle) {
     this.kpuzzle = kpuzzle;
-    this.state = new KState(
+    this.state = new KPattern(
       kpuzzle,
       structuredClone(kpuzzle.startState().stateData),
     );

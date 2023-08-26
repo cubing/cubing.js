@@ -1,5 +1,9 @@
 import type { Alg } from "../../alg";
-import { type KPuzzleDefinition, KState, type KStateData } from "../../kpuzzle";
+import {
+  type KPuzzleDefinition,
+  KPattern,
+  type KPatternData,
+} from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
 import {
@@ -231,28 +235,28 @@ export const insideAPI = {
     return (await insideAPI.randomScrambleForEvent(eventID)).toString();
   },
 
-  solve333ToString: async (stateData: KStateData): Promise<string> => {
-    const state = new KState(await puzzles["3x3x3"].kpuzzle(), stateData);
+  solve333ToString: async (stateData: KPatternData): Promise<string> => {
+    const state = new KPattern(await puzzles["3x3x3"].kpuzzle(), stateData);
     return (await solve333(state)).toString();
   },
 
-  solve222ToString: async (stateData: KStateData): Promise<string> => {
-    const state = new KState(await puzzles["2x2x2"].kpuzzle(), stateData);
+  solve222ToString: async (stateData: KPatternData): Promise<string> => {
+    const state = new KPattern(await puzzles["2x2x2"].kpuzzle(), stateData);
     return (await solve222HTMSubOptimal(state)).toString();
   },
 
-  solveSkewbToString: async (stateData: KStateData): Promise<string> => {
-    const state = new KState(await puzzles["skewb"].kpuzzle(), stateData);
+  solveSkewbToString: async (stateData: KPatternData): Promise<string> => {
+    const state = new KPattern(await puzzles["skewb"].kpuzzle(), stateData);
     return (await solveSkewb(state)).toString();
   },
 
-  solvePyraminxToString: async (stateData: KStateData): Promise<string> => {
-    const state = new KState(await puzzles["pyraminx"].kpuzzle(), stateData);
+  solvePyraminxToString: async (stateData: KPatternData): Promise<string> => {
+    const state = new KPattern(await puzzles["pyraminx"].kpuzzle(), stateData);
     return (await solvePyraminx(state)).toString();
   },
 
-  solveMegaminxToString: async (stateData: KStateData): Promise<string> => {
-    const state = new KState(await puzzles["megaminx"].kpuzzle(), stateData);
+  solveMegaminxToString: async (stateData: KPatternData): Promise<string> => {
+    const state = new KPattern(await puzzles["megaminx"].kpuzzle(), stateData);
     return (await solveMegaminx(state)).toString();
   },
 
@@ -262,7 +266,7 @@ export const insideAPI = {
 
   solveTwsearchToString: async (
     def: KPuzzleDefinition,
-    stateData: KStateData,
+    stateData: KPatternData,
     options?: TwsearchOptions,
   ): Promise<string> => {
     return (await solveTwsearch(def, stateData, options)).toString();

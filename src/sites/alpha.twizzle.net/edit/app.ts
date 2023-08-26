@@ -131,31 +131,31 @@ export class App {
     switch (puzzleID) {
       case "2x2x2": {
         solution = await experimentalSolve2x2x2(
-          kpuzzle.algToTransformation(currentAlg).toKState(),
+          kpuzzle.algToTransformation(currentAlg).toKPattern(),
         );
         break;
       }
       case "3x3x3": {
         solution = await experimentalSolve3x3x3IgnoringCenters(
-          kpuzzle.algToTransformation(currentAlg).toKState(),
+          kpuzzle.algToTransformation(currentAlg).toKPattern(),
         );
         break;
       }
       case "skewb": {
         solution = await solveSkewb(
-          kpuzzle.algToTransformation(currentAlg).toKState(),
+          kpuzzle.algToTransformation(currentAlg).toKPattern(),
         );
         break;
       }
       case "pyraminx": {
         solution = await solvePyraminx(
-          kpuzzle.algToTransformation(currentAlg).toKState(),
+          kpuzzle.algToTransformation(currentAlg).toKPattern(),
         );
         break;
       }
       case "megaminx": {
         solution = await solveMegaminx(
-          kpuzzle.algToTransformation(currentAlg).toKState(),
+          kpuzzle.algToTransformation(currentAlg).toKPattern(),
         );
         break;
       }

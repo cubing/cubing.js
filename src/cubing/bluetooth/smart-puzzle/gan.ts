@@ -2,8 +2,8 @@
 
 import { Quaternion } from "three";
 import { Move } from "../../alg";
-import type { KPuzzle, KStateData } from "../../kpuzzle";
-import { KState } from "../../kpuzzle";
+import type { KPuzzle, KPatternData } from "../../kpuzzle";
+import { KPattern } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import {
   importKey,
@@ -290,7 +290,7 @@ export class GanCube extends BluetoothPuzzle {
 
   public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
-  private state: KState;
+  private state: KPattern;
   private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
 
   private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
@@ -375,7 +375,7 @@ export class GanCube extends BluetoothPuzzle {
     )[7];
   }
 
-  public override async getState(): Promise<KState> {
+  public override async getState(): Promise<KPattern> {
     const arr: Uint8Array = await decryptState(
       new Uint8Array(await this.readFaceletStatus1Characteristic()),
       this.aesKey,
@@ -389,7 +389,7 @@ export class GanCube extends BluetoothPuzzle {
       }
     }
 
-    const stateData: KStateData = {
+    const stateData: KPatternData = {
       CORNERS: {
         pieces: [],
         orientation: [],
@@ -419,7 +419,7 @@ export class GanCube extends BluetoothPuzzle {
       stateData.EDGES.orientation.push(pieceInfo.orientation);
     }
 
-    return new KState(this.kpuzzle, stateData);
+    return new KPattern(this.kpuzzle, stateData);
   }
 
   public async faceletStatus1Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {

@@ -1,10 +1,10 @@
 export { KPuzzle } from "./KPuzzle";
 export type {
   KPuzzleDefinition,
-  KStateData,
-  KStateOrbitData,
+  KPatternData,
+  KPatternOrbitData,
   KTransformationData,
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
-export { KState } from "./KState";
+export { KPattern } from "./KPattern";
 export { KTransformation } from "./KTransformation";

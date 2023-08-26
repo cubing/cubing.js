@@ -1,8 +1,8 @@
 import { Alg } from "../../../../alg";
-import { KState, KTransformation } from "../../../../kpuzzle";
+import { KPattern, KTransformation } from "../../../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../../cubing-private";
 
-export function puzzleOrientation3x3x3Idx(state: KState): [number, number] {
+export function puzzleOrientation3x3x3Idx(state: KPattern): [number, number] {
   const idxU = state.stateData["CENTERS"].pieces[0];
   const idxD = state.stateData["CENTERS"].pieces[5];
   const unadjustedIdxL = state.stateData["CENTERS"].pieces[1];
@@ -37,7 +37,7 @@ export function puzzleOrientation3x3x3Cache(): KTransformation[][] {
         for (let i = 0; i < 4; i++) {
           transformation = transformation.applyAlg(yAlg);
           const [idxU, idxL] = puzzleOrientation3x3x3Idx(
-            transformation.toKState(),
+            transformation.toKPattern(),
           );
           puzzleOrientationCacheRaw[idxU][idxL] = transformation.invert();
         }
@@ -47,7 +47,7 @@ export function puzzleOrientation3x3x3Cache(): KTransformation[][] {
   return puzzleOrientationCacheRaw;
 }
 
-export function normalize3x3x3Orientation(state: KState): KState {
+export function normalize3x3x3Orientation(state: KPattern): KPattern {
   const [idxU, idxL] = puzzleOrientation3x3x3Idx(state);
   const orientationTransformation = puzzleOrientation3x3x3Cache()[idxU][idxL];
   return state.applyTransformation(orientationTransformation);
@@ -56,7 +56,7 @@ export function normalize3x3x3Orientation(state: KState): KState {
 // The `options` argument is required for now, because we haven't yet come up
 // with a general way to specify different kinds of solved for the same puzle.
 export function experimentalIs3x3x3Solved(
-  state: KState,
+  state: KPattern,
   options: {
     ignorePuzzleOrientation: boolean;
     ignoreCenterOrientation: boolean;
@@ -67,7 +67,7 @@ export function experimentalIs3x3x3Solved(
   }
   // TODO(orientationMod)
   if (options.ignoreCenterOrientation) {
-    state = new KState(state.kpuzzle, {
+    state = new KPattern(state.kpuzzle, {
       EDGES: state.stateData.EDGES,
       CORNERS: state.stateData.CORNERS,
       CENTERS: {

@@ -2,7 +2,7 @@ import type { Alg } from "../../../alg";
 import {
   KPuzzle,
   type KPuzzleDefinition,
-  type KStateData,
+  type KPatternData,
   type KTransformationData,
 } from "../../../kpuzzle";
 import { from } from "../../../vendor/mit/p-lazy/p-lazy";
@@ -29,7 +29,7 @@ function mustBeNaturalNumber(meaning: string, n: number): void {
 
 export async function solveTwsearch(
   def: KPuzzleDefinition,
-  stateData: KStateData,
+  stateData: KPatternData,
   options?: TwsearchOptions,
 ): Promise<Alg> {
   const {

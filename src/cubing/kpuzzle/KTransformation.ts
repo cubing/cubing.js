@@ -9,7 +9,7 @@ import { combineTransformationData } from "./combine";
 import { constructIdentityTransformationDataUncached } from "./construct";
 import type { KPuzzle, KTransformationSource } from "./KPuzzle";
 import type { KTransformationData } from "./KPuzzleDefinition";
-import { KState } from "./KState";
+import { KPattern } from "./KPattern";
 
 export class KTransformation {
   constructor(
@@ -99,8 +99,8 @@ export class KTransformation {
   }
 
   // Convenience. Useful for chaining.
-  toKState(): KState {
-    return KState.fromTransformation(this);
+  toKPattern(): KPattern {
+    return KPattern.fromTransformation(this);
   }
 
   repetitionOrder(): number {

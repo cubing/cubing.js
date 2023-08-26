@@ -1,5 +1,5 @@
 import type { Alg, QuantumMove } from "../../../../alg";
-import { KState } from "../../../../kpuzzle";
+import { KPattern } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { randomStateFromSGS, TrembleSolver } from "../tremble";
@@ -28,8 +28,8 @@ export async function preInitializeSkewb(): Promise<void> {
   await getCachedTrembleSolver();
 }
 
-async function resetCenterOrientation(state: KState): Promise<KState> {
-  return new KState(
+async function resetCenterOrientation(state: KPattern): Promise<KPattern> {
+  return new KPattern(
     await (await searchDynamicSideEvents).skewbKPuzzleWithoutMOCached(),
     {
       CORNERS: state.stateData.CORNERS,
@@ -42,7 +42,7 @@ async function resetCenterOrientation(state: KState): Promise<KState> {
 }
 
 // TODO: fix def consistency.
-export async function solveSkewb(state: KState): Promise<Alg> {
+export async function solveSkewb(state: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(
@@ -53,7 +53,7 @@ export async function solveSkewb(state: KState): Promise<Alg> {
   return alg;
 }
 
-export async function randomSkewbFixedCornerState(): Promise<KState> {
+export async function randomSkewbFixedCornerState(): Promise<KPattern> {
   // Note: this sets all center orientations to 0.
   return randomStateFromSGS(
     await (await searchDynamicSideEvents).skewbKPuzzleWithoutMOCached(),

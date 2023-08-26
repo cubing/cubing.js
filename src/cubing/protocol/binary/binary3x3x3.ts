@@ -1,4 +1,4 @@
-import { KState, type KStateData } from "../../kpuzzle";
+import { KPattern, type KPatternData } from "../../kpuzzle";
 import {
   experimental3x3x3KPuzzle,
   experimentalNormalize3x3x3Orientation,
@@ -15,10 +15,10 @@ import {
 
 // TODO: combine with `orientPuzzle`?
 export function reorientPuzzle(
-  state: KState,
+  state: KPattern,
   idxU: number,
   idxL: number,
-): KState {
+): KPattern {
   return state.applyTransformation(
     experimentalPuzzleOrientation3x3x3Cache()[idxU][idxL].invert(),
   );
@@ -109,7 +109,7 @@ function hasFullMOData(centerOrientationModData: number[] | undefined): 0 | 1 {
 }
 
 export function reid3x3x3ToBinaryComponents(
-  state: KState,
+  state: KPattern,
 ): Binary3x3x3Components {
   const normedState = experimentalNormalize3x3x3Orientation(state);
 
@@ -161,7 +161,7 @@ export function binaryComponentsToTwizzleBinary(
 }
 
 /** @category Binary 3x3x3 Format */
-export function reid3x3x3ToTwizzleBinary(state: KState): Binary3x3x3State {
+export function reid3x3x3ToTwizzleBinary(state: KPattern): Binary3x3x3State {
   const components: Binary3x3x3Components = reid3x3x3ToBinaryComponents(state);
   return binaryComponentsToTwizzleBinary(components);
 }
@@ -188,8 +188,8 @@ export function twizzleBinaryToBinaryComponents(
 /** @category Binary 3x3x3 Format */
 export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
-): KState {
-  const stateData: KStateData = {
+): KPattern {
+  const stateData: KPatternData = {
     EDGES: {
       pieces: lexToPermutation(12, components.epLex),
       orientation: maskToOrientations(2, 12, components.eoMask),
@@ -206,7 +206,7 @@ export function binaryComponentsToReid3x3x3(
   if (!components.moSupport) {
     stateData.CENTERS.orientationMod = new Array(6).fill(1);
   }
-  const normedState = new KState(experimental3x3x3KPuzzle, stateData);
+  const normedState = new KPattern(experimental3x3x3KPuzzle, stateData);
 
   if (!supportsPuzzleOrientation(components)) {
     return normedState;
@@ -251,7 +251,7 @@ function validateComponents(components: Binary3x3x3Components): string[] {
 }
 
 /** @category Binary 3x3x3 Format */
-export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): KState {
+export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): KPattern {
   const components = twizzleBinaryToBinaryComponents(buffy);
   const errors = validateComponents(components);
   if (errors.length !== 0) {

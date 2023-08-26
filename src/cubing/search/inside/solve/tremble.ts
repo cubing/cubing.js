@@ -1,6 +1,6 @@
 import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
-import type { KState } from "../../../kpuzzle/KState";
+import type { KPattern } from "../../../kpuzzle/KPattern";
 import { experimentalCountMoves } from "../../../notation";
 import { randomChoice } from "random-uint-below";
 import type { SGSCachedData } from "./parseSGS";
@@ -79,7 +79,7 @@ export class TrembleSolver {
   // }
 
   public async solve(
-    state: KState,
+    state: KPattern,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
     quantumMoveOrder?: (quantumMove: QuantumMove) => number,
   ): Promise<Alg> {
@@ -142,7 +142,7 @@ export class TrembleSolver {
   }
 
   private sgsPhaseSolve(
-    initialTransformation: KTransformation, // TODO: Handle KState
+    initialTransformation: KTransformation, // TODO: Handle KPattern
     bestLenSofar: number,
   ): Alg | null {
     // const pieceNames = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
@@ -199,7 +199,7 @@ export class TrembleSolver {
 export function randomStateFromSGS(
   kpuzzle: KPuzzle,
   sgs: SGSCachedData,
-): KState {
+): KPattern {
   let transformation = kpuzzle.identityTransformation();
   for (const step of sgs.ordering) {
     const sgsAction = randomChoice(Object.values(step.lookup));
@@ -207,5 +207,5 @@ export function randomStateFromSGS(
       sgsAction.transformation,
     );
   }
-  return transformation.toKState();
+  return transformation.toKPattern();
 }

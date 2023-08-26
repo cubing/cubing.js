@@ -12,7 +12,7 @@ import { randomScrambleForEvent } from "../../../../cubing/search/outside";
     kpuzzle2x2x2.algToTransformation(scramble222);
   const scramble222Solution = await experimentalSolveTwsearch(
     kpuzzle2x2x2,
-    scramble222Transformation.toKState(),
+    scramble222Transformation.toKPattern(),
     { moveSubset: "ULFR".split(""), minDepth: 11 },
   );
   scramble222.concat(".").concat(scramble222Solution).log();

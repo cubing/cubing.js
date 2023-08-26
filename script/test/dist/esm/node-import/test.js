@@ -11,7 +11,7 @@ import "cubing/stream";
 import "cubing/twisty";
 
 import { Alg } from "cubing/alg";
-import { KState } from "cubing/kpuzzle";
+import { KPattern } from "cubing/kpuzzle";
 import { cube2x2x2 } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { experimentalSolveTwsearch, setSearchDebug } from "cubing/search";
@@ -27,7 +27,7 @@ setSearchDebug({ disableStringWorker: true });
   const scramble222Transformation = kpuzzle.algToTransformation(scramble222);
   const scramble222Solution = await experimentalSolveTwsearch(
     kpuzzle,
-    scramble222Transformation.toKState(),
+    scramble222Transformation.toKPattern(),
     { moveSubset: "ULFR".split(""), minDepth: 11 },
   );
   scramble222.concat(".").concat(scramble222Solution).log();

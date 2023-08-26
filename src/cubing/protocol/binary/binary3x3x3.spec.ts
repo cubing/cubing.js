@@ -1,6 +1,6 @@
 import { expect } from "../../../test/chai-workarounds";
 
-import { KState } from "../../kpuzzle/KState";
+import { KPattern } from "../../kpuzzle/KPattern";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import {
   reid3x3x3ToTwizzleBinary,
@@ -8,16 +8,16 @@ import {
 } from "./binary3x3x3";
 import { bufferToSpacedHex } from "./hex";
 
-function stateForAlg(alg: string): KState {
-  return experimental3x3x3KPuzzle.algToTransformation(alg).toKState();
+function stateForAlg(alg: string): KPattern {
+  return experimental3x3x3KPuzzle.algToTransformation(alg).toKPattern();
 }
 
-const supersolved = new KState(
+const supersolved = new KPattern(
   experimental3x3x3KPuzzle,
   structuredClone(experimental3x3x3KPuzzle.startState().stateData),
 );
 delete supersolved.stateData["CENTERS"].orientationMod;
-function superStateForAlg(alg: string): KState {
+function superStateForAlg(alg: string): KPattern {
   return supersolved.applyAlg(alg);
 }
 

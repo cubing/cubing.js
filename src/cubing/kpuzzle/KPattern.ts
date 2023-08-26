@@ -3,16 +3,16 @@ import type { Alg, Move } from "../alg";
 import { applyTransformationDataToStateData } from "./combine";
 import type { KTransformationSource } from "./KPuzzle";
 import type {
-  KStateData,
+  KPatternData,
   KTransformationData,
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 
-export class KState {
+export class KPattern {
   constructor(
     public readonly kpuzzle: KPuzzle,
-    public readonly stateData: KStateData,
+    public readonly stateData: KPatternData,
   ) {}
 
   toJSON(): any {
@@ -22,38 +22,38 @@ export class KState {
     };
   }
 
-  static fromTransformation(transformation: KTransformation): KState {
+  static fromTransformation(transformation: KTransformation): KPattern {
     const newStateData = applyTransformationDataToStateData(
       transformation.kpuzzle.definition,
       transformation.kpuzzle.definition.startStateData,
       transformation.transformationData,
     );
-    return new KState(transformation.kpuzzle, newStateData);
+    return new KPattern(transformation.kpuzzle, newStateData);
   }
 
   // Convenience function
   /** @deprecated */
-  apply(source: KTransformationSource): KState {
+  apply(source: KTransformationSource): KPattern {
     return this.applyTransformation(this.kpuzzle.toTransformation(source));
   }
 
-  applyTransformation(transformation: KTransformation): KState {
+  applyTransformation(transformation: KTransformation): KPattern {
     if (transformation.isIdentityTransformation()) {
-      return new KState(this.kpuzzle, this.stateData);
+      return new KPattern(this.kpuzzle, this.stateData);
     }
     const newStateData = applyTransformationDataToStateData(
       this.kpuzzle.definition,
       this.stateData,
       transformation.transformationData,
     );
-    return new KState(this.kpuzzle, newStateData);
+    return new KPattern(this.kpuzzle, newStateData);
   }
 
-  applyMove(move: Move | string): KState {
+  applyMove(move: Move | string): KPattern {
     return this.applyTransformation(this.kpuzzle.moveToTransformation(move));
   }
 
-  applyAlg(alg: Alg | string): KState {
+  applyAlg(alg: Alg | string): KPattern {
     return this.applyTransformation(this.kpuzzle.algToTransformation(alg));
   }
 
@@ -79,7 +79,7 @@ export class KState {
   }): boolean {
     if (!this.kpuzzle.definition.experimentalIsStateSolved) {
       throw new Error(
-        "`KState.experimentalIsSolved()` is not supported for this puzzle at the moment.",
+        "`KPattern.experimentalIsSolved()` is not supported for this puzzle at the moment.",
       );
     }
     return this.kpuzzle.definition.experimentalIsStateSolved(this, options);

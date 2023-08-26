@@ -1,8 +1,8 @@
 import type {
   KPuzzleDefinition,
-  KStateOrbitData,
+  KPatternOrbitData,
 } from "../../../../cubing/kpuzzle/KPuzzleDefinition";
-import { KState } from "../../../../cubing/kpuzzle";
+import { KPattern } from "../../../../cubing/kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
 
 function neatStringify(data: any): string {
@@ -11,7 +11,7 @@ function neatStringify(data: any): string {
     .replace(/\n +(\d+)\n +/g, "$1");
 }
 
-export function stateToString(state: KState): string {
+export function stateToString(state: KPattern): string {
   return neatStringify(state.stateData);
 }
 
@@ -55,7 +55,7 @@ for (const orbit of orbits) {
   });
 }
 
-export function kpuzzleToReidString(state: KState): string {
+export function kpuzzleToReidString(state: KPattern): string {
   const pieces: string[] = [];
 
   const addOrbit = (orbitName: string): void => {
@@ -106,19 +106,19 @@ export function stickersToReidString(stickers: number[]): string {
   return reidStringChars.join("");
 }
 
-export function kpuzzleToStickers(state: KState): number[] {
+export function kpuzzleToStickers(state: KPattern): number[] {
   return reidStringToStickers(kpuzzleToReidString(state));
 }
 
-export function stickersToKPuzzle(stickers: number[]): KState {
-  return reidStringToKState(stickersToReidString(stickers));
+export function stickersToKPuzzle(stickers: number[]): KPattern {
+  return reidStringToKPattern(stickersToReidString(stickers));
 }
 
-export function reidStringToKState(s: string): KState {
+export function reidStringToKPattern(s: string): KPattern {
   const pieces = s.split(" ");
 
-  const orbit = (pieces: string[]): KStateOrbitData => {
-    const orbitState: KStateOrbitData = {
+  const orbit = (pieces: string[]): KPatternOrbitData => {
+    const orbitState: KPatternOrbitData = {
       pieces: [],
       orientation: [],
     };
@@ -134,5 +134,5 @@ export function reidStringToKState(s: string): KState {
     CORNERS: orbit(pieces.slice(12, 20)),
     CENTERS: orbit(pieces.slice(20, 26)),
   };
-  return new KState(experimental3x3x3KPuzzle, stateData);
+  return new KPattern(experimental3x3x3KPuzzle, stateData);
 }

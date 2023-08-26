@@ -1,6 +1,6 @@
 import type { Alg } from "../../../../alg";
-import type { KStateData } from "../../../../kpuzzle";
-import { KState } from "../../../../kpuzzle";
+import type { KPatternData } from "../../../../kpuzzle";
+import { KPattern } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
@@ -30,12 +30,12 @@ export async function preInitializeMegaminx(): Promise<void> {
 }
 
 // TODO: centers
-export async function solveMegaminx(state: KState): Promise<Alg> {
+export async function solveMegaminx(state: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  const stateDataWithoutMO: KStateData = structuredClone(state.stateData);
+  const stateDataWithoutMO: KPatternData = structuredClone(state.stateData);
   stateDataWithoutMO.CENTERS.orientation = new Array(12).fill(0);
-  const stateWithoutMO = new KState(
+  const stateWithoutMO = new KPattern(
     await (await searchDynamicSideEvents).cachedMegaminxKPuzzleWithoutMO(),
     stateDataWithoutMO,
   );

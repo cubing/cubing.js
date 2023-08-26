@@ -1,8 +1,8 @@
 import { isOrbitTransformationDataIdentityUncached } from "./calculate";
 import type {
   KPuzzleDefinition,
-  KStateData,
-  KStateOrbitData,
+  KPatternData,
+  KPatternOrbitData,
   KTransformationData,
 } from "./KPuzzleDefinition";
 
@@ -62,10 +62,10 @@ export function combineTransformationData(
 
 export function applyTransformationDataToStateData(
   definition: KPuzzleDefinition,
-  stateData: KStateData,
+  stateData: KPatternData,
   transformationData: KTransformationData,
-): KStateData {
-  const newStateData = {} as KStateData;
+): KPatternData {
+  const newStateData = {} as KPatternData;
   for (const orbitName in definition.orbits) {
     const orbitDefinition = definition.orbits[orbitName];
     const stateOrbit = stateData[orbitName];
@@ -85,7 +85,7 @@ export function applyTransformationDataToStateData(
           newPieces[idx] =
             stateOrbit.pieces[transformationOrbit.permutation[idx]];
         }
-        const newOrbitData: KStateOrbitData = {
+        const newOrbitData: KPatternOrbitData = {
           pieces: newPieces,
           orientation: stateOrbit.orientation, // copy all 0
         };
@@ -110,7 +110,7 @@ export function applyTransformationDataToStateData(
             mod; // We don't have to use `modIntoRange` (assuming input is well-formed), because we're adding.
           newPieces[idx] = stateOrbit.pieces[transformationIdx];
         }
-        const newOrbitData: KStateOrbitData = {
+        const newOrbitData: KPatternOrbitData = {
           pieces: newPieces,
           orientation: newOrientation,
         };

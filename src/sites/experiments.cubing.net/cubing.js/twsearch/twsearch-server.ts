@@ -1,5 +1,5 @@
 import { Alg } from "../../../../cubing/alg";
-import type { KPuzzle, KState } from "../../../../cubing/kpuzzle";
+import type { KPuzzle, KPattern } from "../../../../cubing/kpuzzle";
 
 const postJSONInit: RequestInit = {
   method: "POST",
@@ -9,7 +9,7 @@ const postJSONInit: RequestInit = {
 };
 
 export interface TwsearchServerClientOptions {
-  startState?: KState;
+  startState?: KPattern;
   searchArgs?: {
     checkBeforeSolve?: "always" | "never" | "auto";
     randomStart?: boolean;
@@ -24,7 +24,7 @@ export interface TwsearchServerClientOptions {
 // TODO: dedup options with `cubing/search`
 export async function solveTwsearchServer(
   kpuzzle: KPuzzle,
-  kstate: KState,
+  kpattern: KPattern,
   options: TwsearchServerClientOptions,
 ): Promise<Alg> {
   if (options.searchArgs) {
@@ -35,7 +35,7 @@ export async function solveTwsearchServer(
     ...postJSONInit,
     body: JSON.stringify({
       definition: kpuzzle.definition,
-      state: kstate.stateData,
+      state: kpattern.stateData,
       startState: options.startState,
       searchArgs: options.searchArgs,
       // TODO: min depth

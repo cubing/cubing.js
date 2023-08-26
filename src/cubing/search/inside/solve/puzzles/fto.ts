@@ -1,5 +1,5 @@
 import { Alg } from "../../../../alg";
-import type { KState } from "../../../../kpuzzle/KState";
+import type { KPattern } from "../../../../kpuzzle/KPattern";
 import { puzzles } from "../../../../puzzles";
 import { from } from "../../../../vendor/mit/p-lazy/p-lazy";
 import { mustBeInsideWorker } from "../../inside-worker";
@@ -38,7 +38,7 @@ export async function preInitializeFTO(): Promise<void> {
 }
 
 // TODO: centers
-export async function solveFTO(state: KState): Promise<Alg> {
+export async function solveFTO(state: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(

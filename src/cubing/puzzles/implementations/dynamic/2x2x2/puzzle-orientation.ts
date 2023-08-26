@@ -1,7 +1,7 @@
 import { Alg } from "../../../../alg";
-import type { KPuzzle, KState, KTransformation } from "../../../../kpuzzle";
+import type { KPuzzle, KPattern, KTransformation } from "../../../../kpuzzle";
 
-export function puzzleOrientation2x2x2Idx(state: KState): number {
+export function puzzleOrientation2x2x2Idx(state: KPattern): number {
   const inverse = state.experimentalToTransformation()!.invert();
 
   const inverseDFL = inverse.transformationData["CORNERS"];
@@ -28,7 +28,7 @@ export function puzzleOrientation2x2x2Cache(
         let transformation = kpuzzle.algToTransformation(uAlg);
         for (let i = 0; i < 4; i++) {
           transformation = transformation.applyAlg(yAlg);
-          const idx = puzzleOrientation2x2x2Idx(transformation.toKState());
+          const idx = puzzleOrientation2x2x2Idx(transformation.toKPattern());
           puzzleOrientationCacheRaw[idx] = {
             transformation: transformation.invert(),
             alg: uAlg.concat(yAlg),
@@ -40,8 +40,8 @@ export function puzzleOrientation2x2x2Cache(
   return puzzleOrientationCacheRaw;
 }
 
-export function normalize2x2x2Orientation(state: KState): {
-  normalizedState: KState;
+export function normalize2x2x2Orientation(state: KPattern): {
+  normalizedState: KPattern;
   normalizationAlg: Alg;
 } {
   const idx = puzzleOrientation2x2x2Idx(state);
@@ -57,7 +57,7 @@ export function normalize2x2x2Orientation(state: KState): {
 // The `options` argument is required for now, because we haven't yet come up
 // with a general way to specify different kinds of solved for the same puzle.
 export function experimentalIs2x2x2Solved(
-  state: KState,
+  state: KPattern,
   options: {
     ignorePuzzleOrientation: boolean;
   },

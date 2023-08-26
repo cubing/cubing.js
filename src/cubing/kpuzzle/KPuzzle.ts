@@ -6,7 +6,7 @@ import type {
   KPuzzleDefinition,
   KTransformationData,
 } from "./KPuzzleDefinition";
-import { KState } from "./KState";
+import { KPattern } from "./KPattern";
 import { KTransformation } from "./KTransformation";
 
 export type KTransformationSource = Alg | Move | string | KTransformation;
@@ -76,8 +76,8 @@ export class KPuzzle {
     }
   }
 
-  startState(): KState {
-    return new KState(this, this.definition.startStateData);
+  startState(): KPattern {
+    return new KPattern(this, this.definition.startStateData);
   }
 
   #cachedCanConvertStateToUniqueTransformation: boolean | undefined;

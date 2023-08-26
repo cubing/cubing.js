@@ -14,7 +14,7 @@ class SVGDisplay {
   }
 
   public setAlg(alg: Alg): void {
-    this.svg.draw(this.kpuzzle.algToTransformation(alg).toKState());
+    this.svg.draw(this.kpuzzle.algToTransformation(alg).toKPattern());
   }
 }
 

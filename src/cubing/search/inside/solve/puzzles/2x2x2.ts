@@ -1,6 +1,6 @@
 import { Alg, Move } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
-import { KState } from "../../../../kpuzzle";
+import { KPattern } from "../../../../kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../puzzles";
 import { randomPermuteInPlace, randomUIntBelow } from "random-uint-below";
 import { mustBeInsideWorker } from "../../inside-worker";
@@ -32,7 +32,7 @@ export async function preInitialize222(): Promise<void> {
 }
 
 export async function solve222HTMSubOptimal(
-  state: KState,
+  state: KPattern,
   maxDepth: number = 11,
 ): Promise<Alg> {
   mustBeInsideWorker();
@@ -51,7 +51,7 @@ export async function solve222HTMSubOptimal(
 // TODO: fix def consistency.
 // TODO: why is this ending up with the wrong rotation sometimes?
 export async function solve222HTMOptimal(
-  state: KState,
+  state: KPattern,
   maxDepth: number = 11,
 ): Promise<Alg> {
   mustBeInsideWorker();
@@ -71,7 +71,7 @@ export async function solve222HTMOptimal(
 }
 
 async function hasHTMSolutionWithFewerMoves(
-  state: KState,
+  state: KPattern,
   filterMin: number,
 ): Promise<boolean> {
   try {
@@ -106,7 +106,7 @@ function isCancelling(alg: Alg): boolean {
 }
 
 // TODO: fix def consistency.
-export async function solve222ForScramble(state: KState): Promise<Alg> {
+export async function solve222ForScramble(state: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   return solveTwsearch(
     (await cube2x2x2.kpuzzle()).definition,
@@ -122,7 +122,7 @@ export async function solve222ForScramble(state: KState): Promise<Alg> {
 function mutatingRandomizeOrbit(
   kpuzzle: KPuzzle,
   orbitName: string,
-  state: KState,
+  state: KPattern,
   options?: { orientationSum?: number },
 ): void {
   randomPermuteInPlace(state.stateData[orbitName].pieces);
@@ -148,9 +148,9 @@ function mutatingRandomizeOrbit(
 }
 
 // TODO: Use SGS?
-export async function random222State(): Promise<KState> {
+export async function random222State(): Promise<KPattern> {
   const kpuzzle = await puzzles["2x2x2"].kpuzzle();
-  const stateCopy: KState = new KState(
+  const stateCopy: KPattern = new KPattern(
     kpuzzle,
     structuredClone(kpuzzle.startState().stateData),
   ); // TODO
@@ -169,7 +169,7 @@ export async function random222Scramble(): Promise<Alg> {
   const inverseState = state
     .experimentalToTransformation()!
     .invert()
-    .toKState(); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
+    .toKPattern(); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
   let sol = await solve222ForScramble(inverseState);
   while (isCancelling(sol)) {
     // Rely on `--randomstart` to find us a non-cancelling with ≈2/3 probability.

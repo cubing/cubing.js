@@ -1,6 +1,6 @@
 import { Alg } from "../../../../cubing/alg";
-import type { KStateData } from "../../../../cubing/kpuzzle";
-import { KState } from "../../../../cubing/kpuzzle/KState";
+import type { KPatternData } from "../../../../cubing/kpuzzle";
+import { KPattern } from "../../../../cubing/kpuzzle/KPattern";
 import {
   binaryComponentsToReid3x3x3,
   reid3x3x3ToBinaryComponents,
@@ -13,8 +13,8 @@ import { ExperimentalSVGAnimator } from "../../../../cubing/twisty";
 import {
   kpuzzleToReidString,
   kpuzzleToStickers,
-  stateToString as kstateToString,
-  reidStringToKState,
+  stateToString as kpatternToString,
+  reidStringToKPattern,
   stickersToKPuzzle,
 } from "./convert";
 
@@ -40,7 +40,7 @@ class App {
     );
   })();
   algTextarea = document.querySelector("#alg") as HTMLTextAreaElement;
-  kstateTextarea = document.querySelector("#kstate") as HTMLTextAreaElement;
+  kpatternTextarea = document.querySelector("#kpattern") as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
     "#reid-string",
   ) as HTMLTextAreaElement;
@@ -86,7 +86,7 @@ class App {
       this.setComponents(this.componentsTextarea.value);
     });
     document.querySelector("#set-kpuzzle")!.addEventListener("click", () => {
-      this.setKStateData(JSON.parse(this.kstateTextarea.value));
+      this.setKPatternData(JSON.parse(this.kpatternTextarea.value));
     });
     document.querySelector("#set-binary")!.addEventListener("click", () => {
       this.setBinary(this.binaryTextarea.value);
@@ -109,12 +109,12 @@ class App {
     this.setState(this.state);
   }
 
-  setKStateData(kstateData: KStateData): void {
-    this.setState(new KState(experimental3x3x3KPuzzle, kstateData));
+  setKPatternData(kpatternData: KPatternData): void {
+    this.setState(new KPattern(experimental3x3x3KPuzzle, kpatternData));
   }
 
   setReidString(s: string): void {
-    this.setState(reidStringToKState(s));
+    this.setState(reidStringToKPattern(s));
   }
 
   setStickers(s: string): void {
@@ -129,12 +129,12 @@ class App {
     this.setState(twizzleBinaryToReid3x3x3(spacedHexToBuffer(s)));
   }
 
-  setState(state: KState): void {
+  setState(state: KPattern): void {
     this.state = state;
     (async () => {
       (await this.svg).draw(state);
     })();
-    this.kstateTextarea.value = kstateToString(state);
+    this.kpatternTextarea.value = kpatternToString(state);
     this.reidStringTextarea.value = kpuzzleToReidString(state);
     this.stickersTextarea.value = JSON.stringify(kpuzzleToStickers(state));
     this.componentsTextarea.value = JSON.stringify(

@@ -1,5 +1,5 @@
 import type { KPuzzle } from "../../../kpuzzle";
-import type { KState } from "../../../kpuzzle/KState";
+import type { KPattern } from "../../../kpuzzle/KPattern";
 import type {
   FaceletMeshStickeringMask,
   StickeringMask,
@@ -141,12 +141,16 @@ export class TwistyAnimatedSVG {
     }
   }
 
-  public drawState(state: KState, nextState?: KState, fraction?: number): void {
+  public drawState(
+    state: KPattern,
+    nextState?: KPattern,
+    fraction?: number,
+  ): void {
     this.draw(state, nextState, fraction);
   }
 
   // TODO: save definition in the constructor?
-  public draw(state: KState, nextState?: KState, fraction?: number): void {
+  public draw(state: KPattern, nextState?: KPattern, fraction?: number): void {
     const nextTransformation = nextState?.experimentalToTransformation();
     if (!state) {
       throw new Error("Distinguishable pieces are not handled for SVG yet!");

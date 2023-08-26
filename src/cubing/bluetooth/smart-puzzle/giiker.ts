@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import { KState, type KStateData } from "../../kpuzzle";
+import { KPattern, type KPatternData } from "../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import { debugLog } from "../debug";
 import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
@@ -156,7 +156,7 @@ export class GiiKERCube extends BluetoothPuzzle {
     this.server.disconnect();
   }
 
-  public override async getState(): Promise<KState> {
+  public override async getState(): Promise<KPattern> {
     return this.toReid333(
       new Uint8Array((await this.cubeCharacteristic.readValue()).buffer),
     );
@@ -168,8 +168,8 @@ export class GiiKERCube extends BluetoothPuzzle {
     return (val[n] >> shift) & 1;
   }
 
-  private toReid333(val: Uint8Array): KState {
-    const state: KStateData = {
+  private toReid333(val: Uint8Array): KPattern {
+    const state: KPatternData = {
       EDGES: {
         pieces: new Array(12),
         orientation: new Array(12),
@@ -196,7 +196,7 @@ export class GiiKERCube extends BluetoothPuzzle {
           postCO[i]) %
         3;
     }
-    return new KState(experimental3x3x3KPuzzle, state);
+    return new KPattern(experimental3x3x3KPuzzle, state);
   }
 
   private async onCubeCharacteristicChanged(event: any): Promise<void> {

@@ -1,5 +1,5 @@
 import { Alg, AlgBuilder } from "../../../../../alg";
-import type { KState } from "../../../../../kpuzzle/KState";
+import type { KPattern } from "../../../../../kpuzzle/KPattern";
 import { puzzles } from "../../../../../puzzles";
 import { randomChoice } from "random-uint-below";
 import { mustBeInsideWorker } from "../../../inside-worker";
@@ -9,7 +9,7 @@ import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
 import { sgs3x3x3 } from "./legacy-sgs";
 
-export async function random333State(): Promise<KState> {
+export async function random333State(): Promise<KPattern> {
   const kpuzzle = await puzzles["3x3x3"].kpuzzle();
   let state = kpuzzle.startState();
   for (const piece of sgs3x3x3) {
@@ -21,7 +21,7 @@ export async function random333State(): Promise<KState> {
   return state;
 }
 
-export async function solve333(s: KState): Promise<Alg> {
+export async function solve333(s: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   return Alg.fromString(
     (await dynamic3x3x3min2phase).solveState(toMin2PhaseState(s)),

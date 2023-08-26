@@ -1,6 +1,6 @@
 import { Alg, Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
-import type { KState } from "../../../../kpuzzle/KState";
+import type { KPattern } from "../../../../kpuzzle/KPattern";
 import {
   Direction,
   type Duration,
@@ -102,11 +102,12 @@ export class SimultaneousMoveIndexer {
 
   public timestampToPosition(
     timestamp: Timestamp,
-    startState?: KState,
+    startState?: KPattern,
   ): PuzzlePosition {
     const currentMoveInfo = this.currentMoveInfo(timestamp);
 
-    let state = startState ?? this.kpuzzle.identityTransformation().toKState();
+    let state =
+      startState ?? this.kpuzzle.identityTransformation().toKPattern();
     for (const leafWithRange of this.animLeaves.slice(
       0,
       currentMoveInfo.stateIndex,
@@ -202,7 +203,7 @@ export class SimultaneousMoveIndexer {
     };
   }
 
-  public stateAtIndex(index: number, startState?: KState): KState {
+  public stateAtIndex(index: number, startState?: KPattern): KPattern {
     let state = startState ?? this.kpuzzle.startState();
     for (let i = 0; i < this.animLeaves.length && i < index; i++) {
       const leafWithRange = this.animLeaves[i];

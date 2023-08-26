@@ -1,4 +1,4 @@
-import type { KStateData } from "../../../../cubing/kpuzzle";
+import type { KPatternData } from "../../../../cubing/kpuzzle";
 import { experimentalReid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
 import {
   type Binary3x3x3Components,
@@ -10,7 +10,7 @@ import { kpuzzleToReidString, kpuzzleToStickers } from "./convert";
 const tests: {
   name: string;
   alg: string;
-  kpuzzle: KStateData;
+  kpuzzle: KPatternData;
   binaryComponents: Binary3x3x3Components;
   binaryBytes: number[];
   reidString: string;
@@ -18,7 +18,7 @@ const tests: {
 }[] = [];
 
 function addTest(name: string, alg: string): void {
-  const state = experimental3x3x3KPuzzle.algToTransformation(alg).toKState();
+  const state = experimental3x3x3KPuzzle.algToTransformation(alg).toKPattern();
   tests.push({
     name: name,
     alg: alg,

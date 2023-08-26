@@ -1,9 +1,9 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
   KPuzzle,
-  KState,
+  KPattern,
   type KPuzzleDefinition,
-  type KStateData,
+  type KPatternData,
 } from "../../../../cubing/kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
@@ -124,7 +124,7 @@ function validateAndSaveInput(
   searchElem.addEventListener("input", () =>
     validateAndSaveInput(searchElem, LOCALSTORAGE_SEARCH),
   );
-  function setSearch(state: KStateData) {
+  function setSearch(state: KPatternData) {
     searchElem.value = neatStringify(state);
     validateAndSaveInput(searchElem, LOCALSTORAGE_SEARCH);
   }
@@ -215,7 +215,7 @@ function validateAndSaveInput(
     results.value = "Searching...";
     try {
       const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
-      const kstate = new KState(kpuzzle, JSON.parse(searchElem.value));
+      const kpattern = new KPattern(kpuzzle, JSON.parse(searchElem.value));
       const options: TwsearchServerClientOptions = {
         searchArgs: {
           minDepth: parseInt(minDepthElem.value),
@@ -224,7 +224,7 @@ function validateAndSaveInput(
       };
       if ((document.querySelector("#use-server") as HTMLInputElement).checked) {
         results.value = (
-          await solveTwsearchServer(kpuzzle, kstate, options)
+          await solveTwsearchServer(kpuzzle, kpattern, options)
         ).toString();
       } else {
         const twsearchOptions: SolveTwsearchOptions = {
@@ -232,7 +232,7 @@ function validateAndSaveInput(
           minDepth: options.searchArgs?.minDepth,
         };
         results.value = (
-          await experimentalSolveTwsearch(kpuzzle, kstate, twsearchOptions)
+          await experimentalSolveTwsearch(kpuzzle, kpattern, twsearchOptions)
         ).toString();
       }
     } catch (e) {
