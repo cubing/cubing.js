@@ -2,3 +2,5 @@
 5d4256efc96914b52c2bc98504a8e26ba68dbc36
 # `make format` for Rome v0.10.1-next
 4b8891790c651de031d8a35dd7687f59db5e84e2
+# Rename "state" to "pattern" in as many remaining places as possible.
+340f18f5824b79d432af238ce2379b601d089d80
