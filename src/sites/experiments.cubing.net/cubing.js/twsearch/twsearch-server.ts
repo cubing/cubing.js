@@ -31,11 +31,11 @@ export async function solveTwsearchServer(
     options.searchArgs.randomStart ??= true;
     options.searchArgs.startPruneDepth ??= 5;
   }
-  const response = await fetch("http://localhost:2023/v0/solve/state", {
+  const response = await fetch("http://localhost:2023/v0/solve/pattern", {
     ...postJSONInit,
     body: JSON.stringify({
       definition: kpuzzle.definition,
-      state: kpattern.stateData,
+      pattern: kpattern.stateData,
       startState: options.startState,
       searchArgs: options.searchArgs,
       // TODO: min depth
