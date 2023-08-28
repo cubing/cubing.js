@@ -2,7 +2,7 @@ import {
   constructWorker,
   wrap,
 } from "../vendor/apache/comlink-everywhere/outside";
-import { insideAPI, type WorkerInsideAPI } from "./inside/api";
+import { type WorkerInsideAPI } from "./inside/api";
 import { searchOutsideDebugGlobals } from "./outside";
 import {
   instantiateSearchWorkerURLNewURLImportMetaURL,
@@ -151,6 +151,7 @@ export const allInsideOutsideAPIPromises: Promise<InsideOutsideAPI>[] = [];
 export async function instantiateWorker(): Promise<InsideOutsideAPI> {
   const insideOutsideAPIPromise = instantiateWorkerImplementation();
   allInsideOutsideAPIPromises.push(insideOutsideAPIPromise);
+  const { insideAPI } = await insideOutsideAPIPromise;
   insideAPI.setDebugMeasurePerf(searchOutsideDebugGlobals.logPerf);
   insideAPI.setScramblePrefetchLevel(
     searchOutsideDebugGlobals.scramblePrefetchLevel,
