@@ -74,3 +74,14 @@ jobs:
       - run: make build-sites
       - run: make test-dist-sites-experiments
       - run: make clean
+
+  test-using-bun:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - run: bun install # TODO: ieally we'd test that this works without dev deps, but the `--production` flag requires a lockfile.
+      - run: bun run src/bin/scramble.ts 333
