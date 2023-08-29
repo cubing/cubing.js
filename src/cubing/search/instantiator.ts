@@ -42,6 +42,10 @@ async function instantiateModuleWorker(
   }
 }
 
+interface BunWorker extends Worker {
+  unref?: () => void;
+}
+
 async function instantiateModuleWorkerAttempt(
   workerEntryFileURL: URL,
   crossOriginTrampoline: boolean,
@@ -68,7 +72,9 @@ async function instantiateModuleWorkerAttempt(
         type: "module",
       })) as Worker & {
         nodeWorker?: import("worker_threads").Worker;
-      };
+      } & BunWorker;
+
+      worker.unref?.(); // Unref in `bun`.
 
       const onError = (e: ErrorEvent) => {
         reject(e);
