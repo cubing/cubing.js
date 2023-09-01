@@ -4,6 +4,9 @@
     "rules": {
       "recommended": true,
       "nursery": {},
+      "complexity": {
+        "useLiteralKeys": "off"
+      },
       "correctness": {
         "noUnreachableSuper": "off"
       },
@@ -41,5 +44,8 @@
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts"
     ]
+  },
+  "organizeImports": {
+    "enabled": false
   }
 }

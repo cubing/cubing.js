@@ -3,7 +3,8 @@ import { join } from "path";
 
 const DIR = new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url)
   .pathname;
-const ROME_JSON = new URL("../rome.json", import.meta.url).pathname;
+// TODO(https://github.com/cubing/cubing.js/issues/290)
+const BIOME_JSON = new URL("../biome.json", import.meta.url).pathname;
 
 let dynamicFileName = null;
 for (const fileName of await readdir(DIR)) {
@@ -44,10 +45,10 @@ for (const fileName of await readdir(DIR)) {
   await writeFile(filePath, contents);
 }
 
-console.log("Fixing:", ROME_JSON);
-let contents = await readFile(ROME_JSON, "utf-8");
+console.log("Fixing:", BIOME_JSON);
+let contents = await readFile(BIOME_JSON, "utf-8");
 contents = contents.replaceAll(
   /"src\/cubing\/vendor\/mpl\/twsearch\/twsearch-.*.js"/g,
   `"src/cubing/vendor/mpl/twsearch/${dynamicFileName}"`,
 );
-await writeFile(ROME_JSON, contents);
+await writeFile(BIOME_JSON, contents);

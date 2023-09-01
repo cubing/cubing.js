@@ -1,6 +1,6 @@
 # TODO: see if we can make everything compatible with `bun`
 NODE=node
-ROME=./node_modules/.bin/rome
+BIOME=npx @biomejs/biome
 WEB_TEST_RUNNER=./node_modules/.bin/wtr
 
 .PHONY: default
@@ -159,7 +159,7 @@ test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/experiments/main.js
 .PHONY: format
 format:
-	${ROME} format --write ./script ./src
+	${BIOME} format --write ./script ./src
 .PHONY: setup
 setup:
 	npm ci
@@ -167,10 +167,10 @@ setup:
 quick-setup: | node_modules
 .PHONY: lint
 lint:
-	${ROME} check ./script ./src
+	${BIOME} check ./script ./src
 .PHONY: lint-ci
 lint-ci:
-	${ROME} ci ./script ./src
+	${BIOME} ci ./script ./src
 .PHONY: prepack
 prepack: clean build test-dist-esm-node-import test-dist-esm-plain-esbuild-compat
 .PHONY: prepublishOnly

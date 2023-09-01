@@ -1,10 +1,9 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.defaultFormatter": "rome.rome",
+  "editor.defaultFormatter": "biomejs.biome",
   "[typescript]": {
-    "editor.defaultFormatter": "rome.rome"
+    "editor.defaultFormatter": "biomejs.biome"
   },
-  "rome.lspBin": "./node_modules/.bin/rome",
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   }
