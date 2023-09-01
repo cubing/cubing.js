@@ -16,14 +16,14 @@
 
 # Legacy package folders.
 # We can hopefully get rid of this once enough bundlers support the `exports` field in `package.json`.
-/alg
-/bluetooth
-/kpuzzle
-/notation
-/protocol
-/puzzle-geometry
-/puzzles
-/scramble
-/search
-/stream
-/twisty
+/alg/package.json
+/bluetooth/package.json
+/kpuzzle/package.json
+/notation/package.json
+/protocol/package.json
+/puzzle-geometry/package.json
+/puzzles/package.json
+/scramble/package.json
+/search/package.json
+/stream/package.json
+/twisty/package.json
