@@ -167,7 +167,7 @@ setup:
 quick-setup: | node_modules
 .PHONY: lint
 lint:
-	${BIOME} lint ./script ./src
+	${BIOME} check ./script ./src
 .PHONY: lint-ci
 lint-ci:
 	${BIOME} ci ./script ./src

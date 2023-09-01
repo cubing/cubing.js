@@ -44,5 +44,8 @@
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts"
     ]
+  },
+  "organizeImports": {
+    "enabled": false
   }
 }
