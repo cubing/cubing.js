@@ -7,12 +7,12 @@ import { packageNames } from "../../../../lib/packages.js";
 const OUT_DIR = "./.temp/plain-esbuild-compat";
 
 needFolder(
-  new URL("../../../../../dist/esm", import.meta.url).pathname,
+  new URL("../../../../../dist/cubing", import.meta.url).pathname,
   "make build-esm",
 );
 
 const dist_entries = packageNames
-  .map((e) => join("dist/esm/", e, "/index.js"))
+  .map((e) => join("dist/cubing/", e, "/index.js"))
   .join(" ");
 const cmd = `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`;
 console.log(cmd);

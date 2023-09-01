@@ -138,22 +138,22 @@ test-dist: \
 	test-dist-sites-experiments # keep CI.yml in sync with this
 .PHONY: test-dist-esm-node-import
 test-dist-esm-node-import: build-esm
-	${NODE} script/test/dist/esm/node-import/main.js
+	${NODE} script/test/dist/cubing/node-import/main.js
 .PHONY: test-dist-esm-scramble-all-events
 test-dist-esm-scramble-all-events: build-esm
-	${NODE} script/test/dist/esm/scramble-all-events/main.js
+	${NODE} script/test/dist/cubing/scramble-all-events/main.js
 .PHONY: test-dist-esm-perf
 test-dist-esm-perf: build-esm
-	${NODE} script/test/dist/esm/perf/*.js
+	${NODE} script/test/dist/cubing/perf/*.js
 .PHONY: test-dist-esm-plain-esbuild-compat
 test-dist-esm-plain-esbuild-compat: build-esm
-	${NODE} script/test/dist/esm/plain-esbuild-compat/main.js
+	${NODE} script/test/dist/cubing/plain-esbuild-compat/main.js
 .PHONY: test-dist-esm-vite
 test-dist-esm-vite: build-esm
-	${NODE} ./script/test/dist/esm/vite/main.js
+	${NODE} ./script/test/dist/cubing/vite/main.js
 .PHONY: test-dist-esm-build-size
 test-dist-esm-build-size: build-esm
-	${NODE} ./script/test/dist/esm/build-size/main.js
+	${NODE} ./script/test/dist/cubing/build-size/main.js
 .PHONY: test-dist-sites-experiments
 test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/experiments/main.js

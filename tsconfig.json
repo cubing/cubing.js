@@ -3,7 +3,7 @@
     "allowJs": true,
     "alwaysStrict": true,
     "declaration": true,
-    "declarationDir": "./dist/types",
+    "declarationDir": "./dist/cubing",
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "lib": [
@@ -33,7 +33,7 @@
     "src",
   ],
   "exclude": [
-    "script/test/dist/esm" // Avoid indexing `dist`.
+    "script/test/dist/cubing" // Avoid indexing `dist`.
   ],
   "typedocOptions": {
     "out": "dist/sites/js.cubing.net/cubing/api",
