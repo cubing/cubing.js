@@ -4,6 +4,9 @@
     "rules": {
       "recommended": true,
       "nursery": {},
+      "complexity": {
+        "useLiteralKeys": "off"
+      },
       "correctness": {
         "noUnreachableSuper": "off"
       },

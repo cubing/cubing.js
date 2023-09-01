@@ -157,7 +157,7 @@ export class TwistyScrubber extends ManagedCustomElement {
       const yDist = Math.abs(sliderY - y);
       let scale = 1;
       if (yDist > 64) {
-        scale = Math.max(Math.pow(2, -(yDist - 64) / 64), 1 / 32);
+        scale = Math.max(2 ** (-(yDist - 64) / 64), 1 / 32);
       }
       const preVal = parseInt(inputElem.value);
       console.log("cl", currentClickNum, clickNum, preVal);
@@ -169,8 +169,7 @@ export class TwistyScrubber extends ManagedCustomElement {
         newVal =
           lastVal +
           delta * scale +
-          (preVal - lastVal) *
-            Math.min(1, Math.pow(1 / 2, (yDist * yDist) / 64));
+          (preVal - lastVal) * Math.min(1, (1 / 2) ** ((yDist * yDist) / 64));
         inputElem.value = newVal.toString();
         console.log(scale);
         scaling = false;

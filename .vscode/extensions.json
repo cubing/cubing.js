@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "rome.rome"
+    "biomejs.biome"
   ],
   "unwantedRecommendations": [
     "ms-vscode-remote.remote-containers"

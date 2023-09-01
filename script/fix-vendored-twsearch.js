@@ -3,6 +3,7 @@ import { join } from "path";
 
 const DIR = new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url)
   .pathname;
+// TODO(https://github.com/cubing/cubing.js/issues/290)
 const ROME_JSON = new URL("../rome.json", import.meta.url).pathname;
 
 let dynamicFileName = null;

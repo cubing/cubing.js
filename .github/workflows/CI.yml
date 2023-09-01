@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: rome/setup-rome@v0.4
+      - uses: rome/setup-rome@v0.4 # TODO(https://github.com/cubing/cubing.js/issues/290)
         with:
           version: latest
       - run: npm ci
