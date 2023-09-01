@@ -55,43 +55,42 @@ export function moveToTransformationUncached(
   kpuzzle: KPuzzle,
   move: Move,
 ): KTransformationData {
-  const quantumKey = move.quantum.toString();
-  let quantumMoveDefinition = kpuzzle.definition.moves[quantumKey] as
-    | KTransformationData
-    | undefined;
-
-  if (!quantumMoveDefinition) {
-    const derivedFrom = kpuzzle.definition.derivedMoves?.[quantumKey];
-
-    if (derivedFrom) {
-      // TODO: avoid the round trip?
-      quantumMoveDefinition =
-        kpuzzle.algToTransformation(derivedFrom).transformationData;
+  function getTransformationData(
+    key: {
+      toString: () => string;
+    },
+    multiplyAmount: number,
+  ): KTransformationData | undefined {
+    const s = key.toString();
+    const movesDef = kpuzzle.definition.moves[s];
+    if (movesDef) {
+      return repeatTransformationUncached(kpuzzle, movesDef, multiplyAmount);
     }
+    const derivedDef = kpuzzle.definition.derivedMoves?.[s];
+    if (derivedDef) {
+      return repeatTransformationUncached(
+        kpuzzle,
+        kpuzzle.algToTransformation(derivedDef).transformationData,
+        multiplyAmount,
+      );
+    }
+    return undefined;
   }
 
-  if (quantumMoveDefinition) {
-    return repeatTransformationUncached(
-      kpuzzle,
-      quantumMoveDefinition,
-      move.amount,
-    );
-  }
+  // TODO: Use Euclid's algorithm to pre-calculate the GCD of moves for each
+  // quantum, along with its transformation. This will make lookup `O(1)` for multiples of e.g. `y2`.
 
-  // Handle e.g. `y2` if `y2` is defined.
-  // Note: this doesn't handle multiples.
-  const moveDefinition = kpuzzle.definition.moves[move.toString()];
-  if (moveDefinition) {
-    return moveDefinition;
-  }
+  const data =
+    getTransformationData(move.quantum, move.amount) ??
+    // Handle e.g. `y2` if `y2` is defined.
+    // Note: this doesn't handle multiples.
+    getTransformationData(move, 1) ??
+    // Handle e.g. `y2'` if `y2` is defined.
+    // Note: this doesn't handle multiples.
+    getTransformationData(move.invert, -1);
 
-  // Handle e.g. `y2'` if `y2` is defined.
-  // Note: this doesn't handle multiples.
-  const inverseMoveDefinition =
-    kpuzzle.definition.moves[move.invert().toString()];
-  if (inverseMoveDefinition) {
-    return repeatTransformationUncached(kpuzzle, inverseMoveDefinition, -1);
+  if (data) {
+    return data;
   }
-
   throw new Error(`Invalid move for KPuzzle (${kpuzzle.name()}): ${move}`);
 }
