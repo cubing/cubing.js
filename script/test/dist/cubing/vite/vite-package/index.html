@@ -1,8 +1,8 @@
 <script type="module">
-  import { setSearchDebug } from "../../search";
+  import { setSearchDebug } from "../../dist/cubing/search";
   setSearchDebug({ disableStringWorker: true });
 
-  import { randomScrambleForEvent } from "../../scramble"; // Relative to `.temp/vite-package` from the `cubing.js` root, NOT from the `vite-package` folder.
+  import { randomScrambleForEvent } from "../../dist/cubing/scramble"; // Relative to `.temp/vite-package` from the `cubing.js` root, NOT from the `vite-package` folder.
   (async () => {
     const scramble = await randomScrambleForEvent("333");
     const elem = document.createElement("div");
