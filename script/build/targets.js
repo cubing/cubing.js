@@ -136,54 +136,15 @@ export async function build(target, dev) {
   }
 }
 
-export const staticPackageMetadataTarget = {
-  name: "static-package-metadata",
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (_) => {
-    // TODO: use `fs/promises` once we can use a recent enough version of `node`.
-    const exports = JSON.parse(await readFile("./package.json")).exports;
-    for (const folder of Object.keys(exports)) {
-      if (!(await existsSync(folder))) {
-        await mkdir(folder);
-      }
-      const folderBasename = basename(folder);
-      const subpackageJSON = {
-        main: `../dist/esm/${folderBasename}/index.js`,
-        types: `../dist/types/${folderBasename}/index.d.ts`,
-      };
-      const packageJSONFilePath = join(folder, "package.json");
-      console.log(`Writing: ${packageJSONFilePath}`);
-      await writeFile(
-        packageJSONFilePath,
-        JSON.stringify(subpackageJSON, null, "  "),
-      );
-
-      try {
-        const typesJS = `export * from "../../types/${folderBasename}";\n`;
-        const typesJSFolder = join("./dist/esm/", folder);
-        const typesJSFilePath = join(typesJSFolder, "index.d.ts");
-        if (!(await existsSync(typesJSFolder))) {
-          await mkdir(typesJSFolder, { recursive: true });
-        }
-        console.log(`Writing: ${typesJSFilePath}`);
-        await writeFile(typesJSFilePath, typesJS);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  },
-};
-
 export const esmTarget = {
   name: "esm",
   builtYet: false,
-  dependencies: [staticPackageMetadataTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     const build = await esbuild.build({
-      // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
+      // TODO: construct entry points based on `exports` and add tests.
       entryPoints: packageEntryPointsWithSearchWorkerEntry,
-      outdir: "dist/esm",
+      outdir: "dist/cubing",
       format: "esm",
       target: "es2020",
       bundle: true,
@@ -287,7 +248,7 @@ export const typesTarget = {
       ...packageEntryPoints,
       "--dts-only",
       "--out-dir",
-      "dist/types",
+      "dist/cubing",
     ]);
   },
 };
@@ -307,7 +268,6 @@ export const targets /*: Record<String, SolverWorker>*/ = {
   sites: sitesTarget,
   twizzle: twizzleTarget,
   experiments: experimentsTarget,
-  "static-package-metadata": staticPackageMetadataTarget,
   esm: esmTarget,
   types: typesTarget,
   bin: binTarget,

@@ -3,9 +3,9 @@
     "allowJs": true,
     "alwaysStrict": true,
     "declaration": true,
-    "declarationDir": "./dist/types",
+    "declarationDir": "./dist/tsc/typesies",
     "declarationMap": true,
-    "emitDeclarationOnly": true,
+    "noEmit": true,
     "lib": [
       "esnext",
       "dom"
@@ -22,7 +22,7 @@
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "rootDir": "./",
-    "outDir": "./dist",
+    "outDir": "./dist/tsc",
     "types": [
       "web-bluetooth",
       "dom-speech-recognition"
@@ -33,7 +33,7 @@
     "src",
   ],
   "exclude": [
-    "script/test/dist/esm" // Avoid indexing `dist`.
+    "script/test/dist" // Avoid indexing `dist`.
   ],
   "typedocOptions": {
     "out": "dist/sites/js.cubing.net/cubing/api",

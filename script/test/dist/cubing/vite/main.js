@@ -1,10 +1,6 @@
 import { needFolder } from "../../../../lib/need-folder.js";
 needFolder(
-  new URL("../../../../../kpuzzle", import.meta.url).pathname,
-  "make build-esm",
-);
-needFolder(
-  new URL("../../../../../dist/esm/kpuzzle", import.meta.url).pathname,
+  new URL("../../../../../dist/cubing/kpuzzle", import.meta.url).pathname,
   "make build-esm",
 );
 

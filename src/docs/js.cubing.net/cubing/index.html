@@ -149,6 +149,21 @@ import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
           href="https://esbuild.github.io/"><code>esbuild</code></a> or tools based on <code>esbuild</code>, and you may
         find <a href="https://github.com/cubing/cubing-app-template">this project template</a> a helpful start.
       </p>
+      <p>
+        If you are using TypeScript and/or VS Code, you may need to specify a module resolution in a <a
+          href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html"><code>tsconfig.json</code> file</a> for
+        your project in order to use the TypeScript types. We recommend using at least the following settings:
+        <code class="sample">
+{<br>
+&nbsp;&nbsp;&quot;compilerOptions&quot;: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;lib&quot;: [&quot;es2020&quot;, &quot;dom&quot;],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;module&quot;: &quot;es2020&quot;,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;moduleResolution&quot;: &quot;bundler&quot;<br>
+&nbsp;&nbsp;}<br>
+}
+</span>
+        </code>
+      </p>
     </section>
 
     <section id="code-experiments">
