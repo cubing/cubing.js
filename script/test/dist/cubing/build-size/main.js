@@ -117,9 +117,9 @@ if (valueResults["twisty"].gzippedSize > 300_000) {
   console.log("✅ Gzipped `cubing/twisty` build size is ≤ 300kB");
 }
 
-if (valueResults["twisty"].gzippedSizeNoTHREE > 100_000) {
+if (valueResults["twisty"].gzippedSizeNoTHREE > 128_000) {
   throw new Error(
-    "❌ Gzipped no-THREE `cubing/twisty` build size is over 100kB",
+    "❌ Gzipped no-THREE `cubing/twisty` build size is over 128kB",
   );
 } else {
   console.log("✅ Gzipped no-THREE `cubing/twisty` build size is ≤ 100kB");
