@@ -25,6 +25,7 @@ if (!(puzzleName && algString)) {
  *   Turn a name into a geometry.
  */
 
+// @ts-ignore: Top-level await is okay because this is not part of the main library.
 let kpuzzle = await puzzles[puzzleName].kpuzzle();
 if (!kpuzzle) {
   const pg = getPuzzleGeometryByName(puzzleName, { allMoves: true });

@@ -15,6 +15,7 @@ Example: scramble 333`);
 }
 
 setSearchDebug({ logPerf: false }); // TODO: why doesn't this work?
+// @ts-ignore: Top-level await is okay because this is not part of the main library.
 const scramble = await randomScrambleForEvent(eventID);
 console.log(scramble.toString());
 
