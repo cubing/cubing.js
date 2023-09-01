@@ -1,24 +1,20 @@
 {
   "compilerOptions": {
+    "target": "es2020",
+    "module": "es2020",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "alwaysStrict": true,
     "declaration": true,
     "declarationDir": "./dist/tsc/typesies",
     "declarationMap": true,
     "noEmit": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitOverride": true,
     "noUnusedLocals": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es2020",
-    "module": "esnext",
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "rootDir": "./",
