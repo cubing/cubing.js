@@ -41,7 +41,7 @@ function defineClass(typeId, superTypeId, castableTypeMap) {
     !superTypeId && (_.typeMarker$ = typeMarkerFn);
   }
   for (let i = 3; i < arguments.length; ++i) {
-    // rome-ignore lint/style/noArguments: Legacy code
+    // biome-ignore lint/style/noArguments: Legacy code
     arguments[i].prototype = _;
   }
   clazz && (_.___clazz$ = clazz);

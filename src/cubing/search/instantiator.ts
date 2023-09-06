@@ -50,7 +50,7 @@ async function instantiateModuleWorkerAttempt(
   workerEntryFileURL: URL,
   crossOriginTrampoline: boolean,
 ): Promise<InsideOutsideAPI> {
-  // rome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
     try {
       if (!workerEntryFileURL) {
@@ -113,7 +113,7 @@ async function instantiateModuleWorkerAttempt(
 // - in `node` (https://github.com/nodejs/node/issues/43583#issuecomment-1540025755)
 // - for CDNs (https://github.com/tc39/proposal-module-expressions or https://github.com/whatwg/html/issues/6911)
 export async function instantiateModuleWorkerDirectlyForBrowser(): Promise<InsideOutsideAPI> {
-  // rome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
     try {
       const worker = instantiateSearchWorkerURLNewURLImportMetaURL();

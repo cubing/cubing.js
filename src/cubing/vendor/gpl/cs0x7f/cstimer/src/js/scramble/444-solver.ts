@@ -135,7 +135,7 @@ function initExpandos(protoType, expandoNames, expandoValues) {
   let i_0 = 0;
   let value;
   for (const name_0 in protoType) {
-    // rome-ignore lint/nursery/noConditionalAssignment: <explanation>
+    // biome-ignore lint/nursery/noConditionalAssignment: <explanation>
     if ((value = protoType[name_0])) {
       expandoNames[i_0] = name_0;
       expandoValues[i_0] = value;

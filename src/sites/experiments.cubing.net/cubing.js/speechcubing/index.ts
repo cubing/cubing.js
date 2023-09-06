@@ -36,7 +36,7 @@ const alternativeListElem = document.querySelector("alternative-list")!;
 recognition.onresult = function (event) {
   const latestResult = event.results.item(event.results.length - 1);
   alternativeListElem.textContent =
-    // rome-ignore lint/style/useTemplate: Using a template would make this more confusing.
+    // biome-ignore lint/style/useTemplate: Using a template would make this more confusing.
     "Raw alternatives: " +
     Array.from(latestResult)
       .map((alternative) => alternative.transcript)
