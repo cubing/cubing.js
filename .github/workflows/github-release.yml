@@ -21,19 +21,13 @@ jobs:
       - name: Check out code for release body calculation using `git` itself
         uses: actions/checkout@v3
       - name: Calculate release body
-        run: |
-          # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#example-of-a-multiline-string
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          echo "RELEASE_BODY<<$EOF" >> $GITHUB_ENV
-          git log --format=%b -n 1 HEAD >> $GITHUB_ENV
-          echo "$EOF" >> $GITHUB_ENV
+        run: git log --format=%b -n 1 HEAD >> /tmp/body-path.txt
       - name: Publish release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ env.RELEASE_NAME }}
-          body: ${{ env.RELEASE_BODY }}
+          tag_name: ${{ env.RELEASE_NAME }}
+          body_path: /tmp/body-path.txt
           draft: false
           prerelease: false
