@@ -7,9 +7,6 @@
       "complexity": {
         "useLiteralKeys": "off"
       },
-      "correctness": {
-        "noUnreachableSuper": "off"
-      },
       "style": {
         "noNegationElse": "off",
         "noShoutyConstants": "off",
