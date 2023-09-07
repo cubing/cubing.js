@@ -23,4 +23,4 @@ const url = new URL("https://alpha.twizzle.net/edit/");
 const puzzleID = eventInfo(eventID)?.puzzleID;
 puzzleID && url.searchParams.set("puzzle", puzzleID);
 url.searchParams.set("alg", scramble.toString());
-console.log("\n🔗 " + url.toString());
+console.log(`\n🔗 ${url.toString()}`);

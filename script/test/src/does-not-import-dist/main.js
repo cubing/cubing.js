@@ -51,7 +51,7 @@ for (const file of Object.values(files)) {
   // We special-case this, since we use `anyImportsNotFromDist` to filter for a more helpful output.
   if (file.path.startsWith("dist/") && file.anyImportsNotFromDist) {
     stderr.write("❌ Imports from the `dist` dir are not allowed:\n");
-    stderr.write(file.path + "\n");
+    stderr.write(`${file.path}\n`);
     stderr.write(file.from.join("\n"));
     exit(1);
   }
@@ -67,7 +67,7 @@ for (const file of Object.values(files)) {
   }
   if (!match) {
     stderr.write("❌ Indexed file outside expected prefixes:\n");
-    stderr.write(file.path + "\n");
+    stderr.write(`${file.path}\n`);
     stderr.write(file.from.join("\n"));
     exit(1);
   }

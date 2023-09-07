@@ -103,5 +103,5 @@ if (fix && needsFix) {
   packageJSON.scripts = Object.fromEntries(
     makefileScriptTargets.map((target) => [target, `make ${target}`]),
   );
-  writeFile(PACKAGE_JSON_PATH, JSON.stringify(packageJSON, null, "  ") + "\n");
+  writeFile(PACKAGE_JSON_PATH, `${JSON.stringify(packageJSON, null, "  ")}\n`);
 }

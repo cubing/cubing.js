@@ -2320,7 +2320,7 @@ export class PuzzleGeometry {
   }
 
   private header(comment: string): string {
-    return comment + copyright + "\n" + comment + "\n";
+    return `${comment + copyright}\n${comment}\n`;
   }
 
   public writegap(): string {
