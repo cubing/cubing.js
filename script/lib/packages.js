@@ -20,7 +20,9 @@ export const packageEntryPoints = packageNames.map((p) =>
 
 export const searchWorkerEsbuildWorkaroundEntry = {
   in: "src/cubing/search/worker-workarounds/search-worker-entry.js",
-  out: "search-worker-entry.js",
+  // esbuild automatically adds `.js`
+  // https://esbuild.github.io/api/#entry-points
+  out: "search-worker-entry",
 };
 
 export const packageEntryPointsWithSearchWorkerEntry =
