@@ -12,7 +12,7 @@ function maybeParse(str: string): Alg | null {
 
 // If there is no occurence, the original string is returned in the first entry.
 // If there is, the delimiter is included at the start of the second entry.
-function splitBeforeOnFirstOccurrence(
+function sliceBeforeFirstOccurrence(
   str: string,
   delimiter: string,
 ): [before: string, after: string] {
@@ -26,7 +26,7 @@ function splitBeforeOnFirstOccurrence(
 function replaceSmartQuotesOutsideComments(str: string): string {
   const linesOut = [];
   for (const line of str.split("\n")) {
-    let [before, after] = splitBeforeOnFirstOccurrence(line, COMMENT_DELIMITER);
+    let [before, after] = sliceBeforeFirstOccurrence(line, COMMENT_DELIMITER);
     before = before.replaceAll("’", "'");
     linesOut.push(before + after);
   }
@@ -58,7 +58,7 @@ export function pasteIntoTextArea(
   // Replace smart quotes that are not in comments.
   let replacement = pastedText;
   if (pasteStartsWithCommentText) {
-    const [before, after] = splitBeforeOnFirstOccurrence(pastedText, "\n");
+    const [before, after] = sliceBeforeFirstOccurrence(pastedText, "\n");
     replacement = before + replaceSmartQuotesOutsideComments(after);
   } else {
     replacement = replaceSmartQuotesOutsideComments(pastedText);
