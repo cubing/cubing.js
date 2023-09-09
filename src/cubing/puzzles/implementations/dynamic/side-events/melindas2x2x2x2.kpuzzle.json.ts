@@ -189,32 +189,10 @@ export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
         orientationDelta: orientation,
       },
     },
-    y2: {
-      CORNERS: {
-        permutation: [
-          40, 41, 42, 43, 44, 45, 46, 47, 32, 33, 34, 35, 36, 37, 38, 39, 56,
-          57, 58, 59, 60, 61, 62, 63, 48, 49, 50, 51, 52, 53, 54, 55, 8, 9, 10,
-          11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29,
-          30, 31, 16, 17, 18, 19, 20, 21, 22, 23,
-        ],
-        orientationDelta: orientation,
-      },
-    },
-    z2: {
-      CORNERS: {
-        permutation: [
-          52, 53, 54, 55, 48, 49, 50, 51, 60, 61, 62, 63, 56, 57, 58, 59, 36,
-          37, 38, 39, 32, 33, 34, 35, 44, 45, 46, 47, 40, 41, 42, 43, 20, 21,
-          22, 23, 16, 17, 18, 19, 28, 29, 30, 31, 24, 25, 26, 27, 4, 5, 6, 7, 0,
-          1, 2, 3, 12, 13, 14, 15, 8, 9, 10, 11,
-        ],
-        orientationDelta: orientation,
-      },
-    },
   },
   derivedMoves: {
     x: "Lx Rx",
-    // y2: "U2 D2", // TODO(https://github.com/cubing/cubing.js/issues/279)
-    // z2: "F2 B2", // TODO(https://github.com/cubing/cubing.js/issues/279)
+    y2: "U2 D2",
+    z2: "F2 B2",
   },
 };

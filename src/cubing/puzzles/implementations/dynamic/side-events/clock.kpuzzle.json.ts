@@ -136,41 +136,6 @@ export const clockJSON: KPuzzleDefinition = {
         orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
-    // TODO: define this as `z2 y2`
-    x2: {
-      DIALS: {
-        permutation: [
-          17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-        ],
-        orientationDelta: [
-          6, 6, 6, 6, 6, 6, 6, 6, 6, -6, -6, -6, -6, -6, -6, -6, -6, -6,
-        ],
-      },
-      FACES: {
-        permutation: [
-          17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-        ],
-        orientationDelta: [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ],
-      },
-      FRAME: {
-        permutation: [0],
-        orientationDelta: [1],
-      },
-      HOUR_MARKS: {
-        permutation: [
-          17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-        ],
-        orientationDelta: [
-          2, 2, 2, 2, 2, 2, 2, 2, 2, -2, -2, -2, -2, -2, -2, -2, -2, -2,
-        ],
-      },
-      PEG_CAPS: {
-        permutation: [6, 7, 4, 5, 2, 3, 0, 1],
-        orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
-      },
-    },
     UL: {
       // TODO: define "pin up" as something other than a normal move.
       DIALS: t18,
@@ -227,7 +192,8 @@ export const clockJSON: KPuzzleDefinition = {
 
     F_PLUS_: "ALL_PLUS_",
 
-    // x2: "y2 z2", // TODO(https://github.com/cubing/cubing.js/issues/279)
+    // Note: It's not possible to represent `x` without "negative"/"mirror" orientations.
+    x2: "y2 z2",
 
     ULw_PLUS_: "U_PLUS_ L_PLUS_ UL_PLUS_'",
     URw_PLUS_: "U_PLUS_ R_PLUS_ UR_PLUS_'",
