@@ -136,50 +136,6 @@ export const clockJSON: KPuzzleDefinition = {
         orientationDelta: [0, 0, 0, 0, 0, 0, 0, 0],
       },
     },
-    UL: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientationDelta: [0] },
-      HOUR_MARKS: t18,
-      PEG_CAPS: {
-        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientationDelta: [1, 0, 0, 0, 0, 0, 0, 0],
-      },
-    },
-    UR: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientationDelta: [0] },
-      HOUR_MARKS: t18,
-      PEG_CAPS: {
-        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientationDelta: [0, 1, 0, 0, 0, 0, 0, 0],
-      },
-    },
-    DL: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientationDelta: [0] },
-      HOUR_MARKS: t18,
-      PEG_CAPS: {
-        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientationDelta: [0, 0, 0, 1, 0, 0, 0, 0],
-      },
-    },
-    DR: {
-      // TODO: define "pin up" as something other than a normal move.
-      DIALS: t18,
-      FACES: t18,
-      FRAME: { permutation: [0], orientationDelta: [0] },
-      HOUR_MARKS: t18,
-      PEG_CAPS: {
-        permutation: [0, 1, 2, 3, 4, 5, 6, 7],
-        orientationDelta: [0, 0, 1, 0, 0, 0, 0, 0],
-      },
-    },
   },
   derivedMoves: {
     UR_PLUS_: "[z': UL_PLUS_]",
@@ -224,5 +180,10 @@ export const clockJSON: KPuzzleDefinition = {
     BMUR_PLUS_: "[y2: MUL_PLUS_']",
     BMDR_PLUS_: "[y2: MDR_PLUS_']",
     BMDL_PLUS_: "[y2: MDL_PLUS_']",
+
+    UL: ".",
+    UR: ".",
+    DL: ".",
+    DR: ".",
   },
 };
