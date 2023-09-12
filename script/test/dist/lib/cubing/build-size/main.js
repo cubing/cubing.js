@@ -3,17 +3,17 @@ import { mkdtemp, readFile, stat } from "fs/promises";
 import { join } from "path";
 import { promisify } from "util";
 import { gzip } from "zlib";
-import { needFolder } from "../../../../lib/need-folder.js";
-import { ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED } from "../../../../build/targets.js"; // TODO: Factor out into the lib dir?
+import { needFolder } from "../../../../../lib/need-folder.js";
+import { ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED } from "../../../../../build/targets.js"; // TODO: Factor out into the lib dir?
 
-import { default as packageJSON } from "../../../../../package.json" assert {
+import { default as packageJSON } from "../../../../../../package.json" assert {
   type: "json",
 };
 const { exports } = packageJSON;
 
-const rootPath = new URL("../../../../../", import.meta.url);
+const rootPath = new URL("../../../../../../", import.meta.url);
 
-needFolder(join(rootPath.pathname, "dist/npm/cubing"), "make build-esm");
+needFolder(join(rootPath.pathname, "dist/lib/cubing"), "make build-esm");
 
 function subpackageEntry(subpackageName) {
   return new URL(exports[`./${subpackageName}`].import, rootPath).pathname;

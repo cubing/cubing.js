@@ -4,7 +4,7 @@ import { execPromise } from "../../../lib/execPromise.js";
 import { needFolder } from "../../../lib/need-folder.js";
 import { expectedPrefixes } from "./expected-import-prefixes.js";
 
-for (const folder of ["bin", "cubing"]) {
+for (const folder of ["bin", "lib/cubing"]) {
   needFolder(
     new URL(join("../../../../dist/", folder), import.meta.url).pathname,
     "make build",

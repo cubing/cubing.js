@@ -129,34 +129,34 @@ test-build: \
 	build-site-docs # keep CI.yml in sync with this
 .PHONY: test-dist
 test-dist: \
-	test-dist-esm-node-import \
-	test-dist-esm-scramble-all-events \
-	test-dist-esm-perf \
-	test-dist-esm-plain-esbuild-compat \
-	test-dist-esm-vite \
-	test-dist-esm-build-size \
+	test-dist-lib-node-import \
+	test-dist-lib-scramble-all-events \
+	test-dist-lib-perf \
+	test-dist-lib-plain-esbuild-compat \
+	test-dist-lib-vite \
+	test-dist-lib-build-size \
 	test-dist-sites-experiments # keep CI.yml in sync with this
-.PHONY: test-dist-esm-node-import
-test-dist-esm-node-import: build-esm
-	${NODE} script/test/dist/npm/cubing/node-import/main.js
-.PHONY: test-dist-esm-scramble-all-events
-test-dist-esm-scramble-all-events: build-esm
-	${NODE} script/test/dist/npm/cubing/scramble-all-events/main.js
-.PHONY: test-dist-esm-perf
-test-dist-esm-perf: build-esm
-	${NODE} script/test/dist/npm/cubing/perf/*.js
-.PHONY: test-dist-esm-plain-esbuild-compat
-test-dist-esm-plain-esbuild-compat: build-esm
-	${NODE} script/test/dist/npm/cubing/plain-esbuild-compat/main.js
-.PHONY: test-dist-esm-vite
-test-dist-esm-vite: build-esm
-	${NODE} ./script/test/dist/npm/cubing/vite/main.js
-.PHONY: test-dist-esm-build-size
-test-dist-esm-build-size: build-esm
-	${NODE} ./script/test/dist/npm/cubing/build-size/main.js
+.PHONY: test-dist-lib-node-import
+test-dist-lib-node-import: build-esm
+	${NODE} script/test/dist/lib/cubing/node-import/main.js
+.PHONY: test-dist-lib-scramble-all-events
+test-dist-lib-scramble-all-events: build-esm
+	${NODE} script/test/dist/lib/cubing/scramble-all-events/main.js
+.PHONY: test-dist-lib-perf
+test-dist-lib-perf: build-esm
+	${NODE} script/test/dist/lib/cubing/perf/*.js
+.PHONY: test-dist-lib-plain-esbuild-compat
+test-dist-lib-plain-esbuild-compat: build-esm
+	${NODE} script/test/dist/lib/cubing/plain-esbuild-compat/main.js
+.PHONY: test-dist-lib-vite
+test-dist-lib-vite: build-esm
+	${NODE} ./script/test/dist/lib/cubing/vite/main.js
+.PHONY: test-dist-lib-build-size
+test-dist-lib-build-size: build-esm
+	${NODE} ./script/test/dist/lib/cubing/build-size/main.js
 .PHONY: test-dist-sites-experiments
 test-dist-sites-experiments: build-sites
-	${NODE} ./script/test/dist/experiments/main.js
+	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: format
 format:
 	${BIOME} format --write ./script ./src
@@ -172,7 +172,7 @@ lint:
 lint-ci:
 	${BIOME} ci ./script ./src
 .PHONY: prepack
-prepack: clean build test-dist-esm-node-import test-dist-esm-plain-esbuild-compat
+prepack: clean build test-dist-lib-node-import test-dist-lib-plain-esbuild-compat
 .PHONY: prepublishOnly
 prepublishOnly: test-all
 .PHONY: postpublish

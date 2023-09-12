@@ -8,48 +8,48 @@
   "repository": "github:cubing/cubing.js",
   "exports": {
     "./alg": {
-      "import": "./dist/npm/cubing/alg/index.js",
-      "types": "./dist/npm/cubing/alg/index.d.ts"
+      "import": "./dist/lib/cubing/alg/index.js",
+      "types": "./dist/lib/cubing/alg/index.d.ts"
     },
     "./bluetooth": {
-      "import": "./dist/npm/cubing/bluetooth/index.js",
-      "types": "./dist/npm/cubing/bluetooth/index.d.ts"
+      "import": "./dist/lib/cubing/bluetooth/index.js",
+      "types": "./dist/lib/cubing/bluetooth/index.d.ts"
     },
     "./kpuzzle": {
-      "import": "./dist/npm/cubing/kpuzzle/index.js",
-      "types": "./dist/npm/cubing/kpuzzle/index.d.ts"
+      "import": "./dist/lib/cubing/kpuzzle/index.js",
+      "types": "./dist/lib/cubing/kpuzzle/index.d.ts"
     },
     "./notation": {
-      "import": "./dist/npm/cubing/notation/index.js",
-      "types": "./dist/npm/cubing/notation/index.d.ts"
+      "import": "./dist/lib/cubing/notation/index.js",
+      "types": "./dist/lib/cubing/notation/index.d.ts"
     },
     "./protocol": {
-      "import": "./dist/npm/cubing/protocol/index.js",
-      "types": "./dist/npm/cubing/protocol/index.d.ts"
+      "import": "./dist/lib/cubing/protocol/index.js",
+      "types": "./dist/lib/cubing/protocol/index.d.ts"
     },
     "./puzzle-geometry": {
-      "import": "./dist/npm/cubing/puzzle-geometry/index.js",
-      "types": "./dist/npm/cubing/types/puzzle-geometry/index.d.ts"
+      "import": "./dist/lib/cubing/puzzle-geometry/index.js",
+      "types": "./dist/lib/cubing/types/puzzle-geometry/index.d.ts"
     },
     "./puzzles": {
-      "import": "./dist/npm/cubing/puzzles/index.js",
-      "types": "./dist/npm/cubing/types-geometry/index.d.ts"
+      "import": "./dist/lib/cubing/puzzles/index.js",
+      "types": "./dist/lib/cubing/types-geometry/index.d.ts"
     },
     "./scramble": {
-      "import": "./dist/npm/cubing/scramble/index.js",
-      "types": "./dist/npm/cubing/scramble/index.d.ts"
+      "import": "./dist/lib/cubing/scramble/index.js",
+      "types": "./dist/lib/cubing/scramble/index.d.ts"
     },
     "./search": {
-      "import": "./dist/npm/cubing/search/index.js",
-      "types": "./dist/npm/cubing/search/index.d.ts"
+      "import": "./dist/lib/cubing/search/index.js",
+      "types": "./dist/lib/cubing/search/index.d.ts"
     },
     "./stream": {
-      "import": "./dist/npm/cubing/stream/index.js",
-      "types": "./dist/npm/cubing/stream/index.d.ts"
+      "import": "./dist/lib/cubing/stream/index.js",
+      "types": "./dist/lib/cubing/stream/index.d.ts"
     },
     "./twisty": {
-      "import": "./dist/npm/cubing/twisty/index.js",
-      "types": "./dist/npm/cubing/twisty/index.d.ts"
+      "import": "./dist/lib/cubing/twisty/index.js",
+      "types": "./dist/lib/cubing/twisty/index.d.ts"
     }
   },
   "dependencies": {
@@ -98,8 +98,8 @@
     "/README.md",
     "/package.json",
     "/package-lock.json",
-    "/dist/npm/cubing/**/*",
-    "/dist/npm/cubing/**/*",
+    "/dist/lib/cubing/**/*",
+    "/dist/lib/cubing/**/*",
     "/*/package.json",
     "/*/index.d.ts"
   ],
@@ -134,12 +134,12 @@
     "fix-src-scripts-consistency": "make fix-src-scripts-consistency",
     "test-build": "make test-build",
     "test-dist": "make test-dist",
-    "test-dist-esm-node-import": "make test-dist-esm-node-import",
-    "test-dist-esm-scramble-all-events": "make test-dist-esm-scramble-all-events",
-    "test-dist-esm-perf": "make test-dist-esm-perf",
-    "test-dist-esm-plain-esbuild-compat": "make test-dist-esm-plain-esbuild-compat",
-    "test-dist-esm-vite": "make test-dist-esm-vite",
-    "test-dist-esm-build-size": "make test-dist-esm-build-size",
+    "test-dist-lib-node-import": "make test-dist-lib-node-import",
+    "test-dist-lib-scramble-all-events": "make test-dist-lib-scramble-all-events",
+    "test-dist-lib-perf": "make test-dist-lib-perf",
+    "test-dist-lib-plain-esbuild-compat": "make test-dist-lib-plain-esbuild-compat",
+    "test-dist-lib-vite": "make test-dist-lib-vite",
+    "test-dist-lib-build-size": "make test-dist-lib-build-size",
     "test-dist-sites-experiments": "make test-dist-sites-experiments",
     "format": "make format",
     "setup": "make setup",

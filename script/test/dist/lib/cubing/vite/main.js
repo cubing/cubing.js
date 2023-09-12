@@ -1,12 +1,13 @@
-import { needFolder } from "../../../../lib/need-folder.js";
+import { needFolder } from "../../../../../lib/need-folder.js";
 needFolder(
-  new URL("../../../../../dist/npm/cubing/kpuzzle", import.meta.url).pathname,
+  new URL("../../../../../../dist/lib/cubing/kpuzzle", import.meta.url)
+    .pathname,
   "make build-esm",
 );
 
 import { chromium } from "playwright";
 import { installServer, port, startServer } from "./serve-vite.js";
-import { killAllChildProcesses } from "../../../../lib/execPromise.js";
+import { killAllChildProcesses } from "../../../../../lib/execPromise.js";
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;

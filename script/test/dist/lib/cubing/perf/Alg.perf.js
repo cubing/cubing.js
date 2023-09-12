@@ -1,6 +1,6 @@
-import { needFolder } from "../../../../lib/need-folder.js";
+import { needFolder } from "../../../../../lib/need-folder.js";
 needFolder(
-  new URL("../../../../../dist/npm/cubing/alg", import.meta.url).pathname,
+  new URL("../../../../../../dist/lib/cubing/alg", import.meta.url).pathname,
   "make build-esm",
 );
 

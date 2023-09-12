@@ -1,11 +1,11 @@
 import { mkdirSync } from "fs";
 import { join } from "path";
-import { execPromise } from "../../../../lib/execPromise.js";
+import { execPromise } from "../../../../../lib/execPromise.js";
 
 export const port = 1236;
 
 const packageSrcPath = new URL("./vite-package", import.meta.url).pathname; // relative to this file
-const packageTempRoot = new URL("../../../../../.temp", import.meta.url)
+const packageTempRoot = new URL("../../../../../../.temp", import.meta.url)
   .pathname;
 const packageTempPath = join(packageTempRoot, "vite-package");
 

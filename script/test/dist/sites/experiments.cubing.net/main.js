@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import { startServer } from "../../../lib/experiments-server/index.js";
+import { startServer } from "../../../../lib/experiments-server/index.js";
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;
