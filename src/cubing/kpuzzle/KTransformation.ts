@@ -103,6 +103,7 @@ export class KTransformation {
     return KPattern.fromTransformation(this);
   }
 
+  // TODO: support calculating this for a given start state. (For `R U R' U` on 3x3x3, should this default to 5 or 10?)
   repetitionOrder(): number {
     return transformationRepetitionOrder(this.kpuzzle.definition, this);
   }
