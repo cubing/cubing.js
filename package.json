@@ -8,48 +8,48 @@
   "repository": "github:cubing/cubing.js",
   "exports": {
     "./alg": {
-      "import": "./dist/cubing/alg/index.js",
-      "types": "./dist/cubing/alg/index.d.ts"
+      "import": "./dist/npm/cubing/alg/index.js",
+      "types": "./dist/npm/cubing/alg/index.d.ts"
     },
     "./bluetooth": {
-      "import": "./dist/cubing/bluetooth/index.js",
-      "types": "./dist/cubing/bluetooth/index.d.ts"
+      "import": "./dist/npm/cubing/bluetooth/index.js",
+      "types": "./dist/npm/cubing/bluetooth/index.d.ts"
     },
     "./kpuzzle": {
-      "import": "./dist/cubing/kpuzzle/index.js",
-      "types": "./dist/cubing/kpuzzle/index.d.ts"
+      "import": "./dist/npm/cubing/kpuzzle/index.js",
+      "types": "./dist/npm/cubing/kpuzzle/index.d.ts"
     },
     "./notation": {
-      "import": "./dist/cubing/notation/index.js",
-      "types": "./dist/cubing/notation/index.d.ts"
+      "import": "./dist/npm/cubing/notation/index.js",
+      "types": "./dist/npm/cubing/notation/index.d.ts"
     },
     "./protocol": {
-      "import": "./dist/cubing/protocol/index.js",
-      "types": "./dist/cubing/protocol/index.d.ts"
+      "import": "./dist/npm/cubing/protocol/index.js",
+      "types": "./dist/npm/cubing/protocol/index.d.ts"
     },
     "./puzzle-geometry": {
-      "import": "./dist/cubing/puzzle-geometry/index.js",
-      "types": "./dist/cubing/types/puzzle-geometry/index.d.ts"
+      "import": "./dist/npm/cubing/puzzle-geometry/index.js",
+      "types": "./dist/npm/cubing/types/puzzle-geometry/index.d.ts"
     },
     "./puzzles": {
-      "import": "./dist/cubing/puzzles/index.js",
-      "types": "./dist/cubing/types-geometry/index.d.ts"
+      "import": "./dist/npm/cubing/puzzles/index.js",
+      "types": "./dist/npm/cubing/types-geometry/index.d.ts"
     },
     "./scramble": {
-      "import": "./dist/cubing/scramble/index.js",
-      "types": "./dist/cubing/scramble/index.d.ts"
+      "import": "./dist/npm/cubing/scramble/index.js",
+      "types": "./dist/npm/cubing/scramble/index.d.ts"
     },
     "./search": {
-      "import": "./dist/cubing/search/index.js",
-      "types": "./dist/cubing/search/index.d.ts"
+      "import": "./dist/npm/cubing/search/index.js",
+      "types": "./dist/npm/cubing/search/index.d.ts"
     },
     "./stream": {
-      "import": "./dist/cubing/stream/index.js",
-      "types": "./dist/cubing/stream/index.d.ts"
+      "import": "./dist/npm/cubing/stream/index.js",
+      "types": "./dist/npm/cubing/stream/index.d.ts"
     },
     "./twisty": {
-      "import": "./dist/cubing/twisty/index.js",
-      "types": "./dist/cubing/twisty/index.d.ts"
+      "import": "./dist/npm/cubing/twisty/index.js",
+      "types": "./dist/npm/cubing/twisty/index.d.ts"
     }
   },
   "dependencies": {
@@ -98,8 +98,8 @@
     "/README.md",
     "/package.json",
     "/package-lock.json",
-    "/dist/cubing/**/*",
-    "/dist/cubing/**/*",
+    "/dist/npm/cubing/**/*",
+    "/dist/npm/cubing/**/*",
     "/*/package.json",
     "/*/index.d.ts"
   ],

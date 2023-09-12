@@ -144,7 +144,7 @@ export const esmTarget = {
     const build = await esbuild.build({
       // TODO: construct entry points based on `exports` and add tests.
       entryPoints: packageEntryPointsWithSearchWorkerEntry,
-      outdir: "dist/cubing",
+      outdir: "dist/npm/cubing",
       format: "esm",
       target: "es2020",
       bundle: true,
@@ -248,7 +248,7 @@ export const typesTarget = {
       ...packageEntryPoints,
       "--dts-only",
       "--out-dir",
-      "dist/cubing",
+      "dist/npm/cubing",
     ]);
   },
 };
