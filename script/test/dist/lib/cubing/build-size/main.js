@@ -26,7 +26,7 @@ async function bundleSize(entryFile, threeExternal = false) {
     bundle: true,
     minify: true,
     format: "esm",
-    target: "es2020",
+    target: "es2022",
     outfile,
     external: threeExternal ? ["three"] : [],
   });

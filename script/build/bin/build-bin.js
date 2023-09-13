@@ -6,7 +6,7 @@ await build({
   outdir: "dist/bin/",
   chunkNames: "chunks/[name]-[hash]",
   format: "esm",
-  target: "es2020",
+  target: "es2022",
   bundle: true,
   logLevel: "info",
   sourcemap: true,

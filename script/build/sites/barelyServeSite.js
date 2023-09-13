@@ -74,7 +74,7 @@ export async function barelyServeSite(srcFolder, dev) {
     devDomain: "cubing.localhost",
     port: 3333,
     esbuildOptions: {
-      target: "es2020",
+      target: "es2022",
       plugins: plugins(dev),
       minify: !dev,
       external: ["node:*"], // TODO

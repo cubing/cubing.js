@@ -12,7 +12,7 @@ export const esmOptions = {
   outdir: "dist/lib/cubing",
   chunkNames: "chunks/[name]-[hash]",
   format: "esm",
-  target: "es2020",
+  target: "es2022",
   bundle: true,
   splitting: true,
   logLevel: "info",

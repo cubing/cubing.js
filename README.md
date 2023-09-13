@@ -34,7 +34,7 @@ import { Alg } from "cubing/alg";
 import { TwistyPlayer } from "cubing/twisty";
 ```
 
-Please note that `cubing.js` requires ES2020 module compatibility. See [here](https://js.cubing.net/cubing/#javascript).
+Please note that `cubing.js` requires ES2022 module compatibility. See [here](https://js.cubing.net/cubing/#javascript).
 
 ## Contributing
 
