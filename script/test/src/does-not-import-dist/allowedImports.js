@@ -74,7 +74,7 @@ export const allowedImports = {
     dynamic: ["src/cubing/puzzle-geometry", "src/cubing/vendor/mpl/twsearch"],
   },
   "src/cubing/stream": {
-    static: ["src/cubing/alg"], // TODO: why isn't this working?
+    static: ["src/cubing/alg", "src/cubing/puzzles/cubing-private"], // TODO: why isn't this working?
   },
   "src/cubing/twisty": {
     static: [
@@ -84,7 +84,12 @@ export const allowedImports = {
       "src/cubing/vendor/mit/p-lazy",
       // TODO: denylist `src/cubing/twisty/heavy-code-imports`
     ],
-    dynamic: ["src/cubing/alg", "src/cubing/puzzle-geometry"],
+    dynamic: [
+      "src/cubing/alg",
+      "src/cubing/bluetooth",
+      "src/cubing/puzzle-geometry",
+      "src/cubing/stream",
+    ],
   },
   "src/cubing/twisty/heavy-code-imports": {
     static: ["three"],
@@ -100,5 +105,9 @@ export const allowedImports = {
   },
   "src/cubing/vendor/gpl/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
     static: ["src/cubing/search/cubing-private"],
+  },
+  // bin
+  "src/sites": {
+    static: ["src/cubing", "jszip", "three"],
   },
 };

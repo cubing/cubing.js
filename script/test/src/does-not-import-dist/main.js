@@ -36,6 +36,7 @@ const plugin = {
 const { metafile } = await build({
   entryPoints: [
     // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
+    "src/bin/**/*.ts",
     "src/cubing/alg/index.ts",
     "src/cubing/bluetooth/index.ts",
     "src/cubing/kpuzzle/index.ts",
@@ -47,7 +48,7 @@ const { metafile } = await build({
     "src/cubing/search/index.ts",
     "src/cubing/stream/index.ts",
     "src/cubing/twisty/index.ts",
-    "src/bin/**/*.ts",
+    "src/sites/**/*.ts",
   ],
   outdir: ".temp/unused",
   format: "esm",
@@ -89,18 +90,29 @@ function checkImport(sourcePath, importInfo, allowedImports) {
       Object.keys(allowedImports),
       sourcePathPrefix,
     );
-    if (
-      matchingSourcePathPrefix &&
-      matchingPathPrefix(
-        [
-          matchingSourcePathPrefix, // allow importing from any source group to itself.
-          ...(allowedImports[matchingSourcePathPrefix][importKind] ?? []),
-        ],
-        importInfo.path,
-      )
-    ) {
-      process.stdout.write(".");
-      return;
+    if (matchingSourcePathPrefix) {
+      const allowedImportsForKind =
+        allowedImports[matchingSourcePathPrefix][importKind];
+      if (
+        typeof allowedImportsForKind !== "undefined" &&
+        !(allowedImportsForKind instanceof Array)
+      ) {
+        throw new Error(
+          `Expected a string list for ${importKind} imports under the scope "${matchingSourcePathPrefix}"`,
+        );
+      }
+      if (
+        matchingPathPrefix(
+          [
+            matchingSourcePathPrefix, // allow importing from any source group to itself.
+            ...(allowedImportsForKind ?? []),
+          ],
+          importInfo.path,
+        )
+      ) {
+        process.stdout.write(".");
+        return;
+      }
     }
   }
   failure = true;
