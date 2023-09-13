@@ -1,4 +1,4 @@
-import { exec, spawn } from "child_process";
+import { exec, spawn } from "node:child_process";
 
 const childProcesses = [];
 export function killAllChildProcesses() {

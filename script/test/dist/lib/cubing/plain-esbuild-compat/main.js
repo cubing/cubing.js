@@ -1,13 +1,13 @@
-import { join } from "path";
-import { stdout } from "process";
+import { join } from "node:path";
+import { stdout } from "node:process";
 import { execPromiseLogged } from "../../../../../lib/execPromise.js";
-import { needFolder } from "../../../../../lib/need-folder.js";
+import { needPath } from "../../../../../lib/need-folder.js";
 import { packageNames } from "../../../../../lib/packages.js";
 
 // TODO: relative
 const OUT_DIR = "./.temp/plain-esbuild-compat";
 
-needFolder(
+needPath(
   new URL("../../../../../../dist/lib/cubing", import.meta.url).pathname,
   "make build-lib-js",
 );

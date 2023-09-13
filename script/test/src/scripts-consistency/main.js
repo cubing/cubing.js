@@ -1,5 +1,5 @@
-import { readFile, writeFile } from "fs/promises";
-import { exit } from "process";
+import { readFile, writeFile } from "node:fs/promises";
+import { exit } from "node:process";
 
 const MAKEFILE_PATH = new URL("../../../../Makefile", import.meta.url);
 const PACKAGE_JSON_PATH = new URL("../../../../package.json", import.meta.url);

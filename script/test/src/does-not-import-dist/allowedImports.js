@@ -10,7 +10,31 @@ import { YARGS_NODE_EXTERNALS } from "../../../build/targets.js";
  * - Files in a given scope key are allowed to import any other within the same scope.
  */
 export const allowedImports = {
-  // bin
+  // script
+  script: {
+    static: [
+      "node:assert",
+      "node:child_process",
+      "node:fetch",
+      "node:fs", // TODO: `existsSync(…)`
+      "node:fs/promises",
+      "node:http",
+      "node:path",
+      "node:process",
+      "node:util",
+
+      "package.json",
+      "cubing",
+
+      "barely-a-dev-server",
+      "esbuild",
+      "node-fetch",
+      "playwright",
+      "zlib",
+    ],
+    dynamic: ["cubing", "node:repl"],
+  },
+  // src/bin
   "src/bin": {
     static: ["src/cubing"],
   },
@@ -22,7 +46,7 @@ export const allowedImports = {
   "src/bin/scramble.ts": {
     static: ["src/cubing", "yargs", "yargs/helpers"],
   },
-  // lib
+  // src/lib
   "src/cubing/alg": {},
   "src/cubing/bluetooth": {
     static: [
@@ -106,7 +130,7 @@ export const allowedImports = {
   "src/cubing/vendor/gpl/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
     static: ["src/cubing/search/cubing-private"],
   },
-  // bin
+  // src/sites
   "src/sites": {
     static: ["src/cubing", "jszip", "three"],
   },

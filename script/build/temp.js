@@ -7,8 +7,8 @@ import {
   renameSync,
   existsSync,
   mkdirSync,
-} from "fs";
-import { join } from "path";
+} from "node:fs";
+import { join } from "node:path";
 
 const TEMP_ROOT = "./.temp/build/";
 

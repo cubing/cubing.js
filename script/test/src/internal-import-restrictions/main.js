@@ -1,6 +1,6 @@
 import { build } from "esbuild";
-import { resolve } from "path";
-import { existsSync } from "fs";
+import { resolve } from "node:path";
+import { existsSync } from "node:fs";
 
 import { targetInfos } from "./target-infos.js";
 import { execPromise } from "../../../lib/execPromise.js";

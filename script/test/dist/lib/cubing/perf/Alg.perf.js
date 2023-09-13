@@ -1,5 +1,5 @@
-import { needFolder } from "../../../../../lib/need-folder.js";
-needFolder(
+import { needPath } from "../../../../../lib/need-folder.js";
+needPath(
   new URL("../../../../../../dist/lib/cubing/alg", import.meta.url).pathname,
   "make build-lib-js",
 );

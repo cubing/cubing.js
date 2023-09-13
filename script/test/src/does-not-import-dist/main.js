@@ -2,7 +2,7 @@ import { join, resolve } from "node:path";
 import { cwd, exit, stderr } from "node:process";
 import { execPromise } from "../../../lib/execPromise.js";
 import { needPath } from "../../../lib/need-folder.js";
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
 import { build } from "esbuild";
 import { esmOptions } from "../../../build/targets.js";
 import { allowedImports } from "./allowedImports.js";
@@ -13,13 +13,12 @@ const metafilePath = new URL(
 ).pathname;
 needPath(metafilePath, "make build-js");
 
-// const INPUT_FOLDERS = ["src/cubing/kpuzzle"];
+const INPUT_FOLDERS = ["script", "src"];
 
 const absoluteCwd = resolve(cwd());
-// const absoluteInputFolders = INPUT_FOLDERS.map((folder) =>
-//   join(absoluteCwd, folder),
-// );
-// const entryPoints = INPUT_FOLDERS.map((folder) => join(folder, "**/*.ts"));
+const absoluteInputFolders = INPUT_FOLDERS.map((folder) =>
+  join(absoluteCwd, folder),
+);
 
 // From https://github.com/evanw/esbuild/issues/619#issuecomment-1504100390
 const plugin = {
@@ -35,8 +34,9 @@ const plugin = {
 
 const { metafile } = await build({
   entryPoints: [
-    // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
+    "script/**/*.js",
     "src/bin/**/*.ts",
+    // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
     "src/cubing/alg/index.ts",
     "src/cubing/bluetooth/index.ts",
     "src/cubing/kpuzzle/index.ts",

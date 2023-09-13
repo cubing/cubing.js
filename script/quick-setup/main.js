@@ -4,8 +4,8 @@ import {
   readFileSync,
   renameSync,
   writeFileSync,
-} from "fs";
-import { join } from "path";
+} from "node:fs";
+import { join } from "node:path";
 import { execPromise } from "../lib/execPromise.js";
 
 const TEMP_ROOT = "./.temp/initial-setup";
