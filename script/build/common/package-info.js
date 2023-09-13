@@ -27,5 +27,3 @@ export const searchWorkerEsbuildWorkaroundEntry = {
 
 export const packageEntryPointsWithSearchWorkerEntry =
   packageEntryPoints.concat([searchWorkerEsbuildWorkaroundEntry]);
-
-export const libExternal = ["three", "comlink", "random-uint-below"];

@@ -1,11 +1,5 @@
 import { build } from "esbuild";
-import {
-  libExternal,
-  searchWorkerEsbuildWorkaroundEntry,
-} from "../common/package-info.js";
-
-// TODO(https://github.com/yargs/yargs/issues/2358): If `yargs` adopts `node:` prefixes we don't have to enumerate these.
-export const YARGS_NODE_EXTERNALS = ["path", "url", "fs", "util", "assert"];
+import { searchWorkerEsbuildWorkaroundEntry } from "../common/package-info.js";
 
 await build({
   entryPoints: [
@@ -23,7 +17,7 @@ await build({
   logLevel: "info",
   sourcemap: false, // TODO: allow when not publishing to `npm` (where it would just be bloat)
   splitting: true, // We need this so that `search-worker-entry.js` exists in the output and can be used by other binaries without importing duplicate copies of some code.
-  external: [...libExternal, ...YARGS_NODE_EXTERNALS],
+  packages: "external",
   supported: {
     "top-level-await": true,
   },

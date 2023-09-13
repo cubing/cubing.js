@@ -1,9 +1,10 @@
 import { build } from "esbuild";
 import { mkdir, writeFile } from "node:fs/promises";
-import {
-  libExternal,
-  packageEntryPointsWithSearchWorkerEntry,
-} from "../common/package-info.js";
+import { packageEntryPointsWithSearchWorkerEntry } from "../common/package-info.js";
+
+// In theory we could set `packages: "external"` here and rely on `make
+// test-src-import-restrictions`, but this is safer.
+export const external = ["three", "comlink", "random-uint-below"];
 
 export const esmOptions = {
   // TODO: construct entry points based on `exports` and add tests.
@@ -17,7 +18,7 @@ export const esmOptions = {
   logLevel: "info",
   sourcemap: true,
   //
-  external: libExternal,
+  external: external,
   metafile: true,
 };
 
