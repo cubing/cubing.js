@@ -44,10 +44,10 @@ build-bin:
 build-sites: build-site-twizzle build-site-experiments
 .PHONY: build-site-twizzle
 build-site-twizzle:
-	${NODE} ./script/build/main.js twizzle
+	${NODE} ./script/build/sites/build-twizzle.js
 .PHONY: build-site-experiments
 build-site-experiments:
-	${NODE} ./script/build/main.js experiments
+	${NODE} ./script/build/sites/build-experiments.js
 .PHONY: build-site-docs
 build-site-docs:
 	rm -rf ./dist/sites/js.cubing.net/

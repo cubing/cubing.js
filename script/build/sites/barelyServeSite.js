@@ -36,27 +36,6 @@ function plugins(dev) {
   return plugins;
 }
 
-export async function barelyServeSite(srcFolder, dev) {
-  const outDir = dev ? join(".temp/dev", srcFolder) : join("dist", srcFolder);
-  await barelyServe({
-    entryRoot: join("src", srcFolder),
-    outDir,
-    dev,
-    devDomain: "cubing.localhost",
-    port: 3333,
-    esbuildOptions: {
-      target: "es2020",
-      plugins: plugins(dev),
-      minify: !dev,
-      external: ["node:*"], // TODO
-    },
-  });
-  if (!dev) {
-    // TODO: Include this in the custom build process.
-    await writeVersionJSON("dist/sites/alpha.twizzle.net");
-  }
-}
-
 async function writeVersionJSON(siteFolder) {
   // https://git-scm.com/docs/git-describe
   const gitDescribeVersion = (
@@ -79,39 +58,23 @@ async function writeVersionJSON(siteFolder) {
   );
 }
 
-export const sitesTarget = {
-  name: "sites",
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (dev) => {
-    await barelyServe(siteOptions("sites", dev));
-  },
-};
-
-export const twizzleTarget = {
-  name: "twizzle",
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (dev) => {
-    await barelyServe(siteOptions("sites/alpha.twizzle.net", dev));
-    if (!dev) {
-      // TODO: Include this in the custom build process.
-      await writeVersionJSON("dist/sites/alpha.twizzle.net");
-    }
-  },
-};
-
-export const experimentsTarget = {
-  name: "experiments",
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (dev) => {
-    await barelyServe(
-      siteOptions("sites/experiments.cubing.net/cubing.js", dev),
-    );
-    if (!dev) {
-      // TODO: Include this in the custom build process.
-      await writeVersionJSON("dist/sites/experiments.cubing.net/cubing.js");
-    }
-  },
-};
+export async function barelyServeSite(srcFolder, dev) {
+  const outDir = dev ? join(".temp/dev", srcFolder) : join("dist", srcFolder);
+  await barelyServe({
+    entryRoot: join("src", srcFolder),
+    outDir,
+    dev,
+    devDomain: "cubing.localhost",
+    port: 3333,
+    esbuildOptions: {
+      target: "es2020",
+      plugins: plugins(dev),
+      minify: !dev,
+      external: ["node:*"], // TODO
+    },
+  });
+  if (!dev) {
+    // TODO: Include this in the custom build process.
+    await writeVersionJSON("dist/sites/alpha.twizzle.net");
+  }
+}
