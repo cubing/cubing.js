@@ -40,7 +40,7 @@ export const allowedImports = {
   },
   "src/bin/import-restrictions-mermaid-diagram.ts": {
     static: [
-      "script/test/src/internal-import-restrictions/target-infos.js", // TODO: remove this
+      "script/test/src/import-restrictions/target-infos.js", // TODO: remove this
     ],
   },
   "src/bin/scramble.ts": {

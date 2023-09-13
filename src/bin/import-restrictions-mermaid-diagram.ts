@@ -1,7 +1,7 @@
 // To run this file directly:
 // bun run src/bin/import-restrictions-mermaid-diagram.ts
 
-import { targetInfos } from "../../script/test/src/internal-import-restrictions/target-infos";
+import { targetInfos } from "../../script/test/src/import-restrictions/target-infos";
 
 console.log("graph BT");
 for (const [target, targetInfo] of Object.entries(targetInfos)) {

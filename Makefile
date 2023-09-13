@@ -98,7 +98,7 @@ test-src: \
 	test-spec \
 	lint-ci \
 	test-src-tsc \
-	test-src-internal-import-restrictions \
+	test-src-import-restrictions \
 	test-src-scripts-consistency # keep CI.yml in sync with this
 .PHONY: test-spec
 test-spec:
@@ -109,9 +109,9 @@ test-spec-with-coverage:
 .PHONY: test-spec-watch
 test-spec-watch:
 	${WEB_TEST_RUNNER} --playwright --watch
-.PHONY: test-src-internal-import-restrictions
-test-src-internal-import-restrictions:
-	${NODE} ./script/test/src/internal-import-restrictions/main.js
+.PHONY: test-src-import-restrictions
+test-src-import-restrictions:
+	${NODE} ./script/test/src/import-restrictions/main.js
 .PHONY: test-src-tsc
 test-src-tsc: build-lib-types
 	npx tsc --project ./tsconfig.json
