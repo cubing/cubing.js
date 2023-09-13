@@ -25,10 +25,6 @@ const argv = await yargs(
   // TODO: `hideBin` just shows `bun` in `bun`.
   hideBin(process.argv),
 )
-  .parserConfiguration({
-    // Workaround for https://github.com/yargs/yargs/issues/2359
-    "parse-positional-numbers": false,
-  })
   .option("amount", {
     describe: "Output format.",
     default: 1,
@@ -45,16 +41,18 @@ const argv = await yargs(
     describe: "Convenient shorthand for `--format text`.",
     alias: "t",
   })
-  .positional("eventID", {
-    describe: "WCA or unofficial event ID",
-    type: "string",
-  })
+  .usage("$0 eventID", "Generate cubing scrambles.", (yargs) =>
+    yargs.positional("eventID", {
+      describe: "WCA or unofficial event ID",
+      type: "string",
+    }),
+  )
   .version(false) // TODO: why doesn't `yargs` get the right version in `bun` or for the `dist` bin?
-  .demand(1)
-  .strict().argv;
+  .strictOptions().argv;
 
-const eventID = argv._[0] as string;
-const format = argv.format ?? (argv.text ? "text" : undefined);
+const eventID = argv.eventID as string;
+let { format } = argv;
+format ??= argv.text ? "text" : undefined;
 
 setSearchDebug({ logPerf: false, showWorkerInstantiationWarnings: false });
 
