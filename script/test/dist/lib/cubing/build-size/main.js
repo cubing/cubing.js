@@ -13,7 +13,7 @@ const { exports } = packageJSON;
 
 const rootPath = new URL("../../../../../../", import.meta.url);
 
-needFolder(join(rootPath.pathname, "dist/lib/cubing"), "make build-esm");
+needFolder(join(rootPath.pathname, "dist/lib/cubing"), "make build-lib-js");
 
 function subpackageEntry(subpackageName) {
   return new URL(exports[`./${subpackageName}`].import, rootPath).pathname;

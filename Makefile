@@ -23,14 +23,18 @@ default:
 
 ######## Shared with `package.json` ########
 
+# By convention, we'd normally place `build-bin` first, but `build-lib` is the main target and
+# it can be less confusing to build first (especially if the build aborts with
+# an error).
 .PHONY: build
-build: clean
-	${NODE} ./script/build/main.js all
-.PHONY: build-esm
-build-esm:
+build: clean build-lib build-bin build-sites
+.PHONY: build-lib
+build-lib: build-lib-js build-lib-types
+.PHONY: build-lib-js
+build-lib-js:
 	${NODE} ./script/build/main.js esm
-.PHONY: build-types
-build-types:
+.PHONY: build-lib-types
+build-lib-types:
 	${NODE} ./script/build/main.js types
 .PHONY: build-bin
 build-bin:
@@ -86,7 +90,7 @@ test-info:
 	@echo "    make test-fast (≈4s, runs a subset of the above)"
 	@echo ""
 .PHONY: test-fast
-test-fast: build-esm lint build-sites build-bin test-spec test-dist-bin
+test-fast: build-lib-js lint build-sites build-bin test-spec test-dist-bin
 .PHONY: test-all
 test-all: test-src test-build test-dist
 .PHONY: test-src
@@ -113,7 +117,7 @@ test-src-internal-import-restrictions:
 test-src-does-not-import-dist: build
 	${NODE} ./script/test/src/does-not-import-dist/main.js
 .PHONY: test-src-tsc
-test-src-tsc: build-types
+test-src-tsc: build-lib-types
 	npx tsc --project ./tsconfig.json
 .PHONY: test-src-scripts-consistency
 test-src-scripts-consistency:
@@ -123,15 +127,15 @@ fix-src-scripts-consistency:
 	${NODE} ./script/test/src/scripts-consistency/main.js --fix
 .PHONY: test-build
 test-build: \
-	build-esm \
+	build-lib-js \
 	build-bin \
-	build-types \
+	build-lib-types \
 	build-sites \
 	build-site-docs # keep CI.yml in sync with this
 .PHONY: test-dist
 test-dist: test-dist-lib test-dist-bin
 .PHONY: test-dist-lib
-test-dist-libt: \
+test-dist-lib: \
 	test-dist-lib-node-import \
 	test-dist-lib-scramble-all-events \
 	test-dist-lib-perf \
@@ -140,22 +144,22 @@ test-dist-libt: \
 	test-dist-lib-build-size \
 	test-dist-sites-experiments # keep CI.yml in sync with this
 .PHONY: test-dist-lib-node-import
-test-dist-lib-node-import: build-esm
+test-dist-lib-node-import: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node-import/main.js
 .PHONY: test-dist-lib-scramble-all-events
-test-dist-lib-scramble-all-events: build-esm
+test-dist-lib-scramble-all-events: build-lib-js
 	${NODE} script/test/dist/lib/cubing/scramble-all-events/main.js
 .PHONY: test-dist-lib-perf
-test-dist-lib-perf: build-esm
+test-dist-lib-perf: build-lib-js
 	${NODE} script/test/dist/lib/cubing/perf/*.js
 .PHONY: test-dist-lib-plain-esbuild-compat
-test-dist-lib-plain-esbuild-compat: build-esm
+test-dist-lib-plain-esbuild-compat: build-lib-js
 	${NODE} script/test/dist/lib/cubing/plain-esbuild-compat/main.js
 .PHONY: test-dist-lib-vite
-test-dist-lib-vite: build-esm
+test-dist-lib-vite: build-lib-js
 	${NODE} ./script/test/dist/lib/cubing/vite/main.js
 .PHONY: test-dist-lib-build-size
-test-dist-lib-build-size: build-esm
+test-dist-lib-build-size: build-lib-js
 	${NODE} ./script/test/dist/lib/cubing/build-size/main.js
 .PHONY: test-dist-sites-experiments
 test-dist-sites-experiments: build-sites

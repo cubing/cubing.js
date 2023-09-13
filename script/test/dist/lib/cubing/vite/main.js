@@ -2,7 +2,7 @@ import { needFolder } from "../../../../../lib/need-folder.js";
 needFolder(
   new URL("../../../../../../dist/lib/cubing/kpuzzle", import.meta.url)
     .pathname,
-  "make build-esm",
+  "make build-lib-js",
 );
 
 import { chromium } from "playwright";

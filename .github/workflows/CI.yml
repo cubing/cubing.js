@@ -40,9 +40,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: make build-esm
+      - run: make build-lib-js
       - run: make build-bin
-      - run: make build-types
+      - run: make build-lib-types
       - run: make build-sites
       - run: make build-site-docs
       - run: make clean
@@ -61,7 +61,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: make build-esm
+      - run: make build-lib-js
       - run: make test-dist-lib-node-import
       - run: make test-dist-lib-perf
       - run: make test-dist-lib-plain-esbuild-compat

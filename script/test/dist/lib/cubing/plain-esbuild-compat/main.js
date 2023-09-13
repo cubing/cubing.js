@@ -9,7 +9,7 @@ const OUT_DIR = "./.temp/plain-esbuild-compat";
 
 needFolder(
   new URL("../../../../../../dist/lib/cubing", import.meta.url).pathname,
-  "make build-esm",
+  "make build-lib-js",
 );
 
 const dist_entries = packageNames
