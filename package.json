@@ -97,7 +97,8 @@
     "node": ">=19"
   },
   "files": [
-    "./dist/lib/cubing/"
+    "./dist/bin/",
+    "./dist/lib/"
   ],
   "scripts": {
     "default": "make default",

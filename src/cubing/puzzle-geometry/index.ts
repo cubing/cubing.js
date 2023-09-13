@@ -12,7 +12,10 @@ export type {
   StickerDatFace,
   StickerDatSticker,
 } from "./PuzzleGeometry";
-export { parseOptions } from "./Options";
+export {
+  parseOptions,
+  type PuzzleGeometryOptions as ExperimentalPuzzleGeometryOptions,
+} from "./Options";
 export { Quat } from "./Quat";
 export { schreierSims } from "./SchreierSims";
 

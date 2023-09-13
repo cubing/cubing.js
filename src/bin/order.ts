@@ -1,9 +1,9 @@
 // To run this file directly:
 // bun run src/bin/order.ts -- <program args>
 
-import { KPuzzle } from "../cubing/kpuzzle";
-import { getPuzzleGeometryByName } from "../cubing/puzzle-geometry";
-import { puzzles } from "../cubing/puzzles";
+import { KPuzzle } from "cubing/kpuzzle";
+import { getPuzzleGeometryByName } from "cubing/puzzle-geometry";
+import { puzzles } from "cubing/puzzles";
 
 /*
  *   Given a puzzle name and an algorithm, calculate the order of that

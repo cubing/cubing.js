@@ -7,12 +7,89 @@ import {
   getPG3DNamedPuzzles,
   parsePuzzleDescription,
   PuzzleGeometry,
-} from "../cubing/puzzle-geometry";
-import { parsePGOptionList } from "../cubing/puzzle-geometry/Options";
+  type ExperimentalPuzzleGeometryOptions,
+} from "cubing/puzzle-geometry";
 import type {
   PuzzleCutDescription,
   PuzzleDescription,
-} from "../cubing/puzzle-geometry/PuzzleGeometry";
+} from "cubing/puzzle-geometry/PuzzleGeometry";
+
+export function asstructured(v: any): any {
+  if (typeof v === "string") {
+    return JSON.parse(v);
+  }
+  return v;
+}
+export function asboolean(v: any): boolean {
+  if (typeof v === "string") {
+    if (v === "false") {
+      return false;
+    }
+    return true;
+  } else {
+    return v ? true : false;
+  }
+}
+export function parsePGOptionList(
+  optionlist?: any[],
+): ExperimentalPuzzleGeometryOptions {
+  const options: ExperimentalPuzzleGeometryOptions = {};
+  if (optionlist !== undefined) {
+    if (optionlist.length % 2 !== 0) {
+      throw new Error("Odd length in option list?");
+    }
+    for (let i = 0; i < optionlist.length; i += 2) {
+      if (optionlist[i] === "verbose") {
+        options.verbosity = (options.verbosity ?? 0) + 1;
+      } else if (optionlist[i] === "quiet") {
+        options.verbosity = 0;
+      } else if (optionlist[i] === "allmoves") {
+        options.allMoves = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "outerblockmoves") {
+        options.outerBlockMoves = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "vertexmoves") {
+        options.vertexMoves = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "rotations") {
+        options.addRotations = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "cornersets") {
+        options.includeCornerOrbits = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "centersets") {
+        options.includeCenterOrbits = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "edgesets") {
+        options.includeEdgeOrbits = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "omit") {
+        options.excludeOrbits = optionlist[i + 1];
+      } else if (optionlist[i] === "graycorners") {
+        options.grayCorners = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "graycenters") {
+        options.grayCenters = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "grayedges") {
+        options.grayEdges = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "movelist") {
+        options.moveList = asstructured(optionlist[i + 1]);
+      } else if (optionlist[i] === "killorientation") {
+        options.fixedOrientation = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "optimize") {
+        options.optimizeOrbits = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "scramble") {
+        options.scrambleAmount = optionlist[i + 1];
+      } else if (optionlist[i] === "fix") {
+        options.fixedPieceType = optionlist[i + 1];
+      } else if (optionlist[i] === "orientcenters") {
+        options.orientCenters = asboolean(optionlist[i + 1]);
+      } else if (optionlist[i] === "puzzleorientation") {
+        options.puzzleOrientation = asstructured(optionlist[i + 1]);
+      } else if (optionlist[i] === "puzzleorientations") {
+        options.puzzleOrientations = asstructured(optionlist[i + 1]);
+      } else {
+        throw new Error(
+          `Bad option while processing option list ${optionlist[i]}`,
+        );
+      }
+    }
+  }
+  return options;
+}
 
 let dosvg = false;
 let doss = false;

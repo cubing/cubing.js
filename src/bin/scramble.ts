@@ -2,11 +2,11 @@
 // bun run src/bin/scramble.ts -- 333
 
 import yargs from "yargs";
-import { eventInfo } from "../cubing/puzzles";
-import { randomScrambleForEvent } from "../cubing/scramble";
-import { setSearchDebug } from "../cubing/search";
+import { eventInfo } from "cubing/puzzles";
+import { randomScrambleForEvent } from "cubing/scramble";
+import { setSearchDebug } from "cubing/search";
 import { hideBin } from "yargs/helpers";
-import type { Alg } from "../cubing/alg";
+import type { Alg } from "cubing/alg";
 
 // TODO: completions for `bash`, `zsh`, and `fish`: https://github.com/loilo/completarr
 

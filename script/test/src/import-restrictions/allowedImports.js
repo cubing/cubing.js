@@ -37,10 +37,7 @@ export const allowedImports = {
   },
   // src/bin
   "src/bin": {
-    static: ["src/cubing"],
-  },
-  "src/bin/import-restrictions-mermaid-diagram.ts": {
-    static: ["script/test/src/import-restrictions/allowedImports.js"],
+    static: ["cubing"],
   },
   "src/bin/scramble.ts": {
     static: ["src/cubing", "yargs", "yargs/helpers"],

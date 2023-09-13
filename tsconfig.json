@@ -18,7 +18,13 @@
     "noImplicitReturns": true,
     "noImplicitOverride": true,
     "noUnusedLocals": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "paths": {
+      // Workaround for the `bin` build: https://github.com/cubing/cubing.js/issues/292
+      "cubing/*": [
+        "./src/cubing/*"
+      ]
+    }
   },
   "include": [
     "script",

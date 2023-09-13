@@ -162,6 +162,9 @@ test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: test-dist-bin
 test-dist-bin: build-bin
+	# Note: we're not testing the output, just that these don't exit with an error.
+	dist/bin/order.js 3x3x3 "R U R'"
+	time dist/bin/puzzle-geometry-bin.js --ss 2x2x2
 	npm exec scramble -- 333
 .PHONY: format
 format:
