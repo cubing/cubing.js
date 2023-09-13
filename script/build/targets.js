@@ -39,6 +39,9 @@ export const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
 
 const external = ["three", "comlink", "random-uint-below"];
 
+// TODO(https://github.com/yargs/yargs/issues/2358): If `yargs` adopts `node:` prefixes we don't have to enumerate these.
+const YARGS_NODE_EXTERNALS = ["path", "url", "fs", "util", "assert"];
+
 function plugins(dev) {
   const plugins = [];
   // TODO: convenience hack for @lgarron; figure out how to either generalize this or add light auto-refresh to `barely-a-dev-server`
@@ -187,7 +190,7 @@ export const binTarget = {
       sourcemap: dev,
       splitting: true, // We need this so that `search-worker-entry.js` exists in the output and can be used by other binaries without importing duplicate copies of some code.
       //
-      external,
+      external: [...external, ...YARGS_NODE_EXTERNALS],
       supported: {
         ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED,
         "top-level-await": true,

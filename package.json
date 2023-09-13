@@ -52,6 +52,9 @@
       "types": "./dist/lib/cubing/twisty/index.d.ts"
     }
   },
+  "bin": {
+    "scramble": "./dist/bin/scramble.js"
+  },
   "dependencies": {
     "@types/three": "^0.149.0",
     "@types/web-bluetooth": "^0.0.16",
