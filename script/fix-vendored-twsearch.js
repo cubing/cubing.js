@@ -1,5 +1,5 @@
-import { readdir, readFile, writeFile } from "fs/promises";
-import { join } from "path";
+import { readdir, readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const DIR = new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url)
   .pathname;

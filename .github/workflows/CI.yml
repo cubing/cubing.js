@@ -20,8 +20,7 @@ jobs:
       - run: make test-spec-with-coverage
       - run: make lint-ci
       - run: make test-src-tsc
-      - run: make test-src-internal-import-restrictions
-      - run: make test-src-does-not-import-dist
+      - run: make test-src-import-restrictions
       - run: make test-src-scripts-consistency
       - run: make format # note: not in `test-src` in `package.json`, only in CI
       - run: make clean

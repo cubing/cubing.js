@@ -54,7 +54,7 @@ async function runTest() {
 
   if (OPEN_REPL) {
     globalThis.page = page;
-    (await import("repl")).start();
+    (await import("node:repl")).start();
   } else {
     await browser.close();
     process.exit(exitCode);

@@ -1,5 +1,5 @@
-import { needFolder } from "../../../../../lib/need-folder.js";
-needFolder(
+import { needPath } from "../../../../../lib/needPath.js";
+needPath(
   new URL("../../../../../../dist/lib/cubing/kpuzzle", import.meta.url)
     .pathname,
   "make build-lib-js",
@@ -47,7 +47,7 @@ async function runTest() {
   assert("algLength < 30", true, algLength < 30);
   if (OPEN_REPL) {
     globalThis.page = page;
-    (await import("repl")).start();
+    (await import("node:repl")).start();
   } else {
     await browser.close();
   }

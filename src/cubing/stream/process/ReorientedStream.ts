@@ -65,6 +65,7 @@ class OrientationTracker {
   }
 }
 
+// TODO: Export this from `cubing/stream`
 export class ReorientedStream extends EventTarget {
   orientationTracker = new OrientationTracker();
 

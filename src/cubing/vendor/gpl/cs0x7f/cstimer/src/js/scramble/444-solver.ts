@@ -1,10 +1,9 @@
 // @ts-nocheck
 
 import { Alg } from "../../../../../../../alg";
-import { random333Scramble as getRandomScramble333 } from "../../../../../../../search/inside/solve/puzzles/3x3x3";
+import { rawRandom333Scramble } from "../../../../../../../search/cubing-private";
 import { circle, Cnk, set8Perm } from "../lib/mathlib";
 import { randomUIntBelow } from "random-uint-below";
-import { mustBeInsideWorker } from "../../../../../../../search/inside/inside-worker";
 
 function createArray(length1: number, length2?: number) {
   const result = new Array<number[]>(length1);
@@ -2997,8 +2996,7 @@ export function initialize(): void {
 }
 
 export async function random444Scramble(): Promise<Alg> {
-  mustBeInsideWorker();
   init();
   const suffix = Alg.fromString($randomState(searcher));
-  return (await getRandomScramble333()).concat(suffix);
+  return (await rawRandom333Scramble()).concat(suffix);
 }

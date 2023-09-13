@@ -1,6 +1,6 @@
-import { needFolder } from "../../../../../lib/need-folder.js";
+import { needPath } from "../../../../../lib/needPath.js";
 
-needFolder(
+needPath(
   new URL("../../../../../../dist/lib/cubing/scramble", import.meta.url)
     .pathname,
   "make build-lib-js",

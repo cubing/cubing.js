@@ -32,22 +32,22 @@ build: clean build-lib build-bin build-sites
 build-lib: build-lib-js build-lib-types
 .PHONY: build-lib-js
 build-lib-js:
-	${NODE} ./script/build/main.js esm
+	${NODE} ./script/build/lib/build-lib-js.js
 .PHONY: build-lib-types
 build-lib-types:
-	${NODE} ./script/build/main.js types
+	${NODE} ./script/build/lib/build-lib-types.js
 .PHONY: build-bin
 build-bin:
-	${NODE} ./script/build/main.js bin
+	${NODE} ./script/build/bin/build-bin.js
 	chmod +x ./dist/bin/*.js
 .PHONY: build-sites
 build-sites: build-site-twizzle build-site-experiments
 .PHONY: build-site-twizzle
 build-site-twizzle:
-	${NODE} ./script/build/main.js twizzle
+	${NODE} ./script/build/sites/build-site-twizzle.js
 .PHONY: build-site-experiments
 build-site-experiments:
-	${NODE} ./script/build/main.js experiments
+	${NODE} ./script/build/sites/build-site-experiments.js
 .PHONY: build-site-docs
 build-site-docs:
 	rm -rf ./dist/sites/js.cubing.net/
@@ -64,7 +64,7 @@ generate-js-svg:
 	@echo "TODO: Generating JS for SVGs is not implemented yet."
 .PHONY: dev
 dev: quick-setup
-	${NODE} ./script/build/main.js sites dev
+	${NODE} ./script/build/sites/dev.js
 .PHONY: link
 link: build
 	npm link
@@ -98,8 +98,7 @@ test-src: \
 	test-spec \
 	lint-ci \
 	test-src-tsc \
-	test-src-internal-import-restrictions \
-	test-src-does-not-import-dist \
+	test-src-import-restrictions \
 	test-src-scripts-consistency # keep CI.yml in sync with this
 .PHONY: test-spec
 test-spec:
@@ -110,12 +109,9 @@ test-spec-with-coverage:
 .PHONY: test-spec-watch
 test-spec-watch:
 	${WEB_TEST_RUNNER} --playwright --watch
-.PHONY: test-src-internal-import-restrictions
-test-src-internal-import-restrictions:
-	${NODE} ./script/test/src/internal-import-restrictions/main.js
-.PHONY: test-src-does-not-import-dist
-test-src-does-not-import-dist: build
-	${NODE} ./script/test/src/does-not-import-dist/main.js
+.PHONY: test-src-import-restrictions
+test-src-import-restrictions:
+	${NODE} ./script/test/src/import-restrictions/main.js
 .PHONY: test-src-tsc
 test-src-tsc: build-lib-types
 	npx tsc --project ./tsconfig.json
@@ -165,9 +161,8 @@ test-dist-lib-build-size: build-lib-js
 test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: test-dist-bin
-test-dist-bin:
+test-dist-bin: build-bin
 	npm exec scramble -- 333
-
 .PHONY: format
 format:
 	${BIOME} format --write ./script ./src
