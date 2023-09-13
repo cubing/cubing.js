@@ -3,10 +3,11 @@ import { join } from "node:path";
 import { execPromise } from "../../lib/execPromise.js";
 import { writeFile } from "node:fs/promises";
 import { barelyServe } from "barely-a-dev-server";
+import { needPath } from "../../lib/needPath.js";
 
-import { needPath } from "../lib/needPath.js";
 needPath(
-  new URL("../../node_modules/barely-a-dev-server", import.meta.url).pathname,
+  new URL("../../../node_modules/barely-a-dev-server", import.meta.url)
+    .pathname,
   "npm install",
 );
 

@@ -1,19 +1,8 @@
-import { join, resolve } from "node:path";
-import { cwd, exit, stderr } from "node:process";
-import { execPromise } from "../../../lib/execPromise.js";
-import { needPath } from "../../../lib/needPath.js";
-import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import { exit } from "node:process";
 import { build } from "esbuild";
-import { esmOptions } from "../../../build/targets.js";
 import { allowedImports } from "./allowedImports.js";
 import { packageNames } from "../../../build/common/package-info.js";
-
-const INPUT_FOLDERS = ["script", "src"];
-
-const absoluteCwd = resolve(cwd());
-const absoluteInputFolders = INPUT_FOLDERS.map((folder) =>
-  join(absoluteCwd, folder),
-);
 
 // From https://github.com/evanw/esbuild/issues/619#issuecomment-1504100390
 const plugin = {
