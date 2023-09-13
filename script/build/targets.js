@@ -235,10 +235,9 @@ export const experimentsTarget = {
     await barelyServe(
       siteOptions("sites/experiments.cubing.net/cubing.js", dev),
     );
-
     if (!dev) {
       // TODO: Include this in the custom build process.
-      await writeVersionJSON("dist/sites/alpha.twizzle.net");
+      await writeVersionJSON("dist/sites/experiments.cubing.net/cubing.js");
     }
   },
 };
