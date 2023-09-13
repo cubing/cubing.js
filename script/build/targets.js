@@ -23,19 +23,6 @@ import {
 } from "../lib/packages.js";
 
 const PARALLEL = false;
-const PUBLISH_WITH_PRIVATE_FIELDS = true;
-
-export const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
-  ? {
-      "class-private-accessor": true,
-      "class-private-brand-check": true,
-      "class-private-field": true,
-      "class-private-method": true,
-      "class-private-static-accessor": true,
-      "class-private-static-field": true,
-      "class-private-static-method": true,
-    }
-  : {};
 
 const external = ["three", "comlink", "random-uint-below"];
 
@@ -86,7 +73,6 @@ function siteOptions(srcFolder, dev) {
       plugins: plugins(dev),
       minify: !dev,
       external: ["node:*"], // TODO
-      supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     },
   };
 }
@@ -143,6 +129,7 @@ export const esmOptions = {
   // TODO: construct entry points based on `exports` and add tests.
   entryPoints: packageEntryPointsWithSearchWorkerEntry,
   outdir: "dist/lib/cubing",
+  chunkNames: "chunks/[name]-[hash]",
   format: "esm",
   target: "es2020",
   bundle: true,
@@ -151,7 +138,6 @@ export const esmOptions = {
   sourcemap: true,
   //
   external,
-  supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
   metafile: true,
 };
 
@@ -194,7 +180,6 @@ export const binTarget = {
       //
       external: [...external, ...YARGS_NODE_EXTERNALS],
       supported: {
-        ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED,
         "top-level-await": true,
       },
       banner: {

@@ -7,12 +7,6 @@ import { build } from "esbuild";
 import { esmOptions } from "../../../build/targets.js";
 import { allowedImports } from "./allowedImports.js";
 
-const metafilePath = new URL(
-  "../../../../.temp/esbuild-metafile.json",
-  import.meta.url,
-).pathname;
-needPath(metafilePath, "make build-js");
-
 const INPUT_FOLDERS = ["script", "src"];
 
 const absoluteCwd = resolve(cwd());
