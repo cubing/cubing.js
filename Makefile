@@ -35,10 +35,10 @@ build-lib-js:
 	${NODE} ./script/build/main.js esm
 .PHONY: build-lib-types
 build-lib-types:
-	${NODE} ./script/build/main.js types
+	${NODE} ./script/build/lib/build-types.js
 .PHONY: build-bin
 build-bin:
-	${NODE} ./script/build/build-bin.js
+	${NODE} ./script/build/bin/build-bin.js
 	chmod +x ./dist/bin/*.js
 .PHONY: build-sites
 build-sites: build-site-twizzle build-site-experiments

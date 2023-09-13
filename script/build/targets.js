@@ -86,19 +86,7 @@ export const typesTarget = {
   name: "types",
   builtYet: false,
   dependencies: [],
-  buildSelf: async (dev) => {
-    console.warn("Note: The `types` target is slow. Expect several seconds.");
-    if (dev) {
-      throw new Error("Cannot build `types` target in dev mode.");
-    }
-    await spawnPromise("npx", [
-      "tsup",
-      ...packageEntryPoints,
-      "--dts-only",
-      "--out-dir",
-      "dist/lib/cubing",
-    ]);
-  },
+  buildSelf: async (dev) => {},
 };
 
 export const targets /*: Record<String, SolverWorker>*/ = {
