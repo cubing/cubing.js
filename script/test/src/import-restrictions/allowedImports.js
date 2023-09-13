@@ -1,4 +1,5 @@
-import { YARGS_NODE_EXTERNALS } from "../../../build/targets.js";
+// TODO(https://github.com/yargs/yargs/issues/2358): If `yargs` adopts `node:` prefixes we don't have to enumerate these.
+export const YARGS_NODE_EXTERNALS = ["path", "url", "fs", "util", "assert"];
 
 /**
  * These definitions help to guard heavy code imports from light entry points.
