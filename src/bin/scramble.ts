@@ -40,6 +40,11 @@ const argv = await yargs(
     choices: ["text", "link", "json-text"],
     alias: "f",
   })
+  .option("text", {
+    type: "boolean",
+    describe: "Convenient shorthand for `--format text`.",
+    alias: "t",
+  })
   .positional("eventID", {
     describe: "WCA or unofficial event ID",
     type: "string",
@@ -49,6 +54,7 @@ const argv = await yargs(
   .strict().argv;
 
 const eventID = argv._[0] as string;
+const format = argv.format ?? (argv.text ? "text" : undefined);
 
 setSearchDebug({ logPerf: false, showWorkerInstantiationWarnings: false });
 
@@ -88,11 +94,11 @@ class JSONListPrinter<T> {
   }
 }
 
-if (argv.format !== "json-text" && argv.amount === 1) {
+if (format !== "json-text" && argv.amount === 1) {
   // @ts-ignore: Top-level await is okay because this is not part of the main library.
   const scramble = await randomScrambleForEvent(eventID);
 
-  switch (argv.format) {
+  switch (format) {
     case "text": {
       console.log(scrambleText(scramble));
       break;
@@ -114,11 +120,11 @@ if (argv.format !== "json-text" && argv.amount === 1) {
   }
 } else {
   const jsonListPrinter: JSONListPrinter<string> | undefined =
-    argv.format === "json-text" ? new JSONListPrinter() : undefined;
+    format === "json-text" ? new JSONListPrinter() : undefined;
   for (let i = 0; i < argv.amount; i++) {
     // @ts-ignore: Top-level await is okay because this is not part of the main library.
     const scramble = await randomScrambleForEvent(eventID);
-    switch (argv.format) {
+    switch (format) {
       case "text": {
         console.log(`// Scramble #${i + 1}`);
         console.log(`${scrambleText(scramble)}\n`);
