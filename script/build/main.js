@@ -1,4 +1,4 @@
-import { needPath } from "../lib/need-folder.js";
+import { needPath } from "../lib/needPath.js";
 needPath(
   new URL("../../node_modules/barely-a-dev-server", import.meta.url).pathname,
   "npm install",

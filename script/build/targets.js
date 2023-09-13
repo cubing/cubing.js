@@ -17,17 +17,13 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
 import {
+  libExternal,
   packageEntryPoints,
   packageEntryPointsWithSearchWorkerEntry,
   searchWorkerEsbuildWorkaroundEntry,
-} from "../lib/packages.js";
+} from "./package-build-info.js";
 
 const PARALLEL = false;
-
-const external = ["three", "comlink", "random-uint-below"];
-
-// TODO(https://github.com/yargs/yargs/issues/2358): If `yargs` adopts `node:` prefixes we don't have to enumerate these.
-export const YARGS_NODE_EXTERNALS = ["path", "url", "fs", "util", "assert"];
 
 function plugins(dev) {
   const plugins = [];
@@ -137,7 +133,7 @@ export const esmOptions = {
   logLevel: "info",
   sourcemap: true,
   //
-  external,
+  external: libExternal,
   metafile: true,
 };
 
@@ -153,40 +149,6 @@ export const esmTarget = {
       "./.temp/esbuild-metafile.json",
       JSON.stringify(build.metafile),
     );
-  },
-};
-
-export const binTarget = {
-  name: "bin",
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (dev) => {
-    await esbuild.build({
-      entryPoints: [
-        "src/bin/order.ts",
-        "src/bin/puzzle-geometry-bin.ts",
-        "src/bin/import-restrictions-mermaid-diagram.ts",
-        "src/bin/scramble.ts",
-        searchWorkerEsbuildWorkaroundEntry,
-      ],
-      outdir: "dist/bin/",
-      chunkNames: "chunks/[name]-[hash]",
-      format: "esm",
-      target: "es2020",
-      bundle: true,
-      logLevel: "info",
-      sourcemap: dev,
-      splitting: true, // We need this so that `search-worker-entry.js` exists in the output and can be used by other binaries without importing duplicate copies of some code.
-      //
-      external: [...external, ...YARGS_NODE_EXTERNALS],
-      supported: {
-        "top-level-await": true,
-      },
-      banner: {
-        js: "#!/usr/bin/env node",
-      },
-    });
-    // Note: the output entry files are `chmod`ded by the `Makefile`.
   },
 };
 
@@ -246,23 +208,10 @@ export const typesTarget = {
   },
 };
 
-export const allTarget = {
-  name: "all",
-  builtYet: false,
-  dependencies: [esmTarget, typesTarget, binTarget],
-  buildSelf: async (dev) => {
-    if (dev) {
-      throw new Error("Cannot build `types` target in dev mode.");
-    }
-  },
-};
-
 export const targets /*: Record<String, SolverWorker>*/ = {
   sites: sitesTarget,
   twizzle: twizzleTarget,
   experiments: experimentsTarget,
   esm: esmTarget,
   types: typesTarget,
-  bin: binTarget,
-  all: allTarget,
 };

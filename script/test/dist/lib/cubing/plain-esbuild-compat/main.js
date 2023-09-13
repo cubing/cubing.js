@@ -1,8 +1,8 @@
 import { join } from "node:path";
 import { stdout } from "node:process";
 import { execPromiseLogged } from "../../../../../lib/execPromise.js";
-import { needPath } from "../../../../../lib/need-folder.js";
-import { packageNames } from "../../../../../lib/packages.js";
+import { needPath } from "../../../../../lib/needPath.js";
+import { packageNames } from "../../../../../build/package-build-info.js";
 
 // TODO: relative
 const OUT_DIR = "./.temp/plain-esbuild-compat";

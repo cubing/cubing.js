@@ -3,7 +3,7 @@
 import { readFile } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join } from "node:path";
-import { needPath } from "../need-folder.js";
+import { needPath } from "../needPath.js";
 
 const DIST_SITES_ROOT = "../../../dist/sites/";
 

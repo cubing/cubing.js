@@ -22,7 +22,7 @@
   },
   "include": [
     "script",
-    "src",
+    "src"
   ],
   "exclude": [
     "script/test/dist" // Avoid indexing `dist`.

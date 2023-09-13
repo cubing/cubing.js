@@ -1,4 +1,4 @@
-import { needPath } from "../../../../../lib/need-folder.js";
+import { needPath } from "../../../../../lib/needPath.js";
 
 needPath(
   new URL("../../../../../../dist/lib/cubing/scramble", import.meta.url)

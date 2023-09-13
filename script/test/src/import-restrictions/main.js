@@ -1,11 +1,12 @@
 import { join, resolve } from "node:path";
 import { cwd, exit, stderr } from "node:process";
 import { execPromise } from "../../../lib/execPromise.js";
-import { needPath } from "../../../lib/need-folder.js";
+import { needPath } from "../../../lib/needPath.js";
 import { readFile } from "node:fs/promises";
 import { build } from "esbuild";
 import { esmOptions } from "../../../build/targets.js";
 import { allowedImports } from "./allowedImports.js";
+import { packageNames } from "../../../build/package-build-info.js";
 
 const INPUT_FOLDERS = ["script", "src"];
 
@@ -31,17 +32,9 @@ const { metafile } = await build({
     "script/**/*.js",
     "src/bin/**/*.ts",
     // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
-    "src/cubing/alg/index.ts",
-    "src/cubing/bluetooth/index.ts",
-    "src/cubing/kpuzzle/index.ts",
-    "src/cubing/notation/index.ts",
-    "src/cubing/protocol/index.ts",
-    "src/cubing/puzzle-geometry/index.ts",
-    "src/cubing/puzzles/index.ts",
-    "src/cubing/scramble/index.ts",
-    "src/cubing/search/index.ts",
-    "src/cubing/stream/index.ts",
-    "src/cubing/twisty/index.ts",
+    ...packageNames.map((packageName) =>
+      join("src/cubing", packageName, "index.ts"),
+    ),
     "src/sites/**/*.ts",
   ],
   outdir: ".temp/unused",

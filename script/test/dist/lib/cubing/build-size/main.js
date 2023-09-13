@@ -3,8 +3,7 @@ import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { gzip } from "zlib";
-import { needPath } from "../../../../../lib/need-folder.js";
-import { ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED } from "../../../../../build/targets.js"; // TODO: Factor out into the lib dir?
+import { needPath } from "../../../../../lib/needPath.js";
 
 import { default as packageJSON } from "../../../../../../package.json" assert {
   type: "json",
@@ -30,7 +29,6 @@ async function bundleSize(entryFile, threeExternal = false) {
     target: "es2020",
     outfile,
     external: threeExternal ? ["three"] : [],
-    supported: ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED,
   });
   const { size } = await stat(outfile);
   const bundleContents = await readFile(outfile);

@@ -38,7 +38,7 @@ build-lib-types:
 	${NODE} ./script/build/main.js types
 .PHONY: build-bin
 build-bin:
-	${NODE} ./script/build/main.js bin
+	${NODE} ./script/build/build-bin.js
 	chmod +x ./dist/bin/*.js
 .PHONY: build-sites
 build-sites: build-site-twizzle build-site-experiments
@@ -163,7 +163,6 @@ test-dist-sites-experiments: build-sites
 .PHONY: test-dist-bin
 test-dist-bin: build-bin
 	npm exec scramble -- 333
-
 .PHONY: format
 format:
 	${BIOME} format --write ./script ./src
