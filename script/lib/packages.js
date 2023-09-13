@@ -22,7 +22,7 @@ export const searchWorkerEsbuildWorkaroundEntry = {
   in: "src/cubing/search/worker-workarounds/search-worker-entry.js",
   // esbuild automatically adds `.js`
   // https://esbuild.github.io/api/#entry-points
-  out: "search-worker-entry",
+  out: "chunks/search-worker-entry",
 };
 
 export const packageEntryPointsWithSearchWorkerEntry =

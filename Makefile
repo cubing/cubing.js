@@ -161,7 +161,7 @@ test-dist-lib-build-size: build-lib-js
 test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: test-dist-bin
-test-dist-bin:
+test-dist-bin: build-bin
 	npm exec scramble -- 333
 
 .PHONY: format
