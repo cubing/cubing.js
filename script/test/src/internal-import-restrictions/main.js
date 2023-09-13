@@ -1,141 +1,140 @@
-import { build } from "esbuild";
-import { resolve } from "node:path";
-import { existsSync } from "node:fs";
-
-import { targetInfos } from "./target-infos.js";
+import { join, resolve } from "node:path";
+import { cwd, exit, stderr } from "node:process";
 import { execPromise } from "../../../lib/execPromise.js";
+import { needPath } from "../../../lib/need-folder.js";
+import { readFile } from "node:fs/promises";
+import { build } from "esbuild";
+import { esmOptions } from "../../../build/targets.js";
+import { allowedImports } from "./allowedImports.js";
 
-const TARGET_INFOS_PATH = resolve(
-  new URL(".", import.meta.url).pathname,
-  "./target-infos.js",
+const metafilePath = new URL(
+  "../../../../.temp/esbuild-metafile.json",
+  import.meta.url,
+).pathname;
+needPath(metafilePath, "make build-js");
+
+const INPUT_FOLDERS = ["script", "src"];
+
+const absoluteCwd = resolve(cwd());
+const absoluteInputFolders = INPUT_FOLDERS.map((folder) =>
+  join(absoluteCwd, folder),
 );
 
-const CUBING_PRIVATE_SUFFIX = "/cubing-private";
+// From https://github.com/evanw/esbuild/issues/619#issuecomment-1504100390
+const plugin = {
+  name: "mark-bare-imports-as-external",
+  setup(build) {
+    const filter = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/; // Must not start with "/" or "./" or "../"
+    build.onResolve({ filter }, (args) => ({
+      path: args.path,
+      external: true,
+    }));
+  },
+};
 
-// Note that we have to use an extra `..` to back out of the file name
-const PATH_TO_SRC_CUBING = resolve(
-  new URL(".", import.meta.url).pathname,
-  "../../../../src/cubing",
-);
-const PATH_TO_SRC_CUBING_VENDOR = resolve(
-  new URL(".", import.meta.url).pathname,
-  "../../../../src/cubing/vendor",
-);
+const { metafile } = await build({
+  entryPoints: [
+    "script/**/*.js",
+    "src/bin/**/*.ts",
+    // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
+    "src/cubing/alg/index.ts",
+    "src/cubing/bluetooth/index.ts",
+    "src/cubing/kpuzzle/index.ts",
+    "src/cubing/notation/index.ts",
+    "src/cubing/protocol/index.ts",
+    "src/cubing/puzzle-geometry/index.ts",
+    "src/cubing/puzzles/index.ts",
+    "src/cubing/scramble/index.ts",
+    "src/cubing/search/index.ts",
+    "src/cubing/stream/index.ts",
+    "src/cubing/twisty/index.ts",
+    "src/sites/**/*.ts",
+  ],
+  outdir: ".temp/unused",
+  format: "esm",
+  write: false,
+  bundle: true,
+  splitting: true,
+  plugins: [plugin],
+  metafile: true,
+  platform: "node",
+});
 
-class Target {
-  constructor(name, targetInfo) {
-    this.name = name;
-    // this.outdir = `./${this.name}`
-    this.outdir = `./dist/test-src-internal-import-restrictions/${this.name}`;
+let failure = false;
 
-    this.deps = targetInfo.deps;
-
-    this.dirPath = resolve(PATH_TO_SRC_CUBING, this.name);
-    if (!existsSync(this.dirPath)) {
-      throw new Error(`Folder doesn't exist: ${this.name}`);
-    }
-
-    this.regExp = new RegExp(this.name);
-  }
-
-  checkImportable(args, forTarget) {
-    switch (args.kind) {
-      case "import-statement": {
-        if (!forTarget.deps.direct.includes(this.name)) {
-          console.error(
-            `\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update ${TARGET_INFOS_PATH} to change this.`,
-          );
-          console.log("From: ", args.importer);
-          console.log("Import path: ", args.path);
-          process.exit(2);
-        }
-        return;
-      }
-      case "dynamic-import": {
-        if (!forTarget.deps.dynamic.includes(this.name)) {
-          console.error(
-            `\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update ${TARGET_INFOS_PATH} to change this.`,
-          );
-          console.log("From: ", args.importer);
-          console.log("Import path: ", args.path);
-          process.exit(2);
-        }
-        return;
-      }
-      default:
-        throw new Error(`Unknown kind: ${args.kind}`);
-    }
-  }
-
-  plugin(forTarget) {
-    const setup = (build) => {
-      if (this.name === forTarget.name) {
-        return undefined;
-      }
-      build.onResolve({ filter: this.regExp }, (args) => {
-        if (
-          args.kind !== "import-statement" &&
-          args.kind !== "dynamic-import"
-        ) {
-          // TODO
-          return undefined;
-        }
-
-        // Allow cubing-private cross-package exports.
-        if (args.path.endsWith(CUBING_PRIVATE_SUFFIX)) {
-          args.path = args.path.slice(0, -CUBING_PRIVATE_SUFFIX.length);
-        }
-
-        const resolved = resolve(args.resolveDir, args.path);
-        if (this.dirPath === resolved) {
-          this.checkImportable(args, forTarget);
-          return {
-            path: `cubing/${this.name}`,
-            external: true,
-          };
-        }
-
-        if (resolved.startsWith(`${forTarget.dirPath}/`)) {
-          return undefined;
-        }
-        // `src/cubing/vendor` subdirs can be imported directly.
-        if (
-          args.kind === "import-statement" &&
-          resolved.startsWith(PATH_TO_SRC_CUBING_VENDOR)
-        ) {
-          return undefined;
-        }
-        console.log("From: ", args.importer);
-        console.log("Import path: ", args.path);
-        process.exit(1);
-      });
-    };
-    return {
-      name: this.name,
-      setup: setup,
-    };
+// Starts with the path and then keeps chopping off from the right.
+function* pathPrefixes(path) {
+  const pathParts = path.split("/");
+  const prefixes = [];
+  for (let n = pathParts.length; n > 0; n--) {
+    yield pathParts.slice(0, n).join("/");
   }
 }
 
-const targets = [];
-for (const [name, targetInfo] of Object.entries(targetInfos)) {
-  targets.push(new Target(name, targetInfo));
+function matchingPathPrefix(matchPrefixes, path) {
+  for (const pathPrefix of pathPrefixes(path)) {
+    if (matchPrefixes.includes(pathPrefix)) {
+      return pathPrefix;
+    }
+  }
+  return false;
 }
 
-// targets.map(a => console.log(a.dirPath))
-
-(async () => {
-  for (const currentTarget of targets) {
-    build({
-      target: "es2020",
-      bundle: true,
-      splitting: true,
-      format: "esm",
-      // sourcemap: true,
-      outdir: currentTarget.outdir,
-      external: ["three"],
-      entryPoints: [currentTarget.dirPath],
-      plugins: targets.map((t) => t.plugin(currentTarget)),
-    });
+function checkImport(sourcePath, importInfo, allowedImports) {
+  const importKind = {
+    "import-statement": "static",
+    "dynamic-import": "dynamic",
+  }[importInfo.kind];
+  for (const sourcePathPrefix of pathPrefixes(sourcePath)) {
+    const matchingSourcePathPrefix = matchingPathPrefix(
+      Object.keys(allowedImports),
+      sourcePathPrefix,
+    );
+    if (matchingSourcePathPrefix) {
+      const allowedImportsForKind =
+        allowedImports[matchingSourcePathPrefix][importKind];
+      if (
+        typeof allowedImportsForKind !== "undefined" &&
+        !(allowedImportsForKind instanceof Array)
+      ) {
+        throw new Error(
+          `Expected a string list for ${importKind} imports under the scope "${matchingSourcePathPrefix}"`,
+        );
+      }
+      if (
+        matchingPathPrefix(
+          [
+            matchingSourcePathPrefix, // allow importing from any source group to itself.
+            ...(allowedImportsForKind ?? []),
+          ],
+          importInfo.path,
+        )
+      ) {
+        process.stdout.write(".");
+        return;
+      }
+    }
   }
-})();
+  failure = true;
+  console.error(`\n❌ File has disallowed ${importKind} import:`);
+  console.error(`From file: ${sourcePath}`);
+  console.error(`Import: ${importInfo.path}`);
+}
+
+async function checkImports(metafile, allowedImports) {
+  console.log("/ means a new file");
+  console.log(". means a valid import for that file");
+
+  for (const [filePath, importInfoList] of Object.entries(metafile.inputs)) {
+    process.stdout.write("/");
+    for (const importInfo of importInfoList.imports) {
+      checkImport(filePath, importInfo, allowedImports);
+    }
+  }
+}
+
+await checkImports(metafile, allowedImports);
+
+if (failure) {
+  exit(1);
+}

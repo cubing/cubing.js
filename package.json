@@ -132,7 +132,6 @@
     "test-spec-with-coverage": "make test-spec-with-coverage",
     "test-spec-watch": "make test-spec-watch",
     "test-src-internal-import-restrictions": "make test-src-internal-import-restrictions",
-    "test-src-does-not-import-dist": "make test-src-does-not-import-dist",
     "test-src-tsc": "make test-src-tsc",
     "test-src-scripts-consistency": "make test-src-scripts-consistency",
     "fix-src-scripts-consistency": "make fix-src-scripts-consistency",

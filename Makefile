@@ -99,7 +99,6 @@ test-src: \
 	lint-ci \
 	test-src-tsc \
 	test-src-internal-import-restrictions \
-	test-src-does-not-import-dist \
 	test-src-scripts-consistency # keep CI.yml in sync with this
 .PHONY: test-spec
 test-spec:
@@ -113,9 +112,6 @@ test-spec-watch:
 .PHONY: test-src-internal-import-restrictions
 test-src-internal-import-restrictions:
 	${NODE} ./script/test/src/internal-import-restrictions/main.js
-.PHONY: test-src-does-not-import-dist
-test-src-does-not-import-dist: build
-	${NODE} ./script/test/src/does-not-import-dist/main.js
 .PHONY: test-src-tsc
 test-src-tsc: build-lib-types
 	npx tsc --project ./tsconfig.json
