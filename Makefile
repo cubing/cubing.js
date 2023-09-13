@@ -35,6 +35,7 @@ build-types:
 .PHONY: build-bin
 build-bin:
 	${NODE} ./script/build/main.js bin
+	chmod +x ./dist/bin/*.js
 .PHONY: build-sites
 build-sites: build-site-twizzle build-site-experiments
 .PHONY: build-site-twizzle
