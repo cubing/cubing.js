@@ -32,10 +32,10 @@ build: clean build-lib build-bin build-sites
 build-lib: build-lib-js build-lib-types
 .PHONY: build-lib-js
 build-lib-js:
-	${NODE} ./script/build/main.js esm
+	${NODE} ./script/build/lib/build-lib-js.js
 .PHONY: build-lib-types
 build-lib-types:
-	${NODE} ./script/build/lib/build-types.js
+	${NODE} ./script/build/lib/build-lib-types.js
 .PHONY: build-bin
 build-bin:
 	${NODE} ./script/build/bin/build-bin.js
@@ -44,10 +44,10 @@ build-bin:
 build-sites: build-site-twizzle build-site-experiments
 .PHONY: build-site-twizzle
 build-site-twizzle:
-	${NODE} ./script/build/sites/build-twizzle.js
+	${NODE} ./script/build/sites/build-site-twizzle.js
 .PHONY: build-site-experiments
 build-site-experiments:
-	${NODE} ./script/build/sites/build-experiments.js
+	${NODE} ./script/build/sites/build-site-experiments.js
 .PHONY: build-site-docs
 build-site-docs:
 	rm -rf ./dist/sites/js.cubing.net/

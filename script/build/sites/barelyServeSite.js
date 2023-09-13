@@ -4,6 +4,12 @@ import { execPromise } from "../../lib/execPromise.js";
 import { writeFile } from "node:fs/promises";
 import { barelyServe } from "barely-a-dev-server";
 
+import { needPath } from "../lib/needPath.js";
+needPath(
+  new URL("../../node_modules/barely-a-dev-server", import.meta.url).pathname,
+  "npm install",
+);
+
 function plugins(dev) {
   const plugins = [];
   // TODO: convenience hack for @lgarron; figure out how to either generalize this or add light auto-refresh to `barely-a-dev-server`
