@@ -39,9 +39,7 @@ export const allowedImports = {
     static: ["src/cubing"],
   },
   "src/bin/import-restrictions-mermaid-diagram.ts": {
-    static: [
-      "script/test/src/import-restrictions/target-infos.js", // TODO: remove this
-    ],
+    static: ["script/test/src/import-restrictions/allowedImports.js"],
   },
   "src/bin/scramble.ts": {
     static: ["src/cubing", "yargs", "yargs/helpers"],

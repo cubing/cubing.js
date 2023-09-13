@@ -118,7 +118,7 @@ function checkImport(sourcePath, importInfo, allowedImports) {
   failure = true;
   console.error(`\n❌ File has disallowed ${importKind} import:`);
   console.error(`From file: ${sourcePath}`);
-  console.error(`Import: ${importInfo.path}`);
+  console.error(`Importing: ${importInfo.path}`);
 }
 
 async function checkImports(metafile, allowedImports) {
@@ -131,6 +131,7 @@ async function checkImports(metafile, allowedImports) {
       checkImport(filePath, importInfo, allowedImports);
     }
   }
+  console.log();
 }
 
 await checkImports(metafile, allowedImports);
@@ -138,3 +139,4 @@ await checkImports(metafile, allowedImports);
 if (failure) {
   exit(1);
 }
+console.log("No disallowed imports in the project! 🥳");
