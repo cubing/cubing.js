@@ -2,7 +2,7 @@ import { build } from "esbuild";
 import {
   libExternal,
   searchWorkerEsbuildWorkaroundEntry,
-} from "./package-build-info.js";
+} from "./common/package-info.js";
 
 // TODO(https://github.com/yargs/yargs/issues/2358): If `yargs` adopts `node:` prefixes we don't have to enumerate these.
 export const YARGS_NODE_EXTERNALS = ["path", "url", "fs", "util", "assert"];

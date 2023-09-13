@@ -64,7 +64,7 @@ generate-js-svg:
 	@echo "TODO: Generating JS for SVGs is not implemented yet."
 .PHONY: dev
 dev: quick-setup
-	${NODE} ./script/build/main.js sites dev
+	${NODE} ./script/build/sites/dev.js
 .PHONY: link
 link: build
 	npm link

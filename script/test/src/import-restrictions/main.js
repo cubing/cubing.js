@@ -6,7 +6,7 @@ import { readFile } from "node:fs/promises";
 import { build } from "esbuild";
 import { esmOptions } from "../../../build/targets.js";
 import { allowedImports } from "./allowedImports.js";
-import { packageNames } from "../../../build/package-build-info.js";
+import { packageNames } from "../../../build/common/package-info.js";
 
 const INPUT_FOLDERS = ["script", "src"];
 
