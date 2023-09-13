@@ -40,7 +40,7 @@ export const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
 const external = ["three", "comlink", "random-uint-below"];
 
 // TODO(https://github.com/yargs/yargs/issues/2358): If `yargs` adopts `node:` prefixes we don't have to enumerate these.
-const YARGS_NODE_EXTERNALS = ["path", "url", "fs", "util", "assert"];
+export const YARGS_NODE_EXTERNALS = ["path", "url", "fs", "util", "assert"];
 
 function plugins(dev) {
   const plugins = [];

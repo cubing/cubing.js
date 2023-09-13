@@ -21,14 +21,15 @@ const absoluteCwd = resolve(cwd());
 // );
 // const entryPoints = INPUT_FOLDERS.map((folder) => join(folder, "**/*.ts"));
 
+// From https://github.com/evanw/esbuild/issues/619#issuecomment-1504100390
 const plugin = {
-  name: "everything-is-external",
+  name: "mark-bare-imports-as-external",
   setup(build) {
-    const filter = /.*/; // Must not start with "/" or "./" or "../"
-    build.onResolve({ filter }, (args) => {
-      console.log(args);
-      return { path: args.path, external };
-    });
+    const filter = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/; // Must not start with "/" or "./" or "../"
+    build.onResolve({ filter }, (args) => ({
+      path: args.path,
+      external: true,
+    }));
   },
 };
 
@@ -46,13 +47,14 @@ const { metafile } = await build({
     "src/cubing/search/index.ts",
     "src/cubing/stream/index.ts",
     "src/cubing/twisty/index.ts",
+    "src/bin/**/*.ts",
   ],
   outdir: ".temp/unused",
   format: "esm",
   write: false,
   bundle: true,
   splitting: true,
-  // plugins: [plugin],
+  plugins: [plugin],
   metafile: true,
   platform: "node",
 });

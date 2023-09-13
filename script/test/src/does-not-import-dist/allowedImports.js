@@ -1,7 +1,28 @@
-// Note:
-// - Only the allowed imports for the most specific (longest) scope key applies to a source file.
-// - Files in a given scope key are allowed to import any other within the same scope.
+import { YARGS_NODE_EXTERNALS } from "../../../build/targets.js";
+
+/**
+ * These definitions help to guard heavy code imports from light entry points.
+ * It's okay to add entries, but be careful that this doesn't greatly increase
+ * the dependency code of any important public API.
+ *
+ * Note:
+ * - Only the allowed imports for the most specific (longest) scope key applies to a source file.
+ * - Files in a given scope key are allowed to import any other within the same scope.
+ */
 export const allowedImports = {
+  // bin
+  "src/bin": {
+    static: ["src/cubing"],
+  },
+  "src/bin/import-restrictions-mermaid-diagram.ts": {
+    static: [
+      "script/test/src/internal-import-restrictions/target-infos.js", // TODO: remove this
+    ],
+  },
+  "src/bin/scramble.ts": {
+    static: ["src/cubing", "yargs", "yargs/helpers"],
+  },
+  // lib
   "src/cubing/alg": {},
   "src/cubing/bluetooth": {
     static: [
@@ -10,7 +31,7 @@ export const allowedImports = {
       "src/cubing/protocol",
       "src/cubing/puzzles",
       "src/cubing/vendor/public-domain/unsafe-raw-aes",
-      "node_modules/three",
+      "three",
     ],
   },
   "src/cubing/kpuzzle": { static: ["src/cubing/alg", "src/cubing/kpuzzle"] },
@@ -43,13 +64,12 @@ export const allowedImports = {
     static: [
       "src/cubing/kpuzzle",
       "src/cubing/puzzles",
-      // "src/cubing/vendor/apache/comlink-everywhere",
       "src/cubing/vendor/gpl/cs0x7f/cstimer/src/js/scramble",
       "src/cubing/vendor/gpl/cs0x7f/min2phase",
       "src/cubing/vendor/gpl/cs0x7f/sq12phase",
       "src/cubing/vendor/mit/p-lazy",
       "src/cubing/vendor/mpl/xyzzy",
-      "node_modules/random-uint-below",
+      "random-uint-below",
     ],
     dynamic: ["src/cubing/puzzle-geometry", "src/cubing/vendor/mpl/twsearch"],
   },
@@ -67,19 +87,16 @@ export const allowedImports = {
     dynamic: ["src/cubing/alg", "src/cubing/puzzle-geometry"],
   },
   "src/cubing/twisty/heavy-code-imports": {
-    static: ["node_modules/three"],
+    static: ["three"],
   },
   "src/cubing/twisty/views/3D": {
-    static: ["node_modules/three", "src/cubing/vendor/mit/three"],
+    static: ["three", "src/cubing/vendor/mit/three"],
   },
   "src/cubing/vendor": {
-    static: ["src/cubing/alg", "node_modules/random-uint-below"],
+    static: ["src/cubing/alg", "random-uint-below"],
   },
   "src/cubing/vendor/apache/comlink-everywhere": {
-    static: [
-      "node_modules/comlink",
-      "node_modules/random-uint-below", // TODO: inherit?
-    ],
+    static: ["comlink"],
   },
   "src/cubing/vendor/gpl/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
     static: ["src/cubing/search/cubing-private"],
