@@ -1,4 +1,5 @@
 import type { Alg } from "../../../../alg";
+import { mustBeInsideWorker } from "../../inside-worker";
 import { addOrientationSuffix } from "../addOrientationSuffix";
 import { dynamic4x4x4Solver } from "./dynamic/4x4x4";
 
@@ -12,6 +13,7 @@ export async function initialize444(): Promise<void> {
 }
 
 export async function random444Scramble(): Promise<Alg> {
+  mustBeInsideWorker();
   return (await dynamic4x4x4Solver).random444Scramble();
 }
 

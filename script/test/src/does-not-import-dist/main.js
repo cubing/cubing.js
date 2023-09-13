@@ -59,11 +59,11 @@ const { metafile } = await build({
 
 let failure = false;
 
-// Includes the path itself
+// Starts with the path and then keeps chopping off from the right.
 function* pathPrefixes(path) {
   const pathParts = path.split("/");
   const prefixes = [];
-  for (let n = 1; n <= pathParts.length; n++) {
+  for (let n = pathParts.length; n > 0; n--) {
     yield pathParts.slice(0, n).join("/");
   }
 }
