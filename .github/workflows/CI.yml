@@ -68,6 +68,8 @@ jobs:
       - run: make test-dist-lib-scramble-all-events
       - run: make test-dist-lib-vite
       - run: make test-dist-lib-build-size
+      - run: make build-bin
+      - run: make test-dist-bin
       - run: make build-sites
       - run: make test-dist-sites-experiments
       - run: make clean

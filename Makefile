@@ -86,7 +86,7 @@ test-info:
 	@echo "    make test-fast (≈4s, runs a subset of the above)"
 	@echo ""
 .PHONY: test-fast
-test-fast: build-esm lint build-sites build-bin test-spec
+test-fast: build-esm lint build-sites build-bin test-spec test-dist-bin
 .PHONY: test-all
 test-all: test-src test-build test-dist
 .PHONY: test-src
@@ -129,7 +129,9 @@ test-build: \
 	build-sites \
 	build-site-docs # keep CI.yml in sync with this
 .PHONY: test-dist
-test-dist: \
+test-dist: test-dist-lib test-dist-bin
+.PHONY: test-dist-lib
+test-dist-libt: \
 	test-dist-lib-node-import \
 	test-dist-lib-scramble-all-events \
 	test-dist-lib-perf \
@@ -158,6 +160,10 @@ test-dist-lib-build-size: build-esm
 .PHONY: test-dist-sites-experiments
 test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
+.PHONY: test-dist-bin
+test-dist-bin:
+	npm exec scramble -- 333
+
 .PHONY: format
 format:
 	${BIOME} format --write ./script ./src
