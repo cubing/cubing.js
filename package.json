@@ -97,14 +97,7 @@
     "node": ">=19"
   },
   "files": [
-    "/LICENSE.md",
-    "/README.md",
-    "/package.json",
-    "/package-lock.json",
-    "/dist/lib/cubing/**/*",
-    "/dist/lib/cubing/**/*",
-    "/*/package.json",
-    "/*/index.d.ts"
+    "./dist/lib/cubing/"
   ],
   "scripts": {
     "default": "make default",
