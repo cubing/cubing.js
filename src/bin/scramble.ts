@@ -1,14 +1,24 @@
 // To run this file directly:
 // bun run src/bin/scramble.ts -- 333
 
-import yargs from "yargs";
 import { eventInfo } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
-import { hideBin } from "yargs/helpers";
 import type { Alg } from "cubing/alg";
 
 // TODO: completions for `bash`, `zsh`, and `fish`: https://github.com/loilo/completarr
+
+const [yargs, hideBin] = await (async () => {
+  try {
+    const yargs = (await import("yargs")).default;
+    const { hideBin } = await import("yargs/helpers");
+    return [yargs, hideBin];
+  } catch (e) {
+    throw new Error(
+      "Could not import `yargs`, which is not automatically installed as a regular dependency of `cubing`. Please run `npm install yargs` (or the equivalent) separately.",
+    );
+  }
+})();
 
 // @ts-ignore: Top-level await is okay because this is not part of the main library.
 const argv = await yargs(

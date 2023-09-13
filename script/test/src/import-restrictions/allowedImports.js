@@ -40,7 +40,8 @@ export const allowedImports = {
     static: ["cubing"],
   },
   "src/bin/scramble.ts": {
-    static: ["src/cubing", "yargs", "yargs/helpers"],
+    static: ["src/cubing"],
+    dynamic: ["yargs"],
   },
   // src/lib
   "src/cubing/alg": {},
