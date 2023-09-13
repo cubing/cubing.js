@@ -3,17 +3,17 @@
 import { readFile } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join } from "node:path";
-import { needFolder } from "../need-folder.js";
+import { needPath } from "../need-folder.js";
 
 const DIST_SITES_ROOT = "../../../dist/sites/";
 
 const DIST_SITES_ROOT_EXPANDED = new URL(DIST_SITES_ROOT, import.meta.url)
   .pathname;
-needFolder(
+needPath(
   join(DIST_SITES_ROOT_EXPANDED, "alpha.twizzle.net"),
   "make build-sites",
 );
-needFolder(
+needPath(
   join(DIST_SITES_ROOT_EXPANDED, "experiments.cubing.net/cubing.js"),
   "make build-sites",
 );

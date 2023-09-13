@@ -139,26 +139,28 @@ export async function build(target, dev) {
   }
 }
 
+export const esmOptions = {
+  // TODO: construct entry points based on `exports` and add tests.
+  entryPoints: packageEntryPointsWithSearchWorkerEntry,
+  outdir: "dist/lib/cubing",
+  format: "esm",
+  target: "es2020",
+  bundle: true,
+  splitting: true,
+  logLevel: "info",
+  sourcemap: true,
+  //
+  external,
+  supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
+  metafile: true,
+};
+
 export const esmTarget = {
   name: "esm",
   builtYet: false,
   dependencies: [],
   buildSelf: async (dev) => {
-    const build = await esbuild.build({
-      // TODO: construct entry points based on `exports` and add tests.
-      entryPoints: packageEntryPointsWithSearchWorkerEntry,
-      outdir: "dist/lib/cubing",
-      format: "esm",
-      target: "es2020",
-      bundle: true,
-      splitting: true,
-      logLevel: "info",
-      sourcemap: true,
-      //
-      external,
-      supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
-      metafile: true,
-    });
+    const build = await esbuild.build(esmOptions);
 
     await mkdir("./.temp", { recursive: true });
     await writeFile(

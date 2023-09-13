@@ -1,9 +1,9 @@
 import { existsSync } from "node:fs";
 
-export function needFolder(folder, cmd) {
+export function needPath(folder, cmd) {
   if (!existsSync(folder)) {
     console.error(
-      `\nFolder does not exist:\n${folder}\n\nRun \`${cmd}\` first!\n\b`,
+      `\nPath does not exist:\n${folder}\n\nRun \`${cmd}\` first!\n\b`,
     );
     process.exit(1);
   }

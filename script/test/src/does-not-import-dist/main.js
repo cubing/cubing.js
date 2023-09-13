@@ -1,75 +1,126 @@
-import { join } from "path";
-import { exit, stderr } from "process";
+import { join, resolve } from "node:path";
+import { cwd, exit, stderr } from "node:process";
 import { execPromise } from "../../../lib/execPromise.js";
-import { needFolder } from "../../../lib/need-folder.js";
-import { expectedPrefixes } from "./expected-import-prefixes.js";
+import { needPath } from "../../../lib/need-folder.js";
+import { readFile } from "fs/promises";
+import { build } from "esbuild";
+import { esmOptions } from "../../../build/targets.js";
+import { allowedImports } from "./allowedImports.js";
 
-for (const folder of ["bin", "lib/cubing"]) {
-  needFolder(
-    new URL(join("../../../../dist/", folder), import.meta.url).pathname,
-    "make build",
-  );
-}
+const metafilePath = new URL(
+  "../../../../.temp/esbuild-metafile.json",
+  import.meta.url,
+).pathname;
+needPath(metafilePath, "make build-js");
 
-// Test that the `dist` dir is not imported from the source (which causes unwanted autocompletion in VSCode).
-// In theory we could test this together with import restrictions, but `npx tsc --explainFiles` lets us test directly against the completions.
+// const INPUT_FOLDERS = ["src/cubing/kpuzzle"];
 
-console.log("Testing the import graph from: npx tsc --explainFiles");
+const absoluteCwd = resolve(cwd());
+// const absoluteInputFolders = INPUT_FOLDERS.map((folder) =>
+//   join(absoluteCwd, folder),
+// );
+// const entryPoints = INPUT_FOLDERS.map((folder) => join(folder, "**/*.ts"));
 
-console.log("Building...");
-await execPromise("make build"); // TODO: check for full expected build without compiling from scratch.
+const plugin = {
+  name: "everything-is-external",
+  setup(build) {
+    const filter = /.*/; // Must not start with "/" or "./" or "../"
+    build.onResolve({ filter }, (args) => {
+      console.log(args);
+      return { path: args.path, external };
+    });
+  },
+};
 
-let output;
-try {
-  console.log("Getting graph...");
-  output = await execPromise("npx tsc --explainFiles -p ./tsconfig.json");
-} catch (e) {
-  stderr.write(
-    "`npx tsc --explainFiles` failed. Please run `make test-src-tsc` to debug.",
-  );
-  exit(1);
-}
-const files = {};
-let currentFile = null;
-for (const line of output.trim().split("\n")) {
-  if (currentFile === null || !line.startsWith("  ")) {
-    currentFile = {
-      path: line,
-      from: [],
-    };
-    files[line] = currentFile;
-  } else {
-    if (!line.includes("from file 'dist")) {
-      // This theoretically has false positics, but it's good enough for us in practice.
-      currentFile.anyImportsNotFromDist = true;
-    }
-    currentFile.from.push(line);
-  }
-}
+const { metafile } = await build({
+  entryPoints: [
+    // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
+    "src/cubing/alg/index.ts",
+    "src/cubing/bluetooth/index.ts",
+    "src/cubing/kpuzzle/index.ts",
+    "src/cubing/notation/index.ts",
+    "src/cubing/protocol/index.ts",
+    "src/cubing/puzzle-geometry/index.ts",
+    "src/cubing/puzzles/index.ts",
+    "src/cubing/scramble/index.ts",
+    "src/cubing/search/index.ts",
+    "src/cubing/stream/index.ts",
+    "src/cubing/twisty/index.ts",
+  ],
+  outdir: ".temp/unused",
+  format: "esm",
+  write: false,
+  bundle: true,
+  splitting: true,
+  // plugins: [plugin],
+  metafile: true,
+  platform: "node",
+});
 
-for (const file of Object.values(files)) {
-  // We special-case this, since we use `anyImportsNotFromDist` to filter for a more helpful output.
-  if (file.path.startsWith("dist/") && file.anyImportsNotFromDist) {
-    stderr.write("❌ Imports from the `dist` dir are not allowed:\n");
-    stderr.write(`${file.path}\n`);
-    stderr.write(file.from.join("\n"));
-    exit(1);
-  }
-  let match = false;
-  // TODO: Allow any length match?
-  const pathParts = file.path.split("/");
+let failure = false;
+
+// Includes the path itself
+function* pathPrefixes(path) {
+  const pathParts = path.split("/");
+  const prefixes = [];
   for (let n = 1; n <= pathParts.length; n++) {
-    const potential_prefix = pathParts.slice(0, n).join("/");
-    if (expectedPrefixes.includes(potential_prefix)) {
-      match = true;
-      break;
+    yield pathParts.slice(0, n).join("/");
+  }
+}
+
+function matchingPathPrefix(matchPrefixes, path) {
+  for (const pathPrefix of pathPrefixes(path)) {
+    if (matchPrefixes.includes(pathPrefix)) {
+      return pathPrefix;
     }
   }
-  if (!match) {
-    stderr.write("❌ Indexed file outside expected prefixes:\n");
-    stderr.write(`${file.path}\n`);
-    stderr.write(file.from.join("\n"));
-    exit(1);
+  return false;
+}
+
+function checkImport(sourcePath, importInfo, allowedImports) {
+  const importKind = {
+    "import-statement": "static",
+    "dynamic-import": "dynamic",
+  }[importInfo.kind];
+  for (const sourcePathPrefix of pathPrefixes(sourcePath)) {
+    const matchingSourcePathPrefix = matchingPathPrefix(
+      Object.keys(allowedImports),
+      sourcePathPrefix,
+    );
+    if (
+      matchingSourcePathPrefix &&
+      matchingPathPrefix(
+        [
+          matchingSourcePathPrefix, // allow importing from any source group to itself.
+          ...(allowedImports[matchingSourcePathPrefix][importKind] ?? []),
+        ],
+        importInfo.path,
+      )
+    ) {
+      process.stdout.write(".");
+      return;
+    }
   }
-  console.log(`✅ ${file.path}`);
+  failure = true;
+  console.error(`\n❌ File has disallowed ${importKind} import:`);
+  console.error(`From file: ${sourcePath}`);
+  console.error(`Import: ${importInfo.path}`);
+}
+
+async function checkImports(metafile, allowedImports) {
+  console.log("/ means a new file");
+  console.log(". means a valid import for that file");
+
+  for (const [filePath, importInfoList] of Object.entries(metafile.inputs)) {
+    process.stdout.write("/");
+    for (const importInfo of importInfoList.imports) {
+      checkImport(filePath, importInfo, allowedImports);
+    }
+  }
+}
+
+await checkImports(metafile, allowedImports);
+
+if (failure) {
+  exit(1);
 }
