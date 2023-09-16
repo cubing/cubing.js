@@ -36,15 +36,15 @@ export const ftoSVG = `<?xml version="1.0" encoding="UTF-8"?>
             <polygon id="C4RNER-l2-o3" style="fill: #7F7F7F;" points="160 320 320 480 0 480"></polygon>
         </g>
         <g id="B" transform="translate(1760.000000, 328.000000) scale(1, -1) translate(-1760.000000, -328.000000) translate(1280.000000, 88.000000)" stroke="#000000" stroke-width="12">
-            <polygon id="C4RNER-l4-o2" style="fill: #0000FF;" points="480 0 640 160 320 160"></polygon>
-            <polygon id="EDGES-l9-o1" style="fill: #0000FF;" points="640 160 800 320 480 320"></polygon>
-            <polygon id="CENTERS-l13-o0" style="fill: #0000FF;" transform="translate(480.000000, 240.000000) scale(1, -1) translate(-480.000000, -240.000000) " points="480 160 640 320 320 320"></polygon>
-            <polygon id="EDGES-l2-o1" style="fill: #0000FF;" points="320 160 480 320 160 320"></polygon>
-            <polygon id="C4RNER-l3-o3" style="fill: #0000FF;" points="800 320 960 480 640 480"></polygon>
-            <polygon id="CENTERS-l12-o0" style="fill: #0000FF;" transform="translate(640.000000, 400.000000) scale(1, -1) translate(-640.000000, -400.000000) " points="640 320 800 480 480 480"></polygon>
-            <polygon id="EDGES-l8-o1" style="fill: #0000FF;" points="480 320 640 480 320 480"></polygon>
-            <polygon id="CENTERS-l10-o0" style="fill: #0000FF;" transform="translate(320.000000, 400.000000) scale(1, -1) translate(-320.000000, -400.000000) " points="320 320 480 480 160 480"></polygon>
-            <polygon id="C4RNER-l5-o1" style="fill: #0000FF;" points="160 320 320 480 0 480"></polygon>
+            <polygon id="C4RNER-l4-o2" style="fill: #26F;" points="480 0 640 160 320 160"></polygon>
+            <polygon id="EDGES-l9-o1" style="fill: #26F;" points="640 160 800 320 480 320"></polygon>
+            <polygon id="CENTERS-l13-o0" style="fill: #26F;" transform="translate(480.000000, 240.000000) scale(1, -1) translate(-480.000000, -240.000000) " points="480 160 640 320 320 320"></polygon>
+            <polygon id="EDGES-l2-o1" style="fill: #26F;" points="320 160 480 320 160 320"></polygon>
+            <polygon id="C4RNER-l3-o3" style="fill: #26F;" points="800 320 960 480 640 480"></polygon>
+            <polygon id="CENTERS-l12-o0" style="fill: #26F;" transform="translate(640.000000, 400.000000) scale(1, -1) translate(-640.000000, -400.000000) " points="640 320 800 480 480 480"></polygon>
+            <polygon id="EDGES-l8-o1" style="fill: #26F;" points="480 320 640 480 320 480"></polygon>
+            <polygon id="CENTERS-l10-o0" style="fill: #26F;" transform="translate(320.000000, 400.000000) scale(1, -1) translate(-320.000000, -400.000000) " points="320 320 480 480 160 480"></polygon>
+            <polygon id="C4RNER-l5-o1" style="fill: #26F;" points="160 320 320 480 0 480"></polygon>
         </g>
         <g id="R" transform="translate(888.000000, 608.000000) scale(-1, -1) rotate(90.000000) translate(-888.000000, -608.000000) translate(408.000000, 368.000000)" stroke="#000000" stroke-width="12">
             <polygon id="C4RNER-l1-o1" style="fill: #32CD32;" points="480 0 640 160 320 160"></polygon>
@@ -58,15 +58,15 @@ export const ftoSVG = `<?xml version="1.0" encoding="UTF-8"?>
             <polygon id="C4RNER-l2-o2" style="fill: #32CD32;" points="160 320 320 480 0 480"></polygon>
         </g>
         <g id="F" transform="translate(128.000000, 648.000000)" stroke="#000000" stroke-width="12">
-            <polygon id="C4RNER-l1-o2" style="fill: #FF0000;" points="480 0 640 160 320 160"></polygon>
-            <polygon id="EDGES-l0-o0" style="fill: #FF0000;" points="640 160 800 320 480 320"></polygon>
-            <polygon id="CENTERS-l0-o0" style="fill: #FF0000;" transform="translate(480.000000, 240.000000) scale(1, -1) translate(-480.000000, -240.000000) " points="480 160 640 320 320 320"></polygon>
-            <polygon id="EDGES-l10-o0" style="fill: #FF0000;" points="320 160 480 320 160 320"></polygon>
-            <polygon id="C4RNER-l2-o1" style="fill: #FF0000;" points="800 320 960 480 640 480"></polygon>
-            <polygon id="CENTERS-l1-o0" style="fill: #FF0000;" transform="translate(640.000000, 400.000000) scale(1, -1) translate(-640.000000, -400.000000) " points="640 320 800 480 480 480"></polygon>
-            <polygon id="EDGES-l1-o0" style="fill: #FF0000;" points="480 320 640 480 320 480"></polygon>
-            <polygon id="CENTERS-l14-o0" style="fill: #FF0000;" transform="translate(320.000000, 400.000000) scale(1, -1) translate(-320.000000, -400.000000) " points="320 320 480 480 160 480"></polygon>
-            <polygon id="C4RNER-l0-o3" style="fill: #FF0000;" points="160 320 320 480 0 480"></polygon>
+            <polygon id="C4RNER-l1-o2" style="fill: red;" points="480 0 640 160 320 160"></polygon>
+            <polygon id="EDGES-l0-o0" style="fill: red;" points="640 160 800 320 480 320"></polygon>
+            <polygon id="CENTERS-l0-o0" style="fill: red;" transform="translate(480.000000, 240.000000) scale(1, -1) translate(-480.000000, -240.000000) " points="480 160 640 320 320 320"></polygon>
+            <polygon id="EDGES-l10-o0" style="fill: red;" points="320 160 480 320 160 320"></polygon>
+            <polygon id="C4RNER-l2-o1" style="fill: red;" points="800 320 960 480 640 480"></polygon>
+            <polygon id="CENTERS-l1-o0" style="fill: red;" transform="translate(640.000000, 400.000000) scale(1, -1) translate(-640.000000, -400.000000) " points="640 320 800 480 480 480"></polygon>
+            <polygon id="EDGES-l1-o0" style="fill: red;" points="480 320 640 480 320 480"></polygon>
+            <polygon id="CENTERS-l14-o0" style="fill: red;" transform="translate(320.000000, 400.000000) scale(1, -1) translate(-320.000000, -400.000000) " points="320 320 480 480 160 480"></polygon>
+            <polygon id="C4RNER-l0-o3" style="fill: red;" points="160 320 320 480 0 480"></polygon>
         </g>
         <g id="L" transform="translate(328.000000, 608.000000) scale(1, -1) rotate(90.000000) translate(-328.000000, -608.000000) translate(-152.000000, 368.000000)" stroke="#000000" stroke-width="12">
             <polygon id="C4RNER-l1-o3" style="fill: #7F007F;" points="480 0 640 160 320 160"></polygon>

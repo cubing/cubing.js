@@ -33,7 +33,7 @@ export const pyraminxSVG = `<?xml version="1.0" encoding="UTF-8"?>
     <!-- CORNERS -->
     <use id="CORNERS-l0-o0" href="#stickerV" transform="translate(5.2, 1.066666667)" style="fill: limegreen"/>
     <use id="CORNERS-l0-o1" href="#stickerA" transform="translate(3, 0)" style="fill: red"/>
-    <use id="CORNERS-l0-o2" href="#stickerA" transform="translate(7.4, 0)" style="fill: blue"/>
+    <use id="CORNERS-l0-o2" href="#stickerA" transform="translate(7.4, 0)" style="fill: #26f"/>
 
     <use id="CORNERS-l3-o0" href="#stickerA" transform="translate(4.2, 3.2)" style="fill: yellow"/>
     <use id="CORNERS-l3-o1" href="#stickerA" transform="translate(2, 1)" style="fill: red"/>
@@ -41,9 +41,9 @@ export const pyraminxSVG = `<?xml version="1.0" encoding="UTF-8"?>
 
     <use id="CORNERS-l2-o0" href="#stickerA" transform="translate(6.2, 3.2)" style="fill: yellow"/>
     <use id="CORNERS-l2-o1" href="#stickerV" transform="translate(6.2, 2.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS-l2-o2" href="#stickerA" transform="translate(8.4, 1)" style="fill: blue"/>
+    <use id="CORNERS-l2-o2" href="#stickerA" transform="translate(8.4, 1)" style="fill: #26f"/>
 
-    <use id="CORNERS-l1-o1" href="#stickerA" transform="translate(9.4, 0)" style="fill: blue"/>
+    <use id="CORNERS-l1-o1" href="#stickerA" transform="translate(9.4, 0)" style="fill: #26f"/>
     <use id="CORNERS-l1-o2" href="#stickerA" transform="translate(1, 0)" style="fill: red"/>
     <use id="CORNERS-l1-o0" href="#stickerA" transform="translate(5.2, 4.2)" style="fill: yellow"/>
 
@@ -51,7 +51,7 @@ export const pyraminxSVG = `<?xml version="1.0" encoding="UTF-8"?>
     <!-- CORNERS2 -->
     <use id="CORNERS2-l0-o0" href="#stickerA" transform="translate(5.2, 0.066666667)" style="fill: limegreen"/>
     <use id="CORNERS2-l0-o1" href="#stickerV" transform="translate(4, 0)" style="fill: red"/>
-    <use id="CORNERS2-l0-o2" href="#stickerV" transform="translate(6.4, 0)" style="fill: blue"/>
+    <use id="CORNERS2-l0-o2" href="#stickerV" transform="translate(6.4, 0)" style="fill: #26f"/>
 
     <use id="CORNERS2-l3-o0" href="#stickerV" transform="translate(3.2, 3.2)" style="fill: yellow"/>
     <use id="CORNERS2-l3-o1" href="#stickerV" transform="translate(2, 2)" style="fill: red"/>
@@ -59,9 +59,9 @@ export const pyraminxSVG = `<?xml version="1.0" encoding="UTF-8"?>
 
     <use id="CORNERS2-l2-o0" href="#stickerV" transform="translate(7.2, 3.2)" style="fill: yellow"/>
     <use id="CORNERS2-l2-o1" href="#stickerA" transform="translate(7.2, 2.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS2-l2-o2" href="#stickerV" transform="translate(8.4, 2)" style="fill: blue"/>
+    <use id="CORNERS2-l2-o2" href="#stickerV" transform="translate(8.4, 2)" style="fill: #26f"/>
 
-    <use id="CORNERS2-l1-o1" href="#stickerV" transform="translate(10.4,0)" style="fill: blue"/>
+    <use id="CORNERS2-l1-o1" href="#stickerV" transform="translate(10.4,0)" style="fill: #26f"/>
     <use id="CORNERS2-l1-o2" href="#stickerV" transform="translate(0, 0)" style="fill: red"/>
     <use id="CORNERS2-l1-o0" href="#stickerV" transform="translate(5.2, 5.2)" style="fill: yellow"/>
 
@@ -70,15 +70,15 @@ export const pyraminxSVG = `<?xml version="1.0" encoding="UTF-8"?>
     <use id="EDGES-l0-o1" href="#stickerA" transform="translate(4.2, 1.066666667)" style="fill: limegreen"/>
 
     <use id="EDGES-l5-o0" href="#stickerA" transform="translate(6.2, 1.066666667)" style="fill: limegreen"/>
-    <use id="EDGES-l5-o1" href="#stickerV" transform="translate(7.4, 1)" style="fill: blue"/>
+    <use id="EDGES-l5-o1" href="#stickerV" transform="translate(7.4, 1)" style="fill: #26f"/>
 
-    <use id="EDGES-l1-o0" href="#stickerV" transform="translate(8.4, 0)" style="fill: blue"/>
+    <use id="EDGES-l1-o0" href="#stickerV" transform="translate(8.4, 0)" style="fill: #26f"/>
     <use id="EDGES-l1-o1" href="#stickerV" transform="translate(2, 0)" style="fill: red"/>
 
     <use id="EDGES-l2-o0" href="#stickerV" transform="translate(5.2, 3.2)" style="fill: yellow"/>
     <use id="EDGES-l2-o1" href="#stickerA" transform="translate(5.2, 2.066666667)" style="fill: limegreen"/>
 
-    <use id="EDGES-l3-o0" href="#stickerV" transform="translate(9.4, 1)" style="fill: blue"/>
+    <use id="EDGES-l3-o0" href="#stickerV" transform="translate(9.4, 1)" style="fill: #26f"/>
     <use id="EDGES-l3-o1" href="#stickerV" transform="translate(6.2, 4.2)" style="fill: yellow"/>
 
     <use id="EDGES-l4-o0" href="#stickerV" transform="translate(4.2, 4.2)" style="fill: yellow"/>
