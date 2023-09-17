@@ -4,5 +4,8 @@
     "ghcr.io/devcontainers/features/node:1": {
       "version": "19"
     }
+  },
+  "containerEnv": {
+    "PATH": "${containerEnv:PATH}:${containerEnv:HOME}/bun/bin"
   }
 }
