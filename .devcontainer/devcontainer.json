@@ -1,8 +1,8 @@
 {
-  "postCreateCommand": "npm ci",
+  "postCreateCommand": "npm ci && curl -fsSL https://bun.sh/install | bash",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-        "version": "19"
+      "version": "19"
     }
   }
 }
