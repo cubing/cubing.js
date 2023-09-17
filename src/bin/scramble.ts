@@ -52,7 +52,7 @@ const argv = await yargs(
 
 const eventID = argv.eventID as string;
 let { format } = argv;
-format ??= argv.text ? "text" : undefined;
+format ??= argv.text || !process.stdout.isTTY ? "text" : "auto";
 
 setSearchDebug({ logPerf: false, showWorkerInstantiationWarnings: false });
 
@@ -110,10 +110,14 @@ if (format !== "json-text" && argv.amount === 1) {
         "Encountered `json` format in code that is not expected to handle it.",
       );
     }
-    default: {
+    case "auto": {
       console.log(`${scrambleText(scramble)}
 
 🔗 ${scrambleLink(scramble)}`);
+      break;
+    }
+    default: {
+      throw new Error("Unknown format!");
     }
   }
 } else {
@@ -137,12 +141,16 @@ if (format !== "json-text" && argv.amount === 1) {
         jsonListPrinter?.push(scramble.toString());
         break;
       }
-      default: {
+      case "auto": {
         console.log(`// Scramble #${i + 1}
 ${scrambleText(scramble)}
 
 🔗 ${scrambleLink(scramble)}
 `);
+        break;
+      }
+      default: {
+        throw new Error("Unknown format!");
       }
     }
   }
