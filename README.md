@@ -42,7 +42,7 @@ If you would like to contribute to the development of `cubing.js`, please refer 
 
 ## Developing `cubing.js` itself
 
-If you have `git`, `node`, and `npm` installed, you can run the `cubing.js` source like this (see the [contribution guidelines](./CONTRIBUTING.md) for more details):
+If you have `git`, `node`, `npm`, and [`bun`](https://bun.sh/) installed, you can run the `cubing.js` source like this (see the [contribution guidelines](./CONTRIBUTING.md) for more details):
 
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js

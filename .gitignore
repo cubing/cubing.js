@@ -3,6 +3,9 @@
 /dist
 /node_modules
 
+# Stick with `package-lock.json` for now.
+/bun.lockb
+
 # Created by `npm pack` by default.
 /*.tgz
 

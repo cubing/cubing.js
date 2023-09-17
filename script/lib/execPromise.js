@@ -1,5 +1,6 @@
-import { exec, spawn } from "node:child_process";
+import { ChildProcess, exec, spawn } from "node:child_process";
 
+/** @type ChildProcess[] */
 const childProcesses = [];
 export function killAllChildProcesses() {
   for (const childProcess of childProcesses) {
@@ -16,9 +17,13 @@ export function killAllChildProcesses() {
   }
 }
 
-export function execPromise(cmd, options) {
+/**
+ * @param {string} cmd
+ * @returns {Promise<string>}
+ */
+export function execPromise(cmd) {
   return new Promise((resolve, reject) => {
-    const childProcess = exec(cmd, options, (error, stdout, stderr) => {
+    const childProcess = exec(cmd, {}, (error, stdout, stderr) => {
       if (error) {
         reject(error);
       }
@@ -29,16 +34,25 @@ export function execPromise(cmd, options) {
   });
 }
 
+/**
+ * @param {string} cmd
+ * @returns {Promise<string>}
+ */
 export async function execPromiseLogged(cmd) {
   console.log(cmd);
   return execPromise(cmd);
 }
 
+/**
+ * @type {string} cmd
+ * @type {string[]} args
+ * @returns {Promise<void>}
+ */
 export function spawnPromise(cmd, args) {
   return new Promise((resolve, reject) => {
     const childProcess = spawn(cmd, args, {
       stdio: "inherit",
-      stderr: "inherit",
+      // stderr: "inherit", // TODO
     }); // Output to shell.
     childProcess.on("error", (error) => {
       console.error(error);

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { build } from "esbuild";
-import { execPromise } from "../lib/execPromise.js";
+import { execPromise } from "../lib/execPromise";
 
 const TS_FILE = new URL("./screenshot-src/main.ts", import.meta.url).pathname;
 const JS_FILE = new URL("./screenshot-src/main.js", import.meta.url).pathname;

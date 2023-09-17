@@ -18,6 +18,9 @@ needPath(
   "make build-sites",
 );
 
+/**
+ * @param {number=} port
+ */
 export function startServer(port) {
   port = port ?? 4443;
   console.log("Starting server.");
@@ -34,7 +37,9 @@ export function startServer(port) {
       filePath += "index.html";
     }
 
+    /** @type string */
     const extension = extname(filePath).toLowerCase();
+    /** @type Partial<Record<string, string>> */
     const mimeTypes = {
       ".html": "text/html",
       ".js": "text/javascript",
@@ -53,7 +58,7 @@ export function startServer(port) {
       ".wasm": "application/wasm",
     };
 
-    const contentType = mimeTypes[extension] || "application/octet-stream";
+    const contentType = mimeTypes[extension] ?? "application/octet-stream";
 
     readFile(filePath, function (error, content) {
       if (error) {

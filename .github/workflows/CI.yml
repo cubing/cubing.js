@@ -11,7 +11,10 @@ jobs:
         node-version: [19.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -33,7 +36,10 @@ jobs:
         node-version: [19.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -54,7 +60,10 @@ jobs:
         node-version: [19.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -73,11 +82,11 @@ jobs:
       - run: make test-dist-sites-experiments
       - run: make clean
 
-  test-using-bun:
+  test-using-bun-install:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest

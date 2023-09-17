@@ -1,5 +1,10 @@
 import { existsSync } from "node:fs";
 
+/**
+ * @param {string} folder
+ * @param {string} cmd
+ * @returns {void}
+ */
 export function needPath(folder, cmd) {
   if (!existsSync(folder)) {
     console.error(

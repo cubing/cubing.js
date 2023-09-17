@@ -1,6 +1,9 @@
 # TODO: see if we can make everything compatible with `bun`
 NODE=node
-BIOME=npx @biomejs/biome
+NPX=npx
+BUN_RUN=bun run
+BUN_BUN_RUN=bun --bun run
+BIOME=bun x @biomejs/biome
 WEB_TEST_RUNNER=./node_modules/.bin/wtr
 
 .PHONY: default
@@ -32,39 +35,39 @@ build: clean build-lib build-bin build-sites
 build-lib: build-lib-js build-lib-types
 .PHONY: build-lib-js
 build-lib-js:
-	${NODE} ./script/build/lib/build-lib-js.js
+	${BUN_RUN} ./script/build/lib/build-lib-js.ts
 .PHONY: build-lib-types
 build-lib-types:
-	${NODE} ./script/build/lib/build-lib-types.js
+	${BUN_RUN} ./script/build/lib/build-lib-types.ts
 .PHONY: build-bin
 build-bin:
-	${NODE} ./script/build/bin/build-bin.js
+	${BUN_RUN} ./script/build/bin/build-bin.ts
 	chmod +x ./dist/bin/*.js
 .PHONY: build-sites
 build-sites: build-site-twizzle build-site-experiments
 .PHONY: build-site-twizzle
 build-site-twizzle:
-	${NODE} ./script/build/sites/build-site-twizzle.js
+	${BUN_RUN} ./script/build/sites/build-site-twizzle.ts
 .PHONY: build-site-experiments
 build-site-experiments:
-	${NODE} ./script/build/sites/build-site-experiments.js
+	${BUN_RUN} ./script/build/sites/build-site-experiments.ts
 .PHONY: build-site-docs
 build-site-docs:
 	rm -rf ./dist/sites/js.cubing.net/
-	npx typedoc src/cubing/*/index.ts
+	${NPX} typedoc src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
 .PHONY: generate-js
 generate-js: generate-js-parsers generate-js-svg
 .PHONY: generate-js-parsers
 generate-js-parsers:
-	npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy
+	${NPX} peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy
 .PHONY: generate-js-svg
 generate-js-svg:
 	@echo "TODO: Generating JS for SVGs is not implemented yet."
 .PHONY: dev
 dev: quick-setup
-	${NODE} ./script/build/sites/dev.js
+	${BUN_RUN} ./script/build/sites/dev.ts
 .PHONY: link
 link: build
 	npm link
@@ -111,10 +114,10 @@ test-spec-watch:
 	${WEB_TEST_RUNNER} --playwright --watch
 .PHONY: test-src-import-restrictions
 test-src-import-restrictions:
-	${NODE} ./script/test/src/import-restrictions/main.js
+	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
 .PHONY: test-src-tsc
 test-src-tsc: build-lib-types
-	npx tsc --project ./tsconfig.json
+	${NPX} tsc --project ./tsconfig.json
 .PHONY: test-src-scripts-consistency
 test-src-scripts-consistency:
 	${NODE} ./script/test/src/scripts-consistency/main.js
@@ -150,13 +153,13 @@ test-dist-lib-perf: build-lib-js
 	${NODE} script/test/dist/lib/cubing/perf/*.js
 .PHONY: test-dist-lib-plain-esbuild-compat
 test-dist-lib-plain-esbuild-compat: build-lib-js
-	${NODE} script/test/dist/lib/cubing/plain-esbuild-compat/main.js
+	${BUN_RUN} script/test/dist/lib/cubing/plain-esbuild-compat/main.ts
 .PHONY: test-dist-lib-vite
 test-dist-lib-vite: build-lib-js
-	${NODE} ./script/test/dist/lib/cubing/vite/main.js
+	${BUN_RUN} ./script/test/dist/lib/cubing/vite/main.ts
 .PHONY: test-dist-lib-build-size
 test-dist-lib-build-size: build-lib-js
-	${NODE} ./script/test/dist/lib/cubing/build-size/main.js
+	${BUN_RUN} ./script/test/dist/lib/cubing/build-size/main.ts
 .PHONY: test-dist-sites-experiments
 test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
@@ -190,17 +193,17 @@ postpublish: update-cdn update-create-cubing-app deploy
 deploy: deploy-twizzle deploy-experiments
 .PHONY: deploy-twizzle
 deploy-twizzle: build-site-twizzle
-	${NODE} script/deploy/twizzle.js
+	${BUN_RUN} script/deploy/twizzle.ts
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
-	${NODE} script/deploy/experiments.js
+	${BUN_RUN} script/deploy/experiments.ts
 .PHONY: roll-vendored-twsearch
 roll-vendored-twsearch:
 	test -d ../twsearch/ || exit
 	cd ../twsearch/ && make clean build/esm
 	rm -rf src/cubing/vendor/mpl/twsearch/*
 	cp -R ../twsearch/build/esm/* src/cubing/vendor/mpl/twsearch/
-	node script/fix-vendored-twsearch.js
+	${BUN_RUN} script/fix-vendored-twsearch.ts
 .PHONY: update-create-cubing-app
 update-create-cubing-app:
 	cd ../create-cubing-app && make roll-cubing-commit && git push
@@ -217,7 +220,7 @@ update-cdn:
 
 # Not .PHONY(!)
 node_modules:
-	${NODE} ./script/quick-setup/main.js
+	${BUN_RUN} ./script/quick-setup/main.ts
 
 .PHONY: publish
 .PHONY: publish
