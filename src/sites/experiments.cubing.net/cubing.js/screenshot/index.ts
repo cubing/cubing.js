@@ -4,7 +4,10 @@ window.addEventListener("DOMContentLoaded", async () => {
   const options = JSON.parse(
     new URL(location.href).searchParams.get("options") || "{}",
   );
-  const twistyPlayer = new TwistyPlayer(options);
+  const twistyPlayer = new TwistyPlayer({
+    experimentalInitialHintFaceletsAnimation: "none",
+    ...options,
+  });
   const screenshot = await twistyPlayer.experimentalScreenshot({
     width: window.innerWidth,
     height: window.innerHeight,
