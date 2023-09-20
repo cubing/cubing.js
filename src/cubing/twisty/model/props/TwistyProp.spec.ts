@@ -30,7 +30,5 @@ describe("operation", () => {
     a.set(10);
     expect(await savedSum).to.equal(18);
     expect(await sum.get()).to.equal(20);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
   });
 });
