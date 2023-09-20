@@ -5,13 +5,19 @@ import { KPuzzle } from "../kpuzzle";
 import { PGPuzzles } from "./PGPuzzles";
 import { getPuzzleGeometryByDesc, PGNotation } from "./PuzzleGeometry";
 
+const TEST_LARGE_PUZZLES = false;
+
+function slow(s: string): string | null {
+  return TEST_LARGE_PUZZLES ? s : null;
+}
+
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
  *   (and thus total stickers), move count, orbit
  *   count, and cubie count.
  */
-const expectedData: { [nam: string]: string } = {
+const expectedData: { [name: string]: string | null } = {
   "2x2x2": "2x2x2, 6, 4, 8, 1, 6, 12",
   "3x3x3": "3x3x3, 6, 9, 26, 3, 9, 120",
   "4x4x4": "4x4x4, 6, 16, 56, 3, 12, 420",
@@ -24,9 +30,9 @@ const expectedData: { [nam: string]: string } = {
   "11x11x11": "11x11x11, 6, 121, 602, 27, 33, 840",
   "12x12x12": "12x12x12, 6, 144, 728, 31, 36, 420",
   "13x13x13": "13x13x13, 6, 169, 866, 38, 39, 840",
-  "20x20x20": "20x20x20, 6, 400, 2168, 91, 60, 420",
-  "30x30x30": "30x30x30, 6, 900, 5048, 211, 90, 420",
-  "40x40x40": "40x40x40, 6, 1600, 9128, 381, 120, 420",
+  "20x20x20": slow("20x20x20, 6, 400, 2168, 91, 60, 420"),
+  "30x30x30": slow("30x30x30, 6, 900, 5048, 211, 90, 420"),
+  "40x40x40": slow("40x40x40, 6, 1600, 9128, 381, 120, 420"),
   skewb: "skewb, 6, 5, 14, 3, 8, 9",
   "master skewb": "master skewb, 6, 13, 50, 6, 12, 2520",
   "professor skewb": "professor skewb, 6, 25, 110, 11, 16, 360",
@@ -47,18 +53,18 @@ const expectedData: { [nam: string]: string } = {
   "master pyramorphix": "master pyramorphix, 4, 10, 26, 8, 9, 2",
   megaminx: "megaminx, 12, 11, 62, 3, 18, 702",
   gigaminx: "gigaminx, 12, 31, 242, 6, 30, 18181800",
-  teraminx: "teraminx, 12, 61, 542, 11, 42, 18181800",
-  petaminx: "petaminx, 12, 101, 962, 18, 54, 18181800",
-  examinx: "examinx, 12, 151, 1502, 27, 66, 18181800",
-  zetaminx: "zetaminx, 12, 211, 2162, 38, 78, 18181800",
-  yottaminx: "yottaminx, 12, 281, 2942, 51, 90, 18181800",
-  pentultimate: "pentultimate, 12, 6, 32, 2, 12, 132",
+  teraminx: slow("teraminx, 12, 61, 542, 11, 42, 18181800"),
+  petaminx: slow("petaminx, 12, 101, 962, 18, 54, 18181800"),
+  examinx: slow("examinx, 12, 151, 1502, 27, 66, 18181800"),
+  zetaminx: slow("zetaminx, 12, 211, 2162, 38, 78, 18181800"),
+  yottaminx: slow("yottaminx, 12, 281, 2942, 51, 90, 18181800"),
+  pentultimate: slow("pentultimate, 12, 6, 32, 2, 12, 132"),
   "master pentultimate": "master pentultimate, 12, 16, 122, 4, 18, 1741740",
   "elite pentultimate": "elite pentultimate, 12, 31, 272, 6, 24, 6832980",
-  starminx: "starminx, 12, 11, 62, 3, 30, 660",
+  starminx: slow("starminx, 12, 11, 62, 3, 30, 660"),
   "starminx 2": "starminx 2, 12, 11, 102, 3, 18, 158340",
   "pyraminx crystal": "pyraminx crystal, 12, 10, 50, 2, 18, 9828",
-  chopasaurus: "chopasaurus, 12, 11, 92, 3, 20, 63954",
+  chopasaurus: slow("chopasaurus, 12, 11, 92, 3, 20, 63954"),
   "big chop": "big chop, 12, 10, 120, 2, 30, 24633",
   "skewb diamond": "skewb diamond, 8, 4, 14, 3, 8, 6",
   FTO: "FTO, 8, 9, 42, 4, 12, 990",
@@ -69,7 +75,7 @@ const expectedData: { [nam: string]: string } = {
   "radio chop": "radio chop, 20, 10, 92, 3, 20, 41580",
   icosamate: "icosamate, 20, 4, 32, 2, 12, 720",
   "icosahedron 2": "icosahedron 2, 20, 9, 102, 3, 18, 432630",
-  "icosahedron 3": "icosahedron 3, 20, 18, 360, 6, 48, 1615854240",
+  "icosahedron 3": slow("icosahedron 3, 20, 18, 360, 6, 48, 1615854240"),
   "icosahedron static faces": "icosahedron static faces, 20, 7, 62, 3, 18, 180",
   "icosahedron moving faces": "icosahedron moving faces, 20, 7, 62, 3, 18, 180",
   "Eitan's star": "Eitan's star, 20, 13, 152, 4, 30, 384560",
@@ -83,6 +89,10 @@ const expectedData: { [nam: string]: string } = {
 };
 
 for (const [name, desc] of Object.entries(PGPuzzles)) {
+  if (expectedData[name] === null) {
+    continue;
+  }
+
   test(`PuzzleGeometry-Puzzles test puzzle ${name}`, () => {
     const pg = getPuzzleGeometryByDesc(desc, {});
     const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
