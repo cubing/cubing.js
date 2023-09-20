@@ -8,7 +8,7 @@ import {
 import { join } from "node:path";
 import { execPromise } from "../lib/execPromise";
 
-const TEMP_ROOT = "./.temp/initial-setup";
+const TEMP_ROOT = "./.temp/quick-setup";
 const TARGET_NODE_MODULES_PATH = "./node_modules";
 
 if (existsSync(TARGET_NODE_MODULES_PATH)) {
