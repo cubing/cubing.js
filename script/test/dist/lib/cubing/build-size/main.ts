@@ -105,7 +105,6 @@ const humanResults = {
     ),
   ),
 };
-console.table(humanResults);
 
 // TODO: Design actual tests, and take bundle splitting into account.
 
