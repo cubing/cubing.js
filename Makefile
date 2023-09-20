@@ -104,8 +104,12 @@ test-src: \
 	test-src-import-restrictions \
 	test-src-scripts-consistency # keep CI.yml in sync with this
 .PHONY: test-spec
-test-spec:
+test-spec: test-spec-bun test-spec-dom
+.PHONY: test-spec-bun
+test-spec-bun:
 	${BUN} test
+.PHONY: test-spec-dom
+test-spec:
 	${WEB_TEST_RUNNER} --playwright
 .PHONY: test-spec-with-coverage
 test-spec-with-coverage:
