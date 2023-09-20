@@ -92,3 +92,4 @@ jobs:
           bun-version: latest
       - run: bun install # TODO: ieally we'd test that this works without dev deps, but the `--production` flag requires a lockfile.
       - run: bun run src/bin/scramble.ts 333
+      - run: bun test
