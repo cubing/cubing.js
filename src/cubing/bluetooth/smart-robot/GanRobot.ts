@@ -3,7 +3,7 @@ import { cube3x3x3 } from "../../puzzles";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Remove this. It's only used for debugging.
-function buf2hex(buffer: ArrayBuffer): string {
+function buf2hex(buffer: ArrayBuffer | Uint8Array): string {
   // buffer is an ArrayBuffer
   return (
     Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>

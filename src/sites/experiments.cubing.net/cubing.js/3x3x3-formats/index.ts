@@ -18,7 +18,7 @@ import {
   stickersToKPattern,
 } from "./convert";
 
-export function bufferToSpacedHex(buffer: ArrayBuffer): string {
+export function bufferToSpacedHex(buffer: ArrayBuffer | Uint8Array): string {
   // buffer is an ArrayBuffer
   return (
     Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>

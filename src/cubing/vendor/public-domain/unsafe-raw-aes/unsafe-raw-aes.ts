@@ -13,7 +13,9 @@ const paddingBlockPlaintext = new Uint8Array(
 );
 const AES_CBC = "AES-CBC";
 
-export async function importKey(keyBytes: ArrayBuffer): Promise<CryptoKey> {
+export async function importKey(
+  keyBytes: ArrayBuffer | Uint8Array,
+): Promise<CryptoKey> {
   return await crypto.subtle.importKey("raw", keyBytes, AES_CBC, true, [
     "encrypt",
     "decrypt",
@@ -22,8 +24,8 @@ export async function importKey(keyBytes: ArrayBuffer): Promise<CryptoKey> {
 
 async function unsafeEncryptBlockWithIV(
   key: CryptoKey,
-  plaintextBlock: ArrayBuffer,
-  iv: ArrayBuffer,
+  plaintextBlock: ArrayBuffer | Uint8Array,
+  iv: ArrayBuffer | Uint8Array,
 ): Promise<ArrayBuffer> {
   const cryptoResult: ArrayBuffer = await window.crypto.subtle.encrypt(
     {
@@ -38,7 +40,7 @@ async function unsafeEncryptBlockWithIV(
 
 export async function unsafeEncryptBlock(
   key: CryptoKey,
-  plaintextBlock: ArrayBuffer,
+  plaintextBlock: ArrayBuffer | Uint8Array,
 ): Promise<ArrayBuffer> {
   return (await unsafeEncryptBlockWithIV(key, plaintextBlock, zeros)).slice(
     0,
@@ -48,7 +50,7 @@ export async function unsafeEncryptBlock(
 
 export async function unsafeDecryptBlock(
   key: CryptoKey,
-  ciphertextBlock: ArrayBuffer,
+  ciphertextBlock: ArrayBuffer | Uint8Array,
 ): Promise<ArrayBuffer> {
   const paddingBlock = await unsafeEncryptBlockWithIV(
     key,

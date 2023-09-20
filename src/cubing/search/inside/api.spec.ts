@@ -1,4 +1,4 @@
-import { expect } from "../../../test/chai-workarounds";
+import { expect, test } from "bun:test";
 
 import { insideAPI, setDebugMeasurePerf } from "./api";
 
@@ -8,18 +8,14 @@ const events = ["222", "333"];
 
 setDebugMeasurePerf(false);
 
-describe("Internal API", () => {
-  for (const event of events) {
-    it(`Generates scramble alg for event: ${event}`, () => {
-      expect(() => insideAPI.randomScrambleForEvent(event)).not.to.throw();
-    });
-  }
+for (const event of events) {
+  test(`Internal API generates scramble alg for event: ${event}`, () => {
+    expect(() => insideAPI.randomScrambleForEvent(event)).not.toThrow();
+  });
+}
 
-  for (const event of events) {
-    it(`Generates scramble string for event: ${event}`, () => {
-      expect(() =>
-        insideAPI.randomScrambleStringForEvent(event),
-      ).not.to.throw();
-    });
-  }
-});
+for (const event of events) {
+  test(`Internal API generates scramble string for event: ${event}`, () => {
+    expect(() => insideAPI.randomScrambleStringForEvent(event)).not.toThrow();
+  });
+}

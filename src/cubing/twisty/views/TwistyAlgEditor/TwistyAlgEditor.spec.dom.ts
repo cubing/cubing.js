@@ -13,7 +13,9 @@ class ResizeObserver {
   }
 }
 
-(window as any).ResizeObserver = ResizeObserver;
+if (globalThis.window) {
+  (window as any).ResizeObserver = ResizeObserver;
+}
 
 describe("TwistyAlgEditor", () => {
   it("can be constructed without arguments", () => {

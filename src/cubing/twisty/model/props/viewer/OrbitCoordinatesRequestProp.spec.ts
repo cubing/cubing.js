@@ -1,10 +1,10 @@
-import { expect } from "../../../../../test/chai-workarounds";
+import { expect, test } from "bun:test";
 import {
   OrbitCoordinatesRequestProp,
   type OrbitCoordinates,
 } from "./OrbitCoordinatesRequestProp";
 
-it("longitude wraps from 180 to -180", async () => {
+test("longitude wraps from 180 to -180", async () => {
   const orbitCoordinatesRequestProp = new OrbitCoordinatesRequestProp();
   async function roundTripLongitude(longitude: number) {
     orbitCoordinatesRequestProp.set({ longitude });
@@ -12,10 +12,10 @@ it("longitude wraps from 180 to -180", async () => {
       .longitude;
   }
 
-  expect(await roundTripLongitude(0)).to.equal(0);
-  expect(await roundTripLongitude(180)).to.equal(180);
-  expect(await roundTripLongitude(181)).to.equal(-179);
-  expect(await roundTripLongitude(-180)).to.equal(180);
-  expect(await roundTripLongitude(270)).to.equal(-90);
-  expect(await roundTripLongitude(1000)).to.equal(-80);
+  expect(await roundTripLongitude(0)).toStrictEqual(0);
+  expect(await roundTripLongitude(180)).toStrictEqual(180);
+  expect(await roundTripLongitude(181)).toStrictEqual(-179);
+  expect(await roundTripLongitude(-180)).toStrictEqual(180);
+  expect(await roundTripLongitude(270)).toStrictEqual(-90);
+  expect(await roundTripLongitude(1000)).toStrictEqual(-80);
 });

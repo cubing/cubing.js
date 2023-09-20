@@ -1,9 +1,10 @@
-import { expect } from "../../test/chai-workarounds";
+import { expect, test } from "bun:test";
 
 import { Alg, Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
 import { PGPuzzles } from "./PGPuzzles";
 import { getPuzzleGeometryByDesc, PGNotation } from "./PuzzleGeometry";
+
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
@@ -80,46 +81,45 @@ const expectedData: { [nam: string]: string } = {
   "megaminx + chopasaurus": "megaminx + chopasaurus, 12, 11, 92, 3, 38, 13860",
   "starminx combo": "starminx combo, 12, 11, 102, 3, 48, 2520",
 };
-describe("PuzzleGeometry-Puzzles", () => {
-  for (const [name, desc] of Object.entries(PGPuzzles)) {
-    it(`testpuzzles ${name}`, () => {
-      const pg = getPuzzleGeometryByDesc(desc, {});
-      const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
-      const sep = ", ";
-      const seq = Object.getOwnPropertyNames(kpuzzleDefinition.moves)
-        .sort()
-        .join(" ");
-      let algo = Alg.fromString(seq);
-      // TODO:  likely a temporary hack until we resolve how notations are
-      // added or set in puzzle geometry.
-      const bms = [];
-      for (const move of algo.childAlgNodes()) {
-        bms.push(pg.notationMapper.notationToExternal(move as Move) as Move);
-      }
-      // console.log(algo.toString(), bms);
-      algo = new Alg(bms);
-      const o = new KPuzzle(kpuzzleDefinition, {
-        experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
-      })
-        .algToTransformation(algo)
-        .repetitionOrder();
-      const dat = [
-        name,
-        sep,
-        pg.baseplanerot.length,
-        sep,
-        pg.stickersperface,
-        sep,
-        pg.cubies.length,
-        sep,
-        kpuzzleDefinition.orbits.length,
-        sep,
-        Object.getOwnPropertyNames(kpuzzleDefinition.moves).length,
-        sep,
-        o,
-      ].join("");
-      const exp = expectedData[name];
-      expect(dat).to.equal(exp);
-    });
-  }
-});
+
+for (const [name, desc] of Object.entries(PGPuzzles)) {
+  test(`PuzzleGeometry-Puzzles test puzzle ${name}`, () => {
+    const pg = getPuzzleGeometryByDesc(desc, {});
+    const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
+    const sep = ", ";
+    const seq = Object.getOwnPropertyNames(kpuzzleDefinition.moves)
+      .sort()
+      .join(" ");
+    let algo = Alg.fromString(seq);
+    // TODO:  likely a temporary hack until we resolve how notations are
+    // added or set in puzzle geometry.
+    const bms = [];
+    for (const move of algo.childAlgNodes()) {
+      bms.push(pg.notationMapper.notationToExternal(move as Move) as Move);
+    }
+    // console.log(algo.toString(), bms);
+    algo = new Alg(bms);
+    const o = new KPuzzle(kpuzzleDefinition, {
+      experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
+    })
+      .algToTransformation(algo)
+      .repetitionOrder();
+    const dat = [
+      name,
+      sep,
+      pg.baseplanerot.length,
+      sep,
+      pg.stickersperface,
+      sep,
+      pg.cubies.length,
+      sep,
+      kpuzzleDefinition.orbits.length,
+      sep,
+      Object.getOwnPropertyNames(kpuzzleDefinition.moves).length,
+      sep,
+      o,
+    ].join("");
+    const exp = expectedData[name];
+    expect(dat).toStrictEqual(exp);
+  });
+}

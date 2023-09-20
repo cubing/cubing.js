@@ -1,8 +1,9 @@
 NODE=node
 NPX=npx
-BUN_RUN=bun run
-BUN_BUN_RUN=bun --bun run
-BIOME=bun x @biomejs/biome
+BUN=bun
+BUN_RUN=${BUN} run
+BUN_BUN_RUN=${BUN} --bun run
+BIOME=${BUN} x @biomejs/biome
 WEB_TEST_RUNNER=./node_modules/.bin/wtr
 
 .PHONY: default
@@ -104,6 +105,7 @@ test-src: \
 	test-src-scripts-consistency # keep CI.yml in sync with this
 .PHONY: test-spec
 test-spec:
+	${BUN} test
 	${WEB_TEST_RUNNER} --playwright
 .PHONY: test-spec-with-coverage
 test-spec-with-coverage:

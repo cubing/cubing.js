@@ -9,7 +9,8 @@
     "rootDir": "./",
     "types": [
       "web-bluetooth",
-      "dom-speech-recognition"
+      "dom-speech-recognition",
+      "./src/test/vendor/bun-types-workaround.d.ts"
     ],
     // Stricter defaults.
     "allowJs": true,

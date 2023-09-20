@@ -24,7 +24,7 @@ export function reorientPuzzle(
   );
 }
 
-type Binary3x3x3Pattern = ArrayBuffer;
+type Binary3x3x3Pattern = Uint8Array;
 
 // Bit lengths of the encoded components, in order.
 const BIT_LENGTHS = [29, 12, 16, 13, 3, 2, 1, 12];
@@ -54,7 +54,10 @@ function arraySum(arr: number[]): number {
 // - Safe: [8, 32]
 // - Unsafe: [4, 32, 4]
 // - Unsafe: [40, 4]
-function splitBinary(bitLengths: number[], buffy: ArrayBuffer): number[] {
+function splitBinary(
+  bitLengths: number[],
+  buffy: ArrayBuffer | Uint8Array,
+): number[] {
   const u8buffy = new Uint8Array(buffy);
   let at = 0;
   let bits = 0;
@@ -72,7 +75,7 @@ function splitBinary(bitLengths: number[], buffy: ArrayBuffer): number[] {
 }
 
 // See above for safety notes.
-function concatBinary(bitLengths: number[], values: number[]): ArrayBuffer {
+function concatBinary(bitLengths: number[], values: number[]): Uint8Array {
   const buffy = new Uint8Array(Math.ceil(arraySum(bitLengths) / 8));
   let at = 0;
   let bits = 0;
@@ -146,7 +149,7 @@ export function reid3x3x3ToBinaryComponents(
 
 export function binaryComponentsToTwizzleBinary(
   components: Binary3x3x3Components,
-): Binary3x3x3Pattern {
+): Uint8Array {
   const { epLex, eoMask, cpLex, coMask, poIdxU, poIdxL, moSupport, moMask } =
     components;
 
@@ -173,7 +176,7 @@ export function reid3x3x3ToTwizzleBinary(
 
 /** @category Binary 3x3x3 Format */
 export function twizzleBinaryToBinaryComponents(
-  buffer: ArrayBuffer,
+  buffer: ArrayBuffer | Uint8Array,
 ): Binary3x3x3Components {
   const [epLex, eoMask, cpLex, coMask, poIdxU, poIdxL, moSupport, moMask] =
     splitBinary(BIT_LENGTHS, buffer);
@@ -256,7 +259,9 @@ function validateComponents(components: Binary3x3x3Components): string[] {
 }
 
 /** @category Binary 3x3x3 Format */
-export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): KPattern {
+export function twizzleBinaryToReid3x3x3(
+  buffy: ArrayBuffer | Uint8Array,
+): KPattern {
   const components = twizzleBinaryToBinaryComponents(buffy);
   const errors = validateComponents(components);
   if (errors.length !== 0) {
