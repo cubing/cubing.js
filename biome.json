@@ -28,7 +28,8 @@
       "./src/cubing/vendor/mpl/twsearch/*.js",
       "./src/cubing/vendor/mpl/xyzzy/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts"
+      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
+      "./script/bin/screenshot-src/main.js"
     ]
   },
   "formatter": {
@@ -39,7 +40,8 @@
       "./src/cubing/vendor/mpl/twsearch/*.js",
       "./src/cubing/vendor/mpl/xyzzy/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts"
+      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
+      "./script/bin/screenshot-src/main.js"
     ]
   },
   "organizeImports": {

@@ -34,6 +34,7 @@ export const allowedImports: AllowedImports = {
       "node-fetch",
       "playwright",
       "zlib",
+      "yargs",
     ],
     dynamic: ["cubing", "node:repl"],
   },
