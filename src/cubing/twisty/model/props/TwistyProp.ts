@@ -2,7 +2,7 @@ import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 import { StaleDropper } from "../PromiseFreshener";
 import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
 
-type InputRecord = {};
+type InputRecord = Record<string, any>;
 
 export type InputProps<T extends InputRecord> = {
   [s in keyof T]: TwistyPropParent<T[s]>;

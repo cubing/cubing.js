@@ -32,7 +32,7 @@ function calculateMoves(
       );
     }
     let transformation = kpuzzle.identityTransformation();
-    for (let i = 1; true; i++) {
+    for (let i = 1; ; i++) {
       transformation = transformation.applyMove(rootMove);
       if (transformation.isIdentityTransformation()) {
         break;
