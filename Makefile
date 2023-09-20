@@ -135,7 +135,7 @@ test-dist: test-dist-lib test-dist-bin
 .PHONY: test-dist-lib
 test-dist-lib: \
 	test-dist-lib-node-import \
-	test-dist-lib-scramble-all-events \
+	test-dist-lib-node-scramble-all-events \
 	test-dist-lib-perf \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-lib-vite \
@@ -143,10 +143,10 @@ test-dist-lib: \
 	test-dist-sites-experiments # keep CI.yml in sync with this
 .PHONY: test-dist-lib-node-import
 test-dist-lib-node-import: build-lib-js
-	${NODE} script/test/dist/lib/cubing/node-import/main.js
-.PHONY: test-dist-lib-scramble-all-events
-test-dist-lib-scramble-all-events: build-lib-js
-	${NODE} script/test/dist/lib/cubing/scramble-all-events/main.js
+	${NODE} script/test/dist/lib/cubing/node/import/main.js
+.PHONY: test-dist-lib-node-scramble-all-events
+test-dist-lib-node-scramble-all-events: build-lib-js
+	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/main.js
 .PHONY: test-dist-lib-perf
 test-dist-lib-perf: build-lib-js
 	${NODE} script/test/dist/lib/cubing/perf/*.js
