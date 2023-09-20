@@ -13,7 +13,7 @@ const SIMPLE_MAKEFILE_TARGET_MATCH = /^([A-Za-z\-]+):/;
 
 const makefileText = await readFile(MAKEFILE_PATH, "utf-8");
 let inScriptsSection = true;
-const makefileScriptTargets = [];
+const makefileScriptTargets: string[] = [];
 let previousLine = "";
 for (const line of makefileText.split("\n")) {
   if (line.includes("Shared with `package.json`")) {
@@ -67,7 +67,7 @@ for (const [scriptName, shell] of Object.entries(packageJSON.scripts)) {
   packageJSONScripts.push(scriptName);
 }
 
-function logDifference(from, subtract) {
+function logDifference(from: string[], subtract: string[]) {
   const output = [];
   for (const entry of from) {
     if (!subtract.includes(entry)) {

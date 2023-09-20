@@ -119,10 +119,10 @@ test-src-tsc: build-lib-types
 	${NPX} tsc --project ./tsconfig.json
 .PHONY: test-src-scripts-consistency
 test-src-scripts-consistency:
-	${NODE} ./script/test/src/scripts-consistency/main.js
+	${BUN_RUN} ./script/test/src/scripts-consistency/main.ts
 .PHONY: fix-src-scripts-consistency
 fix-src-scripts-consistency:
-	${NODE} ./script/test/src/scripts-consistency/main.js --fix
+	${BUN_RUN} ./script/test/src/scripts-consistency/main.ts --fix
 .PHONY: test-build
 test-build: \
 	build-lib-js \
