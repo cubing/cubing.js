@@ -1,4 +1,3 @@
-# TODO: see if we can make everything compatible with `bun`
 NODE=node
 NPX=npx
 BUN_RUN=bun run
