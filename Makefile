@@ -115,11 +115,14 @@ test-spec: test-spec-bun test-spec-dom
 .PHONY: test-spec-bun
 test-spec-bun:
 	${BUN} test
+.PHONY: test-spec-bun-with-coverage
+test-spec-bun-with-coverage:
+	${BUN} test
 .PHONY: test-spec-dom
 test-spec-dom:
 	${WEB_TEST_RUNNER} --playwright
-.PHONY: test-spec-with-coverage
-test-spec-with-coverage:
+.PHONY: test-spec-dom-with-coverage
+test-spec-dom-with-coverage:
 	${WEB_TEST_RUNNER} --playwright --coverage
 .PHONY: test-src-import-restrictions
 test-src-import-restrictions:
