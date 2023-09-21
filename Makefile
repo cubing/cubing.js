@@ -92,8 +92,16 @@ test-info:
 	@echo "    make test-all  (≈40s, runs all of the above)"
 	@echo "    make test-fast (≈4s, runs a subset of the above)"
 	@echo ""
+# The following deps are in a custom order so that the more "useful" tests are first.
+# In case of failure, this is likely to be more helpful.
 .PHONY: test-fast
-test-fast: build-lib-js lint build-sites build-bin test-spec test-dist-bin
+test-fast: \
+	build-lib-js test-spec-bun build-bin build-sites \
+	lint \
+	test-src-import-restrictions test-src-scripts-consistency \
+	test-dist-lib-plain-esbuild-compat \
+	test-spec-dom \
+	test-dist-bin-shebang
 .PHONY: test-all
 test-all: test-src test-build test-dist
 .PHONY: test-src
@@ -114,9 +122,6 @@ test-spec-dom:
 .PHONY: test-spec-with-coverage
 test-spec-with-coverage:
 	${WEB_TEST_RUNNER} --playwright --coverage
-.PHONY: test-spec-watch
-test-spec-watch:
-	${WEB_TEST_RUNNER} --playwright --watch
 .PHONY: test-src-import-restrictions
 test-src-import-restrictions:
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
@@ -169,11 +174,16 @@ test-dist-lib-build-size: build-lib-js
 test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: test-dist-bin
-test-dist-bin: build-bin
+test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec
+.PHONY: test-dist-bin-shebang
+test-dist-bin-shebang: build-bin
 	# Note: we're not testing the output, just that these don't exit with an error.
-	dist/bin/order.js 3x3x3 "R U R'"
-	time dist/bin/puzzle-geometry-bin.js --ss 2x2x2
-	npm exec scramble -- 333
+	time dist/bin/order.js 3x3x3 "R U R'"
+	time dist/bin/puzzle-geometry-bin.js --svg 2x2x2
+	time dist/bin/scramble.js 222
+.PHONY: test-dist-bin-npm-exec
+test-dist-bin-npm-exec: build-bin
+	time npm exec scramble -- 222
 .PHONY: format
 format:
 	${BIOME} format --write ./script ./src
