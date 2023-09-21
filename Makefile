@@ -126,7 +126,7 @@ test-spec-with-coverage:
 test-src-import-restrictions:
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
 .PHONY: test-src-tsc
-test-src-tsc: build-lib-types
+test-src-tsc:
 	${NPX} tsc --project ./tsconfig.json
 .PHONY: test-src-scripts-consistency
 test-src-scripts-consistency:
