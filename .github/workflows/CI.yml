@@ -97,3 +97,18 @@ jobs:
       - run: time make build-lib-js
       - run: time make build-sites
       - run: time make test-spec-bun
+
+  test-quick-setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - run: make quick-setup
+      - name: Set up `node`
+        uses: actions/setup-node@v3
+        with:
+          node-version: v19
+      - run: time make test-fast

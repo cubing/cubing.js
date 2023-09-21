@@ -85,13 +85,14 @@
     "tsup": "^6.7.0",
     "typedoc": "^0.23.28",
     "typescript": "^5.0.2",
-    "yargs": "^17.7.1"
+    "yargs": "^17.7.2"
   },
   "minimalDevDependencies": [
     "barely-a-dev-server",
     "esbuild",
     "jszip",
-    "@biomejs/biome"
+    "@biomejs/biome",
+    "yargs"
   ],
   "engines": {
     "node": ">=19"
