@@ -109,7 +109,7 @@ test-spec: test-spec-bun test-spec-dom
 test-spec-bun:
 	${BUN} test
 .PHONY: test-spec-dom
-test-spec:
+test-spec-dom:
 	${WEB_TEST_RUNNER} --playwright
 .PHONY: test-spec-with-coverage
 test-spec-with-coverage:
