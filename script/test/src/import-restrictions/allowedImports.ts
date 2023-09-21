@@ -12,7 +12,7 @@ export type AllowedImports = Record<
  * - Only the allowed imports for the most specific (longest) scope key applies to a source file.
  * - Files in a given scope key are allowed to import any other within the same scope.
  */
-export const allowedImports: AllowedImports = {
+export const mainAllowedImports: AllowedImports = {
   // script
   script: {
     static: [
@@ -133,5 +133,23 @@ export const allowedImports: AllowedImports = {
   // src/sites
   "src/sites": {
     static: ["src/cubing", "jszip", "three"],
+  },
+};
+
+// This is a separate definition because the `spec` files are interleaved with source files, and it's easier to run a separate check for them.
+export const specAllowedImports: AllowedImports = {
+  "src/cubing": {
+    static: [
+      "bun:test",
+      "src/test/chai-workarounds",
+
+      "comlink",
+      "three",
+      "random-uint-below",
+    ],
+  },
+  "src/test/chai-workarounds": {
+    static: ["src/cubing/alg"],
+    dynamic: ["@esm-bundle/chai"],
   },
 };
