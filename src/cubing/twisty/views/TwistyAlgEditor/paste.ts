@@ -107,7 +107,7 @@ export function pasteIntoTextArea(
     (tryAddSpaceAfter && adoptSpacingIfValid("", " ")); // Paste "U" before "L'" in "R' L'" to create "R' U L'"
 
   // `execCommand` is under-specced and deprecated, but it's more likely to allow undo and preserve history.
-  const execCommandSuccess = globalSafeDocument?.execCommand(
+  const execCommandSuccess = globalSafeDocument?.execCommand?.(
     "insertText",
     false,
     replacement,
