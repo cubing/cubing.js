@@ -83,14 +83,14 @@ test-info:
 	@echo "Run one of the following."
 	@echo "(Time estimates are based on a fast computer.)"
 	@echo ""
-	@echo "    make test-spec (≈3s, \`*.spec.ts\` files only)"
+	@echo "    make test-spec (≈2s, unit tests only)"
 	@echo ""
-	@echo "    make test-src   (≈20s, includes \`make test-spec\`)"
-	@echo "    make test-build (≈8s)"
-	@echo "    make test-dist  (≈15s)"
+	@echo "    make test-src   (≈5s, includes \`make test-spec\`)"
+	@echo "    make test-build (≈13s)"
+	@echo "    make test-dist  (≈10s)"
 	@echo ""
-	@echo "    make test-all  (≈40s, runs all of the above)"
-	@echo "    make test-fast (≈4s, runs a subset of the above)"
+	@echo "    make test-all  (≈27s, runs all of the above)"
+	@echo "    make test-fast (≈2s, runs a subset of the above)"
 	@echo ""
 # The following deps are in a custom order so that the more "useful" tests are first.
 # In case of failure, this is likely to be more helpful.
@@ -100,7 +100,6 @@ test-fast: \
 	lint \
 	test-src-import-restrictions test-src-scripts-consistency \
 	test-dist-lib-plain-esbuild-compat \
-	test-spec-dom \
 	test-dist-bin-shebang
 .PHONY: test-all
 test-all: test-src test-build test-dist
