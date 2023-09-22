@@ -7,17 +7,17 @@ export const kilominxSVG = `<svg id="svg" xmlns="http://www.w3.org/2000/svg" xml
 <polygon id="CORNERS-l0-o0" class="sticker" style="fill: #ffffff" points="212.381 199.301 168.427 199.301 154.845 157.499 212.382 138.805"/>
 <polygon id="CORNERS-l2-o0" class="sticker" style="fill: #ffffff" points="269.918 157.499 256.335 199.301 212.381 199.301 212.382 138.805"/>
 </g><g><title>F</title>
-<polygon id="CORNERS-l8-o0" class="sticker" style="fill: #006633" points="247.941 319.263 212.381 345.098 176.822 319.263 212.382 270.32"/>
-<polygon id="CORNERS-l2-o2" class="sticker" style="fill: #006633" points="212.381 209.823 256.335 209.823 269.918 251.625 212.382 270.32"/>
-<polygon id="CORNERS-l19-o1" class="sticker" style="fill: #006633" points="269.918 251.625 283.500 293.428 247.941 319.263 212.382 270.32"/>
-<polygon id="CORNERS-l0-o1" class="sticker" style="fill: #006633" points="154.845 251.625 168.427 209.823 212.381 209.823 212.382 270.32"/>
-<polygon id="CORNERS-l3-o2" class="sticker" style="fill: #006633" points="176.822 319.263 141.263 293.428 154.845 251.625 212.382 270.32"/>
+<polygon id="CORNERS-l8-o0" class="sticker" style="fill: #008800" points="247.941 319.263 212.381 345.098 176.822 319.263 212.382 270.32"/>
+<polygon id="CORNERS-l2-o2" class="sticker" style="fill: #008800" points="212.381 209.823 256.335 209.823 269.918 251.625 212.382 270.32"/>
+<polygon id="CORNERS-l19-o1" class="sticker" style="fill: #008800" points="269.918 251.625 283.500 293.428 247.941 319.263 212.382 270.32"/>
+<polygon id="CORNERS-l0-o1" class="sticker" style="fill: #008800" points="154.845 251.625 168.427 209.823 212.381 209.823 212.382 270.32"/>
+<polygon id="CORNERS-l3-o2" class="sticker" style="fill: #008800" points="176.822 319.263 141.263 293.428 154.845 251.625 212.382 270.32"/>
 </g><g><title>L</title>
-<polygon id="CORNERS-l4-o0" class="sticker" style="fill: #660099" points="87.302 290.176 43.349 290.176 29.766 248.374 87.303 229.68"/>
-<polygon id="CORNERS-l0-o2" class="sticker" style="fill: #660099" points="122.862 180.736 158.421 206.571 144.839 248.374 87.303 229.68"/>
-<polygon id="CORNERS-l3-o1" class="sticker" style="fill: #660099" points="144.839 248.374 131.256 290.176 87.302 290.176 87.303 229.68"/>
-<polygon id="CORNERS-l1-o1" class="sticker" style="fill: #660099" points="51.743 180.736 87.302 154.901 122.862 180.736 87.303 229.68"/>
-<polygon id="CORNERS-l5-o2" class="sticker" style="fill: #660099" points="29.766 248.374 16.184 206.571 51.743 180.736 87.303 229.68"/>
+<polygon id="CORNERS-l4-o0" class="sticker" style="fill: #8800dd" points="87.302 290.176 43.349 290.176 29.766 248.374 87.303 229.68"/>
+<polygon id="CORNERS-l0-o2" class="sticker" style="fill: #8800dd" points="122.862 180.736 158.421 206.571 144.839 248.374 87.303 229.68"/>
+<polygon id="CORNERS-l3-o1" class="sticker" style="fill: #8800dd" points="144.839 248.374 131.256 290.176 87.302 290.176 87.303 229.68"/>
+<polygon id="CORNERS-l1-o1" class="sticker" style="fill: #8800dd" points="51.743 180.736 87.302 154.901 122.862 180.736 87.303 229.68"/>
+<polygon id="CORNERS-l5-o2" class="sticker" style="fill: #8800dd" points="29.766 248.374 16.184 206.571 51.743 180.736 87.303 229.68"/>
 </g><g><title>BL</title>
 <polygon id="CORNERS-l10-o0" class="sticker" style="fill: #ffff00" points="700.480 172.224 664.921 198.059 629.361 172.224 664.921 123.281"/>
 <polygon id="CORNERS-l1-o2" class="sticker" style="fill: #ffff00" points="664.921 62.784 708.874 62.784 722.457 104.586 664.921 123.281"/>
