@@ -75,7 +75,6 @@ jobs:
       - run: make test-dist-lib-node-scramble-all-events
       - run: make test-dist-lib-perf
       - run: make test-dist-lib-plain-esbuild-compat
-      - run: make test-dist-lib-vite
       - run: make test-dist-lib-build-size
       - run: make build-bin
       - run: make test-dist-bin

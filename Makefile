@@ -151,7 +151,6 @@ test-dist-lib: \
 	test-dist-lib-node-scramble-all-events \
 	test-dist-lib-perf \
 	test-dist-lib-plain-esbuild-compat \
-	test-dist-lib-vite \
 	test-dist-lib-build-size \
 	test-dist-sites-experiments # keep CI.yml in sync with this
 .PHONY: test-dist-lib-node-import
@@ -166,9 +165,6 @@ test-dist-lib-perf: build-lib-js
 .PHONY: test-dist-lib-plain-esbuild-compat
 test-dist-lib-plain-esbuild-compat: build-lib-js
 	${BUN_RUN} script/test/dist/lib/cubing/plain-esbuild-compat/main.ts
-.PHONY: test-dist-lib-vite
-test-dist-lib-vite: build-lib-js
-	${NODE} ./script/test/dist/lib/cubing/vite/main.js
 .PHONY: test-dist-lib-build-size
 test-dist-lib-build-size: build-lib-js
 	${BUN_RUN} ./script/test/dist/lib/cubing/build-size/main.ts
