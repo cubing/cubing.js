@@ -38,6 +38,12 @@ export const mainAllowedImports: AllowedImports = {
     ],
     dynamic: ["cubing", "node:repl"],
   },
+  "script/test/dist/lib/cubing/vite/main.js": {
+    static: ["dist/lib/cubing/alg/index.js"],
+  },
+  "dist/lib/cubing": {
+    static: ["dist/lib/cubing"],
+  },
   // src/bin
   "src/bin": {
     static: ["cubing"],

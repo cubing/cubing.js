@@ -1,4 +1,4 @@
-import { Alg } from "../../../../../../src/cubing/alg";
+import { Alg } from "../../../../../../dist/lib/cubing/alg/index.js";
 import { needPath } from "../../../../../lib/needPath.js";
 needPath(
   new URL("../../../../../../dist/lib/cubing/kpuzzle", import.meta.url)
@@ -40,9 +40,7 @@ async function runTest() {
   });
   await page.goto(`http://localhost:${port}/`);
   const elem = await page.waitForSelector("#scramble-test");
-  const textContent = (await elem.evaluate(
-    (node) => node.textContent,
-  )) as string;
+  const textContent = await elem.evaluate((node) => node.textContent);
   console.log("Generated scramble:", textContent);
   const alg = Alg.fromString(textContent);
   const algLength = alg.experimentalNumChildAlgNodes();

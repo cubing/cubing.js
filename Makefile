@@ -125,7 +125,7 @@ test-spec-dom:
 test-spec-dom-with-coverage:
 	${WEB_TEST_RUNNER} --playwright --coverage
 .PHONY: test-src-import-restrictions
-test-src-import-restrictions:
+test-src-import-restrictions: build-lib-js
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
 .PHONY: test-src-tsc
 test-src-tsc:
@@ -168,7 +168,7 @@ test-dist-lib-plain-esbuild-compat: build-lib-js
 	${BUN_RUN} script/test/dist/lib/cubing/plain-esbuild-compat/main.ts
 .PHONY: test-dist-lib-vite
 test-dist-lib-vite: build-lib-js
-	${BUN_RUN} ./script/test/dist/lib/cubing/vite/main.ts
+	${NODE} ./script/test/dist/lib/cubing/vite/main.js
 .PHONY: test-dist-lib-build-size
 test-dist-lib-build-size: build-lib-js
 	${BUN_RUN} ./script/test/dist/lib/cubing/build-size/main.ts
