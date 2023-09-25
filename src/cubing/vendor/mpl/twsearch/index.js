@@ -71,7 +71,22 @@ function serializeScramblePattern(name, t) {
   for (const [orbitName, orbitData] of Object.entries(t)) {
     outputLines.push(sanitize(orbitName));
     outputLines.push(orbitData.pieces.join(" "));
-    outputLines.push(orbitData.orientation.join(" "));
+    const orientationEntries = [];
+    for (let i = 0; i < orbitData.orientation.length; i++) {
+      switch (orbitData.orientationMod?.[i]) {
+        case 0: {
+          orientationEntries.push(orbitData.orientation[i]);
+          break;
+        }
+        case 1: {
+          orientationEntries.push("?");
+          break;
+        }
+        default:
+          throw new Error("Unsupported `orientationMod` value.");
+      }
+    }
+    outputLines.push(orientationEntries.join(" "));
   }
   outputLines.push(END);
   outputLines.push(BLANK_LINE);
@@ -95,7 +110,22 @@ function serializeDefToTws(kpuzzle, options) {
     for (const [orbitName, orbitData] of Object.entries(def.defaultPattern)) {
       outputLines.push(sanitize(orbitName));
       outputLines.push(orbitData.pieces.join(" "));
-      outputLines.push(orbitData.orientation.join(" "));
+      const orientationEntries = [];
+      for (let i = 0; i < orbitData.orientation.length; i++) {
+        switch (orbitData.orientationMod?.[i]) {
+          case 0: {
+            orientationEntries.push(orbitData.orientation[i]);
+            break;
+          }
+          case 1: {
+            orientationEntries.push("?");
+            break;
+          }
+          default:
+            throw new Error("Unsupported `orientationMod` value.");
+        }
+      }
+      outputLines.push(orientationEntries.join(" "));
     }
   }
   outputLines.push(END);
