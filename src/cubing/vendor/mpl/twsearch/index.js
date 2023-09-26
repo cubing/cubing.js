@@ -73,7 +73,7 @@ function serializeScramblePattern(name, t) {
     outputLines.push(orbitData.pieces.join(" "));
     const orientationEntries = [];
     for (let i = 0; i < orbitData.orientation.length; i++) {
-      switch (orbitData.orientationMod?.[i]) {
+      switch (orbitData.orientationMod?.[i] ?? 0) {
         case 0: {
           orientationEntries.push(orbitData.orientation[i]);
           break;
@@ -112,7 +112,7 @@ function serializeDefToTws(kpuzzle, options) {
       outputLines.push(orbitData.pieces.join(" "));
       const orientationEntries = [];
       for (let i = 0; i < orbitData.orientation.length; i++) {
-        switch (orbitData.orientationMod?.[i]) {
+        switch (orbitData.orientationMod?.[i] ?? 0) {
           case 0: {
             orientationEntries.push(orbitData.orientation[i]);
             break;
