@@ -22,7 +22,7 @@ import { KPuzzleProp } from "./props/puzzle/structure/KPuzzleProp";
 import { PGPuzzleDescriptionStringProp } from "./props/puzzle/structure/PuzzleDescriptionProp";
 import { PuzzleIDProp } from "./props/puzzle/structure/PuzzleIDProp";
 import { PuzzleIDRequestProp } from "./props/puzzle/structure/PuzzleIDRequestProp";
-import { PuzzleLoaderProp } from "./props/puzzle/structure/PuzzleLoaderProp";
+import { PuzzleLoaderProp } from "./props/puzzle/structure/PuzzleIDAndLoaderProp";
 import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
 import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
 import { PlayingInfoProp } from "./props/timeline/PlayingInfoProp";
