@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#!/usr/bin/env -S fish --no-config
 
 echo "export const svgFiles = {" > index.ts
 for i in *.svg

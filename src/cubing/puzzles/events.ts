@@ -5,7 +5,7 @@ interface EventInfo {
   eventName: string;
 }
 
-export const wcaEvents: Record<string, EventInfo> = {
+export const wcaEvents = {
   "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
   "222": { puzzleID: "2x2x2", eventName: "2x2x2 Cube" },
   "444": { puzzleID: "4x4x4", eventName: "4x4x4 Cube" },
@@ -23,14 +23,14 @@ export const wcaEvents: Record<string, EventInfo> = {
   "444bf": { puzzleID: "4x4x4", eventName: "4x4x4 Blindfolded" },
   "555bf": { puzzleID: "5x5x5", eventName: "5x5x5 Blindfolded" },
   "333mb": { puzzleID: "3x3x3", eventName: "3x3x3 Multi-Blind" },
-};
+} as const satisfies Record<string, EventInfo>;
 
 /** @category Event Info */
 export function wcaEventInfo(event: string): EventInfo | null {
-  return wcaEvents[event] ?? null;
+  return wcaEvents[event as keyof typeof wcaEvents] ?? null;
 }
 
-export const twizzleEvents: Record<string, EventInfo> = {
+export const twizzleEvents = {
   ...wcaEvents,
   fto: { puzzleID: "fto", eventName: "Face-Turning Octahedron" },
   master_tetraminx: {
@@ -45,9 +45,9 @@ export const twizzleEvents: Record<string, EventInfo> = {
     puzzleID: "redi_cube",
     eventName: "Redi Cube",
   },
-};
+} as const satisfies Record<string, EventInfo>;
 
 /** @category Event Info */
 export function eventInfo(event: string): EventInfo | null {
-  return twizzleEvents[event] ?? null;
+  return twizzleEvents[event as keyof typeof twizzleEvents] ?? null;
 }
