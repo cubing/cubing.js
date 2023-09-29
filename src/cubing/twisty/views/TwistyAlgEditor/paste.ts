@@ -45,6 +45,8 @@ export function pasteIntoTextArea(
   const textPrecedingSelection = oldValue.slice(0, selectionStart);
   const textFollowingSelection = oldValue.slice(selectionEnd);
 
+  pastedText = pastedText.replaceAll("\r\n", "\n");
+
   // Does the last line end in a comment?
   // Note that we want the match to include "R U R'\n//hello there" but not "// hello there\nR U R'"
   const selectionStartsInExistingComment =
