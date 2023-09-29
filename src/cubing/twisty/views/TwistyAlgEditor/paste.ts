@@ -34,7 +34,6 @@ function replaceSmartQuotesOutsideComments(str: string): string {
   return linesOut.join("\n");
 }
 
-// Returns whether the paste was successful.
 export function pasteIntoTextArea(
   textArea: HTMLTextAreaElement,
   pastedText: string,
