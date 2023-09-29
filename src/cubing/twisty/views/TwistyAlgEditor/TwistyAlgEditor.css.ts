@@ -36,7 +36,6 @@ textarea {
   resize: none;
   background: none;
   z-index: 2;
-  overflow: hidden;
   border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
 }
 
