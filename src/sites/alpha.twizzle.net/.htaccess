@@ -5,7 +5,7 @@ default-src self alpha.twizzle.net ;\
 img-src self alpha.twizzle.net data: ;\
 script-src self alpha.twizzle.net 'unsafe-eval' ;\
 worker-src self alpha.twizzle.net blob: ;\
-connect-src self alpha.twizzle.net api.twizzle.net data: ;\
+connect-src self alpha.twizzle.net api.twizzle.net data: wss://api.twizzle.net ;\
 style-src 'unsafe-inline' alpha.twizzle.net ;\
 frame-src https://www.youtube.com ;\
 frame-ancestors 'none'" env=HTTPS
