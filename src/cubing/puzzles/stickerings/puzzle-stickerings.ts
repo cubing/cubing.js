@@ -45,6 +45,7 @@ export const experimentalStickerings: Record<
   L6EO: { groups: { "3x3x3": "Roux" } },
   "2x2x2": { groups: { "3x3x3": "Petrus" } },
   "2x2x3": { groups: { "3x3x3": "Petrus" } },
+  G1: { groups: { "3x3x3": "FMC" } },
   L2C: {
     groups: {
       "4x4x4": "Reduction",

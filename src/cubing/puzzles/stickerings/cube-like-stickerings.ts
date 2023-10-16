@@ -302,6 +302,18 @@ export async function cubeLikeStickeringMask(
       );
       break;
     }
+    case "G1": {
+      puzzleStickering.set(
+        m.all(),
+        PieceStickering.ExperimentalOrientationWithoutPermutation2,
+      );
+      puzzleStickering.set(
+        m.or(m.moves(["E"])),
+        PieceStickering.OrientationWithoutPermutation,
+      );
+      puzzleStickering.set(m.and(m.moves(["E", "S"])), PieceStickering.Ignored);
+      break;
+    }
     case "L2C": {
       puzzleStickering.set(
         m.or(m.moves(["L", "R", "B", "D"])),

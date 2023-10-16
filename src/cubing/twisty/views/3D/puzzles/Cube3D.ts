@@ -60,8 +60,19 @@ const orientedMaterial = new MeshBasicMaterial({
   color: 0x44ddcc,
 });
 
+const experimentalOriented2Material = new MeshBasicMaterial({
+  color: 0xfffdaa,
+});
+
 const orientedMaterialHint = new MeshBasicMaterial({
   color: 0x44ddcc,
+  side: BackSide,
+  transparent: true,
+  opacity: 0.5,
+});
+
+const experimentalOriented2MaterialHint = new MeshBasicMaterial({
+  color: 0xfff979,
   side: BackSide,
   transparent: true,
   opacity: 0.5,
@@ -97,6 +108,7 @@ class AxisInfo {
         side: FrontSide, // TODO: set to `DoubleSide` when hint facelets are disabled.
       }),
       oriented: orientedMaterial,
+      experimentalOriented2: experimentalOriented2Material,
       ignored: ignoredMaterial,
       invisible: invisibleMaterial,
     };
@@ -114,6 +126,7 @@ class AxisInfo {
         opacity: 0.5 * hintOpacityScale,
       }),
       oriented: orientedMaterialHint,
+      experimentalOriented2: experimentalOriented2MaterialHint,
       ignored: ignoredMaterialHint,
       invisible: invisibleMaterial,
     };

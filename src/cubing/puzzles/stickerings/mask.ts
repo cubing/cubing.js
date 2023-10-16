@@ -7,6 +7,7 @@ export type FaceletMeshStickeringMask =
   | "regular"
   | "dim"
   | "oriented"
+  | "experimentalOriented2" // TODO
   | "ignored"
   | "invisible";
 
@@ -71,6 +72,7 @@ export enum PieceStickering {
   IgnoreNonPrimary = "IgnoreNonPrimary",
   PermuteNonPrimary = "PermuteNonPrimary",
   OrientationWithoutPermutation = "OrientationWithoutPermutation",
+  ExperimentalOrientationWithoutPermutation2 = "ExperimentalOrientationWithoutPermutation2", // TODO
 }
 
 export class PieceAnnotation<T> {
@@ -88,6 +90,7 @@ export class PieceAnnotation<T> {
 const regular = "regular";
 const ignored = "ignored";
 const oriented = "oriented";
+const experimentalOriented2 = "experimentalOriented2";
 const invisible = "invisible";
 const dim = "dim";
 
@@ -144,6 +147,10 @@ const pieceStickerings: Record<string, PieceStickeringMask> = {
   [PieceStickering.OrientationWithoutPermutation]: {
     // oiiii
     facelets: [oriented, ignored, ignored, ignored, ignored],
+  },
+  [PieceStickering.ExperimentalOrientationWithoutPermutation2]: {
+    // oiiii
+    facelets: [experimentalOriented2, ignored, ignored, ignored, ignored],
   },
 };
 
