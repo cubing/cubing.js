@@ -97,7 +97,10 @@
   "engines": {
     "node": ">=19"
   },
-  "files": ["./dist/bin/", "./dist/lib/"],
+  "files": [
+    "./dist/bin/",
+    "./dist/lib/"
+  ],
   "scripts": {
     "default": "make default",
     "build": "make build",
@@ -125,6 +128,7 @@
     "test-spec-bun-with-coverage": "make test-spec-bun-with-coverage",
     "test-spec-dom": "make test-spec-dom",
     "test-spec-dom-with-coverage": "make test-spec-dom-with-coverage",
+    "playwright-install": "make playwright-install",
     "test-src-import-restrictions": "make test-src-import-restrictions",
     "test-src-tsc": "make test-src-tsc",
     "test-src-scripts-consistency": "make test-src-scripts-consistency",

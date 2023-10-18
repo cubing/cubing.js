@@ -119,11 +119,14 @@ test-spec-bun:
 test-spec-bun-with-coverage:
 	${BUN} test
 .PHONY: test-spec-dom
-test-spec-dom:
+test-spec-dom: playwright-install
 	${WEB_TEST_RUNNER} --playwright
 .PHONY: test-spec-dom-with-coverage
-test-spec-dom-with-coverage:
+test-spec-dom-with-coverage: playwright-install
 	${WEB_TEST_RUNNER} --playwright --coverage
+.PHONY: playwright-install
+playwright-install:
+	npx playwright install
 .PHONY: test-src-import-restrictions
 test-src-import-restrictions: build-lib-js
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
