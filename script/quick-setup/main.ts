@@ -22,16 +22,21 @@ Automatically installing a subset of dependencies.
 Note that you have to run \`npm install\` (or \`npm ci\`) manually if you pull new code or want to run any tests.`,
 );
 
-const json = JSON.parse(readFileSync("package.json", "utf8"));
-const oldDevDependencies = json.devDependencies;
-json.devDependencies = {};
-for (const name of json.minimalDevDependencies) {
-  json.devDependencies[name] = oldDevDependencies[name];
+const packageJSON = JSON.parse(readFileSync("package.json", "utf8"));
+const lockfileJSON = JSON.parse(readFileSync("package-lock.json", "utf8"));
+const oldDevDependencies = packageJSON.devDependencies;
+packageJSON.devDependencies = {};
+for (const name of packageJSON.minimalDevDependencies) {
+  packageJSON.devDependencies[name] = oldDevDependencies[name];
 }
 mkdirSync(TEMP_ROOT, { recursive: true });
 writeFileSync(
   join(TEMP_ROOT, "package.json"),
-  JSON.stringify(json, null, "  "),
+  JSON.stringify(packageJSON, null, "  "),
 );
-console.log(await execPromise(`cd ${TEMP_ROOT} && npm install`));
+writeFileSync(
+  join(TEMP_ROOT, "package-lock.json"),
+  JSON.stringify(lockfileJSON, null, "  "),
+);
+console.log(await execPromise(`cd ${TEMP_ROOT} && npm ci`));
 renameSync(join(TEMP_ROOT, "node_modules"), TARGET_NODE_MODULES_PATH);
