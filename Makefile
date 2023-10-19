@@ -172,7 +172,7 @@ test-dist-lib-plain-esbuild-compat: build-lib-js
 test-dist-lib-build-size: build-lib-js
 	${BUN_RUN} ./script/test/dist/lib/cubing/build-size/main.ts
 .PHONY: test-dist-sites-experiments
-test-dist-sites-experiments: build-sites
+test-dist-sites-experiments: playwright-install build-sites
 	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: test-dist-bin
 test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec
