@@ -63,7 +63,7 @@ addTest(
 const testString = JSON.stringify(
   tests,
   (_: string, v: any) => {
-    if (v instanceof Array && typeof v[0] === "number") {
+    if (Array.isArray(v) && typeof v[0] === "number") {
       return `##[${v.join(", ")}]##`;
     } else {
       return v as string;

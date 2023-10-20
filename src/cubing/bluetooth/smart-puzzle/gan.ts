@@ -184,11 +184,13 @@ function rotateLeft(s: string, i: number): string {
 
 const pieceMap: { [s: string]: PieceInfo } = {};
 // TODO: Condense the for loops.
+// biome-ignore lint/complexity/noForEach: https://github.com/biomejs/biome/issues/547
 reidEdgeOrder.forEach((edge, idx) => {
   for (let i = 0; i < 2; i++) {
     pieceMap[rotateLeft(edge, i)] = { piece: idx, orientation: i };
   }
 });
+// biome-ignore lint/complexity/noForEach: https://github.com/biomejs/biome/issues/547
 reidCornerOrder.forEach((corner, idx) => {
   for (let i = 0; i < 3; i++) {
     pieceMap[rotateLeft(corner, i)] = { piece: idx, orientation: i };

@@ -35,7 +35,7 @@
   },
   "formatter": {
     "indentStyle": "space",
-    "indentSize": 2,
+    "indentWidth": 2,
     "ignore": [
       "./src/cubing/vendor/gpl/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",

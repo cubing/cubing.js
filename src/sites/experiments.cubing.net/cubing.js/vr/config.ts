@@ -3,7 +3,7 @@ function getNumber(configName: string, defaultValue: number): number {
     new URL(location.href).searchParams.get(configName) ||
       defaultValue.toString(),
   );
-  return isNaN(value) ? defaultValue : value;
+  return Number.isNaN(value) ? defaultValue : value;
 }
 
 function getBoolean(configName: string, defaultValue: boolean): boolean {

@@ -24,7 +24,7 @@ function calculateMoves(
   }[] = [];
   // const identity = identityTransformation(def); // TODO
   // TODO: Make it easy to filter moves.
-  moveNames.forEach(function (moveName) {
+  for (const moveName of moveNames) {
     const rootMove = new Move(moveName);
     if (rootMove.amount !== 1) {
       throw new Error(
@@ -42,7 +42,7 @@ function calculateMoves(
         transformation,
       });
     }
-  });
+  }
   return searchMoves;
 }
 

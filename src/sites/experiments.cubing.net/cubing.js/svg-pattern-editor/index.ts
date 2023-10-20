@@ -74,13 +74,13 @@ class App {
       window.history.replaceState("", "", url.toString());
     });
 
-    document
-      .querySelectorAll('input[name="mode"]')
-      .forEach((radio: HTMLInputElement) => {
-        radio.addEventListener("change", () => {
-          this.mode = radio.value as Mode;
-        });
+    for (const radio of document.querySelectorAll<HTMLInputElement>(
+      'input[name="mode"]',
+    )) {
+      radio.addEventListener("change", () => {
+        this.mode = radio.value as Mode;
       });
+    }
 
     this.copyPatternElem.addEventListener("click", async () => {
       navigator.clipboard.writeText(

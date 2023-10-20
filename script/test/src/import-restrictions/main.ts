@@ -84,7 +84,7 @@ async function checkAllowedImports(
           allowedImports[matchingSourcePathPrefix][importKind];
         if (
           typeof allowedImportsForKind !== "undefined" &&
-          !(allowedImportsForKind instanceof Array)
+          !Array.isArray(allowedImportsForKind)
         ) {
           throw new Error(
             `Expected a string list for ${importKind} imports under the scope "${matchingSourcePathPrefix}"`,

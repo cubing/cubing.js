@@ -140,14 +140,18 @@ export function countMetricMoves(
     switch (metric) {
       case CommonMetric.ExecutionTurnMetric:
         return countMovesETM(alg);
-      case CommonMetric.RangeBlockTurnMetric:
+      case CommonMetric.RangeBlockTurnMetric: {
         if (puzzleLoader.pg) {
           return countRangeBlockMovesPG(alg);
         }
-      case CommonMetric.RangeBlockQuantumTurnMetric:
+        break;
+      }
+      case CommonMetric.RangeBlockQuantumTurnMetric: {
         if (puzzleLoader.pg) {
           return countRangeBlockQuantumMovesPG(alg);
         }
+        break;
+      }
     }
   }
   throw new Error("Unsupported puzzle or metric.");
