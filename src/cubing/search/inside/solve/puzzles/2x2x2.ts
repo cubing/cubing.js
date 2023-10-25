@@ -7,7 +7,7 @@ import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
-import { solveTwsearch, wasmRandomScrambleForEvent } from "../twsearch";
+import { solveTwsearch } from "../twsearch";
 import { experimentalNormalize2x2x2Orientation } from "../../../../puzzles/cubing-private";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
@@ -124,8 +124,4 @@ export async function random222Pattern(): Promise<KPattern> {
     orientationSum: 0,
   });
   return patternCopy;
-}
-
-export async function random222Scramble(): Promise<Alg> {
-  return wasmRandomScrambleForEvent("222");
 }

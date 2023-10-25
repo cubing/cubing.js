@@ -4,7 +4,6 @@ import type { KPuzzle } from "../kpuzzle";
 import type { KPattern } from "../kpuzzle/KPattern";
 import type { PrefetchLevel } from "./inside/api";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
-import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import type { TwsearchOptions } from "./inside/solve/twsearch";
 import {
   type InsideOutsideAPI,
@@ -40,8 +39,6 @@ export function _preInitializationHintForEvent(
 ): void {
   switch (eventID) {
     case "clock":
-    case "minx":
-      return;
     case "333oh":
       _preInitializationHintForEvent("333");
       return;
@@ -55,8 +52,6 @@ export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
   switch (eventID) {
     case "clock":
       return Alg.fromString(await randomClockScrambleString());
-    case "minx":
-      return Alg.fromString(await randomMegaminxScrambleString());
   }
   const prom = _randomScrambleStringForEvent(eventID);
   const wat = await prom;
@@ -80,8 +75,6 @@ export async function randomScrambleStringForEvent(
   switch (eventID) {
     case "clock":
       return randomClockScrambleString();
-    case "minx":
-      return randomMegaminxScrambleString();
   }
   return await _randomScrambleStringForEvent(eventID);
 }

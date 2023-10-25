@@ -6,11 +6,7 @@ import {
 } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
-import {
-  preInitialize222,
-  random222Scramble,
-  solve222HTMSubOptimal,
-} from "./solve/puzzles/2x2x2";
+import { preInitialize222, solve222HTMSubOptimal } from "./solve/puzzles/2x2x2";
 import {
   initialize333,
   random333FewestMovesScramble,
@@ -39,7 +35,11 @@ import {
   solveSkewb,
 } from "./solve/puzzles/skewb";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
-import { solveTwsearch, type TwsearchOptions } from "./solve/twsearch";
+import {
+  solveTwsearch,
+  wasmRandomScrambleForEvent,
+  type TwsearchOptions,
+} from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
 
@@ -88,9 +88,14 @@ async function randomScrambleForEvent(
 ): Promise<Alg> {
   switch (eventID) {
     case "222":
-      return measurePerf("random222Scramble", random222Scramble, {
-        isPrefetch: options?.isPrefetch,
-      });
+    case "minx":
+      return measurePerf(
+        `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
+        () => wasmRandomScrambleForEvent(eventID),
+        {
+          isPrefetch: options?.isPrefetch,
+        },
+      );
     case "333":
     case "333oh":
     case "333ft":
