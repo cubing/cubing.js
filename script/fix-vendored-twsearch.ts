@@ -1,7 +1,7 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const DIR = new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url)
+const DIR = new URL("../src/cubing/vendor/mpl/twsearch-cpp", import.meta.url)
   .pathname;
 // TODO(https://github.com/cubing/cubing.js/issues/290)
 const BIOME_JSON = new URL("../biome.json", import.meta.url).pathname;
@@ -48,7 +48,7 @@ for (const fileName of await readdir(DIR)) {
 console.log("Fixing:", BIOME_JSON);
 let contents = await readFile(BIOME_JSON, "utf-8");
 contents = contents.replaceAll(
-  /"src\/cubing\/vendor\/mpl\/twsearch\/twsearch-.*.js"/g,
-  `"src/cubing/vendor/mpl/twsearch/${dynamicFileName}"`,
+  /"src\/cubing\/vendor\/mpl\/twsearch-cpp\/twsearch-.*.js"/g,
+  `"src/cubing/vendor/mpl/twsearch-cpp/${dynamicFileName}"`,
 );
 await writeFile(BIOME_JSON, contents);
