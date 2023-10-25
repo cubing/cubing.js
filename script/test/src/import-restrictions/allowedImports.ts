@@ -95,7 +95,11 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/vendor/mpl/xyzzy",
       "random-uint-below",
     ],
-    dynamic: ["src/cubing/puzzle-geometry", "src/cubing/vendor/twsearch-cpp"],
+    dynamic: [
+      "src/cubing/puzzle-geometry",
+      "src/cubing/vendor/mpl/twsearch",
+      "src/cubing/vendor/mpl/twsearch-cpp",
+    ],
   },
   "src/cubing/stream": {
     static: ["src/cubing/alg", "src/cubing/puzzles/cubing-private"], // TODO: why isn't this working?
