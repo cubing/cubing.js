@@ -1,7 +1,6 @@
 import type { Alg } from "../../../alg";
 import {
   type KPuzzleDefinition,
-  type KPatternData,
   type KTransformationData,
   KPattern,
 } from "../../../kpuzzle";
@@ -10,10 +9,6 @@ import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 export const twsearchPromise: Promise<
   typeof import("../../../vendor/mpl/twsearch")
 > = from(async () => import("../../../vendor/mpl/twsearch"));
-
-export const twsearchCppPromise: Promise<
-  typeof import("../../../vendor/mpl/twsearch-cpp")
-> = from(async () => import("../../../vendor/mpl/twsearch-cpp"));
 
 export interface TwsearchOptions {
   // TODO: start prune depth?
