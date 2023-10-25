@@ -38,7 +38,6 @@ export function _preInitializationHintForEvent(
   // callback?: () => void
 ): void {
   switch (eventID) {
-    case "clock":
     case "333oh":
       _preInitializationHintForEvent("333");
       return;
