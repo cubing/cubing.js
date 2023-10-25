@@ -216,9 +216,11 @@ deploy-experiments: build-site-experiments
 .PHONY: roll-vendored-twsearch
 roll-vendored-twsearch:
 	test -d ../twsearch/ || exit
-	cd ../twsearch/ && make clean build/esm
-	rm -rf src/cubing/vendor/mpl/twsearch/*
-	cp -R ../twsearch/build/esm/* src/cubing/vendor/mpl/twsearch/
+	rm -rf ../twsearch/dist/wasm/
+	cd ../twsearch/ && make build-rust-wasm
+	mkdir -p ./src/cubing/vendor/mpl/twsearch
+	rm -rf ./src/cubing/vendor/mpl/twsearch/*
+	cp -R ../twsearch/dist/wasm/* ./src/cubing/vendor/mpl/twsearch/
 	${BUN_RUN} script/fix-vendored-twsearch.ts
 .PHONY: update-create-cubing-app
 update-create-cubing-app:

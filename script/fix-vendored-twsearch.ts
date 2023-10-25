@@ -3,10 +3,7 @@ import { join } from "node:path";
 
 const DIR = new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url)
   .pathname;
-// TODO(https://github.com/cubing/cubing.js/issues/290)
-const BIOME_JSON = new URL("../biome.json", import.meta.url).pathname;
 
-let dynamicFileName = null;
 for (const fileName of await readdir(DIR)) {
   const filePath = join(DIR, fileName);
   console.log("Fixing:", filePath);
@@ -21,34 +18,8 @@ for (const fileName of await readdir(DIR)) {
       break;
     }
     default: {
-      if (dynamicFileName !== null) {
-        throw new Error("Too many files!");
-      }
-      dynamicFileName = fileName;
-      const lines = ["let _scriptDir;"];
-      lineLoop: for (const line of contents.split("\n")) {
-        for (const forbidden of [
-          "import.meta.url",
-          "require2",
-          "createRequire",
-        ]) {
-          if (line.includes(forbidden)) {
-            continue lineLoop;
-          }
-        }
-        lines.push(line);
-      }
-      contents = lines.join("\n");
       break;
     }
   }
   await writeFile(filePath, contents);
 }
-
-console.log("Fixing:", BIOME_JSON);
-let contents = await readFile(BIOME_JSON, "utf-8");
-contents = contents.replaceAll(
-  /"src\/cubing\/vendor\/mpl\/twsearch\/twsearch-.*.js"/g,
-  `"src/cubing/vendor/mpl/twsearch/${dynamicFileName}"`,
-);
-await writeFile(BIOME_JSON, contents);

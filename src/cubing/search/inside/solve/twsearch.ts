@@ -11,6 +11,10 @@ export const twsearchPromise: Promise<
   typeof import("../../../vendor/mpl/twsearch")
 > = from(async () => import("../../../vendor/mpl/twsearch"));
 
+export const twsearchCppPromise: Promise<
+  typeof import("../../../vendor/mpl/twsearch-cpp")
+> = from(async () => import("../../../vendor/mpl/twsearch-cpp"));
+
 export interface TwsearchOptions {
   moveSubset?: string[];
   startPattern?: KTransformationData;
@@ -38,7 +42,7 @@ export async function solveTwsearch(
     serializeDefToTws,
     solvePattern,
     serializeScramblePattern,
-  } = await twsearchPromise;
+  } = await twsearchCppPromise;
   const kpuzzle = new KPuzzle(def);
   setArg("--startprunedepth 5"); // TODO
   let moveSubsetString = ""; // TODO: pass the full set of moves, to avoid rotations not being treated as moves.
@@ -97,4 +101,11 @@ export async function solveTwsearch(
   return await solvePattern(
     serializeScramblePattern("SearchState", patternData),
   );
+}
+
+export async function wasmRandomScrambleForEvent(
+  eventID: string,
+): Promise<Alg> {
+  const { wasmRandomScrambleForEvent } = await twsearchPromise;
+  return wasmRandomScrambleForEvent(eventID);
 }
