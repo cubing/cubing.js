@@ -1,4 +1,6 @@
-import "./chunk-T3VXRQ2V.js";
+// Generated from `twsearch` v0.6.4-31-g67b163a9
+
+import "./chunk-FNEBKWKX.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -428,7 +430,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-Q5ED7P6P.js")).default;
+    const wasmUint8Array = (await import("./twsearch_wasm_bg-V6CRTKYG.js")).default;
     await twsearch_wasm_default(wasmUint8Array.buffer);
   })());
 }
