@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+            lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
@@ -38,6 +40,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+            lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
@@ -62,6 +66,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+            lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
@@ -87,6 +93,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+            lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
@@ -102,6 +110,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+            lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
