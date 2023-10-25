@@ -1,4 +1,4 @@
-import { Alg, Move } from "../../../../alg";
+import { Alg } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { KPattern } from "../../../../kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../puzzles";
@@ -7,7 +7,7 @@ import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
-import { solveTwsearch, twsearchPromise } from "../twsearch";
+import { solveTwsearch, wasmRandomScrambleForEvent } from "../twsearch";
 import { experimentalNormalize2x2x2Orientation } from "../../../../puzzles/cubing-private";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
@@ -70,41 +70,6 @@ export async function solve222HTMOptimal(
   return normalizationAlg.concat(orientedResult);
 }
 
-async function hasHTMSolutionWithFewerMoves(
-  pattern: KPattern,
-  filterMin: number,
-): Promise<boolean> {
-  try {
-    (await solve222HTMOptimal(pattern, filterMin - 1)).log();
-    return true;
-  } catch (e) {
-    if (e instanceof (await twsearchPromise).NoSolutionError) {
-      return false;
-    }
-    throw e;
-  }
-}
-
-function isCancelling(alg: Alg): boolean {
-  let lastFamily: undefined | string;
-  for (const node of alg.childAlgNodes()) {
-    const move = node.as(Move);
-    if (!move) {
-      throw new Error("Unexpected solution with a non-move node!");
-    }
-    const { family } = move;
-    if (
-      lastFamily &&
-      ((lastFamily === "L" && family === "R") ||
-        (lastFamily === "R" && family === "L"))
-    ) {
-      return true;
-    }
-    lastFamily = family;
-  }
-  return false;
-}
-
 // TODO: fix def consistency.
 export async function solve222ForScramble(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
@@ -162,18 +127,5 @@ export async function random222Pattern(): Promise<KPattern> {
 }
 
 export async function random222Scramble(): Promise<Alg> {
-  let pattern = await random222Pattern();
-  while (await hasHTMSolutionWithFewerMoves(pattern, 4)) {
-    console.info("Filtered out a 2x2x2 pattern!");
-    pattern = await random222Pattern();
-  }
-
-  let sol = await solve222ForScramble(pattern);
-  while (isCancelling(sol)) {
-    // Rely on `--randomstart` to find us a non-cancelling with ≈2/3 probability.
-    // TODO: Check that this works for 100% of patterns.
-    sol = await solve222ForScramble(pattern);
-  }
-
-  return sol;
+  return wasmRandomScrambleForEvent("222");
 }
