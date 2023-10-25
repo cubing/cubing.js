@@ -1,6 +1,6 @@
-// Generated from `twsearch` v0.6.4-31-g67b163a9
+// Generated from `twsearch` v0.6.4-32-g92a4b900
 
-import "./chunk-FNEBKWKX.js";
+import "./chunk-WVYZEQ4E.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -9,6 +9,31 @@ import { Alg } from "../../../alg";
 var node_fs_promises_mangled = "node:-fs/pr-omises";
 var node_fs_promises_unmangled = () => node_fs_promises_mangled.replace(/-/g, "");
 var wasm;
+var heap = new Array(128).fill(void 0);
+heap.push(void 0, null, true, false);
+function getObject(idx) {
+  return heap[idx];
+}
+var heap_next = heap.length;
+function dropObject(idx) {
+  if (idx < 132)
+    return;
+  heap[idx] = heap_next;
+  heap_next = idx;
+}
+function takeObject(idx) {
+  const ret = getObject(idx);
+  dropObject(idx);
+  return ret;
+}
+function addHeapObject(obj) {
+  if (heap_next === heap.length)
+    heap.push(heap.length + 1);
+  const idx = heap_next;
+  heap_next = heap[idx];
+  heap[idx] = obj;
+  return idx;
+}
 var cachedTextDecoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-8", { ignoreBOM: true, fatal: true }) : { decode: () => {
   throw Error("TextDecoder not available");
 } };
@@ -25,31 +50,6 @@ function getUint8Memory0() {
 function getStringFromWasm0(ptr, len) {
   ptr = ptr >>> 0;
   return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-}
-var heap = new Array(128).fill(void 0);
-heap.push(void 0, null, true, false);
-var heap_next = heap.length;
-function addHeapObject(obj) {
-  if (heap_next === heap.length)
-    heap.push(heap.length + 1);
-  const idx = heap_next;
-  heap_next = heap[idx];
-  heap[idx] = obj;
-  return idx;
-}
-function getObject(idx) {
-  return heap[idx];
-}
-function dropObject(idx) {
-  if (idx < 132)
-    return;
-  heap[idx] = heap_next;
-  heap_next = idx;
-}
-function takeObject(idx) {
-  const ret = getObject(idx);
-  dropObject(idx);
-  return ret;
 }
 function debugString(val) {
   const type = typeof val;
@@ -158,6 +158,44 @@ function getInt32Memory0() {
   }
   return cachedInt32Memory0;
 }
+function handleError(f, args) {
+  try {
+    return f.apply(this, args);
+  } catch (e) {
+    wasm.__wbindgen_export_3(addHeapObject(e));
+  }
+}
+function wasmTwsearch(kpuzzle_json, search_pattern_json, options_json) {
+  let deferred5_0;
+  let deferred5_1;
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passStringToWasm0(kpuzzle_json, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(search_pattern_json, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm0(options_json, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+    const len2 = WASM_VECTOR_LEN;
+    wasm.wasmTwsearch(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var ptr4 = r0;
+    var len4 = r1;
+    if (r3) {
+      ptr4 = 0;
+      len4 = 0;
+      throw takeObject(r2);
+    }
+    deferred5_0 = ptr4;
+    deferred5_1 = len4;
+    return getStringFromWasm0(ptr4, len4);
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+    wasm.__wbindgen_export_2(deferred5_0, deferred5_1, 1);
+  }
+}
 function wasmRandomScrambleForEvent(event_str) {
   let deferred3_0;
   let deferred3_1;
@@ -183,13 +221,6 @@ function wasmRandomScrambleForEvent(event_str) {
   } finally {
     wasm.__wbindgen_add_to_stack_pointer(16);
     wasm.__wbindgen_export_2(deferred3_0, deferred3_1, 1);
-  }
-}
-function handleError(f, args) {
-  try {
-    return f.apply(this, args);
-  } catch (e) {
-    wasm.__wbindgen_export_3(addHeapObject(e));
   }
 }
 async function __wbg_load(module2, imports) {
@@ -219,10 +250,6 @@ async function __wbg_load(module2, imports) {
 function __wbg_get_imports() {
   const imports = {};
   imports.wbg = {};
-  imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
-    const ret = getStringFromWasm0(arg0, arg1);
-    return addHeapObject(ret);
-  };
   imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
     const ret = new Error();
     return addHeapObject(ret);
@@ -286,6 +313,10 @@ function __wbg_get_imports() {
   imports.wbg.__wbindgen_is_function = function(arg0) {
     const ret = typeof getObject(arg0) === "function";
     return ret;
+  };
+  imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
+    const ret = getStringFromWasm0(arg0, arg1);
+    return addHeapObject(ret);
   };
   imports.wbg.__wbg_call_01734de55d61e11d = function() {
     return handleError(function(arg0, arg1, arg2) {
@@ -430,7 +461,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-V6CRTKYG.js")).default;
+    const wasmUint8Array = (await import("./twsearch_wasm_bg-IXBX46QT.js")).default;
     await twsearch_wasm_default(wasmUint8Array.buffer);
   })());
 }
@@ -438,6 +469,17 @@ async function wasmRandomScrambleForEvent2(eventId) {
   await initWrapper();
   return new Alg(wasmRandomScrambleForEvent(eventId));
 }
+async function wasmTwsearch2(kpuzzleDefinition, searchPattern, options) {
+  await initWrapper();
+  return new Alg(
+    wasmTwsearch(
+      JSON.stringify(kpuzzleDefinition),
+      JSON.stringify(searchPattern.toJSON()["patternData"]),
+      JSON.stringify(options)
+    )
+  );
+}
 export {
-  wasmRandomScrambleForEvent2 as wasmRandomScrambleForEvent
+  wasmRandomScrambleForEvent2 as wasmRandomScrambleForEvent,
+  wasmTwsearch2 as wasmTwsearch
 };
