@@ -42,7 +42,23 @@ If you would like to contribute to the development of `cubing.js`, please refer 
 
 ## Developing `cubing.js` itself
 
-If you have `git`, `node`, `npm`, and [`bun`](https://bun.sh/) installed, you can run the `cubing.js` source like this (see the [contribution guidelines](./CONTRIBUTING.md) for more details):
+Working on `cubing.js` requires the following tools:
+
+- [`GNU make`](https://www.gnu.org/software/make/) (probably included with your OS)
+- [`git`](https://git-scm.com/) (possibly included with your OS)
+- [`node` and `npm`](https://nodejs.org/en/download)
+- [`bun`](https://bun.sh/)
+- [`git-lfs`](https://git-lfs.com/)
+
+On macOS, you can install these using [Homebrew](https://brew.sh/):
+
+```shell
+brew install git node oven-sh/bun/bun git-lfs
+```
+
+(On other platforms, you'll have to follow individual installation instructions. We recommend using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) on Windows.)
+
+Once you have these dependencies, you can run the `cubing.js` source like this (see the [contribution guidelines](./CONTRIBUTING.md) for more details):
 
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js
