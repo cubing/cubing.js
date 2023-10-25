@@ -44,7 +44,3 @@ export async function randomPyraminxPatternFixedOrientation(): Promise<KPattern>
     await (await searchDynamicSideEvents).sgsDataPyraminxFixedOrientation(),
   );
 }
-
-export async function randomPyraminxScrambleFixedOrientation(): Promise<Alg> {
-  return solvePyraminx(await randomPyraminxPatternFixedOrientation());
-}

@@ -25,10 +25,7 @@ import { randomFTOScramble } from "./solve/puzzles/fto";
 import { randomKilominxScramble } from "./solve/puzzles/kilominx";
 import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
-import {
-  randomPyraminxScrambleFixedOrientation,
-  solvePyraminx,
-} from "./solve/puzzles/pyraminx";
+import { solvePyraminx } from "./solve/puzzles/pyraminx";
 import { randomRediCubeScramble } from "./solve/puzzles/redi_cube";
 import {
   randomSkewbFixedCornerScramble,
@@ -89,6 +86,7 @@ async function randomScrambleForEvent(
   switch (eventID) {
     case "222":
     case "minx":
+    case "pyram":
       return measurePerf(
         `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
         () => wasmRandomScrambleForEvent(eventID),
@@ -143,11 +141,6 @@ async function randomScrambleForEvent(
       return measurePerf(
         "randomSkewbFixedCornerScramble",
         randomSkewbFixedCornerScramble,
-      );
-    case "pyram":
-      return measurePerf(
-        "randomPyraminxScrambleFixedOrientation",
-        randomPyraminxScrambleFixedOrientation,
       );
     case "sq1":
       return measurePerf("getRandomSquare1Scramble", getRandomSquare1Scramble, {
