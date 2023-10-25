@@ -17,6 +17,8 @@ import type {
   KTransformationOrbitData,
   KTransformationData,
   KPuzzleDefinition,
+  KPatternData,
+  KPatternOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 
@@ -55,20 +57,20 @@ export function isOrbitTransformationDataIdentical(
   orbitTransformationData1: KTransformationOrbitData,
   orbitTransformationData2: KTransformationOrbitData,
   options: {
-    ignoreOrientation?: boolean;
-    ignorePermutation?: boolean;
+    ignorePieceOrientations?: boolean;
+    ignorePiecePermutation?: boolean;
   } = {},
 ): boolean {
   for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
     if (
-      !options?.ignoreOrientation &&
+      !options?.ignorePieceOrientations &&
       orbitTransformationData1.orientationDelta[idx] !==
         orbitTransformationData2.orientationDelta[idx]
     ) {
       return false;
     }
     if (
-      !options?.ignorePermutation &&
+      !options?.ignorePiecePermutation &&
       orbitTransformationData1.permutation[idx] !==
         orbitTransformationData2.permutation[idx]
     ) {
@@ -89,6 +91,54 @@ export function isTransformationDataIdentical(
         orbitDefinition,
         transformationData1[orbitDefinition.orbitName],
         transformationData2[orbitDefinition.orbitName],
+      )
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function isOrbitPatternDataIdentical(
+  orbitDefinition: KPuzzleOrbitDefinition,
+  orbitPatternData1: KPatternOrbitData,
+  orbitPatternData2: KPatternOrbitData,
+  options: {
+    ignorePieceOrientations?: boolean;
+    ignorePieceIndices?: boolean;
+  } = {},
+): boolean {
+  for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
+    if (
+      !options?.ignorePieceOrientations &&
+      (orbitPatternData1.orientation[idx] !==
+        orbitPatternData2.orientation[idx] ||
+        orbitPatternData1.orientationMod?.[idx] !==
+          orbitPatternData2.orientationMod?.[idx])
+    ) {
+      return false;
+    }
+    if (
+      !options?.ignorePieceIndices &&
+      orbitPatternData1.pieces[idx] !== orbitPatternData2.pieces[idx]
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function isPatternDataIdentical(
+  kpuzzle: KPuzzle,
+  patternData1: KPatternData,
+  patternData2: KPatternData,
+): boolean {
+  for (const orbitDefinition of kpuzzle.definition.orbits) {
+    if (
+      !isOrbitPatternDataIdentical(
+        orbitDefinition,
+        patternData1[orbitDefinition.orbitName],
+        patternData2[orbitDefinition.orbitName],
       )
     ) {
       return false;

@@ -8,6 +8,7 @@ import type {
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
+import { isPatternDataIdentical } from "./calculate";
 
 export class KPattern {
   constructor(
@@ -55,6 +56,14 @@ export class KPattern {
 
   applyAlg(alg: Alg | string): KPattern {
     return this.applyTransformation(this.kpuzzle.algToTransformation(alg));
+  }
+
+  isIdentical(other: KPattern): boolean {
+    return isPatternDataIdentical(
+      this.kpuzzle,
+      this.patternData,
+      other.patternData,
+    );
   }
 
   /** @deprecated */
