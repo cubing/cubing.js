@@ -7,8 +7,8 @@ import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
-import { solveTwsearch } from "../twsearch";
 import { experimentalNormalize2x2x2Orientation } from "../../../../puzzles/cubing-private";
+import { wasmTwsearch } from "../twsearch";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
 async function getCachedTrembleSolver(): Promise<TrembleSolver> {
@@ -36,13 +36,13 @@ export async function solve222HTMSubOptimal(
   maxDepth: number = 11,
 ): Promise<Alg> {
   mustBeInsideWorker();
-  return await solveTwsearch(
+  return await wasmTwsearch(
     (
       await cube2x2x2.kpuzzle()
     ).definition,
     pattern.patternData,
     {
-      moveSubset: "UFLR".split(""), // TODO: <U, F, R>
+      generatorMoves: "UFLR".split(""), // TODO: <U, F, R>
       maxDepth,
     },
   );
@@ -57,13 +57,13 @@ export async function solve222HTMOptimal(
   mustBeInsideWorker();
   const { normalizedPattern, normalizationAlg } =
     experimentalNormalize2x2x2Orientation(pattern);
-  const orientedResult = await solveTwsearch(
+  const orientedResult = await wasmTwsearch(
     (
       await cube2x2x2.kpuzzle()
     ).definition,
     normalizedPattern.patternData,
     {
-      moveSubset: "UFLR".split(""), // TODO: <U, F, R>
+      generatorMoves: "UFLR".split(""), // TODO: <U, F, R>
       maxDepth,
     },
   );
@@ -73,11 +73,11 @@ export async function solve222HTMOptimal(
 // TODO: fix def consistency.
 export async function solve222ForScramble(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
-  return solveTwsearch(
+  return wasmTwsearch(
     (await cube2x2x2.kpuzzle()).definition,
     pattern.patternData,
     {
-      moveSubset: "UFLR".split(""),
+      generatorMoves: "UFLR".split(""),
       minDepth: 11,
     },
   );

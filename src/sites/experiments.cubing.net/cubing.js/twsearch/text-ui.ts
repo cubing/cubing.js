@@ -228,7 +228,7 @@ function validateAndSaveInput(
         ).toString();
       } else {
         const twsearchOptions: SolveTwsearchOptions = {
-          moveSubset: options.searchArgs?.moveSubset,
+          generatorMoves: options.searchArgs?.moveSubset,
           minDepth: options.searchArgs?.minDepth,
         };
         results.value = (

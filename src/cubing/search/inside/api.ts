@@ -3,6 +3,7 @@ import {
   type KPuzzleDefinition,
   KPattern,
   type KPatternData,
+  KPuzzle,
 } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
@@ -33,9 +34,9 @@ import {
 } from "./solve/puzzles/skewb";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
 import {
-  solveTwsearch,
   wasmRandomScrambleForEvent,
   type TwsearchOptions,
+  wasmTwsearch,
 } from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
@@ -273,7 +274,9 @@ export const insideAPI = {
     patternData: KPatternData,
     options?: TwsearchOptions,
   ): Promise<string> => {
-    return (await solveTwsearch(def, patternData, options)).toString();
+    const kpuzzle = new KPuzzle(def);
+    const pattern = new KPattern(kpuzzle, patternData);
+    return (await wasmTwsearch(def, pattern, options)).toString();
   },
 };
 
