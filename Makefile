@@ -202,7 +202,10 @@ lint-ci:
 .PHONY: prepack
 prepack: clean build test-dist-lib-node-import test-dist-lib-plain-esbuild-compat
 .PHONY: prepublishOnly
-prepublishOnly: test-all
+prepublishOnly:
+	# Lucas is usually the one publishing, and `mak` is over twice as fast. So we use it when available.
+	# https://github.com/lgarron/mak
+	mak test-all || make test-all
 .PHONY: postpublish
 postpublish: update-cdn update-create-cubing-app deploy
 .PHONY: deploy
