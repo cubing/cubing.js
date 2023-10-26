@@ -44,14 +44,3 @@ const randomSuffixes = [
 export async function random333OrientedScramble(): Promise<Alg> {
   return addOrientationSuffix(await random333Scramble(), randomSuffixes);
 }
-
-const extraBit = new Alg("R' U' F");
-export async function random333FewestMovesScramble(): Promise<Alg> {
-  const algBuilder = new AlgBuilder();
-  const unorientedScramble = await random333Scramble();
-  algBuilder.experimentalPushAlg(extraBit);
-  // TODO:Avoid cancellable moves.
-  algBuilder.experimentalPushAlg(unorientedScramble);
-  algBuilder.experimentalPushAlg(extraBit);
-  return algBuilder.toAlg();
-}

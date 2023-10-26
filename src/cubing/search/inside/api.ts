@@ -84,13 +84,27 @@ async function randomScrambleForEvent(
   options?: { isPrefetch?: boolean },
 ): Promise<Alg> {
   switch (eventID) {
+    // case "333":
     case "222":
+    // case "444":
     case "555":
     case "666":
     case "777":
+    // case "333bf":
+    case "333fm":
+    // case "333oh":
+    // case "clock":
     case "minx":
     case "pyram":
+    // case "skewb":
+    // case "sq1":
+    // case "444bf":
     case "555bf":
+      // case "333mb":
+      // case "fto":
+      // case "master_tetraminx":
+      // case "kilominx":
+      // case "redi_cube":
       return measurePerf(
         `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
         () => wasmRandomScrambleForEvent(eventID),
@@ -104,11 +118,6 @@ async function randomScrambleForEvent(
       return measurePerf("random333Scramble", random333Scramble, {
         isPrefetch: options?.isPrefetch,
       });
-    case "333fm":
-      return measurePerf(
-        "random333FewestMovesScramble",
-        random333FewestMovesScramble,
-      );
     case "333bf":
     case "333mb":
       return measurePerf(
