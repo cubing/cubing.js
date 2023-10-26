@@ -52,6 +52,10 @@ table td {
   white-space: pre-wrap;
 }
 
+table td:last-child {
+  width: 160px;
+}
+
 table a {
   color: black;
   text-decoration: none;
