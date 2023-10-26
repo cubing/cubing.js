@@ -90,6 +90,7 @@ async function randomScrambleForEvent(
     case "777":
     case "minx":
     case "pyram":
+    case "555bf":
       return measurePerf(
         `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
         () => wasmRandomScrambleForEvent(eventID),
@@ -123,8 +124,6 @@ async function randomScrambleForEvent(
         "random444OrientedScramble",
         random444OrientedScramble,
       );
-    case "555bf":
-      return measurePerf("oriented555RandomMoves", oriented555RandomMoves);
     case "skewb":
       return measurePerf(
         "randomSkewbFixedCornerScramble",
