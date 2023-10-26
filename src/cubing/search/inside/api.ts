@@ -21,7 +21,6 @@ import {
   random444Scramble,
 } from "./solve/puzzles/4x4x4";
 import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
-import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
 import { randomFTOScramble } from "./solve/puzzles/fto";
 import { randomKilominxScramble } from "./solve/puzzles/kilominx";
 import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx";
@@ -86,6 +85,9 @@ async function randomScrambleForEvent(
 ): Promise<Alg> {
   switch (eventID) {
     case "222":
+    case "555":
+    case "666":
+    case "777":
     case "minx":
     case "pyram":
       return measurePerf(
@@ -121,23 +123,8 @@ async function randomScrambleForEvent(
         "random444OrientedScramble",
         random444OrientedScramble,
       );
-    case "555":
-      return measurePerf(
-        "bigCubeScramble(5)",
-        bigCubeRandomMoves.bind(bigCubeRandomMoves, 5),
-      );
     case "555bf":
       return measurePerf("oriented555RandomMoves", oriented555RandomMoves);
-    case "666":
-      return measurePerf(
-        "bigCubeScramble(6)",
-        bigCubeRandomMoves.bind(bigCubeRandomMoves, 6),
-      );
-    case "777":
-      return measurePerf(
-        "bigCubeScramble(7)",
-        bigCubeRandomMoves.bind(bigCubeRandomMoves, 7),
-      );
     case "skewb":
       return measurePerf(
         "randomSkewbFixedCornerScramble",
