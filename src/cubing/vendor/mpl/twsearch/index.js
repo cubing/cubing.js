@@ -460,7 +460,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-UXIKUTOT.js")).default;
+    const wasmUint8Array = (await import("./twsearch_wasm_bg-BXMNNHLU.js")).default;
     await twsearch_wasm_default(wasmUint8Array.buffer);
   })());
 }
