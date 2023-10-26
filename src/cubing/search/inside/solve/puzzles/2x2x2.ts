@@ -36,16 +36,10 @@ export async function solve222HTMSubOptimal(
   maxDepth: number = 11,
 ): Promise<Alg> {
   mustBeInsideWorker();
-  return await wasmTwsearch(
-    (
-      await cube2x2x2.kpuzzle()
-    ).definition,
-    pattern.patternData,
-    {
-      generatorMoves: "UFLR".split(""), // TODO: <U, F, R>
-      maxDepth,
-    },
-  );
+  return await wasmTwsearch((await cube2x2x2.kpuzzle()).definition, pattern, {
+    generatorMoves: "UFLR".split(""), // TODO: <U, F, R>
+    maxDepth,
+  });
 }
 
 // TODO: fix def consistency.
@@ -61,7 +55,7 @@ export async function solve222HTMOptimal(
     (
       await cube2x2x2.kpuzzle()
     ).definition,
-    normalizedPattern.patternData,
+    normalizedPattern,
     {
       generatorMoves: "UFLR".split(""), // TODO: <U, F, R>
       maxDepth,
@@ -73,14 +67,10 @@ export async function solve222HTMOptimal(
 // TODO: fix def consistency.
 export async function solve222ForScramble(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
-  return wasmTwsearch(
-    (await cube2x2x2.kpuzzle()).definition,
-    pattern.patternData,
-    {
-      generatorMoves: "UFLR".split(""),
-      minDepth: 11,
-    },
-  );
+  return wasmTwsearch((await cube2x2x2.kpuzzle()).definition, pattern, {
+    generatorMoves: "UFLR".split(""),
+    minDepth: 11,
+  });
 }
 
 // TODO: factor out and test.

@@ -1,4 +1,4 @@
-import { Alg, AlgBuilder } from "../../../../../alg";
+import { Alg } from "../../../../../alg";
 import type { KPattern } from "../../../../../kpuzzle/KPattern";
 import { puzzles } from "../../../../../puzzles";
 import { randomChoice } from "random-uint-below";

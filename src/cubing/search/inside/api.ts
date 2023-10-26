@@ -10,7 +10,6 @@ import { setIsInsideWorker } from "./inside-worker";
 import { preInitialize222, solve222HTMSubOptimal } from "./solve/puzzles/2x2x2";
 import {
   initialize333,
-  random333FewestMovesScramble,
   random333OrientedScramble,
   random333Scramble,
   solve333,
@@ -20,7 +19,6 @@ import {
   random444OrientedScramble,
   random444Scramble,
 } from "./solve/puzzles/4x4x4";
-import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 import { randomFTOScramble } from "./solve/puzzles/fto";
 import { randomKilominxScramble } from "./solve/puzzles/kilominx";
 import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx";
@@ -104,7 +102,7 @@ async function randomScrambleForEvent(
       // case "fto":
       // case "master_tetraminx":
       // case "kilominx":
-      // case "redi_cube":
+      // case "redi_cube":m
       return measurePerf(
         `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
         () => wasmRandomScrambleForEvent(eventID),

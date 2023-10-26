@@ -28,7 +28,7 @@ setSearchDebug({ disableStringWorker: true });
   const scramble222Solution = await experimentalSolveTwsearch(
     kpuzzle,
     scramble222Transformation.toKPattern(),
-    { moveSubset: "ULFR".split(""), minDepth: 11 },
+    { generatorMoves: "ULFR".split(""), minDepth: 11 },
   );
   scramble222.concat(".").concat(scramble222Solution).log();
   if (

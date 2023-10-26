@@ -17,7 +17,7 @@ export interface TwsearchServerClientOptions {
     maxDepth?: number;
     startPruneDepth?: number;
     quantumMetric?: boolean;
-    moveSubset?: string[];
+    generatorMoves?: string[];
   };
 }
 

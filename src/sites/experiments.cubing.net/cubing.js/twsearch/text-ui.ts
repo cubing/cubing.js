@@ -69,7 +69,7 @@ function validateAndSaveInput(
     localStorage[LOCALSTORAGE_SEARCH] = newSearchPatternString;
   });
   (
-    document.querySelector("#reset-move-subset") as HTMLButtonElement
+    document.querySelector("#reset-generator-moves") as HTMLButtonElement
   ).addEventListener("click", () => {
     delete localStorage[LOCALSTORAGE_CHECKED_MOVES];
     location.reload();
@@ -77,7 +77,7 @@ function validateAndSaveInput(
 
   function mapCheckboxes(fn: (e: HTMLInputElement) => boolean): void {
     for (const checkbox of Array.from(
-      moveSubsetElem.querySelectorAll("input[type=checkbox"),
+      generatorMovesElem.querySelectorAll("input[type=checkbox"),
     ) as HTMLInputElement[]) {
       const checked = fn(checkbox);
       checkbox.checked = checked;
@@ -87,15 +87,15 @@ function validateAndSaveInput(
   }
 
   (
-    document.querySelector("#toggle-move-subset") as HTMLButtonElement
+    document.querySelector("#toggle-generator-moves") as HTMLButtonElement
   ).addEventListener("click", () => mapCheckboxes((e) => !e.checked));
 
   (
-    document.querySelector("#move-subset-check-all") as HTMLButtonElement
+    document.querySelector("#generator-moves-check-all") as HTMLButtonElement
   ).addEventListener("click", () => mapCheckboxes((e) => true));
 
   (
-    document.querySelector("#move-subset-uncheck-all") as HTMLButtonElement
+    document.querySelector("#generator-moves-uncheck-all") as HTMLButtonElement
   ).addEventListener("click", () => mapCheckboxes((e) => false));
 
   const defElem = document.querySelector("#def") as HTMLTextAreaElement;
@@ -130,8 +130,8 @@ function validateAndSaveInput(
   }
 
   const go = document.querySelector("#go") as HTMLButtonElement;
-  const moveSubsetElem = document.querySelector(
-    "#move-subset",
+  const generatorMovesElem = document.querySelector(
+    "#generator-moves",
   ) as HTMLTextAreaElement;
   const minDepthElem = document.querySelector(
     "#min-depth",
@@ -150,9 +150,9 @@ function validateAndSaveInput(
     return `${move.family}|${move.innerLayer ?? "0"}|${move.outerLayer ?? "0"}`;
   }
 
-  async function updateMoveSubset(): Promise<void> {
+  async function updateGeneratorMoves(): Promise<void> {
     const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
-    moveSubsetElem.textContent = "";
+    generatorMovesElem.textContent = "";
     const moveNames = Object.keys(kpuzzle.definition.moves)
       .concat(Object.keys(kpuzzle.definition.derivedMoves ?? {}))
       .sort(function (a, b) {
@@ -160,7 +160,7 @@ function validateAndSaveInput(
       });
     for (const moveName of moveNames) {
       const id = `move-${moveName}`;
-      const wrapper = moveSubsetElem.appendChild(
+      const wrapper = generatorMovesElem.appendChild(
         document.createElement("label"),
       );
       wrapper.setAttribute("for", id);
@@ -189,8 +189,8 @@ function validateAndSaveInput(
     saveCheckedMoves();
   }
 
-  defElem.addEventListener("input", updateMoveSubset);
-  updateMoveSubset();
+  defElem.addEventListener("input", updateGeneratorMoves);
+  updateGeneratorMoves();
 
   function saveCheckedMoves() {
     localStorage.setItem(
@@ -199,10 +199,10 @@ function validateAndSaveInput(
     );
   }
 
-  function getMoveSubset(): string[] {
+  function getGeneratorMoves(): string[] {
     const output = [];
     for (const checkbox of Array.from(
-      moveSubsetElem.querySelectorAll("input[type=checkbox"),
+      generatorMovesElem.querySelectorAll("input[type=checkbox"),
     ) as HTMLInputElement[]) {
       if (checkbox.checked) {
         output.push(checkbox.value);
@@ -219,7 +219,7 @@ function validateAndSaveInput(
       const options: TwsearchServerClientOptions = {
         searchArgs: {
           minDepth: parseInt(minDepthElem.value),
-          moveSubset: getMoveSubset(),
+          generatorMoves: getGeneratorMoves(),
         },
       };
       if ((document.querySelector("#use-server") as HTMLInputElement).checked) {
@@ -228,7 +228,7 @@ function validateAndSaveInput(
         ).toString();
       } else {
         const twsearchOptions: SolveTwsearchOptions = {
-          generatorMoves: options.searchArgs?.moveSubset,
+          generatorMoves: options.searchArgs?.generatorMoves,
           minDepth: options.searchArgs?.minDepth,
         };
         results.value = (
