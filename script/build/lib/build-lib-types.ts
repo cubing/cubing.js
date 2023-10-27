@@ -10,6 +10,8 @@ await spawnPromise("npx", [
   "tsup",
   ...packageEntryPoints,
   "--dts-only",
+  "--format",
+  "esm",
   "--out-dir",
   "dist/lib/cubing",
 ]);
