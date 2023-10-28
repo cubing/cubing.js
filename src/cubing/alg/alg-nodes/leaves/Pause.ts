@@ -1,4 +1,4 @@
-import type { Grouping } from "..";
+import type { Grouping } from "../containers/Grouping";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { AlgLeaf } from "../AlgNode";
