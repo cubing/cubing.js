@@ -437,7 +437,7 @@ async function __wbg_init(input) {
   if (wasm !== void 0)
     return wasm;
   if (typeof input === "undefined") {
-    input = new URL("twsearch_wasm_bg.wasm", import.meta.url);
+    throw new Error("Default `wasm-pack` WASM loading code path triggered! This is currently not supported for `twsearch` due to incompatibility with some bundlers.");
   }
   const imports = __wbg_get_imports();
   if (typeof input === "string" || typeof Request === "function" && input instanceof Request || typeof URL === "function" && input instanceof URL) {
