@@ -136,7 +136,7 @@ export function getConfigFromURL(
       (config as any)[configKey] = paramValue;
     }
   }
-  return config;
+  return { ...config, visualization: "2D" };
 }
 
 export function remapLegacyURLParams(
