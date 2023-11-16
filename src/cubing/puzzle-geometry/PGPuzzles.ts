@@ -38,6 +38,14 @@ export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
   "master tetraminx": "t v 0 v 1",
   "professor pyraminx": "t v -0.2 v 0.6 v 1.4 v 2.2",
   "professor tetraminx": "t v -0.2 v 0.6 v 1.4",
+  "royal pyraminx":
+    "t v -0.333333333333333 v 0.333333333333333 v 1 v 1.66666666666667 v 2.33333333333333",
+  "royal tetraminx":
+    "t v -0.333333333333333 v 0.333333333333333 v 1 v 1.66666666666667",
+  "emperor pyraminx":
+    "t v -0.428571428571429 v 0.142857142857143 v 0.714285714285714 v 1.28571428571429 v 1.85714285714286 v 2.42857142857143",
+  "emperor tetraminx":
+    "t v -0.428571428571429 v 0.142857142857143 v 0.714285714285714 v 1.28571428571429 v 1.85714285714286",
   "Jing pyraminx": "t f 0",
   "master pyramorphix": "t e 0.866025403784437",
   megaminx: "d f 0.7",

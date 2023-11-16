@@ -49,6 +49,10 @@ const expectedData: { [name: string]: string | null } = {
   "master tetraminx": "master tetraminx, 4, 13, 26, 4, 12, 33",
   "professor pyraminx": "professor pyraminx, 4, 25, 54, 7, 20, 198",
   "professor tetraminx": "professor tetraminx, 4, 22, 50, 6, 16, 264",
+  "royal pyraminx": "royal pyraminx, 4, 36, 86, 9, 24, 1386",
+  "royal tetraminx": "royal tetraminx, 4, 33, 82, 8, 20, 1320",
+  "emperor pyraminx": "emperor pyraminx, 4, 49, 126, 13, 28, 1386",
+  "emperor tetraminx": "emperor tetraminx, 4, 46, 122, 12, 24, 9240",
   "Jing pyraminx": "Jing pyraminx, 4, 7, 14, 3, 8, 30",
   "master pyramorphix": "master pyramorphix, 4, 10, 26, 8, 9, 2",
   megaminx: "megaminx, 12, 11, 62, 3, 18, 702",
@@ -130,6 +134,10 @@ for (const [name, desc] of Object.entries(PGPuzzles)) {
       o,
     ].join("");
     const exp = expectedData[name];
+    if (dat !== exp) {
+      console.log("Expected " + dat);
+      console.log("Saw " + exp);
+    }
     expect(dat).toStrictEqual(exp);
   });
 }
