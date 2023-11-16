@@ -5,10 +5,10 @@ import { KPuzzle } from "../kpuzzle";
 import { PGPuzzles } from "./PGPuzzles";
 import { getPuzzleGeometryByDesc, PGNotation } from "./PuzzleGeometry";
 
-const TEST_LARGE_PUZZLES = false;
+import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS";
 
 function slow(s: string): string | null {
-  return TEST_LARGE_PUZZLES ? s : null;
+  return SKIP_SLOW_TESTS ? null : s;
 }
 
 /**

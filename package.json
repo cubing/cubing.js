@@ -125,6 +125,7 @@
     "test-src": "make test-src",
     "test-spec": "make test-spec",
     "test-spec-bun": "make test-spec-bun",
+    "test-spec-bun-fast": "make test-spec-bun-fast",
     "test-spec-bun-with-coverage": "make test-spec-bun-with-coverage",
     "test-spec-dom": "make test-spec-dom",
     "test-spec-dom-with-coverage": "make test-spec-dom-with-coverage",

@@ -96,7 +96,7 @@ test-info:
 # In case of failure, this is likely to be more helpful.
 .PHONY: test-fast
 test-fast: \
-	build-lib-js test-spec-bun build-bin build-sites \
+	build-lib-js test-spec-bun-fast build-bin build-sites \
 	lint \
 	test-src-import-restrictions test-src-scripts-consistency \
 	test-dist-lib-plain-esbuild-compat \
@@ -115,6 +115,9 @@ test-spec: test-spec-bun test-spec-dom
 .PHONY: test-spec-bun
 test-spec-bun:
 	${BUN} test
+.PHONY: test-spec-bun-fast
+test-spec-bun-fast:
+	env CUBING_JS_SKIP_SLOW_TESTS=true ${BUN} test
 .PHONY: test-spec-bun-with-coverage
 test-spec-bun-with-coverage:
 	${BUN} test

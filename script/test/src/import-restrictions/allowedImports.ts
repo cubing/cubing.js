@@ -146,6 +146,7 @@ export const specAllowedImports: AllowedImports = {
     static: [
       "bun:test",
       "src/test/chai-workarounds",
+      "src/test/SKIP_SLOW_TESTS.ts",
 
       "comlink",
       "three",
@@ -155,5 +156,8 @@ export const specAllowedImports: AllowedImports = {
   "src/test/chai-workarounds": {
     static: ["src/cubing/alg"],
     dynamic: ["@esm-bundle/chai"],
+  },
+  "src/test/SKIP_SLOW_TESTS.ts": {
+    static: ["node:process"],
   },
 };
