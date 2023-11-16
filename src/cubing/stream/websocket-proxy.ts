@@ -11,6 +11,7 @@ export class WebSocketProxySender {
   }
 
   public sendMoveEvent(e: MoveEvent): void {
+    (e as any).latestAlgLeaf = e.latestAlgLeaf.toString(); // TODO
     this.sendProxyEvent({
       event: "move",
       data: e,

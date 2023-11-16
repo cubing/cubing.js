@@ -320,7 +320,7 @@ const fn = async (
 
   const sendingOrigin = sendingSocketOrigin();
   if (sendingOrigin) {
-    console.log("Registering senter");
+    console.log("Registering sender…");
     const url = new URL(sendingOrigin);
     url.pathname = "/register-sender";
     sender = new ExperimentalWebSocketProxySender(url.toString());
