@@ -134,10 +134,6 @@ for (const [name, desc] of Object.entries(PGPuzzles)) {
       o,
     ].join("");
     const exp = expectedData[name];
-    if (dat !== exp) {
-      console.log("Expected " + dat);
-      console.log("Saw " + exp);
-    }
     expect(dat).toStrictEqual(exp);
   });
 }
