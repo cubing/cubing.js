@@ -24,6 +24,7 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
       case "square1":
       case "redi_cube":
       case "melindas2x2x2x2":
+      case "loopover":
         return "2D";
       case "3x3x3":
         switch (inputs.visualizationRequest) {

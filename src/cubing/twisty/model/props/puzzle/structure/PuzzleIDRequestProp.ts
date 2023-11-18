@@ -24,6 +24,7 @@ export const puzzleIDs = {
   kilominx: true,
   redi_cube: true,
   melindas2x2x2x2: true,
+  loopover: true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 

@@ -71,6 +71,7 @@ const SCRAMBLE_EVENTS: Partial<Record<PuzzleID, string>> = {
   master_tetraminx: "master_tetraminx",
   kilominx: "kilominx",
   redi_cube: "redi_cube",
+  loopover: "loopover",
 };
 
 export class App {
@@ -635,7 +636,9 @@ class ControlPane {
       "clock",
       "square1",
       "redi_cube",
+      "loopover",
       "melindas2x2x2x2",
+      "loopover",
     ].includes(puzzle);
     this.toolGrid.setButtonEnabled(
       "solve",

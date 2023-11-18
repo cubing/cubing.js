@@ -45,6 +45,10 @@ export const twizzleEvents: Record<string, EventInfo> = {
     puzzleID: "redi_cube",
     eventName: "Redi Cube",
   },
+  loopover: {
+    puzzleID: "loopover",
+    eventName: "Loopover",
+  },
 };
 
 /** @category Event Info */
