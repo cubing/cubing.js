@@ -26,7 +26,7 @@ const argv = await yargs(
   hideBin(process.argv),
 )
   .option("amount", {
-    describe: "Output format.",
+    describe: "Amount of scrambles.",
     default: 1,
     type: "number",
     alias: "n",
