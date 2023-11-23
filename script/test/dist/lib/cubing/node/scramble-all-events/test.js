@@ -30,7 +30,7 @@ const eventsOrdered = [
   "skewb",
   "sq1",
   "555bf",
-  "333mb",
+  "333mbf",
   "redi_cube",
   "master_tetraminx",
 ];

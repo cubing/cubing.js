@@ -98,7 +98,7 @@ async function randomScrambleForEvent(
     // case "sq1":
     // case "444bf":
     case "555bf":
-      // case "333mb":
+      // case "333mbf":
       // case "fto":
       // case "master_tetraminx":
       // case "kilominx":
@@ -117,7 +117,7 @@ async function randomScrambleForEvent(
         isPrefetch: options?.isPrefetch,
       });
     case "333bf":
-    case "333mb":
+    case "333mbf":
       return measurePerf(
         "random333OrientedScramble",
         random333OrientedScramble,
