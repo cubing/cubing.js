@@ -77,7 +77,7 @@ function validateAndSaveInput(
 
   function mapCheckboxes(fn: (e: HTMLInputElement) => boolean): void {
     for (const checkbox of Array.from(
-      generatorMovesElem.querySelectorAll("input[type=checkbox"),
+      generatorMovesElem.querySelectorAll("input[type=checkbox]"),
     ) as HTMLInputElement[]) {
       const checked = fn(checkbox);
       checkbox.checked = checked;
@@ -202,7 +202,7 @@ function validateAndSaveInput(
   function getGeneratorMoves(): string[] {
     const output = [];
     for (const checkbox of Array.from(
-      generatorMovesElem.querySelectorAll("input[type=checkbox"),
+      generatorMovesElem.querySelectorAll("input[type=checkbox]"),
     ) as HTMLInputElement[]) {
       if (checkbox.checked) {
         output.push(checkbox.value);
