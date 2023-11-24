@@ -11,6 +11,7 @@ export type VisualizationStrategy =
   | "Cube3D"
   | "2D"
   | "experimental-2D-LL"
+  | "experimental-2D-LL-face"
   | "PG3D";
 
 export class VisualizationStrategyProp extends TwistyPropDerived<
@@ -40,6 +41,7 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
           case "3D":
             return "PG3D";
           case "experimental-2D-LL":
+          case "experimental-2D-LL-face":
             if (["2x2x2", "4x4x4", "megaminx"].includes(inputs.puzzleID)) {
               // TODO: calculate this based on the `PuzzleLoader`.
               return "experimental-2D-LL";

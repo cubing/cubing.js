@@ -329,7 +329,8 @@ export class TwistyPlayer
       let newWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper;
       switch (strategy) {
         case "2D":
-        case "experimental-2D-LL": {
+        case "experimental-2D-LL":
+        case "experimental-2D-LL-face": {
           newWrapper = new Twisty2DSceneWrapper(
             this.experimentalModel.twistySceneModel,
             strategy,
@@ -503,7 +504,7 @@ export class TwistyPlayer
   // TODO: dimensions.
   async experimentalDownloadScreenshot(filename?: string): Promise<void> {
     if (
-      ["2D", "experimental-2D-LL"].includes(
+      ["2D", "experimental-2D-LL", "experimental-2D-LL-face"].includes(
         await this.experimentalModel.visualizationStrategy.get(),
       )
     ) {

@@ -30,6 +30,11 @@ export const cube3x3x3 = {
       await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3")
     ).cube3x3x3LLSVG;
   }),
+  llFaceSVG: getCached(async () => {
+    return (
+      await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3")
+    ).cube3x3x3LLFaceSVG;
+  }),
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("3x3x3");
   }),

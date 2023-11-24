@@ -5,6 +5,7 @@ export const visualizationFormats = {
   "3D": true, // default
   "2D": true,
   "experimental-2D-LL": true, // TODO
+  "experimental-2D-LL-face": true, // TODO
   PG3D: true,
 };
 export type VisualizationFormat = keyof typeof visualizationFormats;

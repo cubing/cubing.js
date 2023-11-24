@@ -20,7 +20,10 @@ export class Twisty2DSceneWrapper
 
   constructor(
     public model?: TwistySceneModel,
-    private effectiveVisualization?: "2D" | "experimental-2D-LL",
+    private effectiveVisualization?:
+      | "2D"
+      | "experimental-2D-LL"
+      | "experimental-2D-LL-face",
   ) {
     super();
   }

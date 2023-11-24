@@ -16,6 +16,7 @@ export interface PuzzleLoader {
   kpuzzle: () => Promise<KPuzzle>; // TODO
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;
+  llFaceSVG?: () => Promise<string>;
   pg?: () => Promise<PuzzleGeometry>;
   stickeringMask?: (
     stickering: ExperimentalStickering,
