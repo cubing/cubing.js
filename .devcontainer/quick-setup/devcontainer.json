@@ -1,8 +1,8 @@
 {
-  "postCreateCommand": "make quick-setup",
+  "postCreateCommand": "npm install --global bun && make quick-setup",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-        "version": "19"
+      "version": "19"
     }
   }
 }

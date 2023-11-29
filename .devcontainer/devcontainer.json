@@ -1,8 +1,8 @@
 {
-  "postCreateCommand": "npm ci",
+  "postCreateCommand": "npm install --global bun && npm ci",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-        "version": "19"
+      "version": "19"
     }
   }
 }
