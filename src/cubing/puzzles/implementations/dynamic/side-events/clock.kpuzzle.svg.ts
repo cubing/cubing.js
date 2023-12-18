@@ -97,7 +97,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l0-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l0-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l0-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l0-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l0-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l0-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -121,7 +121,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l1-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l1-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l1-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l1-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l1-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l1-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -145,7 +145,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l2-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l2-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l2-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l2-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l2-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l2-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -169,7 +169,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l3-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l3-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l3-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l3-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l3-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l3-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -193,7 +193,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l4-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l4-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l4-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l4-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l4-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l4-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -217,7 +217,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l5-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l5-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l5-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l5-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l5-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l5-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -241,7 +241,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l6-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l6-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l6-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l6-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l6-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l6-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -265,7 +265,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l7-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l7-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l7-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l7-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l7-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l7-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -289,7 +289,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l8-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l8-o0"  href="#hand" transform="rotate(0)" style="fill: #113366"/>
+          <use id="DIALS-l8-o0"  href="#hand" transform="rotate(0)" style="fill: #CC0000"/>
           <use id="DIALS-l8-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l8-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l8-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -373,7 +373,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l9-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l9-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l9-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l9-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l9-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l9-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -397,7 +397,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l10-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l10-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l10-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l10-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l10-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l10-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -421,7 +421,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l11-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l11-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l11-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l11-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l11-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l11-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -445,7 +445,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l12-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l12-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l12-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l12-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l12-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l12-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -469,7 +469,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l13-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l13-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l13-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l13-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l13-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l13-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -493,7 +493,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l14-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l14-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l14-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l14-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l14-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l14-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -517,7 +517,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l15-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l15-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l15-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l15-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l15-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l15-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -541,7 +541,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l16-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l16-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l16-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l16-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l16-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l16-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
@@ -565,7 +565,7 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
           <use id="HOUR_MARKS-l17-o3" href="#cardinal_hour" transform="rotate(270)" style="fill: #0000"/>
         </g>
         <g>
-          <use id="DIALS-l17-o0"  href="#hand" transform="rotate(0)" style="fill: #CCDDEE"/>
+          <use id="DIALS-l17-o0"  href="#hand" transform="rotate(0)" style="fill: #FFCC44"/>
           <use id="DIALS-l17-o1"  href="#hand" transform="rotate(30)" style="fill: #0000"/>
           <use id="DIALS-l17-o2"  href="#hand" transform="rotate(60)" style="fill: #0000"/>
           <use id="DIALS-l17-o3"  href="#hand" transform="rotate(90)" style="fill: #0000"/>
