@@ -1,12 +1,12 @@
 @font-face {
-  font-family: "Ubuntu";
-  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
+  font-family: "Ubuntu-cubing-subset";
+  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.cubing-subset.woff2");
 }
 
 control-pane {
   grid-area: "control";
   /* padding: 1em; */
-  font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
+  font-family: "Ubuntu-cubing-subset", Verdana, Tahoma, sans-serif;
   background: rgb(255, 245, 235);
   overflow-x: hidden;
   overflow-y: auto;
