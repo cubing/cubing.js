@@ -12,7 +12,12 @@
 // const sharedRenderer: WebGLRenderer | null = null;
 
 import { THREEJS } from "../../heavy-code-imports/3d";
-import type { Camera, Scene, WebGLRenderer } from "three";
+import {
+  type Camera,
+  type Scene,
+  type WebGLRenderer,
+  LinearSRGBColorSpace,
+} from "three";
 import { pixelRatio } from "../canvas";
 
 const renderers: Promise<WebGLRenderer>[] = [];
@@ -66,6 +71,7 @@ export async function newRenderer(): Promise<WebGLRenderer> {
     antialias: true,
     alpha: true,
   });
+  renderer.outputColorSpace = LinearSRGBColorSpace; // TODO(https://github.com/cubing/cubing.js/issues/308): remove this
   renderer.setPixelRatio(pixelRatio());
   return renderer;
 }

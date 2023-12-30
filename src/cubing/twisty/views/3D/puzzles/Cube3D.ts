@@ -3,6 +3,7 @@ import {
   BoxGeometry,
   BufferAttribute,
   BufferGeometry,
+  Color,
   DoubleSide,
   Euler,
   FrontSide,
@@ -97,14 +98,16 @@ class AxisInfo {
     public hintOpacityScale: number, // TODO: make this work better across bright *and* dark backgrounds. Maybe tweak sticker compositing settings?
     options?: { hintColor?: number; hintDimColor?: number },
   ) {
+    const colorLinearSRGB = new Color(color).convertLinearToSRGB();
+    const dimColorLinearSRGB = new Color(dimColor).convertLinearToSRGB();
     // TODO: Make sticker material single-sided when cubie foundation is opaque?
     this.stickerMaterial = {
       regular: new MeshBasicMaterial({
-        color,
+        color: colorLinearSRGB,
         side: FrontSide, // TODO: set to `DoubleSide` when hint facelets are disabled.
       }),
       dim: new MeshBasicMaterial({
-        color: dimColor,
+        color: dimColorLinearSRGB,
         side: FrontSide, // TODO: set to `DoubleSide` when hint facelets are disabled.
       }),
       oriented: orientedMaterial,
@@ -144,10 +147,10 @@ const axesInfo: AxisInfo[] = [
   new AxisInfo(
     new Vector3(-1, 0, 0),
     new Euler(0, -TAU / 4, 0),
-    0xff8800,
-    0x884400,
+    0xff9900,
+    0x885500,
     1,
-    { hintDimColor: 0x996600 },
+    { hintDimColor: 0xcc8800 },
   ),
   new AxisInfo(
     new Vector3(0, 0, 1),
@@ -163,7 +166,7 @@ const axesInfo: AxisInfo[] = [
     0xff0000,
     0x660000,
     1,
-    { hintDimColor: 0x990000 },
+    { hintDimColor: 0xdd0000 },
   ),
   new AxisInfo(
     new Vector3(0, 0, -1),
@@ -179,7 +182,7 @@ const axesInfo: AxisInfo[] = [
     0xffff00,
     0x888800,
     1.25,
-    { hintDimColor: 0xbbbb00 },
+    { hintDimColor: 0xdddd00 },
   ),
 ];
 
