@@ -275,11 +275,11 @@ enum PGColors {
   Green = "#44ee00",
   Red = "#ff0000",
   Blue = "#2266ff",
-  Yellow = "#ffff00",
+  Yellow = "#f4f400",
 
   Purple = "#8800dd",
   Gray = "#aaaaaa",
-  Cream = "#ffffd0",
+  Cream = "#e8d0a0",
   Pink = "#ff66cc",
 
   DarkBlue = "#0000ff",
