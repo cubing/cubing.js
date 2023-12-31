@@ -42,12 +42,11 @@ import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 const svgLoader = new TextureLoader();
 
 const ignoredMaterial = new MeshBasicMaterial({
-  color: 0x444444,
-  side: DoubleSide,
+  color: new Color(0x666666).convertLinearToSRGB(),
 });
 
 const ignoredMaterialHint = new MeshBasicMaterial({
-  color: 0xcccccc,
+  color: new Color(0xcccccc).convertLinearToSRGB(),
   side: BackSide,
   transparent: true,
   opacity: 0.75,
@@ -117,13 +116,15 @@ class AxisInfo {
     };
     this.hintStickerMaterial = {
       regular: new MeshBasicMaterial({
-        color: options?.hintColor ?? color,
+        color: new Color(options?.hintColor ?? color).convertLinearToSRGB(),
         side: BackSide,
         transparent: true,
         opacity: 0.5 * hintOpacityScale,
       }),
       dim: new MeshBasicMaterial({
-        color: options?.hintDimColor ?? dimColor,
+        color: new Color(
+          options?.hintDimColor ?? dimColor,
+        ).convertLinearToSRGB(),
         side: BackSide,
         transparent: true,
         opacity: 0.5 * hintOpacityScale,
@@ -150,7 +151,7 @@ const axesInfo: AxisInfo[] = [
     0xff9900,
     0x885500,
     1,
-    { hintDimColor: 0xcc8800 },
+    { hintDimColor: 0x884400 },
   ),
   new AxisInfo(
     new Vector3(0, 0, 1),
@@ -166,7 +167,7 @@ const axesInfo: AxisInfo[] = [
     0xff0000,
     0x660000,
     1,
-    { hintDimColor: 0xdd0000 },
+    { hintDimColor: 0x660000 },
   ),
   new AxisInfo(
     new Vector3(0, 0, -1),
