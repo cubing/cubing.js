@@ -163,8 +163,19 @@ test-dist-lib: \
 test-dist-lib-node-import: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/import/main.js
 .PHONY: test-dist-lib-node-scramble-all-events
-test-dist-lib-node-scramble-all-events: build-lib-js
-	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/main.js
+test-dist-lib-node-scramble-all-events: test-dist-lib-node-scramble-main test-dist-lib-node-scramble-kilominx test-dist-lib-node-scramble-4x4x4 test-dist-lib-node-scramble-fto
+.PHONY: test-dist-lib-node-scramble-main
+test-dist-lib-node-scramble-main: build-lib-js
+	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test.js
+.PHONY: test-dist-lib-node-scramble-kilominx
+test-dist-lib-node-scramble-kilominx: build-lib-js
+	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-kilominx.js
+.PHONY: test-dist-lib-node-scramble-4x4x4
+test-dist-lib-node-scramble-4x4x4: build-lib-js
+	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-4x4x4.js
+.PHONY: test-dist-lib-node-scramble-fto
+test-dist-lib-node-scramble-fto: build-lib-js
+	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-fto.js
 .PHONY: test-dist-lib-perf
 test-dist-lib-perf: build-lib-js
 	${NODE} script/test/dist/lib/cubing/perf/*.js

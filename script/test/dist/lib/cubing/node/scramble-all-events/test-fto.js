@@ -15,27 +15,9 @@ setSearchDebug({ disableStringWorker: true, scramblePrefetchLevel: "none" });
 
 import { randomScrambleForEvent } from "cubing/scramble";
 
-const eventsOrdered = [
-  "333",
-  "222",
-  "555",
-  "666",
-  "777",
-  "333bf",
-  "333fm",
-  "333oh",
-  "clock",
-  "minx",
-  "pyram",
-  "skewb",
-  "sq1",
-  "555bf",
-  "333mbf",
-  "redi_cube",
-  "master_tetraminx",
-];
+const eventsOrdered = [];
 
-const eventsParallel = [];
+const eventsParallel = ["fto"];
 
 (async () => {
   setSearchDebug({ forceNewWorkerForEveryScramble: true });
