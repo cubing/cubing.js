@@ -1,8 +1,7 @@
 import { randomUIntBelow } from "random-uint-below";
 
-const pins = ["UR", "DR", "DL", "UL"];
 const backMoves = ["U", "R", "D", "L", "ALL"];
-const frontMoves = pins.concat(backMoves);
+const frontMoves = ["UR", "DR", "DL", "UL"].concat(backMoves);
 
 export function randomClockScrambleString(): string {
   let filteringMoveCount = 0;
@@ -35,10 +34,5 @@ export function randomClockScrambleString(): string {
     return randomClockScrambleString();
   }
 
-  for (const pin of pins) {
-    if (randomUIntBelow(2) === 0) {
-      moves.push(pin);
-    }
-  }
   return moves.join(" ");
 }
