@@ -866,7 +866,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       }
 
       const move = externalMove;
-      let quantumTransformation;
+      let quantumTransformation: KTransformation | undefined;
       try {
         quantumTransformation = this.kpuzzle.moveToTransformation(
           move.modified({ amount: 1 }),

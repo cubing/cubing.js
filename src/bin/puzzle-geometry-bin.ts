@@ -9,6 +9,7 @@ import {
   PuzzleGeometry,
   type ExperimentalPuzzleGeometryOptions,
 } from "cubing/puzzle-geometry";
+import type { PuzzleDescriptionString } from "cubing/puzzle-geometry/PGPuzzles";
 import type {
   PuzzleCutDescription,
   PuzzleDescription,
@@ -157,7 +158,7 @@ Examples:
   );
 }
 if (globalThis.process && process.argv && process.argv.length >= 3) {
-  let desc;
+  let desc: PuzzleDescriptionString | undefined;
   const puzzleList = getPG3DNamedPuzzles();
   let argp = 2;
   const optionlist = [];

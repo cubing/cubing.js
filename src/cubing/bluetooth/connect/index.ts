@@ -47,7 +47,7 @@ export async function bluetoothConnect<T>(
   options: BluetoothConnectOptions = {},
 ): Promise<T> {
   debugLog("Attempting to pair.");
-  let device;
+  let device: BluetoothDevice;
   try {
     let acceptAllDevices = options.acceptAllDevices;
     if (

@@ -32,7 +32,7 @@ export class SimpleAlgIndexer implements AlgIndexer {
 
   public timestampToIndex(timestamp: Timestamp): number {
     let cumulativeTime = 0;
-    let i;
+    let i: number;
     for (i = 0; i < this.numAnimatedLeaves(); i++) {
       cumulativeTime += this.durationFn.traverseMove(this.getAnimLeaf(i));
       if (cumulativeTime >= timestamp) {

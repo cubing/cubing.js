@@ -24,7 +24,7 @@ recognition.lang = "en-US";
 recognition.interimResults = false;
 recognition.maxAlternatives = 10;
 
-document.body.onclick = function () {
+document.body.onclick = () => {
   recognition.start();
   console.log("Ready to receive a color command.");
 };
@@ -33,7 +33,7 @@ const kpuzzle = new KPuzzle(experimentalCube3x3x3KPuzzleDefinition);
 const player = document.querySelector("twisty-player")!;
 const alternativeListElem = document.querySelector("alternative-list")!;
 
-recognition.onresult = function (event) {
+recognition.onresult = (event) => {
   const latestResult = event.results.item(event.results.length - 1);
   alternativeListElem.textContent =
     // biome-ignore lint/style/useTemplate: Using a template would make this more confusing.
@@ -128,14 +128,14 @@ recognition.onresult = function (event) {
   console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
-recognition.onspeechend = function () {
+recognition.onspeechend = () => {
   recognition.stop();
 };
 
-recognition.onnomatch = function (_event: SpeechRecognitionEvent) {
+recognition.onnomatch = (_event: SpeechRecognitionEvent) => {
   // diagnostic.textContent = "I didn't recognise that color.";
 };
 
-recognition.onerror = function (_event: Event) {
+recognition.onerror = (_event: Event) => {
   // diagnostic.textContent = "Error occurred in recognition: " + event.error;
 };

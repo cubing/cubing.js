@@ -18,18 +18,18 @@ const DEFAULT_INTERVAL_MS = 150;
 const MAX_LATEST_MOVES = 6;
 
 const ganMoveToBlockMove: { [i: number]: Move } = {
-  0x00: new Move("U"),
-  0x02: new Move("U", -1),
-  0x03: new Move("R"),
-  0x05: new Move("R", -1),
-  0x06: new Move("F"),
-  0x08: new Move("F", -1),
-  0x09: new Move("D"),
-  0x0b: new Move("D", -1),
-  0x0c: new Move("L"),
-  0x0e: new Move("L", -1),
-  0x0f: new Move("B"),
-  0x11: new Move("B", -1),
+  0 /*  0x00 */: new Move("U"),
+  2 /*  0x02 */: new Move("U", -1),
+  3 /*  0x03 */: new Move("R"),
+  5 /*  0x05 */: new Move("R", -1),
+  6 /*  0x06 */: new Move("F"),
+  8 /*  0x08 */: new Move("F", -1),
+  9 /*  0x09 */: new Move("D"),
+  11 /* 0x0b */: new Move("D", -1),
+  12 /* 0x0c */: new Move("L"),
+  14 /* 0x0e */: new Move("L", -1),
+  15 /* 0x0f */: new Move("B"),
+  17 /* 0x11 */: new Move("B", -1),
 };
 
 let homeQuatInverse: Quaternion | null = null;
@@ -187,13 +187,11 @@ function rotateLeft(s: string, i: number): string {
 
 const pieceMap: { [s: string]: PieceInfo } = {};
 // TODO: Condense the for loops.
-// biome-ignore lint/complexity/noForEach: https://github.com/biomejs/biome/issues/547
 reidEdgeOrder.forEach((edge, idx) => {
   for (let i = 0; i < 2; i++) {
     pieceMap[rotateLeft(edge, i)] = { piece: idx, orientation: i };
   }
 });
-// biome-ignore lint/complexity/noForEach: https://github.com/biomejs/biome/issues/547
 reidCornerOrder.forEach((corner, idx) => {
   for (let i = 0; i < 3; i++) {
     pieceMap[rotateLeft(corner, i)] = { piece: idx, orientation: i };

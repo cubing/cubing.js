@@ -14,7 +14,7 @@ let isMouseDown = false;
 
 globalSafeDocument?.addEventListener(
   "mousedown",
-  function (event) {
+  (event) => {
     if (event.which) {
       isMouseDown = true;
     }
@@ -24,7 +24,7 @@ globalSafeDocument?.addEventListener(
 
 globalSafeDocument?.addEventListener(
   "mouseup",
-  function (event) {
+  (event) => {
     if (event.which) {
       isMouseDown = false;
     }

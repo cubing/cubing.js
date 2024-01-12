@@ -38,7 +38,6 @@ const pieceMap: { [s: string]: PieceInfo } = {};
 // TODO: Condense the for loops.
 
 for (const orbitDefinition of experimental3x3x3KPuzzle.definition.orbits) {
-  // biome-ignore lint/complexity/noForEach: https://github.com/biomejs/biome/issues/547
   pieceNames[orbitDefinition.orbitName].forEach((piece, idx) => {
     const numOri =
       orbitDefinition.orbitName === "CENTERS"

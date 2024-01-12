@@ -740,6 +740,8 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
   return r;
 }
 
+type MoveSetGeo = [string, string, string, string, number];
+
 /** @category PuzzleGeometry */
 export class PuzzleGeometry {
   private rotations: Quat[]; // all members of the rotation group
@@ -755,7 +757,7 @@ export class PuzzleGeometry {
   public moveplanesets: Quat[][]; // the move planes, in parallel sets
   private moveplanenormals: Quat[]; // one move plane
   public movesetorders: number[]; // the order of rotations for each move set
-  public movesetgeos: [string, string, string, string, number][]; // geometric feature information for move sets
+  public movesetgeos: MoveSetGeo[]; // geometric feature information for move sets
   private basefaces: Face[]; // polytope faces before cuts
   private faces: Face[]; // all the stickers
   private facecentermass: Quat[]; // center of mass of all faces
@@ -1502,7 +1504,7 @@ export class PuzzleGeometry {
     }
     const sizes2 = moverotations.map((_) => 1 + _.length);
     this.movesetorders = sizes2;
-    const movesetgeos: [string, string, string, string, number][] = [];
+    const movesetgeos: MoveSetGeo[] = [];
     let gtype = "?";
     for (let i = 0; i < moveplanesets.length; i++) {
       const p0 = moveplanenormals[i];
@@ -1830,7 +1832,7 @@ export class PuzzleGeometry {
   // digits are allowed in a family name.
   private stringToBlockMove(mv: string): Move {
     // parse a move from the command line
-    const re = RegExp("^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$");
+    const re = /^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$/;
     const p = mv.match(re);
     if (p === null) {
       throw new Error(`Bad move passed ${mv}`);
@@ -1879,7 +1881,7 @@ export class PuzzleGeometry {
     if (grip.endsWith("w") && grip[0] <= "Z") {
       grip = grip.slice(0, -1).toLowerCase();
     }
-    let geo;
+    let geo: MoveSetGeo | undefined;
     let msi = -1;
     const geoname = this.swizzler.unswizzle(grip);
     let firstgrip = false;
@@ -3185,9 +3187,9 @@ export class PuzzleGeometry {
       }
     }
     const twodmapper = this.generate2dmapping(2880, 2160, 0, false, 1.0);
-    const g = (function () {
+    const g = (() => {
       const irot = rot.invrot();
-      return function (facenum: number, coords: number[]): number[] {
+      return (facenum: number, coords: number[]): number[] => {
         let q = new Quat(
           0,
           coords[0] * maxdist,

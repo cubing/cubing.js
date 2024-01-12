@@ -24,7 +24,7 @@ needPath(
 export function startServer(port) {
   port = port ?? 4443;
   console.log("Starting server.");
-  createServer(function (request, response) {
+  createServer((request, response) => {
     const normalizedPath = new URL(request.url, "http://test/").pathname;
 
     let filePath;
@@ -60,10 +60,10 @@ export function startServer(port) {
 
     const contentType = mimeTypes[extension] ?? "application/octet-stream";
 
-    readFile(filePath, function (error, content) {
+    readFile(filePath, (error, content) => {
       if (error) {
         if (["ENOENT", "EISDIR"].includes(error.code)) {
-          readFile("./404.html", function (_error, content) {
+          readFile("./404.html", (_error, content) => {
             response.writeHead(404, { "Content-Type": "text/html" });
             response.end(content, "utf-8");
           });

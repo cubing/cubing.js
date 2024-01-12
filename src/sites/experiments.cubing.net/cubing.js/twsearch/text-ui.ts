@@ -155,9 +155,7 @@ function validateAndSaveInput(
     generatorMovesElem.textContent = "";
     const moveNames = Object.keys(kpuzzle.definition.moves)
       .concat(Object.keys(kpuzzle.definition.derivedMoves ?? {}))
-      .sort(function (a, b) {
-        return moveSortingKey(a).localeCompare(moveSortingKey(b));
-      });
+      .sort((a, b) => moveSortingKey(a).localeCompare(moveSortingKey(b)));
     for (const moveName of moveNames) {
       const id = `move-${moveName}`;
       const wrapper = generatorMovesElem.appendChild(

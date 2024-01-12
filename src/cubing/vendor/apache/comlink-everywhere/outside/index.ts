@@ -26,7 +26,7 @@ export async function constructWorker(
   source: string | URL,
   options?: { eval?: boolean; type?: WorkerType },
 ): Promise<Worker> {
-  let worker;
+  let worker: Worker;
   if (useNodeWorkarounds) {
     return nodeWorker(source, { eval: options?.eval });
   } else {

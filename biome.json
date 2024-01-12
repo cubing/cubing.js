@@ -13,7 +13,8 @@
         "noInferrableTypes": "off",
         "noNonNullAssertion": "off",
         "noParameterAssign": "off",
-        "useEnumInitializers": "off"
+        "useEnumInitializers": "off",
+        "noUselessElse": "off"
       },
       "suspicious": {
         "noAssignInExpressions": "off",
