@@ -23,8 +23,7 @@ export const kilominx: PuzzleLoader = {
       includeEdgeOrbits: false,
     }),
   svg: getCached(async () => {
-    return (
-      await import("../dynamic/unofficial/puzzles-dynamic-unofficial")
-    ).kilominxSVG;
+    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
+      .kilominxSVG;
   }),
 };

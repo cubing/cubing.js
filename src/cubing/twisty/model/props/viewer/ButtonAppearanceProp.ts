@@ -15,7 +15,7 @@ export const buttonIcons = [
   "exit-fullscreen",
   "twizzle-tw",
 ];
-export type ButtonIcon = typeof buttonIcons[number];
+export type ButtonIcon = (typeof buttonIcons)[number];
 
 interface ButtonAppearance {
   enabled: boolean;

@@ -203,8 +203,8 @@ function simplestMove(
       ? MoveSourceType.INDEXABLE_SLICE_FAR
       : MoveSourceType.INDEXABLE_SLICE_NEAR
     : far
-    ? MoveSourceType.INDEXABLE_WIDE_FAR
-    : MoveSourceType.INDEXABLE_WIDE_NEAR;
+      ? MoveSourceType.INDEXABLE_WIDE_FAR
+      : MoveSourceType.INDEXABLE_WIDE_NEAR;
   const moveSourceInfo = firstOfType(axis, moveSourceType);
   return new Move(
     new QuantumMove(moveSourceInfo.family, innerLayer, outerLayer),

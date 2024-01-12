@@ -15,8 +15,7 @@ export const melindas2x2x2x2: PuzzleLoader = {
       ),
   ),
   svg: getCached(async () => {
-    return (
-      await import("../dynamic/side-events/puzzles-dynamic-side-events")
-    ).melindas2x2x2x2OrbitSVG;
+    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+      .melindas2x2x2x2OrbitSVG;
   }),
 };

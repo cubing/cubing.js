@@ -65,7 +65,10 @@ export class SimultaneousMoveIndexer {
   private animLeaves: AnimLeafWithRange[];
   // TODO: Allow custom `durationFn`.
 
-  constructor(private kpuzzle: KPuzzle, alg: Alg) {
+  constructor(
+    private kpuzzle: KPuzzle,
+    alg: Alg,
+  ) {
     this.animLeaves = demos[alg.toString()] ?? simulMoves(alg);
     // TODO: Avoid assuming all base moves are block moves.
   }

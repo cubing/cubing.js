@@ -164,7 +164,10 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
   }
 }
 class WalkerDown {
-  constructor(public apd: AlgWalkerDecoration, public back: boolean) {
+  constructor(
+    public apd: AlgWalkerDecoration,
+    public back: boolean,
+  ) {
     /**/
   }
 }

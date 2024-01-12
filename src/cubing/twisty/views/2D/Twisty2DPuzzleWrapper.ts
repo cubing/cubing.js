@@ -45,8 +45,8 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
         this.effectiveVisualization === "experimental-2D-LL-face"
           ? this.puzzleLoader.llFaceSVG!()
           : this.effectiveVisualization === "experimental-2D-LL"
-          ? this.puzzleLoader.llSVG!()
-          : this.puzzleLoader.svg();
+            ? this.puzzleLoader.llSVG!()
+            : this.puzzleLoader.svg();
       return new Twisty2DPuzzle(
         this.model,
         await this.puzzleLoader.kpuzzle(),

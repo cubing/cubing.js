@@ -8,7 +8,10 @@ import type { PuzzleID, VisualizationFormat } from "../../../cubing/twisty";
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle" as const;
   // TODO: push display name into the KSolve defition.
-  constructor(private kpuzzleName: string, public viz: VisualizationFormat) {}
+  constructor(
+    private kpuzzleName: string,
+    public viz: VisualizationFormat,
+  ) {}
 
   public displayName(): string {
     return puzzles[this.kpuzzleName].fullName;

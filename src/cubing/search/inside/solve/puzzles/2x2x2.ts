@@ -52,9 +52,7 @@ export async function solve222HTMOptimal(
   const { normalizedPattern, normalizationAlg } =
     experimentalNormalize2x2x2Orientation(pattern);
   const orientedResult = await wasmTwsearch(
-    (
-      await cube2x2x2.kpuzzle()
-    ).definition,
+    (await cube2x2x2.kpuzzle()).definition,
     normalizedPattern,
     {
       generatorMoves: "UFLR".split(""), // TODO: <U, F, R>

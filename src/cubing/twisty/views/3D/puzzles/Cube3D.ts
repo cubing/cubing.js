@@ -1013,8 +1013,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       this.options.experimentalStickeringMask?.specialBehaviour === "picture"
         ? newStickerGeometry()
         : isHint
-        ? this.#sharedHintStickerGeometry()
-        : sharedStickerGeometry();
+          ? this.#sharedHintStickerGeometry()
+          : sharedStickerGeometry();
     const stickerMesh = new Mesh(
       geo,
       isHint

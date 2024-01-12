@@ -594,10 +594,10 @@ export function getPuzzleDescriptionString(
 }
 
 export const PUZZLE_BASE_SHAPES = ["c", "t", "o", "d", "i"] as const;
-export type PuzzleBaseShape = typeof PUZZLE_BASE_SHAPES[number];
+export type PuzzleBaseShape = (typeof PUZZLE_BASE_SHAPES)[number];
 
 export const PUZZLE_CUT_TYPES = ["f", "v", "e"] as const;
-export type PuzzleCutType = typeof PUZZLE_CUT_TYPES[number];
+export type PuzzleCutType = (typeof PUZZLE_CUT_TYPES)[number];
 
 export type PuzzleCutDescription = { cutType: PuzzleCutType; distance: number };
 export type PuzzleDescription = {
@@ -879,10 +879,7 @@ export class PuzzleGeometry {
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
     const firstface = getface(planes);
-    this.edgedistance = firstface[0]
-      .sum(firstface[1])
-      .smul(0.5)
-      .dist(zero);
+    this.edgedistance = firstface[0].sum(firstface[1]).smul(0.5).dist(zero);
     this.vertexdistance = firstface[0].dist(zero);
     const cutplanes = [];
     const intersects = [];
@@ -3267,7 +3264,10 @@ Vertex distance ${this.vertexdistance}`;
 
 export class PGNotation {
   private orbitNames: string[];
-  constructor(private pg: PuzzleGeometry, od: PGOrbitsDef) {
+  constructor(
+    private pg: PuzzleGeometry,
+    od: PGOrbitsDef,
+  ) {
     this.orbitNames = od.orbitnames;
   }
 

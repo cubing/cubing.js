@@ -115,8 +115,8 @@ export class Twisty3DSceneWrapper
       depth: e.detail.pressInfo.keys.ctrlOrMetaKey
         ? "rotation"
         : e.detail.pressInfo.keys.shiftKey
-        ? "secondSlice"
-        : "none",
+          ? "secondSlice"
+          : "none",
     });
   }
 

@@ -17,7 +17,10 @@ import type { NotationMapper } from "./notation-mapping/NotationMapper";
   zeros,
 } from "./Perm";
 export class PGOrbitDef {
-  constructor(public size: number, public mod: number) {}
+  constructor(
+    public size: number,
+    public mod: number,
+  ) {}
   public reassemblySize(): bigint {
     return factorial(this.size) * BigInt(this.mod) ** BigInt(this.size);
   }

@@ -22,9 +22,8 @@ class MegaminxPuzzleLoader extends PGPuzzleLoader {
   stickerings = megaminxStickerings;
 
   llSVG = getCached(async () => {
-    return (
-      await import("../dynamic/megaminx/puzzles-dynamic-megaminx")
-    ).megaminxLLSVG;
+    return (await import("../dynamic/megaminx/puzzles-dynamic-megaminx"))
+      .megaminxLLSVG;
   });
 }
 

@@ -142,7 +142,10 @@ class Filler {
   colors: Uint8Array;
   uvs?: Float32Array;
   ind: Uint8Array;
-  constructor(public sz: number, public tm: TextureMapper) {
+  constructor(
+    public sz: number,
+    public tm: TextureMapper,
+  ) {
     this.vertices = new Float32Array(9 * sz);
     this.uvs = undefined;
     this.colors = new Uint8Array(18 * sz);
@@ -950,18 +953,16 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           offset: 0,
           count: 6 * this.foundationBound,
         };
-        (
-          this.fixedGeo.getAttribute("uv") as BufferAttribute
-        ).needsUpdate = true;
+        (this.fixedGeo.getAttribute("uv") as BufferAttribute).needsUpdate =
+          true;
       }
       if (this.#pendingStickeringUpdate || !this.textured) {
         (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {
           offset: 0,
           count: 9 * this.foundationBound,
         };
-        (
-          this.fixedGeo.getAttribute("color") as BufferAttribute
-        ).needsUpdate = true;
+        (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate =
+          true;
       }
     }
     this.scheduleRenderCallback();

@@ -21,19 +21,16 @@ export const cube3x3x3 = {
     return experimental3x3x3KPuzzle;
   }),
   svg: getCached(async () => {
-    return (
-      await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3")
-    ).cube3x3x3SVG;
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+      .cube3x3x3SVG;
   }),
   llSVG: getCached(async () => {
-    return (
-      await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3")
-    ).cube3x3x3LLSVG;
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+      .cube3x3x3LLSVG;
   }),
   llFaceSVG: getCached(async () => {
-    return (
-      await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3")
-    ).cube3x3x3LLFaceSVG;
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+      .cube3x3x3LLFaceSVG;
   }),
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("3x3x3");

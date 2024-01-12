@@ -24,7 +24,10 @@ function truncateAlgForDisplay(alg: Alg): string {
 }
 
 export class TwistyPropDebugger extends ManagedCustomElement {
-  constructor(private name: string, public twistyProp: TwistyPropParent<any>) {
+  constructor(
+    private name: string,
+    public twistyProp: TwistyPropParent<any>,
+  ) {
     super();
   }
 

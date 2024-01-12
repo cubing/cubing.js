@@ -78,7 +78,10 @@ export class App {
   public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
   public controlPane: ControlPane;
-  constructor(public element: Element, initialConfig: TwistyPlayerConfig) {
+  constructor(
+    public element: Element,
+    initialConfig: TwistyPlayerConfig,
+  ) {
     this.puzzlePane = findOrCreateChild(
       this.element,
       "puzzle-pane",
@@ -257,9 +260,8 @@ class ControlPane {
       if (algFeatures.conjugate) {
         which.push("conjugate");
       }
-      this.commutatorConjugateInfo.querySelector(
-        "a",
-      )!.textContent = `${which.join(" and ")} notation`;
+      this.commutatorConjugateInfo.querySelector("a")!.textContent =
+        `${which.join(" and ")} notation`;
       this.square1Info.hidden = !algFeatures.square1;
     });
     twistyPlayer.experimentalModel.videoURL.addFreshListener((url) => {
@@ -698,8 +700,8 @@ class ExpandButton extends HTMLElement {
         ? "▿"
         : "▹"
       : this.expanded
-      ? "▾"
-      : "▸";
+        ? "▾"
+        : "▸";
   }
 }
 

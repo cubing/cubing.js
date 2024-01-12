@@ -15,8 +15,7 @@ export const square1: PuzzleLoader = {
       ),
   ),
   svg: getCached(async () => {
-    return (
-      await import("../dynamic/side-events/puzzles-dynamic-side-events")
-    ).sq1HyperOrbitSVG;
+    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+      .sq1HyperOrbitSVG;
   }),
 };

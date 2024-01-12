@@ -15,8 +15,7 @@ export const clock: PuzzleLoader = {
       ),
   ),
   svg: getCached(async () => {
-    return (
-      await import("../dynamic/side-events/puzzles-dynamic-side-events")
-    ).clockSVG;
+    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+      .clockSVG;
   }),
 };

@@ -12,7 +12,10 @@ import type { VRPuzzle } from "./vr-puzzle";
 export class Room {
   public scene: Scene;
   private box: LineSegments;
-  constructor(private vrInput: VRInput, private vrPuzzle: VRPuzzle) {
+  constructor(
+    private vrInput: VRInput,
+    private vrPuzzle: VRPuzzle,
+  ) {
     this.scene = new Scene();
     this.scene.background = new Color(0x505050);
 

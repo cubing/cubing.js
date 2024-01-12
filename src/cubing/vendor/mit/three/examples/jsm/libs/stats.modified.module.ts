@@ -107,7 +107,11 @@ export class StatsPanel {
   max = 0;
   dom = document.createElement("canvas");
   context = this.dom.getContext("2d")!;
-  constructor(private name: string, private fg: string, private bg: string) {
+  constructor(
+    private name: string,
+    private fg: string,
+    private bg: string,
+  ) {
     this.dom.width = WIDTH;
     this.dom.height = HEIGHT;
     this.dom.style.cssText = "width:80px;height:48px";

@@ -91,7 +91,10 @@ class PhysicalState {
 
   private arr: Uint8Array;
   private arrLen = 19;
-  private constructor(private dataView: DataView, public timeStamp: number) {
+  private constructor(
+    private dataView: DataView,
+    public timeStamp: number,
+  ) {
     this.arr = new Uint8Array(dataView.buffer);
     if (this.arr.length !== this.arrLen) {
       throw new Error("Unexpected array length");

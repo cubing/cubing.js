@@ -90,7 +90,10 @@ customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
 class TwistyAlgWrapperElem extends HTMLElementShim {
   private queue: (Element | Text)[] = [];
 
-  constructor(className: string, public algOrAlgNode: Alg | AlgNode) {
+  constructor(
+    className: string,
+    public algOrAlgNode: Alg | AlgNode,
+  ) {
     super();
     this.classList.add(className);
   }
