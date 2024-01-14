@@ -102,7 +102,7 @@ test-fast: \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
 .PHONY: test-all
-test-all: test-dist-lib-bun-scramble-all-events build-lib-types test-src test-build test-dist
+test-all: test-src test-build test-dist
 .PHONY: test-src
 test-src: \
 	test-spec \
