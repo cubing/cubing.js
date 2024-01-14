@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: make setup
       - run: make test-spec-bun-with-coverage
       - run: make test-spec-dom-with-coverage
       - run: make lint-ci
@@ -49,7 +49,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: make setup
       - run: make build-lib-js
       - run: make build-bin
       - run: make build-lib-types
@@ -75,10 +75,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: make setup
       - run: make build-lib-js
       - run: make test-dist-lib-node-import
-      - run: make test-dist-lib-node-scramble-all-events
+      - run: make test-dist-lib-bun-scramble-all-events
       - run: make test-dist-lib-perf
       - run: make test-dist-lib-plain-esbuild-compat
       - run: make test-dist-lib-build-size
