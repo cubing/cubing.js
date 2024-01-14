@@ -37,7 +37,7 @@ const eventsOrdered = [
 
 const eventsParallel = ["kilominx", "444", "444bf", "fto"];
 
-(async () => {
+await (async () => {
   setSearchDebug({ forceNewWorkerForEveryScramble: true });
   const parallelPromise = Promise.all(
     eventsParallel.map(async (event) =>

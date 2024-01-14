@@ -5,6 +5,7 @@ import {
   renameSync,
   writeFileSync,
 } from "node:fs";
+import { cp } from "node:fs/promises";
 import { join } from "node:path";
 import { execPromise } from "../lib/execPromise";
 
@@ -19,11 +20,10 @@ console.log(
   `
 Automatically installing a subset of dependencies.
 
-Note that you have to run \`npm install\` (or \`npm ci\`) manually if you pull new code or want to run any tests.`,
+Note that you have to run \`make setup\` manually if you pull new code or want to run any tests.`,
 );
 
 const packageJSON = JSON.parse(readFileSync("package.json", "utf8"));
-const lockfileJSON = JSON.parse(readFileSync("package-lock.json", "utf8"));
 const oldDevDependencies = packageJSON.devDependencies;
 packageJSON.devDependencies = {};
 for (const name of packageJSON.minimalDevDependencies) {
@@ -34,9 +34,6 @@ writeFileSync(
   join(TEMP_ROOT, "package.json"),
   JSON.stringify(packageJSON, null, "  "),
 );
-writeFileSync(
-  join(TEMP_ROOT, "package-lock.json"),
-  JSON.stringify(lockfileJSON, null, "  "),
-);
-console.log(await execPromise(`cd ${TEMP_ROOT} && npm ci`));
+cp("bun.lockb", join(TEMP_ROOT, "bun.lockb"));
+console.log(await execPromise(`cd ${TEMP_ROOT} && bun install`));
 renameSync(join(TEMP_ROOT, "node_modules"), TARGET_NODE_MODULES_PATH);

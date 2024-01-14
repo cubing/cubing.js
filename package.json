@@ -97,10 +97,7 @@
   "engines": {
     "node": ">=19"
   },
-  "files": [
-    "./dist/bin/",
-    "./dist/lib/"
-  ],
+  "files": ["./dist/bin/", "./dist/lib/"],
   "scripts": {
     "default": "make default",
     "build": "make build",
@@ -138,7 +135,7 @@
     "test-dist": "make test-dist",
     "test-dist-lib": "make test-dist-lib",
     "test-dist-lib-node-import": "make test-dist-lib-node-import",
-    "test-dist-lib-node-scramble-all-events": "make test-dist-lib-node-scramble-all-events",
+    "test-dist-lib-bun-scramble-all-events": "make test-dist-lib-bun-scramble-all-events",
     "test-dist-lib-perf": "make test-dist-lib-perf",
     "test-dist-lib-plain-esbuild-compat": "make test-dist-lib-plain-esbuild-compat",
     "test-dist-lib-build-size": "make test-dist-lib-build-size",
@@ -146,6 +143,7 @@
     "test-dist-bin": "make test-dist-bin",
     "test-dist-bin-shebang": "make test-dist-bin-shebang",
     "test-dist-bin-npm-exec": "make test-dist-bin-npm-exec",
+    "test-dist-bin-bunx": "make test-dist-bin-bunx",
     "format": "make format",
     "setup": "make setup",
     "quick-setup": "make quick-setup",
