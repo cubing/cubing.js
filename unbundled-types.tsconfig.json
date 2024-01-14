@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "noEmit": false,
-    "outDir": "./.temp/unbundled-types",
-    "skipLibCheck": true
-  },
-  "include": ["src/cubing", "node_modules/@types/node"]
-}

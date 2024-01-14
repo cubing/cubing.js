@@ -35,7 +35,7 @@ const eventsOrdered = [
   "master_tetraminx",
 ];
 
-const eventsParallel = [];
+const eventsParallel = ["kilominx", "444", "444bf", "fto"];
 
 await (async () => {
   setSearchDebug({ forceNewWorkerForEveryScramble: true });

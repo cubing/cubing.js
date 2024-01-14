@@ -102,7 +102,7 @@ test-fast: \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
 .PHONY: test-all
-test-all: test-dist-lib-bun-scramble-kilominx build-lib-types test-src test-build test-dist
+test-all: test-src test-build test-dist
 .PHONY: test-src
 test-src: \
 	test-spec \
@@ -163,19 +163,8 @@ test-dist-lib: \
 test-dist-lib-node-import: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/import/main.js
 .PHONY: test-dist-lib-bun-scramble-all-events
-test-dist-lib-bun-scramble-all-events: test-dist-lib-bun-scramble-main test-dist-lib-bun-scramble-kilominx test-dist-lib-bun-scramble-4x4x4 test-dist-lib-bun-scramble-fto
-.PHONY: test-dist-lib-bun-scramble-main
-test-dist-lib-bun-scramble-main: build-lib-js
-	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test.js
-.PHONY: test-dist-lib-bun-scramble-kilominx
-test-dist-lib-bun-scramble-kilominx: build-lib-js
-	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-kilominx.js
-.PHONY: test-dist-lib-bun-scramble-4x4x4
-test-dist-lib-bun-scramble-4x4x4: build-lib-js
-	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-4x4x4.js
-.PHONY: test-dist-lib-bun-scramble-fto
-test-dist-lib-bun-scramble-fto: build-lib-js
-	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-fto.js
+test-dist-lib-bun-scramble-all-events: build-lib-js
+	${BUN} script/test/dist/lib/cubing/node/scramble-all-events/main.js # TODO: why does this fail in `bun`?
 .PHONY: test-dist-lib-perf
 test-dist-lib-perf: build-lib-js
 	${BUN} script/test/dist/lib/cubing/perf/*.js
