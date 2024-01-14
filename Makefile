@@ -1,10 +1,10 @@
-NODE=node
-NPX=npx
 BUN=bun
+BUNX=${BUN} x
 BUN_RUN=${BUN} run
-BUN_BUN_RUN=${BUN} --bun run
 BIOME=${BUN} x @biomejs/biome
-WEB_TEST_RUNNER=./node_modules/.bin/wtr
+NODE=node
+NPM=npm
+WEB_TEST_RUNNER=${BUNX} @web/test-runner
 
 .PHONY: default
 default:
@@ -14,12 +14,12 @@ default:
 	@echo ""
 	@echo "To build the project, run:"
 	@echo ""
-	@echo "    npm install"
+	@echo "    make setup"
 	@echo "    make build"
 	@echo ""
 	@echo "To see available tests, run:"
 	@echo ""
-	@echo "    npm install"
+	@echo "    make setup"
 	@echo "    make test-info"
 	@echo ""
 
@@ -54,14 +54,14 @@ build-site-experiments:
 .PHONY: build-site-docs
 build-site-docs:
 	rm -rf ./dist/sites/js.cubing.net/
-	${NPX} typedoc src/cubing/*/index.ts
+	${BUNX} typedoc src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
 .PHONY: generate-js
 generate-js: generate-js-parsers generate-js-svg
 .PHONY: generate-js-parsers
 generate-js-parsers:
-	${NPX} peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy
+	${BUNX} peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy
 .PHONY: generate-js-svg
 generate-js-svg:
 	@echo "TODO: Generating JS for SVGs is not implemented yet."
@@ -70,7 +70,7 @@ dev: quick-setup
 	${BUN_RUN} ./script/build/sites/dev.ts
 .PHONY: link
 link: build
-	npm link
+	${BUN} link
 .PHONY: clean
 clean:
 	rm -rf \
@@ -102,7 +102,7 @@ test-fast: \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
 .PHONY: test-all
-test-all: test-src test-build test-dist
+test-all: test-dist-lib-bun-scramble-kilominx build-lib-types test-src test-build test-dist
 .PHONY: test-src
 test-src: \
 	test-spec \
@@ -129,13 +129,13 @@ test-spec-dom-with-coverage: playwright-install
 	${WEB_TEST_RUNNER} --playwright --coverage
 .PHONY: playwright-install
 playwright-install:
-	npx playwright install
+	${BUNX} playwright install
 .PHONY: test-src-import-restrictions
 test-src-import-restrictions: build-lib-js
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
 .PHONY: test-src-tsc
 test-src-tsc:
-	${NPX} tsc --project ./tsconfig.json
+	${BUNX} tsc --project ./tsconfig.json
 .PHONY: test-src-scripts-consistency
 test-src-scripts-consistency:
 	${BUN_RUN} ./script/test/src/scripts-consistency/main.ts
@@ -154,7 +154,7 @@ test-dist: test-dist-lib test-dist-bin
 .PHONY: test-dist-lib
 test-dist-lib: \
 	test-dist-lib-node-import \
-	test-dist-lib-node-scramble-all-events \
+	test-dist-lib-bun-scramble-all-events \
 	test-dist-lib-perf \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-lib-build-size \
@@ -162,23 +162,23 @@ test-dist-lib: \
 .PHONY: test-dist-lib-node-import
 test-dist-lib-node-import: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/import/main.js
-.PHONY: test-dist-lib-node-scramble-all-events
-test-dist-lib-node-scramble-all-events: test-dist-lib-node-scramble-main test-dist-lib-node-scramble-kilominx test-dist-lib-node-scramble-4x4x4 test-dist-lib-node-scramble-fto
-.PHONY: test-dist-lib-node-scramble-main
-test-dist-lib-node-scramble-main: build-lib-js
+.PHONY: test-dist-lib-bun-scramble-all-events
+test-dist-lib-bun-scramble-all-events: test-dist-lib-bun-scramble-main test-dist-lib-bun-scramble-kilominx test-dist-lib-bun-scramble-4x4x4 test-dist-lib-bun-scramble-fto
+.PHONY: test-dist-lib-bun-scramble-main
+test-dist-lib-bun-scramble-main: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test.js
-.PHONY: test-dist-lib-node-scramble-kilominx
-test-dist-lib-node-scramble-kilominx: build-lib-js
+.PHONY: test-dist-lib-bun-scramble-kilominx
+test-dist-lib-bun-scramble-kilominx: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-kilominx.js
-.PHONY: test-dist-lib-node-scramble-4x4x4
-test-dist-lib-node-scramble-4x4x4: build-lib-js
+.PHONY: test-dist-lib-bun-scramble-4x4x4
+test-dist-lib-bun-scramble-4x4x4: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-4x4x4.js
-.PHONY: test-dist-lib-node-scramble-fto
-test-dist-lib-node-scramble-fto: build-lib-js
+.PHONY: test-dist-lib-bun-scramble-fto
+test-dist-lib-bun-scramble-fto: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/scramble-all-events/test-fto.js
 .PHONY: test-dist-lib-perf
 test-dist-lib-perf: build-lib-js
-	${NODE} script/test/dist/lib/cubing/perf/*.js
+	${BUN} script/test/dist/lib/cubing/perf/*.js
 .PHONY: test-dist-lib-plain-esbuild-compat
 test-dist-lib-plain-esbuild-compat: build-lib-js
 	${BUN_RUN} script/test/dist/lib/cubing/plain-esbuild-compat/main.ts
@@ -187,9 +187,9 @@ test-dist-lib-build-size: build-lib-js
 	${BUN_RUN} ./script/test/dist/lib/cubing/build-size/main.ts
 .PHONY: test-dist-sites-experiments
 test-dist-sites-experiments: playwright-install build-sites
-	${NODE} ./script/test/dist/sites/experiments.cubing.net/main.js
+	${BUN} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: test-dist-bin
-test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec
+test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec test-dist-bin-bunx
 .PHONY: test-dist-bin-shebang
 test-dist-bin-shebang: build-bin
 	# Note: we're not testing the output, just that these don't exit with an error.
@@ -198,13 +198,16 @@ test-dist-bin-shebang: build-bin
 	time dist/bin/scramble.js 222
 .PHONY: test-dist-bin-npm-exec
 test-dist-bin-npm-exec: build-bin
-	time npm exec scramble -- 222
+	time ${NPM} exec scramble -- 222
+.PHONY: test-dist-bin-bunx
+test-dist-bin-bunx: build-bin
+	time ${BUN} x scramble 222 # TODO: why doesn't `bun x` take `--`?
 .PHONY: format
 format:
 	${BIOME} format --write ./script ./src
 .PHONY: setup
 setup:
-	npm ci
+	${BUN} install # TOOD: was `npm ci`
 .PHONY: quick-setup
 quick-setup: | node_modules
 .PHONY: lint
@@ -260,7 +263,7 @@ node_modules:
 .PHONY: publish
 .PHONY: publish
 publish:
-	npm publish
+	${NPM} publish
 
 .PHONY: pack
 .PHONY: pack
@@ -271,4 +274,4 @@ pack:
 	# similarly, `./.temp/pack/` folder) that will stick around long enough for
 	# `npm pack` to use. The simplest is just to place the result directly in
 	# `./dist/`.
-	npm pack --pack-destination ./dist/
+	${NPM} pack --pack-destination ./dist/

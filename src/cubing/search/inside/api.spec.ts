@@ -3,7 +3,7 @@ import { expect, test } from "bun:test";
 import { insideAPI, setDebugMeasurePerf } from "./api";
 
 // To keep things fast, we only test a subset of events.
-// Other events are handled by `make test-dist-lib-node-scramble-all-events-all-events`
+// Other events are handled by `make test-dist-lib-bun-scramble-all-events-all-events`
 const events = ["222", "333"];
 
 setDebugMeasurePerf(false);

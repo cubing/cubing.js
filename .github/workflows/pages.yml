@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: make setup
       - run: make build-site-docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

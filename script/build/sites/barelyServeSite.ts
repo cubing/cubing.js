@@ -9,7 +9,7 @@ import type { Plugin } from "esbuild";
 needPath(
   new URL("../../../node_modules/barely-a-dev-server", import.meta.url)
     .pathname,
-  "npm install",
+  "make setup",
 );
 
 function plugins(dev: boolean) {

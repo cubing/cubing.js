@@ -1,5 +1,5 @@
 {
-  "postCreateCommand": "npm install --global bun && npm ci",
+  "postCreateCommand": "npm install --global bun && make setup",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "19"

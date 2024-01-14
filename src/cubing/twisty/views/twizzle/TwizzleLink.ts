@@ -131,7 +131,7 @@ export class TwizzleLink extends ManagedCustomElement {
           background: this.options?.cdnForumTweaks
             ? "checkered-transparent"
             : "checkered",
-          colorScheme: this.options?.colorScheme ? "dark" : "light",
+          colorScheme: this.options?.colorScheme === "dark" ? "dark" : "light",
           ...config,
           viewerLink: isExplorer ? "experimental-twizzle-explorer" : "auto",
         }),
