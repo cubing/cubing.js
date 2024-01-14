@@ -38,7 +38,7 @@ build-lib-js:
 	${BUN_RUN} ./script/build/lib/build-lib-js.ts
 .PHONY: build-lib-types
 build-lib-types:
-	${BUN_RUN} ./script/build/lib/build-lib-types.ts
+	nice -n -19 ${BUN_RUN} ./script/build/lib/build-lib-types.ts
 .PHONY: build-bin
 build-bin:
 	${BUN_RUN} ./script/build/bin/build-bin.ts
@@ -102,7 +102,7 @@ test-fast: \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
 .PHONY: test-all
-test-all: test-src test-build test-dist
+test-all: test-dist-lib-bun-scramble-all-events build-lib-types test-src test-build test-dist
 .PHONY: test-src
 test-src: \
 	test-spec \
@@ -164,7 +164,7 @@ test-dist-lib-node-import: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/import/main.js
 .PHONY: test-dist-lib-bun-scramble-all-events
 test-dist-lib-bun-scramble-all-events: build-lib-js
-	${BUN} script/test/dist/lib/cubing/node/scramble-all-events/main.js # TODO: why does this fail in `bun`?
+	nice -n -19 ${BUN} script/test/dist/lib/cubing/node/scramble-all-events/main.js # TODO: why does this fail in `bun`?
 .PHONY: test-dist-lib-perf
 test-dist-lib-perf: build-lib-js
 	${BUN} script/test/dist/lib/cubing/perf/*.js

@@ -97,7 +97,10 @@
   "engines": {
     "node": ">=19"
   },
-  "files": ["./dist/bin/", "./dist/lib/"],
+  "files": [
+    "./dist/bin/",
+    "./dist/lib/"
+  ],
   "scripts": {
     "default": "make default",
     "build": "make build",
