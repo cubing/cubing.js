@@ -63,7 +63,7 @@
     "three": "^0.160.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.1",
+    "@biomejs/biome": "^1.5.2",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/chai": "^4.3.11",
     "@types/dom-speech-recognition": "^0.0.4",
