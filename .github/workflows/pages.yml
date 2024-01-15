@@ -21,13 +21,13 @@ jobs:
         with:
             lfs: 'true'
       - name: Use `node` v${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - run: make setup
       - run: make build-site-docs
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v1 # TODO: update
         with:
           path: ./dist/sites/js.cubing.net/
           retention-days: 1
