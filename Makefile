@@ -38,7 +38,7 @@ build-lib-js:
 	${BUN_RUN} ./script/build/lib/build-lib-js.ts
 .PHONY: build-lib-types
 build-lib-types:
-	nice -n -19 ${BUN_RUN} ./script/build/lib/build-lib-types.ts
+	${BUN_RUN} ./script/build/lib/build-lib-types.ts
 .PHONY: build-bin
 build-bin:
 	${BUN_RUN} ./script/build/bin/build-bin.ts
@@ -164,7 +164,7 @@ test-dist-lib-node-import: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/import/main.js
 .PHONY: test-dist-lib-bun-scramble-all-events
 test-dist-lib-bun-scramble-all-events: build-lib-js
-	nice -n -19 ${BUN} script/test/dist/lib/cubing/node/scramble-all-events/main.js
+	${BUN} script/test/dist/lib/cubing/node/scramble-all-events/main.js
 .PHONY: test-dist-lib-perf
 test-dist-lib-perf: build-lib-js
 	${BUN} script/test/dist/lib/cubing/perf/*.js
