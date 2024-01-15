@@ -131,7 +131,7 @@ test-spec-dom-with-coverage: playwright-install
 playwright-install:
 	${BUNX} playwright install
 .PHONY: test-src-import-restrictions
-test-src-import-restrictions: build-lib-js
+test-src-import-restrictions:
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
 .PHONY: test-src-tsc
 test-src-tsc:
