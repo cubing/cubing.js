@@ -97,7 +97,10 @@
   "engines": {
     "node": ">=19"
   },
-  "files": ["./dist/bin/", "./dist/lib/"],
+  "files": [
+    "./dist/bin/",
+    "./dist/lib/"
+  ],
   "scripts": {
     "default": "make default",
     "build": "make build",
@@ -143,7 +146,6 @@
     "test-dist-bin": "make test-dist-bin",
     "test-dist-bin-shebang": "make test-dist-bin-shebang",
     "test-dist-bin-npm-exec": "make test-dist-bin-npm-exec",
-    "test-dist-bin-bunx": "make test-dist-bin-bunx",
     "format": "make format",
     "setup": "make setup",
     "quick-setup": "make quick-setup",

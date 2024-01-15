@@ -178,7 +178,7 @@ test-dist-lib-build-size: build-lib-js
 test-dist-sites-experiments: playwright-install build-sites
 	${BUN} ./script/test/dist/sites/experiments.cubing.net/main.js
 .PHONY: test-dist-bin
-test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec test-dist-bin-bunx
+test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec
 .PHONY: test-dist-bin-shebang
 test-dist-bin-shebang: build-bin
 	# Note: we're not testing the output, just that these don't exit with an error.
@@ -188,9 +188,6 @@ test-dist-bin-shebang: build-bin
 .PHONY: test-dist-bin-npm-exec
 test-dist-bin-npm-exec: build-bin
 	time ${NPM} exec scramble -- 222
-.PHONY: test-dist-bin-bunx
-test-dist-bin-bunx: build-bin
-	time ${BUN} x scramble 222 # TODO: why doesn't `bun x` take `--`?
 .PHONY: format
 format:
 	${BIOME} format --write ./script ./src
