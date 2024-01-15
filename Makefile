@@ -40,7 +40,7 @@ build-lib-js:
 build-lib-types:
 	${BUN_RUN} ./script/build/lib/build-lib-types.ts
 .PHONY: build-bin
-build-bin:
+build-bin: build-lib-js
 	${BUN_RUN} ./script/build/bin/build-bin.ts
 	chmod +x ./dist/bin/*.js
 .PHONY: build-sites
