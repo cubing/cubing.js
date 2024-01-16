@@ -949,18 +949,18 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     if (this.#pendingStickeringUpdate || colormods) {
       if (this.textured) {
-        (this.fixedGeo.getAttribute("uv") as BufferAttribute).updateRange = {
-          offset: 0,
-          count: 6 * this.foundationBound,
-        };
+        (this.fixedGeo.getAttribute("uv") as BufferAttribute).addUpdateRange(
+          0,
+          6 * this.foundationBound,
+        );
         (this.fixedGeo.getAttribute("uv") as BufferAttribute).needsUpdate =
           true;
       }
       if (this.#pendingStickeringUpdate || !this.textured) {
-        (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {
-          offset: 0,
-          count: 9 * this.foundationBound,
-        };
+        (this.fixedGeo.getAttribute("color") as BufferAttribute).addUpdateRange(
+          0,
+          9 * this.foundationBound,
+        );
         (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate =
           true;
       }
