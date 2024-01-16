@@ -72,7 +72,7 @@ export class TwizzleLink extends ManagedCustomElement {
     super({ mode: "open" });
   }
 
-  fallback() {
+  #fallback() {
     this.contentWrapper.textContent = "";
     if (this.a) {
       const span = this.contentWrapper.appendChild(
@@ -112,7 +112,7 @@ export class TwizzleLink extends ManagedCustomElement {
     const { hostname, pathname } = new URL(href);
 
     if (hostname !== "alpha.twizzle.net") {
-      this.fallback();
+      this.#fallback();
       return;
     }
     if (["/edit/", "/explore/"].includes(pathname)) {
@@ -147,14 +147,14 @@ export class TwizzleLink extends ManagedCustomElement {
       this.#scrollableRegion.classList.add("scrollable-region");
 
       if (config.experimentalTitle) {
-        this.addHeading(config.experimentalTitle).classList.add("title");
+        this.#addHeading(config.experimentalTitle).classList.add("title");
         // const setupAlgDiv = this.addElement(document.createElement("div"));
         // setupAlgDiv.classList.add("setup-alg");
         // setupAlgDiv.textContent = puzzles[config.puzzle ?? "3x3x3"].fullName;
       }
 
       if (config.experimentalSetupAlg) {
-        this.addHeading(
+        this.#addHeading(
           "Setup",
           async () =>
             (
@@ -170,7 +170,7 @@ export class TwizzleLink extends ManagedCustomElement {
           config.experimentalSetupAlg,
         ).toString();
       }
-      const movesHeading = this.addHeading(
+      const movesHeading = this.#addHeading(
         "Moves",
         async () =>
           (
@@ -188,11 +188,11 @@ export class TwizzleLink extends ManagedCustomElement {
       );
       twistyAlgViewer.part.add("twisty-alg-viewer");
     } else {
-      this.fallback();
+      this.#fallback();
     }
   }
 
-  addHeading(
+  #addHeading(
     text: string,
     getTextToCopy?: () => Promise<string | null>,
   ): HTMLElement {
