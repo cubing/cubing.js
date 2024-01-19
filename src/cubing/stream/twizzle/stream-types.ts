@@ -1,6 +1,6 @@
 // From api.twizzle.net
 
-// TOOD: Reuse https://github.com/cubing/cubing.js/blob/ec71ca736f29bae8ed6104f887a5cbe5fc962e8c/src/cubing/bluetooth/bluetooth-puzzle.ts#L12-L18
+// TODO: Reuse https://github.com/cubing/cubing.js/blob/ec71ca736f29bae8ed6104f887a5cbe5fc962e8c/src/cubing/bluetooth/bluetooth-puzzle.ts#L12-L18
 export interface MoveEvent {
   // deno-lint-ignore no-explicit-any
   latestMove: any;

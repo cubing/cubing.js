@@ -83,7 +83,7 @@ export interface PuzzleSpecificAxisSimplifyInfo {
   simplifySameAxisMoves: (moves: Move[], quantumMod: boolean) => Move[];
 }
 
-// TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
+// TODO: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
 export interface PuzzleSpecificSimplifyOptions {
   quantumMoveOrder?: (quantumMove: QuantumMove) => number;
   // TODO: implement cancellation for non-axis commuting moves (e.g. Megaminx: `BL R BL'` → `R`)

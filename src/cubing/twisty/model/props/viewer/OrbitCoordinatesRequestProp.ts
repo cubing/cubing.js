@@ -20,7 +20,7 @@ export function orbitCoordinatesEqual(
   );
 }
 
-// TOOD: Check if freezing affects perf.
+// TODO: Check if freezing affects perf.
 // const DEFAULT_COORDINATES = Object.freeze({
 //   latitude: 35,
 //   longitude: 30,

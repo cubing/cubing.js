@@ -193,7 +193,7 @@ format:
 	${BIOME} format --write ./script ./src
 .PHONY: setup
 setup:
-	${BUN} install # TOOD: was `npm ci`
+	${BUN} install # TODO: was `npm ci`
 .PHONY: quick-setup
 quick-setup: | node_modules
 .PHONY: lint
