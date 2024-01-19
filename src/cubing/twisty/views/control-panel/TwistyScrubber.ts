@@ -84,6 +84,16 @@ export class TwistyScrubber extends ManagedCustomElement {
     this.model?.twistySceneModel.colorScheme.addFreshListener(
       this.updateColorScheme.bind(this),
     );
+
+    const datalist = this.shadow.appendChild(
+      document.createElement("datalist"),
+    );
+    datalist.id = "markers";
+    datalist.appendChild(document.createElement("option")).value = "2000";
+    datalist.appendChild(document.createElement("option")).value = "10500";
+    datalist.appendChild(document.createElement("option")).value = "14500";
+    datalist.appendChild(document.createElement("option")).value = "22000";
+    datalist.appendChild(document.createElement("option")).value = "30500";
   }
 
   updateColorScheme(colorScheme: ColorScheme): void {
@@ -97,6 +107,7 @@ export class TwistyScrubber extends ManagedCustomElement {
       const elem = document.createElement("input");
       elem.type = "range";
       elem.disabled = true;
+      elem.setAttribute("list", "markers");
 
       // console.log("1");
       this.model?.detailedTimelineInfo.addFreshListener(
