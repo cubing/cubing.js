@@ -122,11 +122,11 @@ test-spec-bun-fast:
 test-spec-bun-with-coverage:
 	${BUN} test
 .PHONY: test-spec-dom
-test-spec-dom: playwright-install
-	${WEB_TEST_RUNNER} --playwright
+test-spec-dom:
+	${WEB_TEST_RUNNER}
 .PHONY: test-spec-dom-with-coverage
-test-spec-dom-with-coverage: playwright-install
-	${WEB_TEST_RUNNER} --playwright --coverage
+test-spec-dom-with-coverage:
+	${WEB_TEST_RUNNER} --coverage
 .PHONY: playwright-install
 playwright-install:
 	${BUNX} playwright install
