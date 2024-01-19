@@ -81,7 +81,7 @@
     "mocha": "^10.2.0",
     "node-fetch": "^3.3.2",
     "peggy": "^3.0.2",
-    "playwright": "1.40.1",
+    "playwright": "^1.41.0",
     "tsup": "^8.0.1",
     "typedoc": "^0.25.7",
     "typescript": "^5.3.3",
