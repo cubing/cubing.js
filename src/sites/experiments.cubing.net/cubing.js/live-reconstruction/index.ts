@@ -67,6 +67,32 @@ window.addEventListener("keydown", (e: KeyboardEvent) => {
   }
 });
 
+function flashSolution() {
+  document
+    .querySelector("#solution")
+    ?.animate(
+      [{ backgroundColor: "gray" }, { backgroundColor: "transparent" }],
+      {
+        duration: 250,
+        easing: "ease-out",
+      },
+    );
+}
+document.addEventListener("copy", (e: ClipboardEvent) => {
+  if (globalThis.getSelection?.()?.toString() === "") {
+    console.log(
+      "Detected no selected text, so the clipboard will be set to the solution.",
+    );
+    e.preventDefault();
+    (async () => {
+      navigator.clipboard.writeText(
+        (await player.experimentalGet.alg()).toString(),
+      );
+      flashSolution();
+    })();
+  }
+});
+
 const IGNORED_PIECE_VALUE = 9999; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
 const ORIENTATION_ONLY_PIECE_VALUE = 9998; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
 
