@@ -113,8 +113,8 @@ function isOrbitPatternDataIdentical(
       !options?.ignorePieceOrientations &&
       (orbitPatternData1.orientation[idx] !==
         orbitPatternData2.orientation[idx] ||
-        orbitPatternData1.orientationMod?.[idx] !==
-          orbitPatternData2.orientationMod?.[idx])
+        (orbitPatternData1.orientationMod?.[idx] ?? 0) !==
+          (orbitPatternData2.orientationMod?.[idx] ?? 0))
     ) {
       return false;
     }
