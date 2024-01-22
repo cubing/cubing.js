@@ -15,18 +15,15 @@ import { cube3x3x3 } from "cubing/puzzles";
 enum PieceMask {
   Regular,
   Ignore,
+  OrientationOnly,
 }
 const R = PieceMask.Regular;
 const I = PieceMask.Ignore;
+const O = PieceMask.OrientationOnly;
 type PatternMask = Record<string /* orbit name */, PieceMask[]>;
 
-const rouxSecondBlockPatternMask: PatternMask = {
-  EDGES: [I, I, I, I, I, R, I, R, R, R, R, R],
-  CORNERS: [I, I, I, I, R, R, R, R],
-  CENTERS: [I, R, I, R, I, I],
-};
-
-const IGNORED_PIECE_VALUE = 99; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
+const IGNORED_PIECE_VALUE = 9999; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
+const ORIENTATION_ONLY_PIECE_VALUE = 9998; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
 
 function applyPatternMask(pattern: KPattern, mask: PatternMask): KPattern {
   const newPatternData: KPatternData = {};
@@ -53,6 +50,14 @@ function applyPatternMask(pattern: KPattern, mask: PatternMask): KPattern {
           newOrbitData.pieces.push(IGNORED_PIECE_VALUE);
           newOrbitData.orientation.push(0);
           newOrbitData.orientationMod.push(1);
+          break;
+        }
+        case PieceMask.OrientationOnly: {
+          newOrbitData.pieces.push(ORIENTATION_ONLY_PIECE_VALUE);
+          newOrbitData.orientation.push(patternOrbit.orientation[i]);
+          newOrbitData.orientationMod.push(
+            patternOrbit.orientationMod?.[i] ?? 0,
+          );
           break;
         }
         default: {
@@ -103,63 +108,91 @@ for (const moveToSetU of [
 
 const orientedSolvedPattern: KPattern = kpuzzle.defaultPattern();
 
-const solvedPatternsByDRF: Record<
-  number /* DRF piece */,
-  Record<number /* DRF orientation */, KPattern>
-> = {};
-const DRF_ORBIT = "CORNERS";
-const DRF_INDEX = 4;
-// Assumes DRF is a piece with known piece number and orientation.
-function extractDRFCoordinates(pattern: KPattern): {
-  pieceDRF: number;
-  orientationDRF: number;
-} {
-  const orbitData = pattern.patternData[DRF_ORBIT];
-  if ((orbitData.orientationMod?.[DRF_INDEX] ?? 0) !== 0) {
-    throw new Error("Unexpected partially known orientation");
-  }
-  return {
-    pieceDRF: orbitData.pieces[DRF_INDEX],
-    orientationDRF: orbitData.orientation[DRF_INDEX],
-  };
-}
-for (const cubeOrientation of cubeOrientations) {
-  const orientedPattern = orientedSolvedPattern.applyTransformation(
-    cubeOrientation.inverseTransformation,
-  );
-  const maskedPattern = applyPatternMask(
-    orientedPattern,
-    rouxSecondBlockPatternMask,
-  );
-  const { pieceDRF, orientationDRF } = extractDRFCoordinates(orientedPattern);
-  const byOrientation = (solvedPatternsByDRF[pieceDRF] ??= {});
-  byOrientation[orientationDRF] = maskedPattern;
+interface OrientationAnchor {
+  orbitName: string;
+  pieceIndex: number;
 }
 
-function isRouxSecondBlockSolved(
-  candidateFull3x3x3Pattern: KPattern,
-): { isSolved: false } | { isSolved: true; algToNormalize: Alg } {
-  for (const cubeOrientation of cubeOrientations) {
-    const reorientedCandidate = candidateFull3x3x3Pattern.applyTransformation(
-      cubeOrientation.inverseTransformation,
-    );
-    const candidateMasked = applyPatternMask(
-      reorientedCandidate,
-      rouxSecondBlockPatternMask,
-    );
-    const { pieceDRF, orientationDRF } =
-      extractDRFCoordinates(reorientedCandidate);
-    const solvedPatternByDRF = solvedPatternsByDRF[pieceDRF][orientationDRF];
-    if (candidateMasked.isIdentical(solvedPatternByDRF)) {
-      const { algToNormalize } = cubeOrientation;
-      return { isSolved: true, algToNormalize };
+interface AnchorCoordinates {
+  anchorPieceIndex: number;
+  anchorOrientationIndex: number;
+}
+
+class PatternChecker {
+  solvedPatternsByAnchorCoordinates: Record<
+    number /* DRF piece */,
+    Record<number /* DRF orientation */, KPattern>
+  > = {};
+  constructor(
+    private patternMask: PatternMask,
+    private orientationAnchor: OrientationAnchor,
+  ) {
+    for (const cubeOrientation of cubeOrientations) {
+      const orientedPattern = orientedSolvedPattern.applyTransformation(
+        cubeOrientation.inverseTransformation,
+      );
+      const maskedPattern = applyPatternMask(orientedPattern, patternMask);
+      const { anchorPieceIndex, anchorOrientationIndex } =
+        this.extractAnchorCoordinates(orientedPattern);
+      const byOrientation = (this.solvedPatternsByAnchorCoordinates[
+        anchorPieceIndex
+      ] ??= {});
+      byOrientation[anchorOrientationIndex] = maskedPattern;
     }
   }
-  return { isSolved: false };
+
+  extractAnchorCoordinates(pattern: KPattern): AnchorCoordinates {
+    const orbitData = pattern.patternData[this.orientationAnchor.orbitName];
+    if (
+      (orbitData.orientationMod?.[this.orientationAnchor.pieceIndex] ?? 0) !== 0
+    ) {
+      throw new Error("Unexpected partially known orientation");
+    }
+    return {
+      anchorPieceIndex: orbitData.pieces[this.orientationAnchor.pieceIndex],
+      anchorOrientationIndex:
+        orbitData.orientation[this.orientationAnchor.pieceIndex],
+    };
+  }
+
+  check(
+    candidateFull3x3x3Pattern: KPattern,
+  ): { isSolved: false } | { isSolved: true; algToNormalize: Alg } {
+    for (const cubeOrientation of cubeOrientations) {
+      const reorientedCandidate = candidateFull3x3x3Pattern.applyTransformation(
+        cubeOrientation.inverseTransformation,
+      );
+      const candidateMasked = applyPatternMask(
+        reorientedCandidate,
+        this.patternMask,
+      );
+      console.log(candidateMasked.patternData);
+      const { anchorPieceIndex, anchorOrientationIndex } =
+        this.extractAnchorCoordinates(reorientedCandidate);
+      const solvedPatternByDRF =
+        this.solvedPatternsByAnchorCoordinates[anchorPieceIndex][
+          anchorOrientationIndex
+        ];
+      if (candidateMasked.isIdentical(solvedPatternByDRF)) {
+        const { algToNormalize } = cubeOrientation;
+        return { isSolved: true, algToNormalize };
+      }
+    }
+    return { isSolved: false };
+  }
 }
 
+const rouxSecondBlockPatternChecker = new PatternChecker(
+  {
+    EDGES: [I, I, I, I, I, R, I, R, R, R, R, R],
+    CORNERS: [I, I, I, I, R, R, R, R],
+    CENTERS: [I, R, I, R, I, I],
+  },
+  { orbitName: "CORNERS", pieceIndex: 4 },
+);
+
 function test(candidate: KPattern) {
-  const isSolvedInfo = isRouxSecondBlockSolved(candidate);
+  const isSolvedInfo = rouxSecondBlockPatternChecker.check(candidate);
   if (isSolvedInfo.isSolved) {
     console.log(
       `Solved, orient using: ${
@@ -179,3 +212,34 @@ test(orientedSolvedPattern.applyAlg("M' U'")); // Prints: "Solved, orient using:
 test(orientedSolvedPattern.applyAlg("F")); // Prints: "Solved, orient using: x"
 test(orientedSolvedPattern.applyAlg("b U B' U F R2 F'")); // Prints: "Solved, orient using: y"
 test(orientedSolvedPattern.applyAlg("[S', L]")); // Prints: "Solved, orient using: z y"
+
+const F2LPatternChecker = new PatternChecker(
+  {
+    EDGES: [I, I, I, I, R, R, R, R, R, R, R, R],
+    CORNERS: [I, I, I, I, R, R, R, R],
+    CENTERS: [I, R, R, R, R, R],
+  },
+  { orbitName: "CORNERS", pieceIndex: 4 },
+);
+
+console.log(
+  F2LPatternChecker.check(orientedSolvedPattern.applyAlg("R U R' U R U2 R'"))
+    .isSolved,
+);
+
+const ELSPatternChecker = new PatternChecker(
+  {
+    EDGES: [O, O, O, O, R, R, R, R, R, R, R, R, R],
+    CORNERS: [I, I, I, I, I, R, R, R],
+    CENTERS: [I, R, R, R, R, R],
+  },
+  { orbitName: "EDGES", pieceIndex: 8 },
+);
+console.log(
+  F2LPatternChecker.check(orientedSolvedPattern.applyAlg("R U' R' U R U2 R'"))
+    .isSolved,
+);
+console.log(
+  ELSPatternChecker.check(orientedSolvedPattern.applyAlg("R U' R' U2 R U' R'"))
+    .isSolved,
+);
