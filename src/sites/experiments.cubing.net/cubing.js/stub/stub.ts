@@ -166,7 +166,6 @@ class PatternChecker {
         reorientedCandidate,
         this.patternMask,
       );
-      console.log(candidateMasked.patternData);
       const { anchorPieceIndex, anchorOrientationIndex } =
         this.extractAnchorCoordinates(reorientedCandidate);
       const solvedPatternByDRF =
@@ -182,36 +181,50 @@ class PatternChecker {
   }
 }
 
-const rouxSecondBlockPatternChecker = new PatternChecker(
+const CrossPatternChecker = new PatternChecker(
   {
-    EDGES: [I, I, I, I, I, R, I, R, R, R, R, R],
-    CORNERS: [I, I, I, I, R, R, R, R],
-    CENTERS: [I, R, I, R, I, I],
+    EDGES: [I, I, I, I, R, R, R, R, I, I, I, I],
+    CORNERS: [I, I, I, I, I, I, I, I],
+    CENTERS: [I, R, R, R, R, R],
   },
-  { orbitName: "CORNERS", pieceIndex: 4 },
+  { orbitName: "EDGES", pieceIndex: 5 },
 );
 
-function test(candidate: KPattern) {
-  const isSolvedInfo = rouxSecondBlockPatternChecker.check(candidate);
-  if (isSolvedInfo.isSolved) {
-    console.log(
-      `Solved, orient using: ${
-        isSolvedInfo.algToNormalize.experimentalIsEmpty()
-          ? "(empty alg)"
-          : isSolvedInfo.algToNormalize
-      }`,
-    );
-  } else {
-    console.log("Unsolved");
-  }
-}
+const F2L1SlotPatternChecker = new PatternChecker(
+  {
+    EDGES: [I, I, I, I, R, R, R, R, R, I, I, I],
+    CORNERS: [I, I, I, I, R, I, I, I],
+    CENTERS: [I, R, R, R, R, R],
+  },
+  { orbitName: "EDGES", pieceIndex: 5 },
+);
 
-test(orientedSolvedPattern.applyAlg("U L F R B D")); // Prints: "Unsolved"
-test(orientedSolvedPattern.applyAlg("y b U B' U F R2 F' y'")); // Prints: "Solved, orient using: (empty alg)"
-test(orientedSolvedPattern.applyAlg("M' U'")); // Prints: "Solved, orient using: (empty alg)"
-test(orientedSolvedPattern.applyAlg("F")); // Prints: "Solved, orient using: x"
-test(orientedSolvedPattern.applyAlg("b U B' U F R2 F'")); // Prints: "Solved, orient using: y"
-test(orientedSolvedPattern.applyAlg("[S', L]")); // Prints: "Solved, orient using: z y"
+const F2LAdjacent2SlotsPatternChecker = new PatternChecker(
+  {
+    EDGES: [I, I, I, I, R, R, R, R, R, R, I, I],
+    CORNERS: [I, I, I, I, R, R, I, I],
+    CENTERS: [I, R, R, R, R, R],
+  },
+  { orbitName: "EDGES", pieceIndex: 5 },
+);
+
+const F2LOpposite2SlotsPatternChecker = new PatternChecker(
+  {
+    EDGES: [I, I, I, I, R, R, R, R, R, I, I, R],
+    CORNERS: [I, I, I, I, R, I, R, I],
+    CENTERS: [I, R, R, R, R, R],
+  },
+  { orbitName: "EDGES", pieceIndex: 5 },
+);
+
+const F2L3SlotsPatternChecker = new PatternChecker(
+  {
+    EDGES: [I, I, I, I, R, R, R, R, I, R, R, R],
+    CORNERS: [I, I, I, I, I, R, R, R],
+    CENTERS: [I, R, R, R, R, R],
+  },
+  { orbitName: "EDGES", pieceIndex: 5 },
+);
 
 const F2LPatternChecker = new PatternChecker(
   {
@@ -219,27 +232,101 @@ const F2LPatternChecker = new PatternChecker(
     CORNERS: [I, I, I, I, R, R, R, R],
     CENTERS: [I, R, R, R, R, R],
   },
-  { orbitName: "CORNERS", pieceIndex: 4 },
-);
-
-console.log(
-  F2LPatternChecker.check(orientedSolvedPattern.applyAlg("R U R' U R U2 R'"))
-    .isSolved,
+  { orbitName: "EDGES", pieceIndex: 5 },
 );
 
 const ELSPatternChecker = new PatternChecker(
   {
     EDGES: [O, O, O, O, R, R, R, R, R, R, R, R, R],
     CORNERS: [I, I, I, I, I, R, R, R],
-    CENTERS: [I, R, R, R, R, R],
+    CENTERS: [O, R, R, R, R, R],
   },
   { orbitName: "EDGES", pieceIndex: 8 },
 );
-console.log(
-  F2LPatternChecker.check(orientedSolvedPattern.applyAlg("R U' R' U R U2 R'"))
-    .isSolved,
+
+const LLOrientedPatternChecker = new PatternChecker(
+  {
+    EDGES: [O, O, O, O, R, R, R, R, R, R, R, R],
+    CORNERS: [O, O, O, O, R, R, R, R],
+    CENTERS: [O, R, R, R, R, R],
+  },
+  { orbitName: "EDGES", pieceIndex: 5 },
 );
-console.log(
-  ELSPatternChecker.check(orientedSolvedPattern.applyAlg("R U' R' U2 R U' R'"))
-    .isSolved,
+
+const SolvedPatternChecker = new PatternChecker(
+  {
+    EDGES: [R, R, R, R, R, R, R, R, R, R, R, R],
+    CORNERS: [R, R, R, R, R, R, R, R],
+    CENTERS: [R, R, R, R, R, R],
+  },
+  { orbitName: "EDGES", pieceIndex: 5 },
+);
+
+function singleCheck(
+  name: string,
+  checker: PatternChecker,
+  candidate: KPattern,
+) {
+  const isSolvedInfo = checker.check(candidate);
+  if (isSolvedInfo.isSolved) {
+    console.log(
+      `[${name}] Solved, orient using: ${
+        isSolvedInfo.algToNormalize.experimentalIsEmpty()
+          ? "(empty alg)"
+          : isSolvedInfo.algToNormalize
+      }`,
+    );
+  } else {
+    console.log(`[${name}] Unsolved`);
+  }
+}
+
+function multiCheck(alg: Alg) {
+  singleCheck(
+    "Cross",
+    CrossPatternChecker,
+    orientedSolvedPattern.applyAlg(alg),
+  );
+  singleCheck(
+    "F2L1Slot",
+    F2L1SlotPatternChecker,
+    orientedSolvedPattern.applyAlg(alg),
+  );
+  singleCheck(
+    "F2LAdjacent2Slots",
+    F2LAdjacent2SlotsPatternChecker,
+    orientedSolvedPattern.applyAlg(alg),
+  );
+  singleCheck(
+    "F2LOpposite2Slots",
+    F2LOpposite2SlotsPatternChecker,
+    orientedSolvedPattern.applyAlg(alg),
+  );
+  singleCheck(
+    "F2L3Slots",
+    F2L3SlotsPatternChecker,
+    orientedSolvedPattern.applyAlg(alg),
+  );
+  singleCheck("F2L", F2LPatternChecker, orientedSolvedPattern.applyAlg(alg));
+  singleCheck("ELS", ELSPatternChecker, orientedSolvedPattern.applyAlg(alg));
+  singleCheck(
+    "LLOriented",
+    LLOrientedPatternChecker,
+    orientedSolvedPattern.applyAlg(alg),
+  );
+  singleCheck(
+    "Solved",
+    SolvedPatternChecker,
+    orientedSolvedPattern.applyAlg(alg),
+  );
+}
+
+multiCheck(
+  new Alg(`
+R2 L2 F U' F B2 U L2 U2 R2 B L2 B' L2 D2 R2 F R2 B'
+
+y' x U2' L2 x U2' R U R' U' R // X-Cross
+U' R U R' L U' L' // Slot 2
+R U' R' U' L' U' L // Slot 3 + ELS
+`),
 );
