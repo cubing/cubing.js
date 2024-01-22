@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>Live Reconstruction</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <!-- <meta name="apple-mobile-web-app-title" content="Twizzle" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=0.75" />
+  <meta name="og:image" content="https://twizzle.net/img/social-media-banner.png" />
+
+  <script src="./index.js" href="./index.ts" type="module"></script>
+  <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+  <twisty-player id="main-player"></twisty-player>
+  <side-panel>
+    <h2>Scramble</h2>
+    <div><twisty-alg-viewer id="scramble"></twisty-alg-viewer></div>
+
+    <h2>Solve</h2>
+    <h3><move-count-display></move-count-display></h3>
+    <twisty-alg-viewer for="main-player"></twisty-alg-viewer>
+  </side-panel>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "Ubuntu";
+  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Ubuntu";
+}
+
+body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+twisty-player {
+  width: 100%;
+  height: 100%;
+}
+
+side-panel {
+  padding: 1em;
+}

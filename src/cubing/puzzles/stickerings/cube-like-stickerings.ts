@@ -9,11 +9,20 @@ import {
 } from "./mask";
 import { experimentalStickerings } from "./puzzle-stickerings";
 
-// TODO: cache calculations?
 export async function cubeLikeStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<StickeringMask> {
+  return (
+    await cubeLikePuzzleStickering(puzzleLoader, stickering)
+  ).toStickeringMask();
+}
+
+// TODO: cache calculations?
+export async function cubeLikePuzzleStickering(
+  puzzleLoader: PuzzleLoader,
+  stickering: ExperimentalStickering,
+): Promise<PuzzleStickering> {
   const kpuzzle = await puzzleLoader.kpuzzle();
   const puzzleStickering = new PuzzleStickering(kpuzzle);
   const m = new StickeringManager(kpuzzle);
@@ -350,7 +359,7 @@ export async function cubeLikeStickeringMask(
       );
       puzzleStickering.set(m.and(m.moves([])), PieceStickering.Dim);
   }
-  return puzzleStickering.toStickeringMask();
+  return puzzleStickering;
 }
 
 export async function cubeLikeStickeringList(
