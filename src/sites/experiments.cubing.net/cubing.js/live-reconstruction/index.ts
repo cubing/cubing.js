@@ -31,6 +31,14 @@ inputPuzzle.addAlgLeafListener((e: MoveEvent) => {
 });
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
+  if (e.which === 13) {
+    e.preventDefault();
+    (async () => {
+      const a = document.createElement("a");
+      a.href = await player.experimentalModel.twizzleLink();
+      a.click();
+    })();
+  }
   if (e.code === "Backspace") {
     player.experimentalRemoveFinalChild();
     e.preventDefault();
@@ -41,11 +49,16 @@ const scramble = await randomScrambleForEvent("333");
 (scrambleElem as any).setAlg(scramble); // TODO: haxx
 player.experimentalSetupAlg = scramble;
 
-const signaturesSeen = new Set<string>();
+let justDetected = false;
 player?.experimentalModel.puzzleAlg.addFreshListener(
   (algWithIssues: AlgWithIssues) => {
     player.experimentalModel.alg.set(
       (async () => {
+        if (justDetected) {
+          justDetected = false;
+          return algWithIssues.alg;
+        }
+
         const setupAlg =
           await player.experimentalModel.setupAlgTransformation.get(); // TODO: dedup?
         const pattern = solved
@@ -53,8 +66,8 @@ player?.experimentalModel.puzzleAlg.addFreshListener(
           .applyAlg(algWithIssues.alg);
 
         const signature = multiCheck(pattern);
-        if (!signaturesSeen.has(signature) && signature !== "") {
-          signaturesSeen.add(signature);
+        if (signature !== null) {
+          justDetected = true;
           return new Alg([
             ...algWithIssues.alg.childAlgNodes(),
             new LineComment(` ${signature}`),

@@ -3,6 +3,7 @@
 
 // For: https://github.com/cubing/cubing.js/issues/317
 
+import { cubeLikePuzzleStickering } from "../../../../cubing/puzzles/stickerings/cube-like-stickerings";
 import { Alg, AlgBuilder, Move } from "../../../../cubing/alg";
 import {
   KPattern,
@@ -11,25 +12,20 @@ import {
   KTransformation,
 } from "../../../../cubing/kpuzzle";
 import { cube3x3x3 } from "../../../../cubing/puzzles";
-
-enum PieceMask {
-  Regular,
-  Ignore,
-  OrientationOnly,
-}
-const R = PieceMask.Regular;
-const I = PieceMask.Ignore;
-const O = PieceMask.OrientationOnly;
-type PatternMask = Record<string /* orbit name */, PieceMask[]>;
+import { PieceStickering } from "../../../../cubing/puzzles/stickerings/mask";
 
 const IGNORED_PIECE_VALUE = 9999; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
 const ORIENTATION_ONLY_PIECE_VALUE = 9998; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
 
-function applyPatternMask(pattern: KPattern, mask: PatternMask): KPattern {
+type FlatPuzzleStickering = Record<string, PieceStickering[]>;
+function applyPuzzleStickering(
+  pattern: KPattern,
+  flatPuzzleStickering: FlatPuzzleStickering,
+): KPattern {
   const newPatternData: KPatternData = {};
   for (const orbitDefinition of kpuzzle.definition.orbits) {
     const patternOrbit = pattern.patternData[orbitDefinition.orbitName];
-    const maskOrbit = mask[orbitDefinition.orbitName];
+    const maskOrbit = flatPuzzleStickering[orbitDefinition.orbitName];
     const newOrbitData: KPatternOrbitData & { orientationMod: number[] } = {
       pieces: [],
       orientation: [],
@@ -38,7 +34,11 @@ function applyPatternMask(pattern: KPattern, mask: PatternMask): KPattern {
 
     for (let i = 0; i < orbitDefinition.numPieces; i++) {
       switch (maskOrbit[i]) {
-        case PieceMask.Regular: {
+        case PieceStickering.PermuteNonPrimary:
+        // fallthrough
+        case PieceStickering.Regular:
+        // fallthrough
+        case PieceStickering.Dim: {
           newOrbitData.pieces.push(patternOrbit.pieces[i]);
           newOrbitData.orientation.push(patternOrbit.orientation[i]);
           newOrbitData.orientationMod.push(
@@ -46,13 +46,21 @@ function applyPatternMask(pattern: KPattern, mask: PatternMask): KPattern {
           );
           break;
         }
-        case PieceMask.Ignore: {
+        case PieceStickering.Ignored:
+        // fallthrough
+        case PieceStickering.Invisible: {
           newOrbitData.pieces.push(IGNORED_PIECE_VALUE);
           newOrbitData.orientation.push(0);
           newOrbitData.orientationMod.push(1);
           break;
         }
-        case PieceMask.OrientationOnly: {
+        case PieceStickering.IgnoreNonPrimary:
+        // fallthrough
+        case PieceStickering.Ignoriented:
+        // fallthrough
+        case PieceStickering.OrientationWithoutPermutation:
+        // fallthrough
+        case PieceStickering.OrientationStickers: {
           newOrbitData.pieces.push(ORIENTATION_ONLY_PIECE_VALUE);
           newOrbitData.orientation.push(patternOrbit.orientation[i]);
           newOrbitData.orientationMod.push(
@@ -61,7 +69,9 @@ function applyPatternMask(pattern: KPattern, mask: PatternMask): KPattern {
           break;
         }
         default: {
-          throw new Error("Unrecognized `PieceMaskAction` value.");
+          throw new Error(
+            `Unrecognized \`PieceMaskAction\` value: ${maskOrbit[i]}`,
+          );
         }
       }
     }
@@ -124,14 +134,19 @@ class PatternChecker {
     Record<number /* DRF orientation */, KPattern>
   > = {};
   constructor(
-    private patternMask: PatternMask,
+    public name: string,
+    private flatPuzzleStickering: FlatPuzzleStickering,
     private orientationAnchor: OrientationAnchor,
+    public obviates: string[] = [],
   ) {
     for (const cubeOrientation of cubeOrientations) {
       const orientedPattern = orientedSolvedPattern.applyTransformation(
         cubeOrientation.inverseTransformation,
       );
-      const maskedPattern = applyPatternMask(orientedPattern, patternMask);
+      const maskedPattern = applyPuzzleStickering(
+        orientedPattern,
+        flatPuzzleStickering,
+      );
       const { anchorPieceIndex, anchorOrientationIndex } =
         this.extractAnchorCoordinates(orientedPattern);
       const byOrientation = (this.solvedPatternsByAnchorCoordinates[
@@ -162,9 +177,9 @@ class PatternChecker {
       const reorientedCandidate = candidateFull3x3x3Pattern.applyTransformation(
         cubeOrientation.inverseTransformation,
       );
-      const candidateMasked = applyPatternMask(
+      const candidateMasked = applyPuzzleStickering(
         reorientedCandidate,
-        this.patternMask,
+        this.flatPuzzleStickering,
       );
       const { anchorPieceIndex, anchorOrientationIndex } =
         this.extractAnchorCoordinates(reorientedCandidate);
@@ -181,129 +196,205 @@ class PatternChecker {
   }
 }
 
-const CrossPatternChecker = new PatternChecker(
-  {
-    EDGES: [I, I, I, I, R, R, R, R, I, I, I, I],
-    CORNERS: [I, I, I, I, I, I, I, I],
-    CENTERS: [I, R, R, R, R, R],
-  },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+const R = PieceStickering.Regular;
+const I = PieceStickering.Ignored;
 
-const F2L1SlotPatternChecker = new PatternChecker(
+const F2L1: [FlatPuzzleStickering, OrientationAnchor] = [
   {
     EDGES: [I, I, I, I, R, R, R, R, R, I, I, I],
     CORNERS: [I, I, I, I, R, I, I, I],
     CENTERS: [I, R, R, R, R, R],
   },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+  { orbitName: "EDGES", pieceIndex: 4 },
+];
 
-const F2LAdjacent2SlotsPatternChecker = new PatternChecker(
+const F2L2A: [FlatPuzzleStickering, OrientationAnchor] = [
   {
     EDGES: [I, I, I, I, R, R, R, R, R, R, I, I],
     CORNERS: [I, I, I, I, R, R, I, I],
     CENTERS: [I, R, R, R, R, R],
   },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+  { orbitName: "EDGES", pieceIndex: 4 },
+];
 
-const F2LOpposite2SlotsPatternChecker = new PatternChecker(
+const F2L2O: [FlatPuzzleStickering, OrientationAnchor] = [
   {
     EDGES: [I, I, I, I, R, R, R, R, R, I, I, R],
     CORNERS: [I, I, I, I, R, I, R, I],
     CENTERS: [I, R, R, R, R, R],
   },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+  { orbitName: "EDGES", pieceIndex: 4 },
+];
 
-const F2L3SlotsPatternChecker = new PatternChecker(
+const F2L3: [FlatPuzzleStickering, OrientationAnchor] = [
   {
     EDGES: [I, I, I, I, R, R, R, R, I, R, R, R],
     CORNERS: [I, I, I, I, I, R, R, R],
     CENTERS: [I, R, R, R, R, R],
   },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+  { orbitName: "EDGES", pieceIndex: 4 },
+];
 
-const F2LPatternChecker = new PatternChecker(
+const FirstLayer: [FlatPuzzleStickering, OrientationAnchor] = [
   {
-    EDGES: [I, I, I, I, R, R, R, R, R, R, R, R],
+    EDGES: [I, I, I, I, R, R, R, R, I, I, I, I],
     CORNERS: [I, I, I, I, R, R, R, R],
     CENTERS: [I, R, R, R, R, R],
   },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+  { orbitName: "EDGES", pieceIndex: 4 },
+];
 
-const ELSPatternChecker = new PatternChecker(
+const Roux1L: [FlatPuzzleStickering, OrientationAnchor] = [
   {
-    EDGES: [O, O, O, O, R, R, R, R, R, R, R, R, R],
-    CORNERS: [I, I, I, I, I, R, R, R],
-    CENTERS: [O, R, R, R, R, R],
+    EDGES: [I, I, I, I, I, I, I, R, I, R, I, R],
+    CORNERS: [I, I, I, I, I, R, R, I],
+    CENTERS: [I, R, I, I, I, I],
   },
-  { orbitName: "EDGES", pieceIndex: 8 },
-);
+  { orbitName: "CORNERS", pieceIndex: 5 },
+];
 
-const LLOrientedPatternChecker = new PatternChecker(
+// const Roux1R: [FlatPuzzleStickering, OrientationAnchor] = [
+//   {
+//     EDGES: [I, I, I, I, I, R, I, I, R, I, R, I],
+//     CORNERS: [I, I, I, I, R, I, I, R],
+//     CENTERS: [I, I, I, R, I, I],
+//   },
+//   { orbitName: "CORNERS", pieceIndex: 4 },
+// ];
+
+const Roux2: [FlatPuzzleStickering, OrientationAnchor] = [
   {
-    EDGES: [O, O, O, O, R, R, R, R, R, R, R, R],
-    CORNERS: [O, O, O, O, R, R, R, R],
-    CENTERS: [O, R, R, R, R, R],
+    EDGES: [I, I, I, I, I, R, I, R, R, R, R, R],
+    CORNERS: [I, I, I, I, R, R, R, R],
+    CENTERS: [I, R, I, R, I, I],
   },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+  { orbitName: "CORNERS", pieceIndex: 5 },
+];
 
-const SolvedPatternChecker = new PatternChecker(
-  {
-    EDGES: [R, R, R, R, R, R, R, R, R, R, R, R],
-    CORNERS: [R, R, R, R, R, R, R, R],
-    CENTERS: [R, R, R, R, R, R],
-  },
-  { orbitName: "EDGES", pieceIndex: 5 },
-);
+const patternCheckers: PatternChecker[] = [];
 
-export function multiCheck(pattern: KPattern): string {
-  const signatureEntries: string[] = [];
-  function singleCheck(
-    name: string,
-    checker: PatternChecker,
-    candidate: KPattern,
-  ) {
-    const isSolvedInfo = checker.check(candidate);
+async function addSimpleStep(
+  stickering: string,
+  orbitName: string,
+  pieceIndex: number,
+  name?: string,
+  obviates: string[] = [],
+) {
+  patternCheckers.push(
+    new PatternChecker(
+      name ?? stickering,
+      Object.fromEntries(
+        (
+          await cubeLikePuzzleStickering(cube3x3x3, stickering)
+        ).stickerings.entries(),
+      ),
+      {
+        orbitName,
+        pieceIndex,
+      },
+      obviates,
+    ),
+  );
+}
+
+const LSLLStuff = ["OLL", "OCLL", "EOLL", "F2L", "CLS", "ELS"];
+
+const XCrosses = [
+  "X-Cross",
+  "Double X-Cross (adjacent)",
+  "Double X-Cross (opposite)",
+  "Triple X-Cross",
+];
+
+const RouxBlocks = ["Both Roux blocks", "1st Roux block"];
+
+const CFOP_Stuff = [...XCrosses, ...LSLLStuff];
+const XRoux = [...XCrosses, ...RouxBlocks];
+
+// Note: these are topologically sorted.
+// TODO: add "prerequisites" (e.g. EOLL for ZBLL, OLL for PLL, ELS for CLS, Roux blocks for Rouxh L10P steps, etc.)
+await addSimpleStep("full", "EDGES", 4, "Solved");
+await addSimpleStep("OLL", "EDGES", 4, undefined, ["ELS", "CLS", "CLL"]);
+await addSimpleStep("OLL", "EDGES", 4);
+await addSimpleStep("OCLL", "EDGES", 4);
+await addSimpleStep("EOLL", "EDGES", 4);
+await addSimpleStep("F2L", "EDGES", 4, undefined, ["CLS"]);
+await addSimpleStep("CLS", "EDGES", 4, undefined, ["OLL", "EOLL"]);
+await addSimpleStep("ELS", "EDGES", 4, undefined, ["EOLL"]);
+
+// await addSimpleStep("L6E", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
+// await addSimpleStep("L6EO", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
+await addSimpleStep("CMLL", "CORNERS", 4, undefined, CFOP_Stuff); // TODO: AUF
+patternCheckers.push(
+  new PatternChecker("Both Roux blocks", ...Roux2, CFOP_Stuff),
+);
+patternCheckers.push(
+  new PatternChecker("1st Roux block", ...Roux1L, CFOP_Stuff),
+); // TODO: detect left vs. right
+
+patternCheckers.push(new PatternChecker("Triple X-Cross", ...F2L3, XRoux));
+patternCheckers.push(new PatternChecker("F2L Slot 3", ...F2L3, XRoux));
+patternCheckers.push(
+  new PatternChecker("Double X-Cross (opposite)", ...F2L2O, XRoux),
+);
+patternCheckers.push(
+  new PatternChecker("Double X-Cross (adjacent)", ...F2L2A, XRoux),
+);
+patternCheckers.push(
+  new PatternChecker("F2L Slot 2 (adjacent)", ...F2L2A, XRoux),
+);
+patternCheckers.push(
+  new PatternChecker("F2L Slot 2 (opposite)", ...F2L2O, XRoux),
+);
+patternCheckers.push(new PatternChecker("X-Cross", ...F2L1, XRoux));
+patternCheckers.push(new PatternChecker("F2L Slot 1", ...F2L1, XRoux));
+
+// await addSimpleStep("EOCross", "EDGES", 4); // TODO
+patternCheckers.push(new PatternChecker("First Layer", ...FirstLayer, XRoux));
+await addSimpleStep("Cross", "EDGES", 4, undefined, XCrosses);
+// TODO: daisy
+await addSimpleStep("2x2x3", "CORNERS", 6);
+await addSimpleStep("2x2x2", "CORNERS", 6);
+// TODO: 1x2x2?
+// await addSimpleStep("EO", "EDGES", 0); // TODO
+
+const obviated = new Set<string>();
+
+let lastI = patternCheckers.length + 1;
+export function multiCheck(pattern: KPattern): string | null {
+  console.log("--------");
+  for (const [i, patternChecker] of patternCheckers.entries()) {
+    if (i >= lastI) {
+      return null;
+    }
+    if (obviated.has(patternChecker.name)) {
+      continue;
+    }
+    // if (skip.has(patternChecker.name)) {
+    //   continue;
+    // }
+    const isSolvedInfo = patternChecker.check(pattern);
     if (isSolvedInfo.isSolved) {
       console.log(
-        `[${name}] Solved, orient using: ${
+        `[${patternChecker.name}] Solved, orient using: ${
           isSolvedInfo.algToNormalize.experimentalIsEmpty()
             ? "(empty alg)"
             : isSolvedInfo.algToNormalize
         }`,
       );
-      signatureEntries.splice(0); // TOFO
-      signatureEntries.push(name);
+      lastI = i;
+      obviated.add(patternChecker.name);
+      for (const newlyObviated of patternChecker.obviates) {
+        console.log("obviating", newlyObviated);
+        obviated.add(newlyObviated);
+      }
+      return patternChecker.name;
     } else {
-      console.log(`[${name}] Unsolved`);
+      // console.log(`[${patternChecker.name}] Unsolved`);
     }
   }
 
-  singleCheck("Cross", CrossPatternChecker, pattern);
-  singleCheck("F2L — 1 slot", F2L1SlotPatternChecker, pattern);
-  singleCheck(
-    "F2L — 2 slots (adjacent)",
-    F2LAdjacent2SlotsPatternChecker,
-    pattern,
-  );
-  singleCheck(
-    "F2L — 2 slots (opposite)",
-    F2LOpposite2SlotsPatternChecker,
-    pattern,
-  );
-  singleCheck("F2L — 3 slots", F2L3SlotsPatternChecker, pattern);
-  singleCheck("F2L", F2LPatternChecker, pattern);
-  singleCheck("ELS", ELSPatternChecker, pattern);
-  singleCheck("LL oriented", LLOrientedPatternChecker, pattern);
-  singleCheck("Solved", SolvedPatternChecker, pattern);
-
-  return signatureEntries.join(" + ");
+  return null;
 }
 
 // multiCheck(
