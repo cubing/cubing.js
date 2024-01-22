@@ -372,17 +372,6 @@ await addSimpleStep("EOLL", "EDGES", 4);
 await addSimpleStep("F2L", "EDGES", 4, undefined, ["CLS"]);
 await addSimpleStep("CLS", "EDGES", 4, undefined, ["OLL", "EOLL"]);
 await addSimpleStep("ELS", "EDGES", 4, undefined, ["EOLL"]);
-
-// await addSimpleStep("L6E", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
-// await addSimpleStep("L6EO", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
-await addSimpleStep("CMLL", "CORNERS", 4, undefined, CFOP_Stuff); // TODO: AUF
-patternCheckers.push(
-  new PatternChecker("Both Roux blocks", ...Roux2, CFOP_Stuff),
-);
-patternCheckers.push(
-  new PatternChecker("1st Roux block", ...Roux1L, CFOP_Stuff),
-); // TODO: detect left vs. right
-
 patternCheckers.push(new PatternChecker("Triple X-Cross", ...F2L3, XRoux));
 patternCheckers.push(new PatternChecker("F2L Slot 3", ...F2L3, XRoux));
 patternCheckers.push(
@@ -400,11 +389,22 @@ patternCheckers.push(
 patternCheckers.push(new PatternChecker("X-Cross", ...F2L1, XRoux));
 patternCheckers.push(new PatternChecker("F2L Slot 1", ...F2L1, XRoux));
 
+await addSimpleStep("2x2x3", "CORNERS", 6);
+
+// await addSimpleStep("L6E", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
+// await addSimpleStep("L6EO", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
+await addSimpleStep("CMLL", "CORNERS", 4, undefined, CFOP_Stuff); // TODO: AUF
+patternCheckers.push(
+  new PatternChecker("Both Roux blocks", ...Roux2, CFOP_Stuff),
+);
+patternCheckers.push(
+  new PatternChecker("1st Roux block", ...Roux1L, CFOP_Stuff),
+); // TODO: detect left vs. right
+
 // await addSimpleStep("EOCross", "EDGES", 4); // TODO
 patternCheckers.push(new PatternChecker("First Layer", ...FirstLayer, XRoux));
 await addSimpleStep("Cross", "EDGES", 4, undefined, XCrosses);
 // TODO: daisy
-await addSimpleStep("2x2x3", "CORNERS", 6);
 await addSimpleStep("2x2x2", "CORNERS", 6);
 // TODO: 1x2x2?
 // await addSimpleStep("EO", "EDGES", 0); // TODO
