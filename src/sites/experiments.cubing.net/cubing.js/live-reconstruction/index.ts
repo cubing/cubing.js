@@ -381,6 +381,7 @@ const XCrosses = [
   "Double X-Cross (adjacent)",
   "Double X-Cross (opposite)",
   "Triple X-Cross",
+  "First Layer",
 ];
 
 const RouxBlocks = ["Both Roux blocks", "1st Roux block"];
@@ -397,7 +398,7 @@ await addSimpleStep("OCLL", "EDGES", 4);
 await addSimpleStep("EOLL", "EDGES", 4);
 await addSimpleStep("F2L", "EDGES", 4, undefined, ["CLS"]);
 await addSimpleStep("CLS", "EDGES", 4, undefined, ["OLL", "EOLL"]);
-await addSimpleStep("ELS", "EDGES", 4, undefined, ["EOLL"]);
+await addSimpleStep("ELS", "EDGES", 4, undefined, ["OLL", "EOLL"]);
 patternCheckers.push(new PatternChecker("Triple X-Cross", ...F2L3, XRoux));
 patternCheckers.push(new PatternChecker("F2L Slot 3", ...F2L3, XRoux));
 patternCheckers.push(
@@ -413,6 +414,7 @@ patternCheckers.push(
   new PatternChecker("F2L Slot 2 (opposite)", ...F2L2O, XRoux),
 );
 patternCheckers.push(new PatternChecker("X-Cross", ...F2L1, XRoux));
+patternCheckers.push(new PatternChecker("First Layer", ...FirstLayer, XRoux)); // TODO: this is usually obviated by 1st Roux block
 patternCheckers.push(new PatternChecker("F2L Slot 1", ...F2L1, XRoux));
 
 await addSimpleStep("2x2x3", "CORNERS", 6);
@@ -428,7 +430,6 @@ patternCheckers.push(
 ); // TODO: detect left vs. right
 
 // await addSimpleStep("EOCross", "EDGES", 4); // TODO
-patternCheckers.push(new PatternChecker("First Layer", ...FirstLayer, XRoux));
 await addSimpleStep("Cross", "EDGES", 4, undefined, XCrosses);
 // TODO: daisy
 await addSimpleStep("2x2x2", "CORNERS", 6);
