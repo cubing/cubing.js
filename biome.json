@@ -25,7 +25,7 @@
       }
     },
     "ignore": [
-      "./src/cubing/vendor/gpl/cs0x7f/**/*",
+      "./src/cubing/vendor/mit/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
       "./src/cubing/vendor/mpl/xyzzy/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
@@ -38,7 +38,7 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "ignore": [
-      "./src/cubing/vendor/gpl/cs0x7f/**/*",
+      "./src/cubing/vendor/mit/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
       "./src/cubing/vendor/mpl/xyzzy/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",

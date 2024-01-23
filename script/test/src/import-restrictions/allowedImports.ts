@@ -88,9 +88,9 @@ export const mainAllowedImports: AllowedImports = {
     static: [
       "src/cubing/kpuzzle",
       "src/cubing/puzzles",
-      "src/cubing/vendor/gpl/cs0x7f/cstimer/src/js/scramble",
-      "src/cubing/vendor/gpl/cs0x7f/min2phase",
-      "src/cubing/vendor/gpl/cs0x7f/sq12phase",
+      "src/cubing/vendor/mit/cs0x7f/cstimer/src/js/scramble",
+      "src/cubing/vendor/mit/cs0x7f/min2phase",
+      "src/cubing/vendor/mit/cs0x7f/sq12phase",
       "src/cubing/vendor/mit/p-lazy",
       "src/cubing/vendor/mpl/xyzzy",
       "random-uint-below",
@@ -131,7 +131,7 @@ export const mainAllowedImports: AllowedImports = {
   "src/cubing/vendor/apache/comlink-everywhere": {
     static: ["comlink"],
   },
-  "src/cubing/vendor/gpl/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
+  "src/cubing/vendor/mit/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
     static: ["src/cubing/search/cubing-private"],
   },
   // src/sites

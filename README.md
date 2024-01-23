@@ -87,6 +87,8 @@ It also uses the [`three.js`](https://github.com/mrdoob/three.js), [`comlink`](h
 
 ## License
 
-This project is licensed under the GPL license (version 3 or later). This means that this library is **free to use**, although you **must publish any code that uses it** (e.g. also put it on GitHub). See [the full license](./LICENSE.md) for exact details.
+This project is licensed under the Mozilla Public License. This means that `cubing.js` is **free to use** in any public or private project. We've selected this license so that `cubing.js` can be used in a large variety of use cases.
 
-We've selected this license in order to encourage the cubing community to work on software in a way so that everyone can contribute and extend each other's work.
+However, if you modify the source code of `cubing.js` to fit your needs then you **must publish your modifications to the `cubing.js` source code** (e.g. publish a fork put it on GitHub). See [the full license](./LICENSE-MPL.md) for exact details.
+
+Although you are no longer required to publish code that uses `cubing.js`, we encourage you to developer your projects as open-source. This way, others can learn from your work and build on it far into the future. It also allows us to tell how features are being used by projects in the community, and what new features are needed.

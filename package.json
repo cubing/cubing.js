@@ -4,7 +4,7 @@
   "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
   "type": "module",
-  "license": "GPL-3.0-or-later",
+  "license": "MPL-2.0 OR GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
   "exports": {
     "./alg": {
@@ -97,10 +97,7 @@
   "engines": {
     "node": ">=19"
   },
-  "files": [
-    "./dist/bin/",
-    "./dist/lib/"
-  ],
+  "files": ["./dist/bin/", "./dist/lib/"],
   "scripts": {
     "default": "make default",
     "build": "make build",
