@@ -76,15 +76,6 @@ We recommend using Microsoft's [Windows Subsystem for Linux (WSL)](https://learn
 
 For release versions and release notes, view the release history on GitHub: <https://github.com/cubing/cubing.js/releases>
 
-## Acknowledgments
-
-As of this time, `cubing.js` primarily contains code by [Lucas Garron (@lgarron)](https://github.com/lgarron) and [Tom Rokicki (@rokicki)](https://github.com/rokicki). Significant parts of the cubing code also are from:
-
-- [Chen Shuang (@cs0x7f)](https://github.com/cs0x7f): Scramblers for 3x3x3, 4x4x4, and Square-1
-- [`xyxxy` (@torchlight)](https://github.com/torchlight): Scramblers for unofficial events
-
-It also uses the [`three.js`](https://github.com/mrdoob/three.js), [`comlink`](https://github.com/GoogleChromeLabs/comlink), and [`p-lazy`](https://github.com/sindresorhus/p-lazy) libraries. Twizzle also uses the [Ubuntu font](https://design.ubuntu.com/font/).
-
 ## License
 
 This project is licensed under the Mozilla Public License. This means that `cubing.js` is **free to use** in any public or private project. We've selected this license so that `cubing.js` can be used in a large variety of use cases.
@@ -96,3 +87,12 @@ Although you are no longer required to publish code that uses `cubing.js`, we en
 ### Fine Print
 
 All original code in this project is dual-licensed as both [GPL](./LICENSE-GPL.md) and [MPL](./LICENSE-MPL.md), but the codebase contains additional vendored code under the [Apache](./src/cubing/vendor/apache/), [MIT](./src/cubing/vendor/mit/), and [Ubuntu Font](./src/sites/experiments.cubing.net/cubing.js/vendor/fonts/ubuntu/) licenses. This may affect you if you are forking the source code, as certain parts are not MPL-licensed on their own. But if you are just using `cubing.js` as a library, you can effectively treat all of `cubing.js` as if it was MPL-licensed.
+
+## Acknowledgments
+
+As of this time, `cubing.js` primarily contains code by [Lucas Garron (@lgarron)](https://github.com/lgarron) and [Tom Rokicki (@rokicki)](https://github.com/rokicki). Significant parts of the cubing code also are from:
+
+- [Chen Shuang (@cs0x7f)](https://github.com/cs0x7f): Scramblers for 3x3x3, 4x4x4, and Square-1
+- [`xyxxy` (@torchlight)](https://github.com/torchlight): Scramblers for unofficial events
+
+It also uses the [`three.js`](https://github.com/mrdoob/three.js), [`comlink`](https://github.com/GoogleChromeLabs/comlink), and [`p-lazy`](https://github.com/sindresorhus/p-lazy) libraries. Twizzle also uses the [Ubuntu font](https://design.ubuntu.com/font/).
