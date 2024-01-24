@@ -397,8 +397,18 @@ await addSimpleStep("OLL", "EDGES", 4);
 await addSimpleStep("OCLL", "EDGES", 4);
 await addSimpleStep("EOLL", "EDGES", 4);
 await addSimpleStep("F2L", "EDGES", 4, undefined, ["CLS"]);
-await addSimpleStep("CLS", "EDGES", 4, undefined, ["OLL", "EOLL"]);
-await addSimpleStep("ELS", "EDGES", 4, undefined, ["OLL", "EOLL"]);
+await addSimpleStep("CLS", "EDGES", 4, undefined, [
+  "OLL",
+  "OCLL",
+  "EOLL",
+  "F2L",
+]);
+await addSimpleStep("ELS", "EDGES", 4, undefined, [
+  "OLL",
+  "OCLL",
+  "EOLL",
+  "F2L",
+]);
 patternCheckers.push(new PatternChecker("Triple X-Cross", ...F2L3, XRoux));
 patternCheckers.push(new PatternChecker("F2L Slot 3", ...F2L3, XRoux));
 patternCheckers.push(
