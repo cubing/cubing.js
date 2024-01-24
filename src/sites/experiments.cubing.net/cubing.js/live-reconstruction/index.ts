@@ -392,7 +392,15 @@ const XRoux = [...XCrosses, ...RouxBlocks];
 // Note: these are topologically sorted.
 // TODO: add "prerequisites" (e.g. EOLL for ZBLL, OLL for PLL, ELS for CLS, Roux blocks for Rouxh L10P steps, etc.)
 await addSimpleStep("full", "EDGES", 4, "Solved");
-await addSimpleStep("OLL", "EDGES", 4, undefined, ["ELS", "CLS", "CLL"]);
+await addSimpleStep("PLL", "EDGES", 4);
+await addSimpleStep("L6E", "EDGES", 4);
+await addSimpleStep("OLL", "EDGES", 4, undefined, [
+  "ELS",
+  "CLS",
+  "CLL",
+  "Solved",
+  "L6E",
+]);
 await addSimpleStep("OLL", "EDGES", 4);
 await addSimpleStep("OCLL", "EDGES", 4);
 await addSimpleStep("EOLL", "EDGES", 4);
@@ -402,6 +410,8 @@ await addSimpleStep("CLS", "EDGES", 4, undefined, [
   "OCLL",
   "EOLL",
   "F2L",
+  "Solved",
+  "L6E",
 ]);
 await addSimpleStep("ELS", "EDGES", 4, undefined, [
   "OLL",
@@ -429,11 +439,14 @@ patternCheckers.push(new PatternChecker("F2L Slot 1", ...F2L1, XRoux));
 
 await addSimpleStep("2x2x3", "CORNERS", 6);
 
-// await addSimpleStep("L6E", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
 // await addSimpleStep("L6EO", "CORNERS", 4, undefined, CFOP_Stuff); // TODO
 await addSimpleStep("CMLL", "CORNERS", 4, undefined, CFOP_Stuff); // TODO: AUF
 patternCheckers.push(
-  new PatternChecker("Both Roux blocks", ...Roux2, CFOP_Stuff),
+  new PatternChecker("Both Roux blocks", ...Roux2, [
+    ...CFOP_Stuff,
+    "Solved",
+    "PLL",
+  ]),
 );
 patternCheckers.push(
   new PatternChecker("1st Roux block", ...Roux1L, CFOP_Stuff),
