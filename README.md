@@ -92,3 +92,7 @@ This project is licensed under the Mozilla Public License. This means that `cubi
 However, if you modify the source code of `cubing.js` to fit your needs then you **must publish your modifications to the `cubing.js` source code** (e.g. publish a fork put it on GitHub). See [the full license](./LICENSE-MPL.md) for exact details.
 
 Although you are no longer required to publish code that uses `cubing.js`, we encourage you to developer your projects as open-source. This way, others can learn from your work and build on it far into the future. It also allows us to tell how features are being used by projects in the community, and what new features are needed.
+
+### Fine Print
+
+All original code in this project is dual-licensed as both [GPL](./LICENSE-GPL.md) and [MPL](./LICENSE-MPL.md), but the codebase contains additional vendored code under the [Apache](./src/cubing/vendor/apache/), [MIT](./src/cubing/vendor/mit/), and [Ubuntu Font](./src/sites/experiments.cubing.net/cubing.js/vendor/fonts/ubuntu/) licenses. This may affect you if you are forking the source code, as certain parts are not MPL-licensed on their own. But if you are just using `cubing.js` as a library, you can effectively treat all of `cubing.js` as if it was MPL-licensed.
