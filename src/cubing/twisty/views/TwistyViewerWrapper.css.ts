@@ -1,6 +1,7 @@
-import { CSSSource } from "./ManagedCustomElement";
+import { cssStyleSheetShim } from "./node-custom-element-shims";
 
-export const twistyViewerWrapperCSS = new CSSSource(
+export const twistyViewerWrapperCSS = new cssStyleSheetShim();
+twistyViewerWrapperCSS.replaceSync(
   `
 :host {
   width: 384px;

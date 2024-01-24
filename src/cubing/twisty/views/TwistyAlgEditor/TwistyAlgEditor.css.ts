@@ -1,6 +1,7 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { cssStyleSheetShim } from "../node-custom-element-shims";
 
-export const twistyAlgEditorCSS = new CSSSource(
+export const twistyAlgEditorCSS = new cssStyleSheetShim();
+twistyAlgEditorCSS.replaceSync(
   `
 :host {
   width: 384px;

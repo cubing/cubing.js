@@ -1,6 +1,7 @@
-import { CSSSource } from "./ManagedCustomElement";
+import { cssStyleSheetShim } from "./node-custom-element-shims";
 
-export const twistyAlgViewerCSS = new CSSSource(
+export const twistyAlgViewerCSS = new cssStyleSheetShim();
+twistyAlgViewerCSS.replaceSync(
   `
 :host {
   display: inline;

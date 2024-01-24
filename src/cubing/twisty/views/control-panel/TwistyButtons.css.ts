@@ -1,6 +1,7 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { cssStyleSheetShim } from "../node-custom-element-shims";
 
-export const buttonGridCSS = new CSSSource(
+export const buttonGridCSS = new cssStyleSheetShim();
+buttonGridCSS.replaceSync(
   `
 :host {
   width: 384px;
@@ -33,7 +34,8 @@ export const buttonGridCSS = new CSSSource(
 `,
 );
 
-export const buttonCSS = new CSSSource(
+export const buttonCSS = new cssStyleSheetShim();
+buttonCSS.replaceSync(
   `
 :host:not([hidden]) {
   display: grid;

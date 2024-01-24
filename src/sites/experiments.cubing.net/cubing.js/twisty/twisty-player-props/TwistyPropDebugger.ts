@@ -1,14 +1,15 @@
 import type { Alg } from "../../../../../cubing/alg";
 import { experimentalCountMoves } from "../../../../../cubing/notation";
 import { ClassListManager } from "../../../../../cubing/twisty/views/ClassListManager";
-import {
-  CSSSource,
-  ManagedCustomElement,
-} from "../../../../../cubing/twisty/views/ManagedCustomElement";
+import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
 import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
 import type { TwistyPlayer } from "../../../../../cubing/twisty/views/TwistyPlayer";
 import type { AlgIssues } from "../../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp";
+import {
+  twistyPlayerDebuggerCSS,
+  twistyPropDebuggerCSS,
+} from "./TwistyPropDebugger.css";
 
 function truncateAlgForDisplay(alg: Alg): string {
   let str = alg.toString();
@@ -44,73 +45,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     this.twistyProp.addRawListener(this.onPropRaw.bind(this));
     this.twistyProp.addFreshListener(this.onProp.bind(this));
 
-    this.addCSS(
-      new CSSSource(
-        `
-
-.wrapper {
-  font-family: Ubuntu, sans-serif;
-  display: grid;
-  grid-template-rows: 1.5em 3.5em;
-  max-width: 20em;
-
-  border: 2px solid #ddd;
-  overflow: hidden;
-  box-sizing: border-box;
-
-  cursor: pointer;
-}
-
-.wrapper > :nth-child(2) {
-  border-top: 1px solid #000;
-  width: 100%;
-  height: 3.5em;
-  overflow-wrap: anywhere;
-  padding: 0.25em;
-}
-
-.wrapper > span {
-  padding: 0.25em;
-  max-width: 100%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  line-height: 1em;
-}
-
-.wrapper.highlight-de-emphasize {
-  opacity: 0.25;
-}
-
-/* .wrapper:hover > span::before { content: "⭐️ "; margin-right: 0.1em; } */
-
-.wrapper.highlight-grandchild-or-further,
-.wrapper.highlight-grandparent-or-further                { background: rgba(0, 0, 0, 0.2); }
-.wrapper.highlight-grandparent-or-further > span::before { content: "⏬ "; margin-right: 0.1em; }
-
-.wrapper.highlight-child,
-.wrapper.highlight-parent                { background: rgba(0, 0, 0, 0.6); color: white; }
-.wrapper.highlight-parent > span::before { content: "🔽 "; margin-right: 0.1em; }
-
-.wrapper.highlight-self                { background: rgba(0, 0, 0, 0.8); color: white; }
-.wrapper.highlight-self > span::before { content: "⭐️ "; margin-right: 0.1em; }
-
-.wrapper.highlight-child > span::before { content: "🔼 "; margin-right: 0.1em; }
-
-.wrapper.highlight-grandchild-or-further > span::before { content: "⏫ "; margin-right: 0.1em; }
-
-.wrapper:hover {
-  border: 2px solid #000;
-  opacity: 1;
-}
-
-.wrapper.highlight-self:hover {
-  /* border: 2px solid #f00; */
-}
-.wrapper.highlight-self:hover > span::before { content: "🌟 "; margin-right: 0.1em; }
-
-    `,
-      ),
-    );
+    this.addCSS(twistyPropDebuggerCSS);
   }
 
   async onPropRaw(): Promise<void> {
@@ -225,31 +160,7 @@ export class TwistyPlayerDebugger extends ManagedCustomElement {
   }
 
   connectedCallback(): void {
-    this.addCSS(
-      new CSSSource(
-        `
-.wrapper {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
-}
-
-twisty-prop-debugger.hidden {
-  /* display: none; */
-}
-
-twisty-prop-debugger.first-in-group,
-twisty-prop-debugger.highlighted {
-  /* grid-column-start: 1; */
-}
-
-twisty-prop-debugger.highlighted {
-  /* grid-column: 1 / -1; */
-  /* margin: 1em 0; */
-}
-`,
-      ),
-    );
+    this.addCSS(twistyPlayerDebuggerCSS);
 
     for (const [key, value] of Object.entries(
       this.player.experimentalModel,

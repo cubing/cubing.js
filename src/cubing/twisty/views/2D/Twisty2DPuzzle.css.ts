@@ -1,7 +1,8 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { cssStyleSheetShim } from "../node-custom-element-shims";
 
 // TODO: Can we do this without so much nesting, and styling all the nested elems?
-export const twisty2DSVGCSS = new CSSSource(
+export const twisty2DSVGCSS = new cssStyleSheetShim();
+twisty2DSVGCSS.replaceSync(
   `
 :host {
   width: 384px;

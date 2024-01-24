@@ -82,11 +82,14 @@ export class TwizzleLink extends ManagedCustomElement {
       span.title = "Could not show a player for link";
       this.addElement(this.a);
     }
-    this.#cssElem?.remove();
+    this.removeCSS(twizzleLinkCSS);
+    const cssIndex = this.shadow.adoptedStyleSheets.indexOf(twizzleLinkCSS);
+    if (typeof cssIndex !== "undefined") {
+      this.shadow.adoptedStyleSheets.splice(cssIndex, cssIndex + 1);
+    }
     this.#cssCDNForumTweaksElem?.remove();
   }
 
-  #cssElem: HTMLStyleElement | undefined;
   #cssCDNForumTweaksElem: HTMLStyleElement | undefined;
   #scrollableRegion: HTMLDivElement;
   #responsiveWrapper: HTMLDivElement;
@@ -97,7 +100,7 @@ export class TwizzleLink extends ManagedCustomElement {
     if (this.options?.colorScheme === "dark") {
       this.contentWrapper.classList.add("dark-mode");
     }
-    this.#cssElem = this.addCSS(twizzleLinkCSS);
+    this.addCSS(twizzleLinkCSS);
     if (this.options?.cdnForumTweaks) {
       this.addCSS(twizzleLinkForumTweaksCSS);
     }

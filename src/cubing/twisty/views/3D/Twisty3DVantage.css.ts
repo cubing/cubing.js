@@ -1,12 +1,13 @@
-import { CSSSource } from "../ManagedCustomElement";
-
 // The `position` values are a hack for a bug in Safari where the canvas either
 // grows infinitely, or takes up the full `fr` of any encompassing grid (making
 // the contents of that element e.g. over 100% of its height). `contain:
 // content` is a good fix for this, but there is no indication that Safari will
 // support it soon. https://developer.mozilla.org/en-US/docs/Web/CSS/contain
 
-export const twisty3DVantageCSS = new CSSSource(
+import { cssStyleSheetShim } from "../node-custom-element-shims";
+
+export const twisty3DVantageCSS = new cssStyleSheetShim();
+twisty3DVantageCSS.replaceSync(
   `
 :host {
   width: 384px;

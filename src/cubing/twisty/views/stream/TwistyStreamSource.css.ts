@@ -1,6 +1,7 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { cssStyleSheetShim } from "../node-custom-element-shims";
 
-export const twistyStreamSourceCSS = new CSSSource(
+export const twistyStreamSourceCSS = new cssStyleSheetShim();
+twistyStreamSourceCSS.replaceSync(
   `
 :host {
   width: 384px;

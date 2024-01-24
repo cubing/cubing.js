@@ -6,7 +6,7 @@ class HTMLElementStub {}
 
 let HTMLElementShim: typeof HTMLElement;
 if (globalThis.HTMLElement) {
-  HTMLElementShim = HTMLElement;
+  HTMLElementShim = globalThis.HTMLElement;
 } else {
   HTMLElementShim = HTMLElementStub as any;
 }
@@ -22,9 +22,25 @@ class CustomElementsStub {
 let customElementsShim: typeof customElements;
 
 if (globalThis.customElements) {
-  customElementsShim = customElements;
+  customElementsShim = globalThis.customElements;
 } else {
   customElementsShim = new CustomElementsStub() as any;
 }
 
 export { customElementsShim };
+
+let cssStyleSheetShim: typeof CSSStyleSheet;
+
+class CSSStyleSheetStub {
+  replaceSync(): void {
+    // nothing
+  }
+}
+
+if (globalThis.CSSStyleSheet) {
+  cssStyleSheetShim = globalThis.CSSStyleSheet;
+} else {
+  cssStyleSheetShim = CSSStyleSheetStub as any;
+}
+
+export { cssStyleSheetShim };

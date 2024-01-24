@@ -1,6 +1,7 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { cssStyleSheetShim } from "../node-custom-element-shims";
 
-export const twistyScrubberCSS = new CSSSource(
+export const twistyScrubberCSS = new cssStyleSheetShim();
+twistyScrubberCSS.replaceSync(
   `
 :host {
   width: 384px;

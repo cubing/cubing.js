@@ -1,6 +1,7 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { cssStyleSheetShim } from "../node-custom-element-shims";
 
-export const twizzleLinkCSS = new CSSSource(
+export const twizzleLinkCSS = new cssStyleSheetShim();
+twizzleLinkCSS.replaceSync(
   `
 .wrapper {
   background: rgb(255, 245, 235);
@@ -135,7 +136,8 @@ twisty-alg-viewer {
 `,
 );
 
-export const twizzleLinkForumTweaksCSS = new CSSSource(`
+export const twizzleLinkForumTweaksCSS = new cssStyleSheetShim();
+twizzleLinkForumTweaksCSS.replaceSync(`
 .wrapper {
   background: white;
   --heading-background: 232, 239, 253
