@@ -681,8 +681,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         lastTranslation = newTranslation;
         if (elapsed < translationDuration) {
           requestAnimationFrame(animateRaiseHintSticker);
+          this.scheduleRenderCallback?.();
         }
-        this.scheduleRenderCallback?.();
       };
       animateRaiseHintSticker();
     }, 500);

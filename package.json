@@ -1,6 +1,6 @@
 {
   "name": "cubing",
-  "version": "0.47.0",
+  "version": "0.47.1",
   "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
   "type": "module",
@@ -97,7 +97,10 @@
   "engines": {
     "node": ">=19"
   },
-  "files": ["./dist/bin/", "./dist/lib/"],
+  "files": [
+    "./dist/bin/",
+    "./dist/lib/"
+  ],
   "scripts": {
     "default": "make default",
     "build": "make build",
