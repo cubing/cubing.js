@@ -28,6 +28,8 @@ export const experimentalStickerings: Record<
   ELL: { groups: megaAnd3x3x3LL },
   ZBLL: { groups: megaAnd3x3x3LL },
   LS: { groups: megaAnd3x3x3LS },
+  LSOLL: { groups: megaAnd3x3x3LS },
+  LSOCLL: { groups: megaAnd3x3x3LS },
   ELS: { groups: megaAnd3x3x3LS },
   CLS: { groups: megaAnd3x3x3LS },
   ZBLS: { groups: megaAnd3x3x3LS },

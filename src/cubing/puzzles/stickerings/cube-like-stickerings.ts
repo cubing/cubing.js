@@ -205,6 +205,22 @@ export async function cubeLikePuzzleStickering(
       puzzleStickering.set(centerLL(), PieceStickering.Dim);
       break;
     }
+    case "LSOLL": {
+      dimF2L();
+      setOLL();
+      puzzleStickering.set(slotFR(), PieceStickering.Regular);
+      break;
+    }
+    case "LSOCLL": {
+      dimF2L();
+      dimOLL();
+      puzzleStickering.set(
+        m.and([LL(), CORNERS()]),
+        PieceStickering.IgnoreNonPrimary,
+      );
+      puzzleStickering.set(slotFR(), PieceStickering.Regular);
+      break;
+    }
     case "EO": {
       puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
       puzzleStickering.set(

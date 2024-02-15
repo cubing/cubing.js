@@ -39,6 +39,8 @@ export function demo(visualization: VisualizationFormat): void {
   addAlg("VLS", "x' R2 U' R' U l'");
   addAlg("WVLS", "R' F2 R F2' L' U2 L");
   addAlg("LS", "U' R U' R' U R U R'");
+  addAlg("LSOLL", "R' F R F'");
+  addAlg("LSOCLL", "R' F' R U R U' R' F");
   addAlg("EO", "R' F R");
   addAlg("EOline", "B U B' D F R' L D'");
   addAlg("EOcross", "B U B' D F R' L D'");
