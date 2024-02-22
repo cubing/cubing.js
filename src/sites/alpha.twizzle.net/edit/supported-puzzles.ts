@@ -116,6 +116,11 @@ const puzzleData: Partial<
     optgroup: OptGroup.Other,
     symbol: GeometrySymbol.Square,
   },
+  tri_quad: {
+    "2D": true,
+    optgroup: OptGroup.Other,
+    symbol: GeometrySymbol.Square,
+  },
   loopover: {
     "2D": true,
     optgroup: OptGroup.Other,

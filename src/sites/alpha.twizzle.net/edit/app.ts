@@ -12,9 +12,9 @@ import {
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import {
+  TwistyPlayer,
   type ExperimentalStickering,
   type PuzzleID,
-  TwistyPlayer,
   type TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import {
@@ -640,6 +640,7 @@ class ControlPane {
       "redi_cube",
       "loopover",
       "melindas2x2x2x2",
+      "tri_quad",
       "loopover",
     ].includes(puzzle);
     this.toolGrid.setButtonEnabled(

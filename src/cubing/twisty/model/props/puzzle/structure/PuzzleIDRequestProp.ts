@@ -1,7 +1,7 @@
 import {
-  type NoValueType,
   NO_VALUE,
   SimpleTwistyPropSource,
+  type NoValueType,
 } from "../../TwistyProp";
 
 export const puzzleIDs = {
@@ -24,6 +24,7 @@ export const puzzleIDs = {
   kilominx: true,
   redi_cube: true,
   melindas2x2x2x2: true,
+  tri_quad: true,
   loopover: true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;

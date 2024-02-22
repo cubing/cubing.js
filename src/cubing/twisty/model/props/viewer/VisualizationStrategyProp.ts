@@ -1,6 +1,6 @@
-import type { VisualizationFormatWithAuto } from "./VisualizationProp";
-import { TwistyPropDerived } from "../TwistyProp";
 import type { PuzzleID } from "../../..";
+import { TwistyPropDerived } from "../TwistyProp";
+import type { VisualizationFormatWithAuto } from "./VisualizationProp";
 
 type VisualizationStrategyPropInputs = {
   visualizationRequest: VisualizationFormatWithAuto;
@@ -25,6 +25,7 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
       case "square1":
       case "redi_cube":
       case "melindas2x2x2x2":
+      case "tri_quad":
       case "loopover":
         return "2D";
       case "3x3x3":
