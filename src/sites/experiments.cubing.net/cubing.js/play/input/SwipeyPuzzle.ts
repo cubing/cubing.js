@@ -3,12 +3,12 @@ import type { AlgLeaf } from "../../../../../cubing/alg/alg-nodes/AlgNode";
 import { puzzles } from "../../../../../cubing/puzzles";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
 import {
-  type BackViewLayout,
   TwistyPlayer,
+  type BackViewLayout,
   type TwistyPlayerConfig,
   type VisualizationFormat,
 } from "../../../../../cubing/twisty";
-import { getSetup, type PuzzleID, getCancel } from "../url-params";
+import { getCancel, getSetup, type PuzzleID } from "../url-params";
 import { SwipeGrid, themes, type ThemeType } from "./SwipeGrid";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
@@ -83,6 +83,17 @@ export const moveMaps: Record<PuzzleID, string[][]> = {
   ],
   megaminx: megaminxAndKilominx,
   kilominx: megaminxAndKilominx,
+  tri_quad: [
+    ["", "U'", "U2'", "", "", "", "", "", "/enter"],
+    ["U", "", "U'", "", "", "", "", "", ""],
+    ["U2", "U", "", "", "", "R'", "/backspace", "", "R2'"],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "R", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["/space", "", "R2", "", "", "", "", "", ""],
+  ],
 };
 
 export type Action = "space" | "enter" | "backspace";
