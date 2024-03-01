@@ -16,7 +16,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
+          bun-version: 1.0.26 # TODO: https://github.com/oven-sh/bun/issues/9024
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -44,7 +44,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
+          bun-version: 1.0.26 # TODO: https://github.com/oven-sh/bun/issues/9024
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -70,7 +70,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
+          bun-version: 1.0.26 # TODO: https://github.com/oven-sh/bun/issues/9024
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -97,7 +97,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
+          bun-version: 1.0.26 # TODO: https://github.com/oven-sh/bun/issues/9024
       - run: make quick-setup
       - name: Set up `node`
         uses: actions/setup-node@v4
