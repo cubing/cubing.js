@@ -57,14 +57,6 @@ build-site-docs:
 	${BUNX} typedoc src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
-.PHONY: generate-js
-generate-js: generate-js-parsers generate-js-svg
-.PHONY: generate-js-parsers
-generate-js-parsers:
-	${BUNX} peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy
-.PHONY: generate-js-svg
-generate-js-svg:
-	@echo "TODO: Generating JS for SVGs is not implemented yet."
 .PHONY: dev
 dev: quick-setup
 	${BUN_RUN} ./script/build/sites/dev.ts
