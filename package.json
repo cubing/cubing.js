@@ -115,6 +115,7 @@
     "dev": "make dev",
     "link": "make link",
     "clean": "make clean",
+    "reset": "make reset",
     "test": "make test",
     "test-info": "make test-info",
     "test-fast": "make test-fast",

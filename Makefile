@@ -68,6 +68,14 @@ clean:
 	rm -rf \
 		dist .temp coverage script/bin/screenshot-src/main.js \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
+.PHONY: reset
+reset: clean
+	rm -rf node_modules
+	@echo ""
+	@echo "To reinstall dependencies, run:"
+	@echo ""
+	@echo "    make setup"
+	@echo ""
 .PHONY: test
 test: test-info
 .PHONY: test-info
