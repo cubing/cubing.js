@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf8">
   <title>cubing.js</title>
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="../../main.css">
   <script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
 </head>
+
 <body>
   <content>
     <!-- Tip: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
@@ -19,9 +21,10 @@
         <code>cubing.js</code> is a library for showing and playing with twisty
         puzzles.
       </p>
-      <p>You may use it for free in any website or app, for any personal use or if you <a
-      href="https://github.com/cubing/cubing.js/blob/main/LICENSE.md">publicly
-      share any code that uses it</a>.</p>
+      <p>
+        <code>cubing.js</code> is a library for showing and playing with twisty
+        puzzles. You may use it for free in any website or app.
+      </p>
     </section>
 
     <section id="show-alg">
@@ -35,8 +38,8 @@
           <code class="sample">
             <span>&lt;script
               src=&quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/twisty&quot;
-              type=&quot;module&quot;&gt;&lt;/script&gt;
-            </span>
+          type=&quot;module&quot;&gt;&lt;/script&gt;
+          </span>
           </code>
           <p>Create any number of players, like this:</p>
           <code class="sample">
@@ -54,7 +57,7 @@
     <section id="parameters">
       <h1><a href="#parameters">Parameters</a></h1>
       <p>The example above uses only the <code>alg</code> parameter; there are
-      many more. Here is a player that uses a variety of parameters:</p>
+        many more. Here is a player that uses a variety of parameters:</p>
       <div class="code-demo">
         <code class="sample">
           <span>&lt;twisty-player<br>
@@ -66,20 +69,15 @@
             &gt;&lt;/twisty-player&gt;
           </span>
         </code>
-        <twisty-player
-          puzzle="4x4x4"
-          alg="r U2 x r U2 r U2 r' U2 l U2 r' U2 r U2 r' U2 r'"
-          background="none"
-          hint-facelets="none"
-          back-view="top-right"
-        ></twisty-player>
+        <twisty-player puzzle="4x4x4" alg="r U2 x r U2 r U2 r' U2 l U2 r' U2 r U2 r' U2 r'" background="none"
+          hint-facelets="none" back-view="top-right"></twisty-player>
       </div>
       <p>
         <a href="https://codepen.io/cubing/pen/MWbegxW">Try it</a>.
       </p>
       <p>
         You can view and try out more options <a
-        href="https://experiments.cubing.net/cubing.js/twisty/twisty-player-config.html">here</a>.
+          href="https://experiments.cubing.net/cubing.js/twisty/twisty-player-config.html">here</a>.
         Note that some combinations are not supported yet (for example, some
         puzzles do not work with <code>visualization="2D"</code> yet).
       </p>
@@ -88,7 +86,8 @@
     <section id="style">
       <h1><a href="#style">Size, background, and other styles</a></h1>
       <p>A <code>twisty-player</code> has a default width of 384px and height of 256px.</p>
-      <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a> to set the dimensions and other formatting styles of a <code>twisty-player</code>:</p>
+      <p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a> to set the dimensions and other
+        formatting styles of a <code>twisty-player</code>:</p>
       <div class="code-demo">
         <code class="sample">
           <span>&lt;twisty-player<br>
@@ -105,40 +104,36 @@
             &gt;&lt;/twisty-player&gt;
           </span>
         </code>
-        <twisty-player
-          style="width: 256px;
+        <twisty-player style="width: 256px;
             height: 192px;
             margin: auto;
             background: #0088ff22;
-            border: 4px double #00000044;"
-          puzzle="fto"
-          alg="[R: [B', R F R']]"
-          hint-facelets="none"
-          back-view="side-by-side"
-          background="none"
-        ></twisty-player>
+            border: 4px double #00000044;" puzzle="fto" alg="[R: [B', R F R']]" hint-facelets="none"
+          back-view="side-by-side" background="none"></twisty-player>
       </div>
       <p>(Tip: you should set <code>background=&quot;none&quot</code> on
-      the <code>twisty-player</code> to remove
-      the default background if you want
-      a different one.)</p>
+        the <code>twisty-player</code> to remove
+        the default background if you want
+        a different one.)</p>
       <p>
-        To have the player take up all the available space, you may also find it useful to use: <code>width: 100%; height: 100%;</code>
+        To have the player take up all the available space, you may also find it useful to use:
+        <code>width: 100%; height: 100%;</code>
       </p>
       <p>
         <a href="https://codepen.io/cubing/pen/xxROKBR">Try it</a>.
       </p>
     </section>
-    
+
     <section id="experimental">
       <h1><a href="#experimental">Experimental Parameters</a></h1>
 
       <p>Parameters (or parameter values) that start with <code>experimental</code> may not be reliable in
-      all situations. All experimental features will eventually be
-      removed (either replaced with a non-experimental version of the feature, or
-      removed completely), but you may find it convenient to try them out. Please send us
-      <a href="#contribute">feedback</a> about your experience with experimental
-      features.</p>
+        all situations. All experimental features will eventually be
+        removed (either replaced with a non-experimental version of the feature, or
+        removed completely), but you may find it convenient to try them out. Please send us
+        <a href="#contribute">feedback</a> about your experience with experimental
+        features.
+      </p>
 
       <h3>Use a setup alg or scramble</h3>
       <p>This example also demonstrates multi-line algs:</p>
@@ -154,24 +149,23 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U // AUF&quot;<br>
           &gt;&lt;/twisty-player&gt;
         </code>
-        <twisty-player
-          experimental-setup-alg="F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2"
-          alg="y x' // inspection
+        <twisty-player experimental-setup-alg="F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2" alg="y x' // inspection
             U R2 U' F' L F' U' L' // XX-Cross + EO
             U' R U R' // 3rd slot
             R' U R U2' R' U R // 4th slot
             U R' U' R U' R' U2 R // OLL / ZBLL
-            U // AUF"
-        ></twisty-player>
+            U // AUF"></twisty-player>
       </div>
 
       <h3>End solved / end with the setup pattern</h3>
       <p>
-        <code>experimental-setup-anchor=&quot;end&quot;</code> will make the alg end with the solved pattern, rather than starting with the solved pattern.
+        <code>experimental-setup-anchor=&quot;end&quot;</code> will make the alg end with the solved pattern, rather
+        than starting with the solved pattern.
       </p>
       <p>
-        If you also use <code>experimental-setup-alg</code> at the same time, the setup pattern (the result of applying the setup alg to the solved pattern) will be used instead of the solved pattern.
-    </p>
+        If you also use <code>experimental-setup-alg</code> at the same time, the setup pattern (the result of applying
+        the setup alg to the solved pattern) will be used instead of the solved pattern.
+      </p>
       <div class="code-demo">
         <code class="sample">
           &lt;twisty-player<br>
@@ -179,15 +173,12 @@
           &nbsp;&nbsp;alg=&quot;U M&#x27; U&#x27; R&#x27; U&#x27; R U M2&#x27; U&#x27; R&#x27; U r&quot;<br>
           &gt;&lt;/twisty-player&gt;
         </code>
-        <twisty-player
-          experimental-setup-anchor="end"
-          alg="U M' U' R' U' R U M2' U' R' U r"
-        ></twisty-player>
+        <twisty-player experimental-setup-anchor="end" alg="U M' U' R' U' R U M2' U' R' U r"></twisty-player>
       </div>
-      
+
       <h3>2D visualization</h3>
       <p>2D visualization is technically not experimental, but it's only
-      supported for a few puzzles so far.</p>
+        supported for a few puzzles so far.</p>
       <div class="code-demo">
         <code class="sample">
           &lt;twisty-player<br>
@@ -195,12 +186,10 @@
           &nbsp;&nbsp;visualization=&quot;<b><u>2D</u></b>&quot;<br>
           &gt;&lt;/twisty-player&gt;
         </code>
-        <twisty-player
-          alg="M2 E2 S2"
-          visualization="2D"
-          style="max-height: 256px;"
-        ></twisty-player><!-- TODO: fix the max-height override -->
-      </div><h3>2D LL visualization</h3>
+        <twisty-player alg="M2 E2 S2" visualization="2D"
+          style="max-height: 256px;"></twisty-player><!-- TODO: fix the max-height override -->
+      </div>
+      <h3>2D LL visualization</h3>
       <div class="code-demo">
         <code class="sample">
                       &lt;twisty-player<br>
@@ -212,19 +201,14 @@
                       &nbsp;&nbsp;control-panel=&quot;none&quot;<br>
                       &gt;&lt;/twisty-player&gt;
                     </code>
-        <twisty-player
-          alg="R U R' (U' D) R2 U' R U' R' U R' U R2 (D' U)"
-          experimental-setup-anchor="end"
-          visualization="experimental-2D-LL"
-          background="none"
-          control-panel="none"
-          style="max-height: 256px;"
-        ></twisty-player><!-- TODO: fix the max-height override -->
+        <twisty-player alg="R U R' (U' D) R2 U' R U' R' U R' U R2 (D' U)" experimental-setup-anchor="end"
+          visualization="experimental-2D-LL" background="none" control-panel="none"
+          style="max-height: 256px;"></twisty-player><!-- TODO: fix the max-height override -->
       </div>
 
       <h3>Stickering</h3>
       <p>This is very useful for showing algs that correspond to a particular
-      step in a speedsolving method.</p>
+        step in a speedsolving method.</p>
       <div class="code-demo">
         <code class="sample">
                 &lt;twisty-player<br>
@@ -233,11 +217,8 @@
                 &nbsp;&nbsp;<b><u>experimental-stickering</u></b>=&quot;OLL&quot;<br>
                 &gt;&lt;/twisty-player&gt;
               </code>
-        <twisty-player
-          alg="r U R' U R U2 r'"
-          experimental-setup-anchor="end"
-          experimental-stickering="OLL"
-        ></twisty-player>
+        <twisty-player alg="r U R' U R U2 r'" experimental-setup-anchor="end"
+          experimental-stickering="OLL"></twisty-player>
       </div>
       <p>Cross is currently only supported on the default D face (yellow):</p>
       <div class="code-demo">
@@ -248,11 +229,9 @@
                 &nbsp;&nbsp;<b><u>experimental-stickering</u></b>=&quot;Cross&quot;<br>
                 &gt;&lt;/twisty-player&gt;
               </code>
-        <twisty-player
-          alg="y' R' D2 R' y' R' U L2'"
+        <twisty-player alg="y' R' D2 R' y' R' U L2'"
           experimental-setup-alg="D U2 B D2 U2 L2 B D2 R2 F R2 B U2 D B2 F U B' R' B2 D'"
-          experimental-stickering="Cross"
-        ></twisty-player>
+          experimental-stickering="Cross"></twisty-player>
       </div>
     </section>
 
@@ -265,41 +244,43 @@
       <code class="sample">
         <span>
           <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
-import { TwistyPlayer } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/twisty&quot;;<br>
-<br>
-const player = new TwistyPlayer({<br>
-&nbsp;&nbsp;puzzle: &quot;4x4x4&quot;,<br>
-&nbsp;&nbsp;alg: &quot;R U R'&quot;,<br>
-&nbsp;&nbsp;hintFacelets: &quot;none&quot;,<br>
-&nbsp;&nbsp;backView: &quot;top-right&quot;,<br>
-&nbsp;&nbsp;background: &quot;none&quot;<br>
-});<br>
-document.body.appendChild(player);<br>
-<br>
-// You can also change parameters after you've constructed the player:<br>
-player.backView = &quot;side-by-side&quot;;<br>
-<code class="boilerplate">&lt;/script&gt;</code>
-        </span>
+      import { TwistyPlayer } from &quot;<code class="boilerplate"
+        title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/twisty&quot;;<br>
+      <br>
+      const player = new TwistyPlayer({<br>
+      &nbsp;&nbsp;puzzle: &quot;4x4x4&quot;,<br>
+      &nbsp;&nbsp;alg: &quot;R U R'&quot;,<br>
+      &nbsp;&nbsp;hintFacelets: &quot;none&quot;,<br>
+      &nbsp;&nbsp;backView: &quot;top-right&quot;,<br>
+      &nbsp;&nbsp;background: &quot;none&quot;<br>
+      });<br>
+      document.body.appendChild(player);<br>
+      <br>
+      // You can also change parameters after you've constructed the player:<br>
+      player.backView = &quot;side-by-side&quot;;<br>
+      <code class="boilerplate">&lt;/script&gt;</code>
+      </span>
       </code>
       <p>
         <a href="https://codepen.io/cubing/pen/vYyKBMd">Try it</a>.
       </p>
       <p>There are more experimental features available &mdash; such as
-      <code>twistyPlayer.play()</code> &mdash; but many of them will change before
-      version <code>1.0</code> of <code>cubing.js</code>. Please consider <a
-      href="#contribute">contributing</a> to help make these features
-      stable.</p>
+        <code>twistyPlayer.play()</code> &mdash; but many of them will change before
+        version <code>1.0</code> of <code>cubing.js</code>. Please consider <a href="#contribute">contributing</a> to
+        help make these features
+        stable.
+      </p>
 
       <h3>Debugging and Experimenting</h3>
       You can run the following in the JavaScript console (for example, in <a
-      href="https://developers.google.com/web/tools/chrome-devtools">Chrome</a>,
+        href="https://developers.google.com/web/tools/chrome-devtools">Chrome</a>,
       <a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging">Android Chrome</a>,
+      <a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Firefox</a>,
       <a
-      href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Firefox</a>,
-      <a
-      href="https://support.apple.com/guide/safari/use-the-developer-tools-in-the-develop-menu-sfri20948/mac">Safari</a>,
+        href="https://support.apple.com/guide/safari/use-the-developer-tools-in-the-develop-menu-sfri20948/mac">Safari</a>,
       <a href="https://www.browserstack.com/guide/how-to-debug-on-iphone">iOS Safari</a>,
-      or <a href="https://docs.microsoft.com/en-us/microsoft-edge/devtools-guide-chromium/">Edge</a>) to select the first
+      or <a href="https://docs.microsoft.com/en-us/microsoft-edge/devtools-guide-chromium/">Edge</a>) to select the
+      first
       <code>&lt;twisty-player&gt;</code> on the page:
       <code class="sample">
         document.querySelector(&quot;twisty-player&quot;)
@@ -309,4 +290,5 @@ player.backView = &quot;side-by-side&quot;;<br>
     </section>
   </content>
 </body>
+
 </html>
