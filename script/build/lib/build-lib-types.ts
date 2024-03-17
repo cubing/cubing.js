@@ -37,11 +37,11 @@ await spawnPromise("npx", [
   "dist/lib/cubing",
 ]);
 
-const TYPESCRIPT_DECLARATION_INDEX = "index.d.ts";
+export const TYPESCRIPT_DECLARATION_INDEX = "index.d.ts";
 
 // TODO: remove this once TypeScript resolves types from the `package.json` exports out of the box.
 for (const packageName of packageNames) {
-  await mkdir(packageName);
+  await mkdir(packageName, { recursive: true });
   const indexFileName = join(packageName, TYPESCRIPT_DECLARATION_INDEX);
   await writeFile(
     indexFileName,
