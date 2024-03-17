@@ -31,7 +31,6 @@ default:
 # an error).
 .PHONY: build
 build: clean build-lib build-bin build-sites
-	${BUN_RUN} script/build/lib/clean-types.ts
 .PHONY: build-lib
 build-lib: build-lib-js build-lib-types
 .PHONY: build-lib-js
@@ -69,6 +68,7 @@ clean:
 	rm -rf \
 		dist .temp coverage script/bin/screenshot-src/main.js \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
+	${BUN_RUN} script/build/lib/clean-types.ts
 .PHONY: reset
 reset: clean
 	rm -rf node_modules

@@ -98,7 +98,7 @@
     "node": ">=19",
     "bun": ">=1.0.30"
   },
-  "files": ["./dist/bin/", "./dist/lib/"],
+  "files": ["./dist/bin/", "./dist/lib/", "*/index.d.ts"],
   "scripts": {
     "default": "make default",
     "build": "make build",
