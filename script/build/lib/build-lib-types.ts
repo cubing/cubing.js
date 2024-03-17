@@ -45,7 +45,7 @@ for (const packageName of packageNames) {
   const indexFileName = join(packageName, TYPESCRIPT_DECLARATION_INDEX);
   await writeFile(
     indexFileName,
-    `export type * from ${JSON.stringify(
+    `export * from ${JSON.stringify(
       join(
         "..",
         "dist",
