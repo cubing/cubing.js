@@ -190,7 +190,7 @@ test-dist-bin-npm-exec: build-bin
 	time ${NPM} exec scramble -- 222
 .PHONY: format
 format:
-	${BIOME} format --write ./script ./src
+	${BIOME} check --apply ./script ./src
 .PHONY: setup
 setup:
 	${BUN} install # TODO: was `npm ci`
