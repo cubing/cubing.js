@@ -31,6 +31,7 @@ default:
 # an error).
 .PHONY: build
 build: clean build-lib build-bin build-sites
+	${BUN_RUN} script/build/lib/clean-types.ts
 .PHONY: build-lib
 build-lib: build-lib-js build-lib-types
 .PHONY: build-lib-js

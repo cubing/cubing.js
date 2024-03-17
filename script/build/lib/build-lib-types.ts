@@ -1,4 +1,5 @@
-import { rename } from "fs/promises";
+import { mkdir, rename, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import { spawnPromise } from "../../lib/execPromise";
 import { packageNames } from "../common/package-info";
 
@@ -35,3 +36,25 @@ await spawnPromise("npx", [
   "--out-dir",
   "dist/lib/cubing",
 ]);
+
+const TYPESCRIPT_DECLARATION_INDEX = "index.d.ts";
+
+// TODO: remove this once TypeScript resolves types from the `package.json` exports out of the box.
+for (const packageName of packageNames) {
+  await mkdir(packageName);
+  const indexFileName = join(packageName, TYPESCRIPT_DECLARATION_INDEX);
+  await writeFile(
+    indexFileName,
+    `export type * from ${JSON.stringify(
+      join(
+        "..",
+        "dist",
+        "lib",
+        "cubing",
+        packageName,
+        TYPESCRIPT_DECLARATION_INDEX,
+      ),
+    )};`,
+    "utf-8",
+  );
+}
