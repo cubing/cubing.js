@@ -1,6 +1,6 @@
 {
   "name": "cubing",
-  "version": "0.48.0",
+  "version": "0.48.1",
   "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
   "type": "module",
@@ -98,7 +98,11 @@
     "node": ">=19",
     "bun": ">=1.0.30"
   },
-  "files": ["./dist/bin/", "./dist/lib/", "*/index.d.ts"],
+  "files": [
+    "./dist/bin/",
+    "./dist/lib/",
+    "*/index.d.ts"
+  ],
   "scripts": {
     "default": "make default",
     "build": "make build",
