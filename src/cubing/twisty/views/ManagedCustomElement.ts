@@ -10,7 +10,7 @@ export class ManagedCustomElement extends HTMLElementShim {
   public readonly shadow: ShadowRoot; // TODO: hide this
   public readonly contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
 
-  constructor(options?: { mode: "open" | "closed" }) {
+  constructor(options?: { mode?: "open" | "closed" }) {
     super();
     this.shadow = this.attachShadow({ mode: options?.mode ?? "closed" });
 
