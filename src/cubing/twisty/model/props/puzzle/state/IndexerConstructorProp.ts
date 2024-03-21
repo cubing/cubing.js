@@ -21,7 +21,7 @@ interface IndexerConstructorPropInputs {
 }
 
 // `SimultaneousMoveIndexer` is currently not optimized and has to expand the alg. This bounds the number of moves in the expanded alg.
-const SIMULTANEOUS_INDEXER_MAX_EXPANDED_LEAVES = 256;
+const SIMULTANEOUS_INDEXER_MAX_EXPANDED_LEAVES = 1024;
 
 // TODO: Also handle PG3D vs. 3D
 export class IndexerConstructorProp extends TwistyPropDerived<
