@@ -4,7 +4,7 @@ BUN_RUN=${BUN} run
 BIOME=${BUN} x @biomejs/biome
 NODE=node
 NPM=npm
-WEB_TEST_RUNNER=${BUNX} @web/test-runner
+WEB_TEST_RUNNER=${BUNX} web-test-runner # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
 
 .PHONY: default
 default:
