@@ -1,7 +1,7 @@
 import type { AlgIndexer } from "../../../..";
 import type { Alg } from "../../../../../alg";
 import type { KPuzzle } from "../../../../../kpuzzle";
-import { experimentalCountMoves } from "../../../../../notation";
+import { countLeavesInExpansionForSimultaneousMoveIndexer } from "../../../../../notation/CountMoves";
 import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer";
 import { SimultaneousMoveIndexer } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexer";
 import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
@@ -20,6 +20,9 @@ interface IndexerConstructorPropInputs {
   indexerConstructorRequest: IndexerStrategyName;
 }
 
+// `SimultaneousMoveIndexer` is currently not optimized and has to expand the alg. This bounds the number of moves in the expanded alg.
+const SIMULTANEOUS_INDEXER_MAX_EXPANDED_LEAVES = 256;
+
 // TODO: Also handle PG3D vs. 3D
 export class IndexerConstructorProp extends TwistyPropDerived<
   IndexerConstructorPropInputs,
@@ -29,7 +32,8 @@ export class IndexerConstructorProp extends TwistyPropDerived<
     switch (inputs.indexerConstructorRequest) {
       case "auto":
         if (
-          experimentalCountMoves(inputs.alg.alg) < 100 &&
+          countLeavesInExpansionForSimultaneousMoveIndexer(inputs.alg.alg) <=
+            SIMULTANEOUS_INDEXER_MAX_EXPANDED_LEAVES &&
           inputs.puzzle === "3x3x3" &&
           inputs.visualizationStrategy === "Cube3D"
         ) {

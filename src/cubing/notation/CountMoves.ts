@@ -66,6 +66,50 @@ class CountMoves extends TraversalUp<number> {
   }
 }
 
+// TODO
+class CountLeavesInExpansionForSimultaneousMoveIndexer extends TraversalUp<number> {
+  public traverseAlg(alg: Alg): number {
+    let r = 0;
+    for (const algNode of alg.childAlgNodes()) {
+      r += this.traverseAlgNode(algNode);
+    }
+    return r;
+  }
+
+  public traverseGrouping(grouping: Grouping): number {
+    const alg: Alg = grouping.alg;
+    return this.traverseAlg(alg) * Math.abs(grouping.amount);
+  }
+
+  public traverseMove(move: Move): number {
+    return 1;
+  }
+
+  public traverseCommutator(commutator: Commutator): number {
+    return (
+      2 * (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
+    );
+  }
+
+  public traverseConjugate(conjugate: Conjugate): number {
+    return 2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B);
+  }
+
+  // TODO: Remove spaces between repeated pauses (in traverseSequence)
+  public traversePause(_pause: Pause): number {
+    return 1;
+  }
+
+  public traverseNewline(_newLine: Newline): number {
+    return 1;
+  }
+
+  // TODO: Enforce being followed by a newline (or the end of the alg)?
+  public traverseLineComment(_comment: LineComment): number {
+    return 1;
+  }
+}
+
 function isCharUppercase(c: string): boolean {
   return "A" <= c && c <= "Z";
 }
@@ -119,6 +163,11 @@ export const countRangeBlockQuantumMovesPG = functionFromTraversal(CountMoves, [
 export const countRangeBlockMovesPG = functionFromTraversal(CountMoves, [
   rangeBlockTurnMetric,
 ]);
+
+export const countLeavesInExpansionForSimultaneousMoveIndexer =
+  functionFromTraversal(CountLeavesInExpansionForSimultaneousMoveIndexer, [
+    baseMetric,
+  ]);
 
 /**
  * Only implemented so far:
