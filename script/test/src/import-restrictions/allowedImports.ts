@@ -25,6 +25,7 @@ export const mainAllowedImports: AllowedImports = {
       "node:path",
       "node:process",
       "node:util",
+      "node:zlib",
 
       "package.json",
       "cubing",
@@ -33,7 +34,6 @@ export const mainAllowedImports: AllowedImports = {
       "esbuild",
       "node-fetch",
       "playwright",
-      "zlib",
       "yargs",
     ],
     dynamic: ["cubing", "node:repl"],

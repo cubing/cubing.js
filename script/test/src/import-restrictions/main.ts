@@ -1,12 +1,12 @@
+import { build, type ImportKind, type Metafile, type Plugin } from "esbuild";
 import { join } from "node:path";
 import { exit } from "node:process";
-import { build, type ImportKind, type Metafile, type Plugin } from "esbuild";
+import { packageNames } from "../../../build/common/package-info";
 import {
+  specAllowedImports as allowedImportsIncludingForSpecFiles,
   mainAllowedImports,
   type AllowedImports,
-  specAllowedImports as allowedImportsIncludingForSpecFiles,
 } from "./allowedImports";
-import { packageNames } from "../../../build/common/package-info";
 
 async function checkAllowedImports(
   entryPoints: string[],
@@ -136,12 +136,15 @@ async function checkAllowedImports(
 
 await checkAllowedImports(
   [
+    "script/**/*.ts",
     "script/**/*.js",
+    "src/bin/**/*.js",
     "src/bin/**/*.ts",
     // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
     ...packageNames.map((packageName) =>
       join("src/cubing", packageName, "index.ts"),
     ),
+    "src/sites/**/*.js",
     "src/sites/**/*.ts",
   ],
   mainAllowedImports,
