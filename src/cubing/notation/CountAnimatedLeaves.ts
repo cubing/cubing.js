@@ -1,15 +1,15 @@
 import {
-  Alg,
-  Commutator,
-  Conjugate,
-  Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
   TraversalUp,
+  functionFromTraversal,
+  type Alg,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../alg";
-import { functionFromTraversal } from "../alg";
 
 // TODO: Include Pause, include amounts
 class CountAnimatedLeaves extends TraversalUp<number, number> {

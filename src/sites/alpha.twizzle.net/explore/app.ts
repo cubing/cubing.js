@@ -5,18 +5,17 @@ import {
 } from "../../../cubing/bluetooth";
 import { KTransformation } from "../../../cubing/kpuzzle";
 import {
-  getPuzzleDescriptionString,
   getPG3DNamedPuzzles,
-  PuzzleGeometry,
+  getPuzzleDescriptionString,
+  type PuzzleGeometry,
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
-import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
-import { constructTwistyPlayer } from "./twisty-player";
-import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
-
-import "./TwistyPuzzleDescriptionInput";
 import type { PuzzleLoader } from "../../../cubing/puzzles";
+import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import { constructMoveCountDisplay } from "../../../cubing/twisty/cubing-private";
+import { constructTwistyPlayer } from "./twisty-player";
+import "./TwistyPuzzleDescriptionInput";
+import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
 
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;

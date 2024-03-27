@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 
-import { Alg, Move } from "../alg";
+import { Alg, type Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
 import { PGPuzzles } from "./PGPuzzles";
-import { getPuzzleGeometryByDesc, PGNotation } from "./PuzzleGeometry";
+import { PGNotation, getPuzzleGeometryByDesc } from "./PuzzleGeometry";
 
 import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS";
 

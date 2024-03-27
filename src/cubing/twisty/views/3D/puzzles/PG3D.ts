@@ -6,12 +6,12 @@ import {
   Euler,
   FrontSide,
   Group,
-  Material,
   Mesh,
   MeshBasicMaterial,
   Object3D,
-  Texture,
   Vector3,
+  type Material,
+  type Texture,
 } from "three";
 import { Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
@@ -22,8 +22,8 @@ import type {
 } from "../../../../puzzle-geometry";
 import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
 import {
-  type ExperimentalFaceletMeshStickeringMask,
   experimentalGetFaceletStickeringMask,
+  type ExperimentalFaceletMeshStickeringMask,
   type ExperimentalStickeringMask,
 } from "../../../../puzzles/cubing-private";
 import type { PuzzlePosition } from "../../../controllers/AnimationTypes";

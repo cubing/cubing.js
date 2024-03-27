@@ -1,13 +1,13 @@
 import {
-  Alg,
-  Grouping,
-  LineComment,
-  Commutator,
-  Conjugate,
-  Move,
-  Newline,
-  Pause,
   TraversalUp,
+  type Alg,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../../../alg";
 import type { Duration } from "../AnimationTypes";
 

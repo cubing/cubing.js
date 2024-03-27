@@ -1,8 +1,8 @@
 import type { Alg } from "../../../alg";
-import {
-  type KPuzzleDefinition,
-  type KTransformationData,
+import type {
   KPattern,
+  KPuzzleDefinition,
+  KTransformationData,
 } from "../../../kpuzzle";
 import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 

@@ -1,17 +1,17 @@
 import {
   Alg,
   type AlgNode,
-  Commutator,
-  Conjugate,
-  Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../../../../../cubing/alg";
 import {
-  functionFromTraversal,
   TraversalUp,
+  functionFromTraversal,
 } from "../../../../../cubing/alg/traversal";
 import { cube3x3x3 } from "../../../../../cubing/puzzles";
 
@@ -35,9 +35,7 @@ class RemoveAnnotations extends TraversalUp<Generator<AlgNode>> {
   }
 
   public *traverseConjugate(conjugate: Conjugate): Generator<AlgNode> {
-    {
-      yield conjugate;
-    }
+    yield conjugate;
   }
 
   public *traversePause(_pause: Pause): Generator<AlgNode> {

@@ -27,6 +27,7 @@ export class PLazy<T> extends Promise<T> {
     });
   }
 
+  // biome-ignore lint/suspicious/noThenProperty: This is implementing the `Promise` API.
   then(onFulfilled, onRejected) {
     this._promise = this._promise || new Promise(this._executor);
 

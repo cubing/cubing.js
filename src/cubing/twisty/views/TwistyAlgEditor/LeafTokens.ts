@@ -1,16 +1,16 @@
 import {
-  Alg,
-  Commutator,
-  Conjugate,
-  Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
   TraversalDownUp,
+  functionFromTraversal,
+  type Alg,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parseAlg";
-import { functionFromTraversal } from "../../../alg";
 import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves";
 
 export type AnimatedLeafAlgNodeInfo = {

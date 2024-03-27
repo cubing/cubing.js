@@ -1,4 +1,4 @@
-import { Alg, Move } from "../../alg";
+import { Alg, type Move } from "../../alg";
 import { cube3x3x3 } from "../../puzzles";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 

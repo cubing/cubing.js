@@ -1,7 +1,7 @@
-import type { Grouping } from "../containers/Grouping";
-import { AlgCommon, Comparable } from "../../common";
+import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { AlgLeaf } from "../AlgNode";
+import type { Grouping } from "../containers/Grouping";
 
 /** @category Alg Nodes */
 export class Pause extends AlgCommon<Pause> {

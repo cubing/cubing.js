@@ -1,16 +1,16 @@
 import {
-  Alg,
-  Commutator,
-  Conjugate,
-  Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
   TraversalUp,
+  functionFromTraversal,
+  type Alg,
   type AlgNode,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../../../../cubing/alg";
-import { functionFromTraversal } from "../../../../cubing/alg";
 
 class Extractor extends TraversalUp<Generator<[string, AlgNode | Alg]>> {
   *traverseAlg(alg: Alg): Generator<[string, AlgNode | Alg]> {

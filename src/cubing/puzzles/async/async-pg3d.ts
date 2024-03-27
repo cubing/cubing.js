@@ -1,19 +1,19 @@
+import {
+  Move,
+  type PuzzleSpecificSimplifyOptions,
+  type QuantumMove,
+} from "../../alg";
 import { KPuzzle, type KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
+import { PLazy } from "../../vendor/mit/p-lazy/p-lazy";
 import type { PuzzleLoader } from "../PuzzleLoader";
-import type { StickeringMask } from "../stickerings/mask";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,
 } from "../stickerings/cube-like-stickerings";
+import type { StickeringMask } from "../stickerings/mask";
 import { getCached } from "./lazy-cached";
-import {
-  Move,
-  type PuzzleSpecificSimplifyOptions,
-  QuantumMove,
-} from "../../alg";
-import { PLazy } from "../../vendor/mit/p-lazy/p-lazy";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(

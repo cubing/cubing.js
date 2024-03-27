@@ -1,5 +1,5 @@
 import { Alg } from "../../../../alg";
-import { KPattern, KTransformation } from "../../../../kpuzzle";
+import { KPattern, type KTransformation } from "../../../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../../cubing-private";
 
 export function puzzleOrientation3x3x3Idx(pattern: KPattern): [number, number] {

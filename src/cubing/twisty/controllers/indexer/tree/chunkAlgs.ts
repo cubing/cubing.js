@@ -1,17 +1,17 @@
 import {
-  Alg,
   AlgBuilder,
-  type AlgNode,
-  Commutator,
   Conjugate,
   Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
   TraversalUp,
+  functionFromTraversal,
+  type Alg,
+  type AlgNode,
+  type Commutator,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../../../../alg";
-import { functionFromTraversal } from "../../../../alg";
 
 const MIN_CHUNKING_THRESHOLD = 16;
 

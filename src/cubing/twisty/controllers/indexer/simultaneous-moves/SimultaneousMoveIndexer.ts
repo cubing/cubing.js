@@ -1,4 +1,4 @@
-import { Alg, Move } from "../../../../alg";
+import { Move, type Alg } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
 import {
@@ -9,9 +9,9 @@ import {
 } from "../../AnimationTypes";
 import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import {
-  type AnimatedLeafAlgNode,
-  type AnimLeafWithRange,
   simulMoves,
+  type AnimLeafWithRange,
+  type AnimatedLeafAlgNode,
 } from "./simul-moves";
 
 const demos: Record<string, AnimLeafWithRange[]> = {

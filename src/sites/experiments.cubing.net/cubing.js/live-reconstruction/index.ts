@@ -1,23 +1,27 @@
-import { cubeLikePuzzleStickering } from "../../../../cubing/puzzles/stickerings/cube-like-stickerings";
-import { Alg, AlgBuilder, Move } from "../../../../cubing/alg";
 import {
-  KPattern,
-  type KPatternData,
-  type KPatternOrbitData,
-  KTransformation,
-} from "../../../../cubing/kpuzzle";
-import { PieceStickering } from "../../../../cubing/puzzles/stickerings/mask";
-
-import type { AlgWithIssues } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import { TwistyAlgViewer, type TwistyPlayer } from "../../../../cubing/twisty";
-import { LineComment, Newline } from "../../../../cubing/alg";
-import { eventInfo, puzzles } from "../../../../cubing/puzzles";
+  Alg,
+  AlgBuilder,
+  LineComment,
+  Move,
+  Newline,
+} from "../../../../cubing/alg";
 import {
   debugKeyboardConnect,
   type MoveEvent,
 } from "../../../../cubing/bluetooth";
+import {
+  KPattern,
+  type KPatternData,
+  type KPatternOrbitData,
+  type KTransformation,
+} from "../../../../cubing/kpuzzle";
+import { eventInfo, puzzles } from "../../../../cubing/puzzles";
+import { cubeLikePuzzleStickering } from "../../../../cubing/puzzles/stickerings/cube-like-stickerings";
+import { PieceStickering } from "../../../../cubing/puzzles/stickerings/mask";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
+import type { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 import { constructMoveCountDisplay } from "../../../../cubing/twisty/cubing-private";
+import type { AlgWithIssues } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 
 const player = document.querySelector<TwistyPlayer>("twisty-player")!;
 const scrambleElem = document.querySelector<TwistyAlgViewer>("#scramble")!;

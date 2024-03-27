@@ -1,24 +1,24 @@
 import {
-  Alg,
-  Commutator,
-  Conjugate,
-  Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
+  functionFromTraversal,
   TraversalDownUp,
+  type Alg,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../alg";
-import { functionFromTraversal } from "../alg";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type {
-  KPuzzleOrbitDefinition,
-  KTransformationOrbitData,
-  KTransformationData,
-  KPuzzleDefinition,
   KPatternData,
   KPatternOrbitData,
+  KPuzzleDefinition,
+  KPuzzleOrbitDefinition,
+  KTransformationData,
+  KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 

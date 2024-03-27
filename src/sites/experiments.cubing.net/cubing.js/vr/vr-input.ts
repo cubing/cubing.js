@@ -2,11 +2,11 @@ import {
   AdditiveBlending,
   BufferGeometry,
   Float32BufferAttribute,
-  Group,
   Line,
   LineBasicMaterial,
   Vector3,
-  WebGLRenderer,
+  type Group,
+  type WebGLRenderer,
 } from "three";
 
 export enum Status {

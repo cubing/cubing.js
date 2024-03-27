@@ -1,4 +1,4 @@
-import { Alg, Move, TraversalUp } from "../../../alg";
+import { Alg, type Move, type TraversalUp } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
 import type { KPattern } from "../../../kpuzzle/KPattern";
 import { experimentalCountAnimatedLeaves } from "../../../notation";

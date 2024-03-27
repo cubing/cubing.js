@@ -1,9 +1,7 @@
 import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 
-{
-  document.querySelector("#no-attributes")!.appendChild(new TwistyPlayer());
-}
+document.querySelector("#no-attributes")!.appendChild(new TwistyPlayer());
 
 {
   document.querySelector("#alg")!.appendChild(

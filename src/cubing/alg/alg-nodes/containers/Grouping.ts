@@ -1,11 +1,11 @@
+import { Commutator, Conjugate } from "..";
 import { Alg, experimentalEnsureAlg, type FlexibleAlgSource } from "../../Alg";
-import { AlgCommon, Comparable } from "../../common";
+import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
+import type { AlgLeaf, AlgNode } from "../AlgNode";
 import { Move, QuantumMove } from "../leaves/Move";
 import type { Pause } from "../leaves/Pause";
 import { QuantumWithAmount } from "../QuantumWithAmount";
-import type { AlgLeaf, AlgNode } from "../AlgNode";
-import { Commutator, Conjugate } from "..";
 
 // This is a workaround for `jest`, which doesn't handle cycles of imports inside `cubing/alg`.
 // We need to lazy-initialize the reusable quantum moves for Square-1, so we create this wrapper for it.

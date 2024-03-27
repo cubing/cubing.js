@@ -1,19 +1,19 @@
 import {
   Alg,
-  Commutator,
-  Conjugate,
-  Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
   TraversalDownUp,
   TraversalUp,
   type AlgNode,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../../../../alg";
 import {
-  experimentalDirectedGenerator,
   ExperimentalIterationDirection,
+  experimentalDirectedGenerator,
 } from "../../../../alg/cubing-private";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { Duration } from "../../AnimationTypes";

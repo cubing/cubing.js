@@ -13,10 +13,10 @@ import {
   MeshBasicMaterial,
   Object3D,
   Quaternion,
-  Texture,
   TextureLoader,
   Vector2,
   Vector3,
+  type Texture,
 } from "three";
 import type { KPuzzle } from "../../../../kpuzzle";
 import type { ExperimentalStickeringMask } from "../../../../puzzles/cubing-private";
@@ -29,12 +29,12 @@ import type {
   PuzzlePosition,
 } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
+import type { FaceletScale } from "../../../model/props/puzzle/display/FaceletScaleProp";
 import {
-  type HintFaceletStyle,
   hintFaceletStyles,
+  type HintFaceletStyle,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
 import type { InitialHintFaceletsAnimation } from "../../../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
-import type { FaceletScale } from "../../../model/props/puzzle/display/FaceletScaleProp";
 import { TAU } from "../TAU";
 import { haveStartedSharingRenderers } from "../Twisty3DVantage";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";

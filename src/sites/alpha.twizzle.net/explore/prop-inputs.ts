@@ -28,7 +28,7 @@ function setupTempoScale(tempoScaleProp: TempoScaleProp): void {
     "#tempo-scale-display",
   ) as HTMLSpanElement;
   tempoScaleInput.addEventListener("input", () => {
-    tempoScaleProp.set(parseFloat(tempoScaleInput.value));
+    tempoScaleProp.set(Number.parseFloat(tempoScaleInput.value));
     tempoScaleDisplay.textContent = `${tempoScaleInput.value}×`;
   });
   tempoScaleProp.addFreshListener((tempoScale) => {

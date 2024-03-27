@@ -1,6 +1,6 @@
 import { bluetoothConnect, type BluetoothConnectOptions } from "../connect";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
-import { GanTimer, ganTimerConfig } from "./GanTimer";
+import { ganTimerConfig, type GanTimer } from "./GanTimer";
 
 /** @category Timers */
 export type BluetoothTimer = GanTimer; // TODO

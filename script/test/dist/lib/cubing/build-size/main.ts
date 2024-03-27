@@ -2,7 +2,7 @@ import { build } from "esbuild";
 import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { promisify } from "node:util";
-import { gzip } from "zlib";
+import { gzip } from "node:zlib";
 import { needPath } from "../../../../../lib/needPath.js";
 
 import { default as packageJSON } from "../../../../../../package.json" assert {

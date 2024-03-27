@@ -1,14 +1,14 @@
 import {
-  Alg,
-  Commutator,
-  Conjugate,
-  functionFromTraversal,
-  Grouping,
-  LineComment,
-  Move,
-  Newline,
-  Pause,
   TraversalDownUp,
+  functionFromTraversal,
+  type Alg,
+  type Commutator,
+  type Conjugate,
+  type Grouping,
+  type LineComment,
+  type Move,
+  type Newline,
+  type Pause,
 } from "../../../cubing/alg";
 
 const noAlgFeatures = {

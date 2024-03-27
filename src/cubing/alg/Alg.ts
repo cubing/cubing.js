@@ -1,15 +1,15 @@
 // https://js.cubing.net/cubing/alg/
 
-import { AlgCommon, Comparable } from "./common";
-import { experimentalIs, experimentalIsAlgNode } from "./is";
-import { direct, IterationDirection, reverse } from "./iteration";
-import { parseAlg } from "./parseAlg";
-import { simplify, type SimplifyOptions } from "./simplify";
 import { Grouping, Pause } from "./alg-nodes";
+import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
 import { LineComment } from "./alg-nodes/leaves/LineComment";
 import { Move } from "./alg-nodes/leaves/Move";
 import { Newline } from "./alg-nodes/leaves/Newline";
-import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
+import { AlgCommon, type Comparable } from "./common";
+import { experimentalIs, experimentalIsAlgNode } from "./is";
+import { IterationDirection, direct, reverse } from "./iteration";
+import { parseAlg } from "./parseAlg";
+import { simplify, type SimplifyOptions } from "./simplify";
 import { warnOnce } from "./warnOnce";
 
 export type FlexibleAlgSource = string | Iterable<AlgNode> | Alg;

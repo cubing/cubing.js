@@ -1,4 +1,4 @@
-import { AlgCommon, Comparable } from "../../common";
+import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { AlgLeaf } from "../AlgNode";
 

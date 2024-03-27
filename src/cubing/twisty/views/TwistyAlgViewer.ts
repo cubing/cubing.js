@@ -1,33 +1,33 @@
 import {
   Alg,
-  Commutator,
-  Conjugate,
   Grouping,
-  LineComment,
-  Move,
-  Newline,
   Pause,
   TraversalDownUp,
+  functionFromTraversal,
   type AlgNode,
+  type Commutator,
+  type Conjugate,
+  type LineComment,
+  type Move,
+  type Newline,
 } from "../../alg";
+import {
+  ExperimentalIterationDirection,
+  experimentalDirect,
+} from "../../alg/cubing-private";
 import type { Parsed } from "../../alg/parseAlg";
-import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
-import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import type { CurrentMoveInfo } from "../controllers/indexer/AlgIndexer";
+import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
+import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
 import { ManagedCustomElement } from "./ManagedCustomElement";
-import {
-  customElementsShim,
-  HTMLElementShim,
-} from "./node-custom-element-shims";
 import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css";
 import { TwistyPlayer } from "./TwistyPlayer";
-import {
-  experimentalDirect,
-  ExperimentalIterationDirection,
-} from "../../alg/cubing-private";
-import { functionFromTraversal } from "../../alg";
 import { firstElementWithId } from "./firstElementWithId";
+import {
+  HTMLElementShim,
+  customElementsShim,
+} from "./node-custom-element-shims";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 

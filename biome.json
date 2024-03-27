@@ -14,7 +14,8 @@
         "noNonNullAssertion": "off",
         "noParameterAssign": "off",
         "useEnumInitializers": "off",
-        "noUselessElse": "off"
+        "noUselessElse": "off",
+        "useNumberNamespace": "off"
       },
       "suspicious": {
         "noAssignInExpressions": "off",

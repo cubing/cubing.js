@@ -1,5 +1,9 @@
-import { Alg, experimentalEnsureAlg, type FlexibleAlgSource } from "../../Alg";
-import { AlgCommon, Comparable } from "../../common";
+import {
+  experimentalEnsureAlg,
+  type Alg,
+  type FlexibleAlgSource,
+} from "../../Alg";
+import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { AlgLeaf } from "../AlgNode";
 

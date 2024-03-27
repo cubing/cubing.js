@@ -4,9 +4,9 @@ import type { KPattern } from "../../../../kpuzzle/KPattern";
 import type { Duration, Timestamp } from "../../AnimationTypes";
 import type { AlgIndexer } from "../AlgIndexer";
 import {
-  AlgWalkerDecoration,
   AlgWalker,
   DecoratorConstructor,
+  type AlgWalkerDecoration,
 } from "./AlgWalker";
 import { chunkAlgs } from "./chunkAlgs";
 

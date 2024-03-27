@@ -2,7 +2,7 @@ import {
   constructWorker,
   wrap,
 } from "../vendor/apache/comlink-everywhere/outside";
-import { type WorkerInsideAPI } from "./inside/api";
+import type { WorkerInsideAPI } from "./inside/api";
 import { searchOutsideDebugGlobals } from "./outside";
 import {
   instantiateSearchWorkerURLNewURLImportMetaURL,
