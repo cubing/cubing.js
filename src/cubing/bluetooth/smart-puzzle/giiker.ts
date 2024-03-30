@@ -4,7 +4,7 @@ import { Move } from "../../alg";
 import { KPattern, type KPatternData } from "../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import { BluetoothPuzzle, type BluetoothConfig } from "./bluetooth-puzzle";
 
 const MESSAGE_LENGTH = 20;
 
@@ -259,11 +259,12 @@ export class GiiKERCube extends BluetoothPuzzle {
 // TODO: Move this into a factory?
 export const giiKERConfig: BluetoothConfig<BluetoothPuzzle> = {
   connect: GiiKERCube.connect.bind(GiiKERCube),
-  prefixes: ["Gi", ""], // Hack
+  prefixes: ["Gi", "", "Mi"], // Hack
   filters: [
     // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)
     // Suspected prefixes GiY, Gi3
     { namePrefix: "Gi" },
+    { namePrefix: "Mi" },
     { services: ["0000aadb-0000-1000-8000-00805f9b34fb"] },
     { services: ["0000aaaa-0000-1000-8000-00805f9b34fb"] },
     { services: ["0000fe95-0000-1000-8000-00805f9b34fb"] },

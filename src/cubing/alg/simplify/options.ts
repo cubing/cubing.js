@@ -18,6 +18,7 @@ export type ModWrap =
 
 export interface AppendCancelOptions {
   directional?: QuantumDirectionalCancellation;
+  handleMovesWithNet0Amount?: "remove" | "keep";
   puzzleSpecificModWrap?: ModWrap; // Default depends on `directional`
 }
 
