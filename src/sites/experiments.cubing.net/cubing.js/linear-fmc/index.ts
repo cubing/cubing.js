@@ -8,6 +8,7 @@ import {
 import { countMetricMoves } from "../../../../cubing/notation/CountMoves";
 import { CommonMetric } from "../../../../cubing/notation/commonMetrics";
 import { cube3x3x3 } from "../../../../cubing/puzzles";
+import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 import { Stats } from "./vendor/timer.cubing.net/Stats";
 import { Timer } from "./vendor/timer.cubing.net/Timer";
@@ -54,6 +55,8 @@ class Competitor {
 const competitor = new Competitor();
 
 window.addEventListener("DOMContentLoaded", async () => {
+  const kpuzzle = await cube3x3x3.kpuzzle();
+
   const timeDisplay = document.querySelector(".time-display") as HTMLDivElement;
   const timer = new Timer((t) => {
     timeDisplay.textContent = Stats.formatTime(t);
@@ -69,6 +72,34 @@ window.addEventListener("DOMContentLoaded", async () => {
   const countingMovesElem = document.querySelector(
     "#counting-moves",
   ) as HTMLElement;
+
+  const scrambleDisplaySection = document.querySelector(
+    "#scramble-display",
+  ) as HTMLDivElement;
+  const scrambleDisplayPlayer = scrambleDisplaySection.querySelector(
+    "twisty-player",
+  ) as TwistyPlayer;
+  const scrambleDisplayAlgViewer =
+    scrambleDisplaySection.querySelector("twisty-alg-viewer")!;
+
+  async function displayNewScramble() {
+    const useTrivialTestScramble =
+      new URL(location.href).searchParams.get("use-trivial-test-scramble") ===
+      "true";
+    const scramble = useTrivialTestScramble
+      ? "R U R'"
+      : await randomScrambleForEvent("333");
+    scrambleDisplayPlayer.alg = scramble;
+    scrambleDisplaySection.hidden = false;
+    scrambleDisplayAlgViewer.classList.toggle("correct", false);
+    // timeDisplay.hidden = true;
+  }
+  displayNewScramble();
+
+  // function showTimer() {
+  //   // timeDisplay.hidden = false;
+  //   scrambleDisplaySection.hidden = true;
+  // }
 
   const connectButton = document.querySelector("#connect") as HTMLButtonElement;
   connectButton.addEventListener("click", async () => {
@@ -107,11 +138,18 @@ window.addEventListener("DOMContentLoaded", async () => {
         numMoves === 1;
     }
 
-    puzzle.addAlgLeafListener((e: MoveEvent) => {
+    puzzle.addAlgLeafListener(async (e: MoveEvent) => {
       twistyPlayer.experimentalAddAlgLeaf(e.latestAlgLeaf);
       updateCountingAlg(
         appendWithFMCCancellation(countingAlg, e.latestAlgLeaf),
       );
+      const correct = kpuzzle
+        .defaultPattern()
+        .applyAlg(countingAlg)
+        .isIdentical(
+          await scrambleDisplayPlayer.experimentalModel.currentPattern.get(),
+        );
+      scrambleDisplayAlgViewer.classList.toggle("correct", correct);
     });
 
     const moveAlgToScrambleButton = document.querySelector(
@@ -141,6 +179,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       resetButton.disabled = true;
       timer.reset();
       moveAlgToScrambleButton.focus();
+      displayNewScramble();
     });
     resetButton.disabled = true;
 
@@ -151,6 +190,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       twistyPlayer.experimentalSetupAlg = countingAlg;
       twistyPlayer.alg = new Alg();
       updateCountingAlg(new Alg());
+      scrambleDisplaySection.hidden = true;
       recordResultButton.disabled = false;
       moveAlgToScrambleButton.disabled = true;
       startTimerButton.disabled = false;

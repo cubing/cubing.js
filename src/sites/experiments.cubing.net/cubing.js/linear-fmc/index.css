@@ -83,3 +83,12 @@ twisty-player {
   padding: 0.5em 0 0.4em;
   text-align: center;
 }
+
+twisty-alg-viewer {
+  padding: 0.5em;
+}
+
+twisty-alg-viewer.correct {
+  background: green;
+  color: white;
+}
