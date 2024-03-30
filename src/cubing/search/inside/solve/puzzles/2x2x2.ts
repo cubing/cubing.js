@@ -3,7 +3,6 @@ import type { Alg } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { KPattern } from "../../../../kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../puzzles";
-import { experimentalNormalize2x2x2Orientation } from "../../../../puzzles/cubing-private";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
@@ -31,43 +30,11 @@ export async function preInitialize222(): Promise<void> {
   await getCachedTrembleSolver();
 }
 
-export async function solve222HTMSubOptimal(
-  pattern: KPattern,
-  maxDepth: number = 11,
-): Promise<Alg> {
-  mustBeInsideWorker();
-  return await wasmTwsearch((await cube2x2x2.kpuzzle()).definition, pattern, {
-    generatorMoves: "UFLR".split(""), // TODO: <U, F, R>
-    maxDepth,
-  });
-}
-
 // TODO: fix def consistency.
-// TODO: why is this ending up with the wrong rotation sometimes?
-export async function solve222HTMOptimal(
-  pattern: KPattern,
-  maxDepth: number = 11,
-): Promise<Alg> {
-  mustBeInsideWorker();
-  const { normalizedPattern, normalizationAlg } =
-    experimentalNormalize2x2x2Orientation(pattern);
-  const orientedResult = await wasmTwsearch(
-    (await cube2x2x2.kpuzzle()).definition,
-    normalizedPattern,
-    {
-      generatorMoves: "UFLR".split(""), // TODO: <U, F, R>
-      maxDepth,
-    },
-  );
-  return normalizationAlg.concat(orientedResult);
-}
-
-// TODO: fix def consistency.
-export async function solve222ForScramble(pattern: KPattern): Promise<Alg> {
+export async function solve222(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
   return wasmTwsearch((await cube2x2x2.kpuzzle()).definition, pattern, {
     generatorMoves: "UFLR".split(""),
-    minDepth: 11,
   });
 }
 

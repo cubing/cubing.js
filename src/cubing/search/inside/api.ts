@@ -1,13 +1,13 @@
 import type { Alg } from "../../alg";
 import {
-  type KPuzzleDefinition,
   KPattern,
-  type KPatternData,
   KPuzzle,
+  type KPatternData,
+  type KPuzzleDefinition,
 } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
-import { preInitialize222, solve222HTMSubOptimal } from "./solve/puzzles/2x2x2";
+import { preInitialize222, solve222 } from "./solve/puzzles/2x2x2";
 import {
   initialize333,
   random333OrientedScramble,
@@ -32,8 +32,8 @@ import {
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
 import {
   wasmRandomScrambleForEvent,
-  type TwsearchOptions,
   wasmTwsearch,
+  type TwsearchOptions,
 } from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
@@ -81,9 +81,24 @@ async function randomScrambleForEvent(
   eventID: string,
   options?: { isPrefetch?: boolean },
 ): Promise<Alg> {
+  function wasm(): Promise<Alg> {
+    return measurePerf(
+      `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
+      () => wasmRandomScrambleForEvent(eventID),
+      {
+        isPrefetch: options?.isPrefetch,
+      },
+    );
+  }
+
   switch (eventID) {
     // case "333":
     case "222":
+      return (await wasm()).experimentalSimplify({
+        puzzleSpecificSimplifyOptions: {
+          quantumMoveOrder: () => 4,
+        },
+      });
     // case "444":
     case "555":
     case "666":
@@ -103,13 +118,7 @@ async function randomScrambleForEvent(
       // case "master_tetraminx":
       // case "kilominx":
       // case "redi_cube":m
-      return measurePerf(
-        `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
-        () => wasmRandomScrambleForEvent(eventID),
-        {
-          isPrefetch: options?.isPrefetch,
-        },
-      );
+      return wasm();
     case "333":
     case "333oh":
     case "333ft":
@@ -234,7 +243,7 @@ export const insideAPI = {
 
   solve222ToString: async (patternData: KPatternData): Promise<string> => {
     const pattern = new KPattern(await puzzles["2x2x2"].kpuzzle(), patternData);
-    return (await solve222HTMSubOptimal(pattern)).toString();
+    return (await solve222(pattern)).toString();
   },
 
   solveSkewbToString: async (patternData: KPatternData): Promise<string> => {
