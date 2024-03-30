@@ -9,6 +9,8 @@ import { countMetricMoves } from "../../../../cubing/notation/CountMoves";
 import { CommonMetric } from "../../../../cubing/notation/commonMetrics";
 import { cube3x3x3 } from "../../../../cubing/puzzles";
 import { TwistyPlayer } from "../../../../cubing/twisty";
+import { Stats } from "./vendor/timer.cubing.net/Stats";
+import { Timer } from "./vendor/timer.cubing.net/Timer";
 
 function appendWithFMCCancellation(alg: Alg, leaf: AlgLeaf): Alg {
   const nodes = [...alg.childAlgNodes()];
@@ -52,6 +54,11 @@ class Competitor {
 const competitor = new Competitor();
 
 window.addEventListener("DOMContentLoaded", async () => {
+  const timeDisplay = document.querySelector(".time-display") as HTMLDivElement;
+  const timer = new Timer((t) => {
+    timeDisplay.textContent = Stats.formatTime(t);
+  });
+
   const twistyPlayer = new TwistyPlayer({
     alg: new Alg(),
   });
@@ -108,6 +115,12 @@ window.addEventListener("DOMContentLoaded", async () => {
     const moveAlgToScrambleButton = document.querySelector(
       "#move-alg-to-scramble",
     ) as HTMLButtonElement;
+    const startTimerButton = document.querySelector(
+      "#start-timer",
+    ) as HTMLButtonElement;
+    const stopTimerButton = document.querySelector(
+      "#stop-timer",
+    ) as HTMLButtonElement;
     const scrambleSection =
       document.querySelector<HTMLElement>("#scramble-section")!;
 
@@ -124,6 +137,8 @@ window.addEventListener("DOMContentLoaded", async () => {
       updateCountingAlg(new Alg());
       recordResultButton.disabled = true;
       resetButton.disabled = true;
+      timer.reset();
+      moveAlgToScrambleButton.focus();
     });
     resetButton.disabled = true;
 
@@ -136,6 +151,8 @@ window.addEventListener("DOMContentLoaded", async () => {
       updateCountingAlg(new Alg());
       recordResultButton.disabled = false;
       moveAlgToScrambleButton.disabled = true;
+      startTimerButton.disabled = false;
+      startTimerButton.focus();
     });
     moveAlgToScrambleButton.disabled = false;
 
@@ -165,6 +182,20 @@ window.addEventListener("DOMContentLoaded", async () => {
     });
     recordResultButton.disabled = true;
 
+    startTimerButton.addEventListener("click", () => {
+      timer.start();
+      startTimerButton.disabled = true;
+      stopTimerButton.disabled = false;
+      stopTimerButton.focus();
+    });
+
+    stopTimerButton.addEventListener("click", () => {
+      timer.stop();
+      recordResultButton.focus();
+      stopTimerButton.disabled = true;
+      recordResultButton.focus();
+    });
+
     // const cubeStateButton = document.querySelector(
     //   "#player-state-read",
     // ) as HTMLButtonElement;
@@ -191,5 +222,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       //   .experimentalGetScheduler()
       //   .singleFrame();
     });
+
+    moveAlgToScrambleButton.focus();
   });
 });
