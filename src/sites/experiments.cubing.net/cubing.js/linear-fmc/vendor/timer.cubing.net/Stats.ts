@@ -57,7 +57,7 @@ export class Stats {
     }
 
     const parts = Stats.timeParts(time);
-    let result = `${parts.secFirst + parts.secRest}.${parts.decimals}`;
+    let result = `${parts.secFirst + parts.secRest}`;
     if (options?.partial) {
       result = `(${result})`;
     }

@@ -11,7 +11,7 @@ import { cube3x3x3 } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 import { Stats } from "./vendor/timer.cubing.net/Stats";
-import { Timer } from "./vendor/timer.cubing.net/Timer";
+import { Timer, type Milliseconds } from "./vendor/timer.cubing.net/Timer";
 
 function appendWithFMCCancellation(alg: Alg, leaf: AlgLeaf): Alg {
   const nodes = [...alg.childAlgNodes()];
@@ -54,13 +54,19 @@ class Competitor {
 }
 const competitor = new Competitor();
 
+const timeLimit: Milliseconds = 2 * 60 * 1000; // 2 minutes
+
 window.addEventListener("DOMContentLoaded", async () => {
   const kpuzzle = await cube3x3x3.kpuzzle();
 
   const timeDisplay = document.querySelector(".time-display") as HTMLDivElement;
-  const timer = new Timer((t) => {
-    timeDisplay.textContent = Stats.formatTime(t);
-  });
+  const updateTimeCallback = (t: Milliseconds) => {
+    const remaining = timeLimit - t + 999; // Emulate a countdown with basically a full intital second.
+    timeDisplay.textContent =
+      remaining < 0 ? "DNF" : Stats.formatTime(remaining);
+  };
+  const timer = new Timer(updateTimeCallback);
+  updateTimeCallback(0);
 
   const twistyPlayer = new TwistyPlayer({
     alg: new Alg(),
