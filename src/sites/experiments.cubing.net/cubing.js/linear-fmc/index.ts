@@ -101,8 +101,10 @@ window.addEventListener("DOMContentLoaded", async () => {
     async function updateCountingAlg(newAlg: Alg) {
       countingAlg = newAlg;
       countingMovesElem.textContent = countingAlg.toString();
-      document.querySelector("#obtm")!.textContent =
-        countingAlgNumMoves().toString();
+      const numMoves = countingAlgNumMoves();
+      document.querySelector("#obtm")!.textContent = numMoves.toString();
+      (document.querySelector("#moves-plural") as HTMLElement).hidden =
+        numMoves === 1;
     }
 
     puzzle.addAlgLeafListener((e: MoveEvent) => {
