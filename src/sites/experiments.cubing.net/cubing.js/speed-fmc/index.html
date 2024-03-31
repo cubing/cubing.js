@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>Speed FMC</title>
+  <link href="./index.css" rel="stylesheet" type="text/css" />
+  <script src="./index.js" href="./index.ts" type="module"></script>
+</head>
+
+<body>
+  <div id="controls">
+    <div class="header">
+      <div>
+        <h2>Speed FMC <button id="connect" style="vertical-align: 0.2em;" autofocus>Connect</button></h2>
+        Competitor: <input id="competitor" placeholder="Competitor" style="font-size: 1em">
+        <br>
+        <br>
+        <button id="move-alg-to-scramble" disabled>Done with scramble</button>
+        <button id="start-timer" disabled>Start</button>
+        <button id="stop-timer" disabled>Stop</button>
+        <button id="record-result">Record result</button>
+        <button id="player-pattern-reset" disabled>Reset scramble and alg</button>
+      </div>
+      <div class="results-qr" hidden><a
+          href="https://docs.google.com/spreadsheets/d/1RWEQo8jQeuZHz2mB5pDdZE2LWYA_TNdu2uUQgGlZv28/edit#gid=0">Results</a>:<br><img
+          src="./results-qr.png" width="150"></div>
+    </div>
+
+    <br>
+    <div class="time-display-wrapper">
+      <div class="time-display">2:00.00</div>
+    </div>
+
+    <div id="scramble-display" hidden>
+      <h3>Scramble</h3>
+      <twisty-player id="scramble-display-player" visualization="2D" control-panel="none" background="none"
+        style="height: 200px" ;></twisty-player>
+      <twisty-alg-viewer for="scramble-display-player">
+    </div>
+
+    <div id="scramble-section" hidden>
+      <h3>Scramble</h3>
+      <div class="scramble-text"></div>
+    </div>
+
+    <h3>Solution (<span id="obtm">0</span> move<span id="moves-plural">s</span> OBTM)</h3>
+    <div id="counting-moves"></div>
+  </div>
+  <div id="player"></div>
+</body>
+
+</html>
