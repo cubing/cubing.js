@@ -2,7 +2,7 @@ import { Alg } from "../Alg";
 import type { AlgNode } from "../alg-nodes";
 import type { AlgLeaf } from "../alg-nodes/AlgNode";
 import { Move } from "../alg-nodes/leaves/Move";
-import { AppendOptionsHelper, type AppendOptions } from "./options";
+import { type AppendOptions, AppendOptionsHelper } from "./options";
 
 function areSameDirection(direction: -1 | 1, move2: Move): boolean {
   // This multiplication has two properties:
@@ -131,14 +131,9 @@ export function experimentalAppendMove(
       outputSuffix = [new Move(addedMove.quantum, amount)];
     }
   }
-  outputSuffix = outputSuffix.map((m) => modMove(m));
-
-  if (
-    typeof options?.cancel !== "boolean" &&
-    options?.cancel?.handleMovesWithNet0Amount !== "keep"
-  ) {
-    outputSuffix = outputSuffix.filter((move: Move) => move.amount !== 0);
-  }
+  outputSuffix = outputSuffix
+    .map((m) => modMove(m))
+    .filter((move: Move) => move.amount !== 0);
   return output();
 }
 
