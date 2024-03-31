@@ -61,9 +61,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const timeDisplay = document.querySelector(".time-display") as HTMLDivElement;
   const updateTimeCallback = (t: Milliseconds) => {
-    const remaining = timeLimit - t + 999; // Emulate a countdown with basically a full intital second.
+    const remaining = timeLimit - t; // Emulate a countdown.
     timeDisplay.textContent =
-      remaining < 0 ? "DNF" : Stats.formatTime(remaining);
+      remaining < 0 ? "DNF" : Stats.formatTime(remaining + +999);
   };
   const timer = new Timer(updateTimeCallback);
   updateTimeCallback(0);
@@ -235,6 +235,11 @@ window.addEventListener("DOMContentLoaded", async () => {
       startTimerButton.disabled = true;
       stopTimerButton.disabled = false;
       stopTimerButton.focus();
+
+      timeDisplay.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 500,
+        easing: "ease-out",
+      });
     });
 
     stopTimerButton.addEventListener("click", () => {

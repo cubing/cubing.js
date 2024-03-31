@@ -74,11 +74,14 @@ twisty-player {
   padding: 0 50px;
 }
 
+.time-display-wrapper {
+  background: black;
+}
+
 .time-display {
   font-family: "digital-7-mono";
   font-size: 6em;
   width: 100%;
-  background: black;
   color: rgb(255, 0, 0);
   padding: 0.5em 0 0.4em;
   text-align: center;
