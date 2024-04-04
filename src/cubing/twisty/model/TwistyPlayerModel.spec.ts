@@ -24,7 +24,7 @@ test("adds alg leaves and moves properly", async () => {
   twistyPlayerModel.experimentalAddAlgLeaf(new Move("D2"));
   expect(
     (await twistyPlayerModel.alg.get()).alg.isIdentical(new Alg("R U R' D2")),
-  ).toBeTrue;
+  ).toBeTrue();
 
   // This should be the same as `.experimentalAddAlgLeaf()`;
   twistyPlayerModel.experimentalAddMove(new Move("F'"));
@@ -32,21 +32,21 @@ test("adds alg leaves and moves properly", async () => {
     (await twistyPlayerModel.alg.get()).alg.isIdentical(
       new Alg("R U R' D2 F'"),
     ),
-  ).toBeTrue;
+  ).toBeTrue();
 
   twistyPlayerModel.experimentalAddMove(new Move("F2"), {
     cancel: true,
   });
   expect(
     (await twistyPlayerModel.alg.get()).alg.isIdentical(new Alg("R U R' D2 F")),
-  ).toBeTrue;
+  ).toBeTrue();
 
   twistyPlayerModel.experimentalAddAlgLeaf(new Pause());
   expect(
     (await twistyPlayerModel.alg.get()).alg.isIdentical(
       new Alg("R U R' D2 F ."),
     ),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("can handle async timestamp setting", async () => {

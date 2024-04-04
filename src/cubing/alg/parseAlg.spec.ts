@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
+import { Alg } from ".";
 import { setAlgDebug } from "./debug";
 import { parseAlg } from "./parseAlg";
-import { Alg } from ".";
 
 test("handles 0 amounts", () => {
   expect(parseAlg("R0").toString()).toStrictEqual("R0");
@@ -81,5 +81,7 @@ test("does not allow caret NISS notation when disabled", () => {
   }
 });
 test("parses caret NISS notation by default", () => {
-  expect(parseAlg("R ^(U L) D").isIdentical(new Alg("R . D (U L)'"))).toBeTrue;
+  expect(
+    parseAlg("R ^(U L) D").isIdentical(new Alg("R . D (U L)'")),
+  ).toBeTrue();
 });

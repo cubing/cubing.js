@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 
 import { Alg } from "./Alg";
+import { Commutator, Grouping, Move, Pause, QuantumMove } from "./alg-nodes";
 import { setAlgPartTypeMismatchReportingLevel } from "./debug";
 import { Example as Ex } from "./example";
-import { Commutator, Grouping, Move, QuantumMove, Pause } from "./alg-nodes";
 
 setAlgPartTypeMismatchReportingLevel("error");
 
@@ -17,13 +17,13 @@ test("Alg can be constructed from a string", () => {
 test("Alg can concat algs", () => {
   expect(
     new Alg("R U2").concat(new Alg("F' D")).isIdentical(new Alg("R U2 F' D")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     Array.from(new Alg("R U2").concat(new Alg("U R'")).childAlgNodes()).length,
   ).toStrictEqual(4);
   expect(
     new Alg("R U2").concat(new Alg("U R'")).isIdentical(new Alg("R U2 U R'")),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("Alg allows an empty Alg", () => {
@@ -85,8 +85,9 @@ test("Move prevents constructing: w, 2T, 2-3q", () => {
 });
 
 test("Move supports a default amount of 1.", () => {
-  expect(new Alg([new Move("U")]).isIdentical(new Alg([new Move("U", 1)])))
-    .toBeTrue;
+  expect(
+    new Alg([new Move("U")]).isIdentical(new Alg([new Move("U", 1)])),
+  ).toBeTrue();
 });
 
 test("Move throws an error for an invalid family", () => {
@@ -182,20 +183,19 @@ test("converts triple pause to . . . (with spaces)", () => {
 });
 
 test("correctly inverts", () => {
-  expect(Ex.Sune.invert().isIdentical(Ex.AntiSune)).toBeTrue;
-  expect(Ex.Sune.invert().invert().isIdentical(Ex.Sune)).toBeTrue;
-  expect(Ex.Sune.invert().invert().isIdentical(Ex.AntiSune)).toBeFalse;
+  expect(Ex.Sune.invert().isIdentical(Ex.AntiSune)).toBeTrue();
+  expect(Ex.Sune.invert().invert().isIdentical(Ex.Sune)).toBeTrue();
+  expect(Ex.Sune.invert().invert().isIdentical(Ex.AntiSune)).toBeFalse();
 });
 
 test("correctly expands", () => {
-  expect(Ex.FURURFCompact.expand().isIdentical(Ex.FURURFMoves)).toBeTrue;
-  expect(Ex.Sune.expand().isIdentical(Ex.Sune)).toBeTrue;
-  expect(Ex.SuneCommutator.expand().isIdentical(Ex.Sune)).toBeFalse;
-  expect(Ex.FURURFCompact.expand().isIdentical(Ex.SuneCommutator)).toBeTrue;
+  expect(Ex.FURURFCompact.expand().isIdentical(Ex.FURURFMoves)).toBeTrue();
+  expect(Ex.Sune.expand().isIdentical(Ex.Sune)).toBeTrue();
+  expect(Ex.SuneCommutator.expand().isIdentical(Ex.Sune)).toBeFalse();
 });
 
 test("correctly expands a group with two alg nodes", () => {
-  expect(new Alg("(R U)2").expand().isIdentical(new Alg("R U R U"))).toBeTrue;
+  expect(new Alg("(R U)2").expand().isIdentical(new Alg("R U R U"))).toBeTrue();
 });
 
 test("correctly expands an E-Perm", () => {
@@ -203,18 +203,18 @@ test("correctly expands an E-Perm", () => {
     Ex.EPerm.expand().isIdentical(
       new Alg("x' R U' R' D R U R' D' R U R' D R U' R' D' x"),
     ),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("correctly compares algs", () => {
-  expect(Ex.FURURFCompact.isIdentical(Ex.FURURFMoves)).toBeFalse;
-  expect(Ex.FURURFMoves.isIdentical(Ex.FURURFCompact)).toBeFalse;
-  expect(Ex.FURURFMoves.isIdentical(Ex.FURURFMoves)).toBeTrue;
-  expect(Ex.FURURFCompact.isIdentical(Ex.FURURFCompact)).toBeTrue;
+  expect(Ex.FURURFCompact.isIdentical(Ex.FURURFMoves)).toBeFalse();
+  expect(Ex.FURURFMoves.isIdentical(Ex.FURURFCompact)).toBeFalse();
+  expect(Ex.FURURFMoves.isIdentical(Ex.FURURFMoves)).toBeTrue();
+  expect(Ex.FURURFCompact.isIdentical(Ex.FURURFCompact)).toBeTrue();
 });
 
 test("cancels U U to U2", () => {
-  expect(UU.experimentalSimplify({ cancel: true }).isIdentical(U2)).toBeTrue;
+  expect(UU.experimentalSimplify({ cancel: true }).isIdentical(U2)).toBeTrue();
 });
 
 test("cancels expanded commutator Sune corectly", () => {
@@ -222,26 +222,28 @@ test("cancels expanded commutator Sune corectly", () => {
     Ex.SuneCommutator.expand()
       .experimentalSimplify({ cancel: true })
       .isIdentical(Ex.Sune),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("parses an empty Alg", () => {
-  expect(new Alg("").isIdentical(new Alg())).toBeTrue;
-  expect(Alg.fromString("()").isIdentical(new Alg([new Grouping(new Alg([]))])))
-    .toBeTrue;
-  expect(new Alg("").isIdentical(new Alg())).toBeTrue;
-  expect(Alg.fromString("()").isIdentical(new Alg([new Grouping(new Alg([]))])))
-    .toBeTrue;
+  expect(new Alg("").isIdentical(new Alg())).toBeTrue();
+  expect(
+    Alg.fromString("()").isIdentical(new Alg([new Grouping(new Alg([]))])),
+  ).toBeTrue();
+  expect(new Alg("").isIdentical(new Alg())).toBeTrue();
+  expect(
+    Alg.fromString("()").isIdentical(new Alg([new Grouping(new Alg([]))])),
+  ).toBeTrue();
 });
 
 test("parses a Sune", () => {
-  expect(new Alg("R U R' U R U2' R'").isIdentical(Ex.Sune)).toBeTrue;
-  expect(Alg.fromString("R U R' U R U2' R'").isIdentical(Ex.Sune)).toBeTrue;
+  expect(new Alg("R U R' U R U2' R'").isIdentical(Ex.Sune)).toBeTrue();
+  expect(Alg.fromString("R U R' U R U2' R'").isIdentical(Ex.Sune)).toBeTrue();
   expect(
     new Alg("R U R' U R U2' R'").isIdentical(
       Alg.fromString("R U R' U R U2' R'"),
     ),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("parses U u Uw x 2U 2u 2Uw 2-3u 2-3Uw", () => {
@@ -251,27 +253,32 @@ test("parses U u Uw x 2U 2u 2Uw 2-3u 2-3Uw", () => {
 
 test("parses . . .", () => {
   const p = new Pause();
-  expect(new Alg(". . .").isIdentical(new Alg([p, p, p]))).toBeTrue;
+  expect(new Alg(". . .").isIdentical(new Alg([p, p, p]))).toBeTrue();
 });
 
 // TODO: Should these be parsed differently?
 test("parses R and R1 as the same (for now)", () => {
-  expect(new Alg("R").isIdentical(new Alg("R1"))).toBeTrue;
+  expect(new Alg("R").isIdentical(new Alg("R1"))).toBeTrue();
 });
 
 test("round-trips algs through a string", () => {
-  expect(new Alg(Ex.SuneCommutator.toString()).isIdentical(Ex.SuneCommutator))
-    .toBeTrue;
-  expect(new Alg(Ex.Niklas.toString()).isIdentical(Ex.Niklas)).toBeTrue;
-  expect(new Alg(Ex.FURURFCompact.toString()).isIdentical(Ex.FURURFCompact))
-    .toBeTrue;
-  expect(new Alg(Ex.APermCompact.toString()).isIdentical(Ex.APermCompact))
-    .toBeTrue;
-  expect(new Alg(Ex.TPerm.toString()).isIdentical(Ex.TPerm)).toBeTrue;
-  expect(new Alg(Ex.HeadlightSwaps.toString()).isIdentical(Ex.HeadlightSwaps))
-    .toBeTrue;
-  expect(new Alg(Ex.TriplePause.toString()).isIdentical(Ex.TriplePause))
-    .toBeTrue;
+  expect(
+    new Alg(Ex.SuneCommutator.toString()).isIdentical(Ex.SuneCommutator),
+  ).toBeTrue();
+  expect(new Alg(Ex.Niklas.toString()).isIdentical(Ex.Niklas)).toBeTrue();
+  expect(
+    new Alg(Ex.FURURFCompact.toString()).isIdentical(Ex.FURURFCompact),
+  ).toBeTrue();
+  expect(
+    new Alg(Ex.APermCompact.toString()).isIdentical(Ex.APermCompact),
+  ).toBeTrue();
+  expect(new Alg(Ex.TPerm.toString()).isIdentical(Ex.TPerm)).toBeTrue();
+  expect(
+    new Alg(Ex.HeadlightSwaps.toString()).isIdentical(Ex.HeadlightSwaps),
+  ).toBeTrue();
+  expect(
+    new Alg(Ex.TriplePause.toString()).isIdentical(Ex.TriplePause),
+  ).toBeTrue();
 });
 
 test("rejects suffixes without families", () => {

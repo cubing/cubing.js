@@ -11,7 +11,7 @@ test("can cancel", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R'")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("R R2'")
       .experimentalSimplify({
@@ -19,7 +19,7 @@ test("can cancel", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R'")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("R R7'")
       .experimentalSimplify({
@@ -27,7 +27,7 @@ test("can cancel", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R6'")),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("can avoid cancelling", () => {
@@ -37,7 +37,7 @@ test("can avoid cancelling", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R R2")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("R R2'")
       .experimentalSimplify({
@@ -47,7 +47,7 @@ test("can avoid cancelling", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R R2'")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("R R2'")
       .experimentalSimplify({
@@ -55,7 +55,7 @@ test("can avoid cancelling", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R R2")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("R R2'")
       .experimentalSimplify({
@@ -63,7 +63,7 @@ test("can avoid cancelling", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R R2")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("R R2'")
       .experimentalSimplify({
@@ -71,7 +71,7 @@ test("can avoid cancelling", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R R2'")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("R R2'")
       .experimentalSimplify({
@@ -82,7 +82,7 @@ test("can avoid cancelling", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("R R2'")),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("handles mod wrap field", () => {
@@ -101,7 +101,7 @@ test("handles mod wrap field", () => {
           ". R . R2 . R' . . R . R2 . R' . R . R2 . R' . . R . R2 . R' .",
         ),
       ),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg(
       "R8' . R7' . R6' . R5' . R4' . R3' . R2' . R' . R . R2 . R3 . R4 . R5 . R6 . R7 . R8",
@@ -117,7 +117,7 @@ test("handles mod wrap field", () => {
           "R8' . R7' . R6' . R5' . R4' . R3' . R2' . R' . R . R2 . R3 . R4 . R5 . R6 . R7 . R8",
         ),
       ),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg(
       "R8' . R7' . R6' . R5' . R4' . R3' . R2' . R' . R . R2 . R3 . R4 . R5 . R6 . R7 . R8",
@@ -133,7 +133,7 @@ test("handles mod wrap field", () => {
           ". R . R2' . R' . . R . R2' . R' . R . R2 . R' . . R . R2 . R' .",
         ),
       ),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg(
       "R8' . R7' . R6' . R5' . R4' . R3' . R2' . R' . R . R2 . R3 . R4 . R5 . R6 . R7 . R8",
@@ -149,7 +149,7 @@ test("handles mod wrap field", () => {
           ". R . R2 . R3 . . R . R2 . R3 . R . R2 . R3 . . R . R2 . R3 .",
         ),
       ),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg(
       "R8' . R7' . R6' . R5' . R4' . R3' . R2' . R' . R . R2 . R3 . R4 . R5 . R6 . R7 . R8",
@@ -165,7 +165,7 @@ test("handles mod wrap field", () => {
           ". R3' . R2' . R' . . R3' . R2' . R' . R . R2 . R3 . . R . R2 . R3 .",
         ),
       ),
-  ).toBeTrue;
+  ).toBeTrue();
 });
 
 test("cancels more complex algs correctly", () => {
@@ -176,7 +176,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("U (y' U) U'")
       .experimentalSimplify({
@@ -184,7 +184,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("U (d) U'")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("(U U')")
       .experimentalSimplify({
@@ -192,7 +192,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 (U F)0 S")
       .experimentalSimplify({
@@ -200,7 +200,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, F] S")
       .experimentalSimplify({
@@ -208,7 +208,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 [R, F] S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, F F2'] S")
       .experimentalSimplify({
@@ -216,7 +216,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 [R, F'] S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, F F'] S")
       .experimentalSimplify({
@@ -224,7 +224,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R R', F] S")
       .experimentalSimplify({
@@ -232,7 +232,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R,] S")
       .experimentalSimplify({
@@ -240,7 +240,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [, F] S")
       .experimentalSimplify({
@@ -248,7 +248,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, R] S")
       .experimentalSimplify({
@@ -256,7 +256,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, R'] S")
       .experimentalSimplify({
@@ -264,7 +264,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, R3] S")
       .experimentalSimplify({
@@ -272,7 +272,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, R2] S")
       .experimentalSimplify({
@@ -280,7 +280,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, r] S")
       .experimentalSimplify({
@@ -288,7 +288,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, L R2 L'] S")
       .experimentalSimplify({
@@ -296,7 +296,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R, L R2 R L'] S")
       .experimentalSimplify({
@@ -304,7 +304,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [,] S")
       .experimentalSimplify({
@@ -312,7 +312,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R: U U'] S")
       .experimentalSimplify({
@@ -320,7 +320,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R R': U] S")
       .experimentalSimplify({
@@ -328,7 +328,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 U S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R R': F] S")
       .experimentalSimplify({
@@ -336,7 +336,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 f")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("L2 [R: r] S")
       .experimentalSimplify({
@@ -344,7 +344,7 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("L2 r S")),
-  ).toBeTrue;
+  ).toBeTrue();
   expect(
     new Alg("U [R, r] [E: d']")
       .experimentalSimplify({
@@ -352,5 +352,5 @@ test("cancels more complex algs correctly", () => {
         puzzleLoader: cube3x3x3,
       })
       .isIdentical(new Alg("y")),
-  ).toBeTrue;
+  ).toBeTrue();
 });
