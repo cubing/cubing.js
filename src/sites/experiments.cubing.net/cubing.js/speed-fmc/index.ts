@@ -130,7 +130,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     function countingAlgNumMoves(): number {
       return countMetricMoves(
         cube3x3x3,
-        CommonMetric.ExecutionTurnMetric,
+        CommonMetric.OuterBlockTurnMetric,
         countingAlg,
       );
     }
