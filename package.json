@@ -1,6 +1,6 @@
 {
   "name": "cubing",
-  "version": "0.48.2",
+  "version": "0.48.3",
   "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
   "type": "module",
