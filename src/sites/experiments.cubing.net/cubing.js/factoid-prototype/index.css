@@ -1,0 +1,25 @@
+html, body {
+  display: grid;
+  place-content: center;
+}
+
+factoid-section {
+  display: grid;
+  align-items: center;
+  justify-content: justify;
+  width: 512px;;
+  max-width: 90vw;
+}
+
+twisty-player {
+  width: 100%;
+}
+
+.factoids > div {
+  max-width: 100%;
+  text-align: center;
+}
+
+.factoids li {
+  text-align: start;
+}
