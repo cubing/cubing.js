@@ -1,7 +1,7 @@
 import { rsync } from "./rsync";
 
 const experimentsSFTPPath =
-  "cubing_deploy@towns.dreamhost.com:~/experiments.cubing.net/cubing.js";
+  "cubing_deploy@experiments.cubing.net:~/experiments.cubing.net/cubing.js";
 const experimentsURL = "https://experiments.cubing.net/cubing.js/";
 
 await rsync(
