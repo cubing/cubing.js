@@ -96,7 +96,7 @@ test-info:
 # The following deps are in a custom order so that the more "useful" tests are first.
 # In case of failure, this is likely to be more helpful.
 .PHONY: test-fast
-test-fast: \
+test-fast: quick-setup \
 	build-lib-js test-spec-bun-fast build-bin build-sites \
 	lint \
 	test-src-import-restrictions test-src-scripts-consistency \
