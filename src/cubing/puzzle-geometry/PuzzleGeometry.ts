@@ -2133,8 +2133,9 @@ export class PuzzleGeometry {
         // in this case we add duplicate stickers
         // so that we can make it animate properly in a 3D world.
         if (b.length === 2 && this.options.orientCenters) {
+          const dir = this.facecentermass[i].dot(this.moveplanenormals[k]);
           for (let ii = 1; ii < this.movesetorders[k]; ii++) {
-            if (sc === 0) {
+            if (dir > 0) {
               b.push(b[0], ii);
             } else {
               b.push(
