@@ -2,11 +2,11 @@
 // bun run src/bin/puzzle-geometry-bin.ts -- <program args>
 
 import {
-  type ExperimentalPuzzleBaseShape,
-  type ExperimentalPuzzleCutType,
+  PuzzleGeometry,
   getPG3DNamedPuzzles,
   parsePuzzleDescription,
-  PuzzleGeometry,
+  type ExperimentalPuzzleBaseShape,
+  type ExperimentalPuzzleCutType,
   type ExperimentalPuzzleGeometryOptions,
 } from "cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "cubing/puzzle-geometry/PGPuzzles";
@@ -23,12 +23,9 @@ export function asstructured(v: any): any {
 }
 export function asboolean(v: any): boolean {
   if (typeof v === "string") {
-    if (v === "false") {
-      return false;
-    }
-    return true;
+    return v !== "false";
   } else {
-    return v ? true : false;
+    return !!v;
   }
 }
 export function parsePGOptionList(
