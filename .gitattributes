@@ -1,4 +1,4 @@
 *.ttf filter=lfs diff=lfs merge=lfs -text
 *.wasm filter=lfs diff=lfs merge=lfs -text
 src/cubing/vendor/mpl/twsearch/twsearch_wasm_bg-*.js filter=lfs diff=lfs merge=lfs -text
-generic.png filter=lfs diff=lfs merge=lfs -text
+*.lfs.png filter=lfs diff=lfs merge=lfs -text
