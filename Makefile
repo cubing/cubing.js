@@ -194,7 +194,7 @@ format:
 	${BIOME} check --apply ./script ./src
 .PHONY: setup
 setup:
-	${BUN} install # TODO: was `npm ci`
+	${BUN} install --no-save # TODO: was `npm ci`
 .PHONY: quick-setup
 quick-setup: | node_modules
 .PHONY: lint

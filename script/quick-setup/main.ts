@@ -35,5 +35,5 @@ writeFileSync(
   JSON.stringify(packageJSON, null, "  "),
 );
 cp("bun.lockb", join(TEMP_ROOT, "bun.lockb"));
-console.log(await execPromise(`cd ${TEMP_ROOT} && bun install`));
+console.log(await execPromise(`cd ${TEMP_ROOT} && bun install --no-save`));
 renameSync(join(TEMP_ROOT, "node_modules"), TARGET_NODE_MODULES_PATH);
