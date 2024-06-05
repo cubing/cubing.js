@@ -231,7 +231,7 @@ roll-vendored-twsearch:
 	${BUN_RUN} script/fix-vendored-twsearch.ts
 .PHONY: update-create-cubing-app
 update-create-cubing-app:
-	cd ../create-cubing-app && make roll-cubing-commit && git push
+	cd ../create-cubing-app && make auto-publish
 .PHONY: update-cdn
 update-cdn:
 	@echo "--------------------------------"
