@@ -77,6 +77,9 @@ reset: clean
 	@echo ""
 	@echo "    make setup"
 	@echo ""
+.PHONY: audit
+audit:
+	bun x bun-audit # We purposely don't include `bun-audit` and `yarn` in deps.
 .PHONY: test
 test: test-info
 .PHONY: test-info
