@@ -59,7 +59,7 @@
     "@types/three": "^0.162.0",
     "@types/web-bluetooth": "^0.0.20",
     "comlink": "^4.4.1",
-    "random-uint-below": "^3.0.0",
+    "random-uint-below": "v3.2.0",
     "three": "^0.162.0"
   },
   "devDependencies": {
