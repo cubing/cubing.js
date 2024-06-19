@@ -16,6 +16,7 @@ export interface TwsearchOptions {
   targetPattern?: KTransformationData;
   minDepth?: number;
   maxDepth?: number;
+  quantumMetric?: boolean;
 }
 
 export async function wasmTwsearch(
