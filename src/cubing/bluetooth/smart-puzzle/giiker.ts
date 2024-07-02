@@ -259,7 +259,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 // TODO: Move this into a factory?
 export const giiKERConfig: BluetoothConfig<BluetoothPuzzle> = {
   connect: GiiKERCube.connect.bind(GiiKERCube),
-  prefixes: ["Gi", "", "Mi"], // Hack
+  prefixes: ["Gi", "", "Mi", "Hi-"], // Hack
   filters: [
     // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)
     // Suspected prefixes GiY, Gi3
