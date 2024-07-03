@@ -265,6 +265,7 @@ export const giiKERConfig: BluetoothConfig<BluetoothPuzzle> = {
     // Suspected prefixes GiY, Gi3
     { namePrefix: "Gi" },
     { namePrefix: "Mi" },
+    { namePrefix: "Hi-" },
     { services: ["0000aadb-0000-1000-8000-00805f9b34fb"] },
     { services: ["0000aaaa-0000-1000-8000-00805f9b34fb"] },
     { services: ["0000fe95-0000-1000-8000-00805f9b34fb"] },
