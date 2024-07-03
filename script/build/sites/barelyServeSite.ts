@@ -1,10 +1,10 @@
+import { barelyServe } from "barely-a-dev-server";
+import type { Plugin } from "esbuild";
 import { exec } from "node:child_process";
+import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { execPromise } from "../../lib/execPromise";
-import { writeFile } from "node:fs/promises";
-import { barelyServe } from "barely-a-dev-server";
 import { needPath } from "../../lib/needPath";
-import type { Plugin } from "esbuild";
 
 needPath(
   new URL("../../../node_modules/barely-a-dev-server", import.meta.url)
@@ -89,6 +89,7 @@ export async function barelyServeSite(srcFolder: string, dev: boolean) {
     devDomain: "cubing.localhost",
     port: 3333,
     esbuildOptions: {
+      chunkNames: "chunks/[name]-[hash]",
       target: "es2022",
       plugins: plugins(dev),
       minify: !dev,
