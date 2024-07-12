@@ -5,7 +5,7 @@ import { from } from "../../../../vendor/mit/p-lazy/p-lazy";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
-import { dynamicFTOSolver } from "./dynamic/fto";
+import { dynamicFTO } from "./dynamic/fto";
 
 const dynamic = from<
   typeof import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial")
@@ -51,5 +51,5 @@ export async function solveFTO(pattern: KPattern): Promise<Alg> {
 
 export async function randomFTOScramble(): Promise<Alg> {
   mustBeInsideWorker();
-  return new Alg(await (await dynamicFTOSolver).randomFTOScrambleString());
+  return new Alg(await (await dynamicFTO).getRandomFTOScramble());
 }

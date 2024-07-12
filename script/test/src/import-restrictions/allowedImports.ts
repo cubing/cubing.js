@@ -90,6 +90,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/puzzles",
       "src/cubing/vendor/mit/cs0x7f/cstimer/src/js/scramble",
       "src/cubing/vendor/mit/cs0x7f/min2phase",
+      "src/cubing/vendor/mit/cs0x7f/fto",
       "src/cubing/vendor/mit/cs0x7f/sq12phase",
       "src/cubing/vendor/mit/p-lazy",
       "src/cubing/vendor/mpl/xyzzy",
