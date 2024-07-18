@@ -6,9 +6,9 @@ import type { PrefetchLevel } from "./inside/api";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import type { TwsearchOptions } from "./inside/solve/twsearch";
 import {
-  type InsideOutsideAPI,
   instantiateWorker,
   mapToAllWorkers,
+  type InsideOutsideAPI,
 } from "./instantiator";
 
 let cachedWorkerInstance: Promise<InsideOutsideAPI> | undefined;
@@ -119,6 +119,7 @@ export interface SolveTwsearchOptions {
   generatorMoves?: string[];
   startPattern?: KPattern;
   minDepth?: number;
+  quantumMetric?: boolean;
 }
 
 export async function solveTwsearch(
