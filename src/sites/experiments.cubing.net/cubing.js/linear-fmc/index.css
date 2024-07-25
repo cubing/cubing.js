@@ -59,7 +59,7 @@ twisty-player {
   body {
     grid-template-areas: "player" "controls";
     grid-template-columns: 1fr;
-    grid-template-rows: 50% 50%;
+    grid-template-rows: 30% 80%;
   }
 }
 
