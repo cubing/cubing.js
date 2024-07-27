@@ -222,9 +222,9 @@ window.addEventListener("DOMContentLoaded", async () => {
       };
       console.log(result);
       results.push(result);
-      navigator.clipboard.writeText(
-        `${competitor.name}\t${result.numMoves}\t${result.scramble}\t${result.solution}`,
-      );
+      // navigator.clipboard.writeText(
+      //   `${competitor.name}\t${result.numMoves}\t${result.scramble}\t${result.solution}`,
+      // );
       localStorage[key] = JSON.stringify(results);
       resetButton.disabled = false;
     });
