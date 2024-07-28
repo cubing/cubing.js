@@ -58,35 +58,36 @@ export const costFactorsByMetric: Partial<
       {
         constantFactor: number;
         amountFactor: number;
+        zeroAmount: number;
       }
     >
   >
 > = {
   // Note: these are hardcoded for 3x3x3. They will not automatically generalize to any other puzzles.
   [CommonMetric.OuterBlockTurnMetric]: {
-    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
-    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0 },
-    [MoveType.Inner]: { constantFactor: 2, amountFactor: 0 },
+    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0, zeroAmount: 0 },
+    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0, zeroAmount: 0 },
+    [MoveType.Inner]: { constantFactor: 2, amountFactor: 0, zeroAmount: 0 },
   },
   [CommonMetric.RangeBlockTurnMetric]: {
-    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
-    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0 },
-    [MoveType.Inner]: { constantFactor: 1, amountFactor: 0 },
+    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0, zeroAmount: 0 },
+    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0, zeroAmount: 0 },
+    [MoveType.Inner]: { constantFactor: 1, amountFactor: 0, zeroAmount: 0 },
   },
   [CommonMetric.OuterBlockQuantumTurnMetric]: {
-    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
-    [MoveType.Outer]: { constantFactor: 0, amountFactor: 1 },
-    [MoveType.Inner]: { constantFactor: 0, amountFactor: 2 },
+    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0, zeroAmount: 0 },
+    [MoveType.Outer]: { constantFactor: 0, amountFactor: 1, zeroAmount: 0 },
+    [MoveType.Inner]: { constantFactor: 0, amountFactor: 2, zeroAmount: 0 },
   },
   [CommonMetric.RangeBlockQuantumTurnMetric]: {
-    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
-    [MoveType.Outer]: { constantFactor: 0, amountFactor: 1 },
-    [MoveType.Inner]: { constantFactor: 0, amountFactor: 1 },
+    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0, zeroAmount: 0 },
+    [MoveType.Outer]: { constantFactor: 0, amountFactor: 1, zeroAmount: 0 },
+    [MoveType.Inner]: { constantFactor: 0, amountFactor: 1, zeroAmount: 0 },
   },
   [CommonMetric.ExecutionTurnMetric]: {
-    [MoveType.Rotation]: { constantFactor: 1, amountFactor: 0 },
-    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0 },
-    [MoveType.Inner]: { constantFactor: 1, amountFactor: 0 },
+    [MoveType.Rotation]: { constantFactor: 1, amountFactor: 0, zeroAmount: 1 },
+    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0, zeroAmount: 1 },
+    [MoveType.Inner]: { constantFactor: 1, amountFactor: 0, zeroAmount: 1 },
   },
 };
 
@@ -101,6 +102,9 @@ export function countMove3x3x3(metric: CommonMetric, move: Move): number {
     throw new Error(`Invalid move for 3x3x3 ${metric}: ${moveQuantumString}`);
   }
   const costType = cache[moveQuantumString];
-  const { constantFactor, amountFactor } = costFactors[costType];
+  const { constantFactor, amountFactor, zeroAmount } = costFactors[costType];
+  if (move.amount === 0) {
+    return zeroAmount;
+  }
   return constantFactor + amountFactor * Math.abs(move.amount);
 }
