@@ -1,8 +1,10 @@
+import { fileURLToPath } from "node:url";
 import { needPath } from "../../../../../../lib/needPath.js";
 
 needPath(
-  new URL("../../../../../../../dist/lib/cubing/scramble", import.meta.url)
-    .pathname,
+  fileURLToPath(
+    new URL("../../../../../../../dist/lib/cubing/scramble", import.meta.url),
+  ),
   "make build-lib-js",
 );
 

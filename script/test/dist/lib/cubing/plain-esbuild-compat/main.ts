@@ -1,14 +1,15 @@
 import { join } from "node:path";
 import { stdout } from "node:process";
+import { fileURLToPath } from "node:url";
+import { packageNames } from "../../../../../build/common/package-info.js";
 import { execPromiseLogged } from "../../../../../lib/execPromise.js";
 import { needPath } from "../../../../../lib/needPath.js";
-import { packageNames } from "../../../../../build/common/package-info.js";
 
 // TODO: relative
 const OUT_DIR = "./.temp/plain-esbuild-compat";
 
 needPath(
-  new URL("../../../../../../dist/lib/cubing", import.meta.url).pathname,
+  fileURLToPath(new URL("../../../../../../dist/lib/cubing", import.meta.url)),
   "make build-lib-js",
 );
 

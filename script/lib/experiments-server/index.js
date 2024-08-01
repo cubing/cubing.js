@@ -3,12 +3,14 @@
 import { readFile } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { needPath } from "../needPath.js";
 
 const DIST_SITES_ROOT = "../../../dist/sites/";
 
-const DIST_SITES_ROOT_EXPANDED = new URL(DIST_SITES_ROOT, import.meta.url)
-  .pathname;
+const DIST_SITES_ROOT_EXPANDED = fileURLToPath(
+  new URL(DIST_SITES_ROOT, import.meta.url),
+);
 needPath(
   join(DIST_SITES_ROOT_EXPANDED, "alpha.twizzle.net"),
   "make build-sites",
@@ -28,10 +30,9 @@ export function startServer(port) {
     const normalizedPath = new URL(request.url, "http://test/").pathname;
 
     let filePath;
-    filePath = new URL(
-      join(DIST_SITES_ROOT_EXPANDED, normalizedPath),
-      import.meta.url,
-    ).pathname;
+    filePath = fileURLToPath(
+      new URL(join(DIST_SITES_ROOT_EXPANDED, normalizedPath), import.meta.url),
+    );
 
     if (filePath.endsWith("/")) {
       filePath += "index.html";

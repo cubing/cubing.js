@@ -25,6 +25,7 @@ export const mainAllowedImports: AllowedImports = {
       "node:path",
       "node:process",
       "node:util",
+      "node:url",
       "node:zlib",
 
       "package.json",

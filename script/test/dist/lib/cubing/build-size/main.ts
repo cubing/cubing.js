@@ -5,17 +5,23 @@ import { promisify } from "node:util";
 import { gzip } from "node:zlib";
 import { needPath } from "../../../../../lib/needPath.js";
 
+import { fileURLToPath } from "node:url";
 import { default as packageJSON } from "../../../../../../package.json" assert {
   type: "json",
 };
 const { exports } = packageJSON;
 
-const rootPath = new URL("../../../../../../", import.meta.url);
+const rootFilePath = new URL("../../../../../../", import.meta.url);
 
-needPath(join(rootPath.pathname, "dist/lib/cubing"), "make build-lib-js");
+needPath(
+  join(fileURLToPath(rootFilePath), "dist/lib/cubing"),
+  "make build-lib-js",
+);
 
 function subpackageEntry(subpackageName) {
-  return new URL(exports[`./${subpackageName}`].import, rootPath).pathname;
+  return fileURLToPath(
+    new URL(exports[`./${subpackageName}`].import, rootFilePath),
+  );
 }
 
 async function bundleSize(entryFile, threeExternal = false) {
@@ -48,7 +54,7 @@ function mapValues(s) {
   );
 }
 
-const CONSOLE_PATH = new URL("./src/total.js", import.meta.url).pathname;
+const CONSOLE_PATH = fileURLToPath(new URL("./src/total.js", import.meta.url));
 
 async function bundleSizeSummary(s) {
   const path = s === "(total)" ? CONSOLE_PATH : subpackageEntry(s);

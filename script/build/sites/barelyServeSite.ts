@@ -3,12 +3,14 @@ import type { Plugin } from "esbuild";
 import { exec } from "node:child_process";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { execPromise } from "../../lib/execPromise";
 import { needPath } from "../../lib/needPath";
 
 needPath(
-  new URL("../../../node_modules/barely-a-dev-server", import.meta.url)
-    .pathname,
+  fileURLToPath(
+    new URL("../../../node_modules/barely-a-dev-server", import.meta.url),
+  ),
   "make setup",
 );
 

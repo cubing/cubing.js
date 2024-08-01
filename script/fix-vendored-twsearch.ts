@@ -1,8 +1,10 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const DIR = new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url)
-  .pathname;
+const DIR = fileURLToPath(
+  new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url),
+);
 
 for (const fileName of await readdir(DIR)) {
   const filePath = join(DIR, fileName);

@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { exit } from "node:process";
+import { fileURLToPath } from "node:url";
 
 const MAKEFILE_PATH = new URL("../../../../Makefile", import.meta.url);
 const PACKAGE_JSON_PATH = new URL("../../../../package.json", import.meta.url);
@@ -40,9 +41,9 @@ This must be fixed by hand. Please do one of the following:
 
 .PHONY: ${target}
 
-2. Add "${target}" to \`EXPECTED_NON_PHONY_TARGETS\` in \`${
-            new URL(import.meta.url).pathname
-          }\`
+2. Add "${target}" to \`EXPECTED_NON_PHONY_TARGETS\` in \`${fileURLToPath(
+            new URL(import.meta.url),
+          )}\`
 `,
         );
         exit(1);
