@@ -58,6 +58,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/vendor/public-domain/unsafe-raw-aes",
       "three",
     ],
+    dynamic: ["src/cubing/puzzles"],
   },
   "src/cubing/kpuzzle": { static: ["src/cubing/alg", "src/cubing/kpuzzle"] },
   "src/cubing/notation": {

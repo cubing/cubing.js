@@ -1,11 +1,12 @@
 import type { ExperimentalStickering } from "../../../twisty";
 import { PGPuzzleLoader } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
-import type { StickeringMask } from "../../stickerings/mask";
 import {
   ftoStickering,
   ftoStickerings,
 } from "../../stickerings/fto-stickerings";
+import type { StickeringMask } from "../../stickerings/mask";
+import { ftoKeyMapping } from "./ftoKeyMapping";
 
 class FTOPuzzleLoader extends PGPuzzleLoader {
   constructor() {
@@ -25,6 +26,7 @@ class FTOPuzzleLoader extends PGPuzzleLoader {
     return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
       .ftoSVG;
   });
+  keyMapping = async () => ftoKeyMapping;
 }
 
 export const fto = new FTOPuzzleLoader();

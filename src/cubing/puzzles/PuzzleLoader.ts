@@ -1,9 +1,11 @@
-import type { PuzzleSpecificSimplifyOptions } from "../alg";
+import type { AlgLeaf, PuzzleSpecificSimplifyOptions } from "../alg";
 import type { AppendOptions } from "../alg/simplify";
 import type { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { ExperimentalStickering } from "../twisty";
 import type { StickeringMask } from "./stickerings/mask";
+
+export type KeyMapping = { [keyCode: string]: AlgLeaf };
 
 export interface PuzzleLoader {
   id: string;
@@ -24,6 +26,7 @@ export interface PuzzleLoader {
   stickerings?: () => Promise<ExperimentalStickering[]>;
   puzzleSpecificSimplifyOptions?: PuzzleSpecificSimplifyOptions;
   puzzleSpecificSimplifyOptionsPromise?: Promise<PuzzleSpecificSimplifyOptions>; // TODO
+  keyMapping?: () => Promise<KeyMapping>; // TODO: async getter
 }
 
 // TODO: consolidate the `puzzleSpecificSimplifyOptionsPromise` with `puzzleSpecificSimplifyOptions` somehow, so that we don't have to do this.

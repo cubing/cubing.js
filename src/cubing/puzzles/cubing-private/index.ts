@@ -27,13 +27,15 @@ export {
 } from "../implementations/dynamic/2x2x2/puzzle-orientation"; // TODO: Actually dynamic
 
 export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "../customPGPuzzleLoader";
-export { getFaceletStickeringMask as experimentalGetFaceletStickeringMask } from "../stickerings/mask";
-export type {
-  PieceStickeringMask as ExperimentalPieceStickeringMask,
-  FaceletMeshStickeringMask as ExperimentalFaceletMeshStickeringMask,
-  StickeringMask as ExperimentalStickeringMask,
-} from "../stickerings/mask";
 export {
+  getFaceletStickeringMask as experimentalGetFaceletStickeringMask,
   getPieceStickeringMask as experimentalGetPieceStickeringMask,
   PieceStickering as ExperimentalPieceStickering,
 } from "../stickerings/mask";
+export type {
+  FaceletMeshStickeringMask as ExperimentalFaceletMeshStickeringMask,
+  PieceStickeringMask as ExperimentalPieceStickeringMask,
+  StickeringMask as ExperimentalStickeringMask,
+} from "../stickerings/mask";
+
+export type { KeyMapping } from "../PuzzleLoader";

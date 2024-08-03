@@ -4,11 +4,12 @@ import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
 import { experimental3x3x3KPuzzle } from "../../cubing-private";
 import type { PuzzleLoader } from "../../PuzzleLoader";
-import type { StickeringMask } from "../../stickerings/mask";
 import {
-  cubeLikeStickeringMask,
   cubeLikeStickeringList,
+  cubeLikeStickeringMask,
 } from "../../stickerings/cube-like-stickerings";
+import type { StickeringMask } from "../../stickerings/mask";
+import { cube3x3x3KeyMapping } from "./cube3x3x3KeyMapping";
 import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
 
 /** @category Specific Puzzles */
@@ -40,4 +41,5 @@ export const cube3x3x3 = {
   ): Promise<StickeringMask> => cubeLikeStickeringMask(cube3x3x3, stickering),
   stickerings: () => cubeLikeStickeringList("3x3x3"),
   puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,
+  keyMapping: async () => cube3x3x3KeyMapping,
 } satisfies PuzzleLoader;

@@ -210,7 +210,7 @@ const fn = async (
     swipeyPuzzle.showGrid();
   }
 
-  const kbp = await debugKeyboardConnect(document.body);
+  const kbp = await debugKeyboardConnect(document.body, getPuzzleID());
   kbp.addAlgLeafListener(algLeafListener);
 
   window.removeEventListener("keydown", keyboardCallback);
