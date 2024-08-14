@@ -19,7 +19,7 @@ const supercubeSprite = new URL(
 {
   const player = new TwistyPlayer({
     alg: Alg.fromString("M' R' U' D' M R"),
-    experimentalSetupAlg: Alg.fromString("(M' R' U' D' M R)'"),
+    experimentalSetupAnchor: "end",
   });
   // player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo2")!.appendChild(player);
