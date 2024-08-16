@@ -6,10 +6,6 @@ import {
   Newline,
 } from "../../../../cubing/alg";
 import {
-  debugKeyboardConnect,
-  type MoveEvent,
-} from "../../../../cubing/bluetooth";
-import {
   KPattern,
   type KPatternData,
   type KPatternOrbitData,
@@ -20,8 +16,14 @@ import { cubeLikePuzzleStickering } from "../../../../cubing/puzzles/stickerings
 import { PieceStickering } from "../../../../cubing/puzzles/stickerings/mask";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import type { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
+import "../../../../cubing/twisty/cubing-private"; // TwistyStreamSource
+import type { TwistyStreamSource } from "../../../../cubing/twisty/cubing-private";
 import { constructMoveCountDisplay } from "../../../../cubing/twisty/cubing-private";
 import type { AlgWithIssues } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+
+const twistyStreamSource: TwistyStreamSource = document.querySelector(
+  "twisty-stream-source",
+)!;
 
 const player = document.querySelector<TwistyPlayer>("twisty-player")!;
 const scrambleElem = document.querySelector<TwistyAlgViewer>("#scramble")!;
@@ -45,15 +47,17 @@ const solved = kpuzzle.defaultPattern();
 
 constructMoveCountDisplay(player.experimentalModel, moveCountDisplay);
 
-const inputPuzzle = await debugKeyboardConnect();
-inputPuzzle.addAlgLeafListener((e: MoveEvent) => {
-  player.experimentalAddAlgLeaf(e.latestAlgLeaf, {
-    cancel: {
-      directional: "same-direction",
-      puzzleSpecificModWrap: "gravity",
+twistyStreamSource.addEventListener("move", (e) => {
+  player.experimentalAddAlgLeaf(
+    (e as any as { detail: { move: Move } }).detail.move,
+    {
+      cancel: {
+        directional: "same-direction",
+        puzzleSpecificModWrap: "gravity",
+      },
+      puzzleSpecificSimplifyOptions: puzzleLoader.puzzleSpecificSimplifyOptions,
     },
-    puzzleSpecificSimplifyOptions: puzzleLoader.puzzleSpecificSimplifyOptions,
-  });
+  );
 });
 
 window.addEventListener("keydown", (e: KeyboardEvent) => {
