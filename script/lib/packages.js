@@ -8,6 +8,7 @@ export const packageNames = [
   "protocol",
   "puzzle-geometry",
   "puzzles",
+  "puzzles/stickerings",
   "scramble",
   "stream",
   "search",

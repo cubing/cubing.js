@@ -35,6 +35,10 @@
       "import": "./dist/esm/puzzles/index.js",
       "types": "./dist/esm/types-geometry/index.d.ts"
     },
+    "./puzzles/stickerings": {
+      "import": "./dist/esm/puzzles/stickerings/index.js",
+      "types": "./dist/types/puzzles/stickerings/index.d.ts"
+    },
     "./scramble": {
       "import": "./dist/esm/scramble/index.js",
       "types": "./dist/types/scramble/index.d.ts"
@@ -69,7 +73,6 @@
     "@types/yargs": "^17.0.17",
     "@web/dev-server-esbuild": "^0.3.3",
     "@web/test-runner": "^0.15.0",
-    "@web/test-runner-playwright": "^0.9.0",
     "barely-a-dev-server": "^0.4.7",
     "chai": "^4.3.7",
     "esbuild": "^0.16.4",
@@ -77,7 +80,6 @@
     "mocha": "^10.2.0",
     "node-fetch": "^3.3.0",
     "peggy": "^2.0.1",
-    "playwright": "^1.28.1",
     "rome": "^11.0.0-nightly.fab5440",
     "tsup": "^6.5.0",
     "typedoc": "^0.23.22",
