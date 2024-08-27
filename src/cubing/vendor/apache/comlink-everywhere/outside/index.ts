@@ -24,18 +24,12 @@ async function nodeWorker(
 
 export async function constructWorker(
   source: string | URL,
-  options?: { eval?: boolean; type?: WorkerType },
+  options?: { type?: WorkerType },
 ): Promise<Worker> {
   let worker: Worker;
   if (useNodeWorkarounds) {
-    return nodeWorker(source, { eval: options?.eval });
+    return nodeWorker(source);
   } else {
-    if (options?.eval) {
-      const blob = new Blob([source as string], {
-        type: "application/javascript",
-      });
-      source = URL.createObjectURL(blob);
-    }
     worker = new globalThis.Worker(source, {
       type: options ? options.type : undefined, // TODO: Is it safe to use `options?.type`?
     });
