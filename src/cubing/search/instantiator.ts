@@ -234,7 +234,5 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
     }
   }
 
-  throw new Error(
-    `${failed()}. There are no more fallbacks available. If you are using Firefox, please update to version 114 or later.`,
-  );
+  throw new Error(`${failed()}. There are no more fallbacks available.`);
 }
