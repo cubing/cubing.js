@@ -1,11 +1,7 @@
+import { getBuiltinModule } from "getbuiltinmodule-ponyfill";
 import nodeEndpoint from "../node-adapter";
 
 export { wrap } from "comlink";
-// Mangled so that bundlers don't try to inline the source.
-
-const worker_threads_mangled = "node:w-orker-_threa-ds";
-const worker_threads_unmangled = () => worker_threads_mangled.replace(/-/g, "");
-
 const useNodeWorkarounds =
   typeof globalThis.Worker === "undefined" &&
   typeof (globalThis as any).WorkerNavigator === "undefined";
@@ -14,9 +10,7 @@ async function nodeWorker(
   source: string | URL,
   options?: { eval?: boolean },
 ): Promise<Worker> {
-  const { Worker: NodeWorker } = await import(
-    /* @vite-ignore */ worker_threads_unmangled()
-  );
+  const { Worker: NodeWorker } = await getBuiltinModule("node:worker_threads");
   const worker = new NodeWorker(source, options);
   worker.unref();
   return nodeEndpoint(worker);

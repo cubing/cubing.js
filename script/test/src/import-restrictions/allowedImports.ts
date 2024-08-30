@@ -129,10 +129,14 @@ export const mainAllowedImports: AllowedImports = {
     static: ["three", "src/cubing/vendor/mit/three"],
   },
   "src/cubing/vendor": {
-    static: ["src/cubing/alg", "random-uint-below"],
+    static: [
+      "src/cubing/alg",
+      "random-uint-below",
+      "getbuiltinmodule-ponyfill",
+    ],
   },
   "src/cubing/vendor/apache/comlink-everywhere": {
-    static: ["comlink"],
+    static: ["comlink", "getbuiltinmodule-ponyfill"],
   },
   "src/cubing/vendor/mit/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
     static: ["src/cubing/search/cubing-private"],
@@ -140,6 +144,9 @@ export const mainAllowedImports: AllowedImports = {
   // src/sites
   "src/sites": {
     static: ["src/cubing", "jszip", "three"],
+  },
+  "src/sites/experiments.cubing.net/cubing.js/rust/wasm": {
+    static: ["getbuiltinmodule-ponyfill"],
   },
 };
 
@@ -154,6 +161,7 @@ export const specAllowedImports: AllowedImports = {
       "comlink",
       "three",
       "random-uint-below",
+      "getbuiltinmodule-ponyfill",
     ],
   },
   "src/test/chai-workarounds": {

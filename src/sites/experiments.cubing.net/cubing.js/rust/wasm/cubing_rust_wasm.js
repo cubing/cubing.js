@@ -1,6 +1,4 @@
-// Mangled so that bundlers don't try to inline the source.
-const node_fs_promises_mangled = "node:-fs/pr-omises";
-const node_fs_promises_unmangled = () => node_fs_promises_mangled.replace(/-/g, "");
+import { getBuiltinModule } from "getbuiltinmodule-ponyfill";
 
 let wasm;
 
@@ -258,7 +256,7 @@ async function init(input) {
             if (!(e instanceof TypeError)) {
                 throw e;
             }
-            input = await (await import(node_fs_promises_unmangled())).readFile(input);
+            input = await getBuiltinModule("node:fs/promises").readFile(input);
         }
     }
 
@@ -269,5 +267,5 @@ async function init(input) {
     return finalizeInit(instance, module);
 }
 
-export { initSync }
+export { initSync };
 export default init;

@@ -1,6 +1,6 @@
 import { cube3x3x3, type PuzzleLoader } from "../../../puzzles";
-import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp";
 import type { FaceletScale } from "../../model/props/puzzle/display/FaceletScaleProp";
+import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp";
 import { Cube3D, type Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 

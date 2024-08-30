@@ -5,8 +5,7 @@ import "./chunk-FTOVDLBG.js";
 import { Alg } from "../../../alg";
 
 // .temp/rust-wasm/twsearch_wasm.js
-var node_fs_promises_mangled = "node:-fs/pr-omises";
-var node_fs_promises_unmangled = () => node_fs_promises_mangled.replace(/-/g, "");
+import { getBuiltinModule } from "getbuiltinmodule-ponyfill";
 var wasm;
 var cachedTextDecoder = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-8", { ignoreBOM: true, fatal: true }) : { decode: () => {
   throw Error("TextDecoder not available");
@@ -447,7 +446,7 @@ async function __wbg_init(input) {
       if (!(e instanceof TypeError)) {
         throw e;
       }
-      input = await (await import(node_fs_promises_unmangled())).readFile(input);
+      input = await (await getBuiltinModule("node:fs/promises")).readFile(input);
     }
   }
   __wbg_init_memory(imports);
@@ -460,7 +459,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-V4F3SIUO.js")).default;
+    const wasmUint8Array = (await import("./twsearch_wasm_bg-AVUYD5YC.js")).default;
     await twsearch_wasm_default(wasmUint8Array.buffer);
   })());
 }

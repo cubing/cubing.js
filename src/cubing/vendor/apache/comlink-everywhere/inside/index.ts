@@ -1,23 +1,20 @@
 import { expose as comlinkExpose } from "comlink";
+import { getBuiltinModule } from "getbuiltinmodule-ponyfill";
 import nodeEndpoint from "../node-adapter";
 
 const useNodeWorkarounds =
   typeof globalThis.Worker === "undefined" &&
   typeof (globalThis as any).WorkerNavigator === "undefined";
 
-// Mangled so that bundlers don't try to inline the source.
-const worker_threads_mangled = "node:w-orker-_threa-ds";
-const worker_threads_unmangled = () => worker_threads_mangled.replace(/-/g, "");
-
 export async function nodeEndpointPort(): Promise<
   Worker & {
     nodeWorker?: import("node:worker_threads").Worker;
   }
 > {
-  const { parentPort } = await import(
-    /* @vite-ignore */ worker_threads_unmangled()
-  ).catch();
-  return nodeEndpoint(parentPort);
+  const { parentPort } = await getBuiltinModule("node:worker_threads");
+  return nodeEndpoint(
+    parentPort as unknown as import("node:worker_threads").Worker,
+  );
 }
 
 export function expose(api: any) {
