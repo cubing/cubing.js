@@ -39,6 +39,7 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "ignore": [
+      "./package.json",
       "./src/cubing/vendor/mit/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
       "./src/cubing/vendor/mpl/xyzzy/*.js",
