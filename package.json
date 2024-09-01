@@ -59,7 +59,6 @@
     "@types/three": "^0.165.0",
     "@types/web-bluetooth": "^0.0.20",
     "comlink": "^4.4.1",
-    "getbuiltinmodule-ponyfill": "^1.0.1",
     "random-uint-below": "v3.3.0",
     "three": "^0.165.0"
   },
@@ -77,6 +76,7 @@
     "barely-a-dev-server": "latest",
     "chai": "^5.1.1",
     "esbuild": "latest",
+    "getbuiltinmodule-ponyfill": "^1.0.1",
     "jszip": "^3.10.1",
     "mocha": "^10.5.2",
     "playwright": "^1.45.0",
@@ -86,6 +86,7 @@
     "yargs": "^17.7.2"
   },
   "minimalDevDependencies": [
+    "getbuiltinmodule-ponyfill",
     "barely-a-dev-server",
     "esbuild",
     "jszip",
