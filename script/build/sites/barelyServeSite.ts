@@ -95,7 +95,6 @@ export async function barelyServeSite(srcFolder: string, dev: boolean) {
       target: "es2022",
       plugins: plugins(dev),
       minify: !dev,
-      external: ["node:*"], // TODO
     },
   });
   if (!dev) {
