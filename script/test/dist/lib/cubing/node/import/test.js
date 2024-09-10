@@ -1,47 +1,23 @@
-import "cubing/alg";
-import "cubing/bluetooth";
-import "cubing/kpuzzle";
-import "cubing/notation";
-import "cubing/protocol";
-import "cubing/puzzle-geometry";
-import "cubing/puzzles";
-import "cubing/scramble";
-import "cubing/search";
-import "cubing/stream";
-import "cubing/twisty";
+import * as alg from "cubing/alg";
+import * as bluetooth from "cubing/bluetooth";
+import * as kpuzzle from "cubing/kpuzzle";
+import * as notation from "cubing/notation";
+import * as protocol from "cubing/protocol";
+import * as puzzleGeometry from "cubing/puzzle-geometry";
+import * as puzzles from "cubing/puzzles";
+import * as scramble from "cubing/scramble";
+import * as search from "cubing/search";
+import * as stream from "cubing/stream";
+import * as twisty from "cubing/twisty";
 
-import { Alg } from "cubing/alg";
-import { KPattern } from "cubing/kpuzzle";
-import { cube2x2x2 } from "cubing/puzzles";
-import { randomScrambleForEvent } from "cubing/scramble";
-import { experimentalSolveTwsearch, setSearchDebug } from "cubing/search";
-
-setSearchDebug({ disableStringWorker: true });
-
-(async () => {
-  (await randomScrambleForEvent("222")).log();
-  (await randomScrambleForEvent("333")).log();
-
-  const scramble222 = new Alg("R' F2 R F2 R F' U2 R' F' L2 F'");
-  const kpuzzle = await cube2x2x2.kpuzzle();
-  const scramble222Transformation = kpuzzle.algToTransformation(scramble222);
-  const scramble222Solution = await experimentalSolveTwsearch(
-    kpuzzle,
-    scramble222Transformation.toKPattern(),
-    { generatorMoves: "ULFR".split(""), minDepth: 11 },
-  );
-  scramble222.concat(".").concat(scramble222Solution).log();
-  if (
-    !scramble222Transformation
-      .applyAlg(scramble222Solution)
-      .isIdentical(kpuzzle.identityTransformation())
-  ) {
-    throw new Error("Invalid solution!");
-  }
-  const numMoves = scramble222Solution.experimentalNumChildAlgNodes();
-  if (numMoves < 11) {
-    throw new Error(`Solution too short (at least 11 expected): ${numMoves}`);
-  }
-
-  console.log("Success!");
-})();
+console.log(alg);
+console.log(bluetooth);
+console.log(kpuzzle);
+console.log(notation);
+console.log(protocol);
+console.log(puzzleGeometry);
+console.log(puzzles);
+console.log(scramble);
+console.log(search);
+console.log(stream);
+console.log(twisty);

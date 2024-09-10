@@ -103,6 +103,7 @@ test-fast: quick-setup \
 	build-lib-js test-spec-bun-fast build-bin build-sites \
 	lint \
 	test-src-import-restrictions test-src-scripts-consistency \
+	test-dist-lib-node-import \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
 .PHONY: test-all
@@ -158,6 +159,7 @@ test-dist: test-dist-lib test-dist-bin
 .PHONY: test-dist-lib
 test-dist-lib: \
 	test-dist-lib-node-import \
+	test-dist-lib-node-scramble \
 	test-dist-lib-bun-scramble-all-events \
 	test-dist-lib-perf \
 	test-dist-lib-plain-esbuild-compat \
@@ -166,6 +168,9 @@ test-dist-lib: \
 .PHONY: test-dist-lib-node-import
 test-dist-lib-node-import: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/import/main.js
+.PHONY: test-dist-lib-node-scramble
+test-dist-lib-node-scramble: build-lib-js
+	${NODE} script/test/dist/lib/cubing/node/scramble/main.js
 .PHONY: test-dist-lib-bun-scramble-all-events
 test-dist-lib-bun-scramble-all-events: build-lib-js
 	${BUN} script/test/dist/lib/cubing/node/scramble-all-events/main.js
@@ -207,7 +212,7 @@ lint:
 lint-ci:
 	${BIOME} ci ./script ./src
 .PHONY: prepack
-prepack: clean build test-dist-lib-node-import test-dist-lib-plain-esbuild-compat
+prepack: clean build test-dist-lib-node-import test-dist-lib-node-scramble test-dist-lib-plain-esbuild-compat
 .PHONY: prepublishOnly
 prepublishOnly:
 	# Lucas is usually the one publishing, and `mak` is over twice as fast. So we use it when available.
