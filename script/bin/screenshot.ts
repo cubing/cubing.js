@@ -1,9 +1,16 @@
+/**
+ * Usage:
+ *
+ *    bun run "script/bin/screenshot.ts" "R U R' U R U2' R'"
+ *
+ *  */
+
 // We would use named imports, but that doesn't seem to be an option.
 import { chromium } from "playwright";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import type { TwistyPlayerConfig } from "../../../src/cubing/twisty";
-import { startServer } from "../../lib/experiments-server/index.js";
+import type { TwistyPlayerConfig } from "../../src/cubing/twisty/index.js";
+import { startServer } from "../lib/experiments-server/index.js";
 
 const DEBUG = false;
 const PAGE_URL =

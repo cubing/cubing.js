@@ -66,7 +66,7 @@ link: build
 .PHONY: clean
 clean:
 	rm -rf \
-		dist .temp coverage script/bin/screenshot-src/main.js ./package-lock.json \
+		dist .temp coverage ./package-lock.json \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
 	${BUN_RUN} script/build/lib/clean-types.ts
 .PHONY: reset

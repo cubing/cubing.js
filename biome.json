@@ -31,8 +31,7 @@
       "./src/cubing/vendor/mpl/xyzzy/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
-      "./src/test/vendor/bun-types-workaround.d.ts",
-      "./script/bin/screenshot-src/main.js"
+      "./src/test/vendor/bun-types-workaround.d.ts"
     ]
   },
   "formatter": {
@@ -45,8 +44,7 @@
       "./src/cubing/vendor/mpl/xyzzy/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
       "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
-      "./src/test/vendor/bun-types-workaround.d.ts",
-      "./script/bin/screenshot-src/main.js"
+      "./src/test/vendor/bun-types-workaround.d.ts"
     ]
   },
   "organizeImports": {
