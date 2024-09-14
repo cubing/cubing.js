@@ -25,10 +25,7 @@ import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx"
 import { solveMegaminx } from "./solve/puzzles/megaminx";
 import { solvePyraminx } from "./solve/puzzles/pyraminx";
 import { randomRediCubeScramble } from "./solve/puzzles/redi_cube";
-import {
-  randomSkewbFixedCornerScramble,
-  solveSkewb,
-} from "./solve/puzzles/skewb";
+import { solveSkewb } from "./solve/puzzles/skewb";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
 import {
   wasmRandomScrambleForEvent,
@@ -77,98 +74,104 @@ const prefetchPromises: Map<string, Promise<Alg>> = new Map();
 // https://nodejs.org/api/timers.html#settimeoutcallback-delay-args
 let queuedPrefetchTimeoutID: ReturnType<typeof setTimeout> | null = null;
 
+// This is used to ensure only one scramble is running (and measured) at a time, as interleaving scrambles within a single worker isn't supported (yet).
+// Scrambles may perform async work (e.g. loading code), and this guard this prevents unintended interleaving.
+let scrambleActivityLock: Promise<Alg>;
+
 async function randomScrambleForEvent(
   eventID: string,
   options?: { isPrefetch?: boolean },
 ): Promise<Alg> {
-  function wasm(): Promise<Alg> {
-    return measurePerf(
-      `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
-      () => wasmRandomScrambleForEvent(eventID),
-      {
-        isPrefetch: options?.isPrefetch,
-      },
-    );
-  }
-
-  switch (eventID) {
-    // case "333":
-    case "222":
-      return (await wasm()).experimentalSimplify({
-        puzzleSpecificSimplifyOptions: {
-          quantumMoveOrder: () => 4,
+  return (scrambleActivityLock = (async () => {
+    await scrambleActivityLock;
+    function wasm(): Promise<Alg> {
+      return measurePerf(
+        `wasmRandomScrambleForEvent(${JSON.stringify(eventID)})`,
+        () => wasmRandomScrambleForEvent(eventID),
+        {
+          isPrefetch: options?.isPrefetch,
         },
-      });
-    // case "444":
-    case "555":
-    case "666":
-    case "777":
-    // case "333bf":
-    case "333fm":
-    // case "333oh":
-    // case "clock":
-    case "minx":
-    case "pyram":
-    // case "skewb":
-    // case "sq1":
-    // case "444bf":
-    case "555bf":
-      // case "333mbf":
-      // case "fto":
-      // case "master_tetraminx":
-      // case "kilominx":
-      // case "redi_cube":m
-      return wasm();
-    case "333":
-    case "333oh":
-    case "333ft":
-      return measurePerf("random333Scramble", random333Scramble, {
-        isPrefetch: options?.isPrefetch,
-      });
-    case "333bf":
-    case "333mbf":
-      return measurePerf(
-        "random333OrientedScramble",
-        random333OrientedScramble,
       );
-    case "444":
-      return measurePerf("random444Scramble", random444Scramble, {
-        isPrefetch: options?.isPrefetch,
-      });
-    case "444bf":
-      return measurePerf(
-        "random444OrientedScramble",
-        random444OrientedScramble,
-      );
-    case "skewb":
-      return measurePerf(
-        "randomSkewbFixedCornerScramble",
-        randomSkewbFixedCornerScramble,
-      );
-    case "sq1":
-      return measurePerf("getRandomSquare1Scramble", getRandomSquare1Scramble, {
-        isPrefetch: options?.isPrefetch,
-      });
-    case "fto":
-      return measurePerf("randomFTOScramble", randomFTOScramble, {
-        isPrefetch: options?.isPrefetch,
-      });
-    case "master_tetraminx":
-      return measurePerf(
-        "randomMasterTetraminxScramble",
-        randomMasterTetraminxScramble,
-      );
-    case "kilominx":
-      return measurePerf("randomKilominxScramble", randomKilominxScramble, {
-        isPrefetch: options?.isPrefetch,
-      });
-    case "redi_cube":
-      return measurePerf("randomRediCubeScramble", randomRediCubeScramble, {
-        isPrefetch: options?.isPrefetch,
-      });
-    default:
-      throw new Error(`unsupported event: ${eventID}`);
-  }
+    }
+
+    switch (eventID) {
+      // case "333":
+      case "222":
+        return (await wasm()).experimentalSimplify({
+          puzzleSpecificSimplifyOptions: {
+            quantumMoveOrder: () => 4,
+          },
+        });
+      // case "444":
+      case "555":
+      case "666":
+      case "777":
+      // case "333bf":
+      case "333fm":
+      // case "333oh":
+      // case "clock":
+      case "minx":
+      case "pyram":
+      case "skewb":
+      // case "sq1":
+      // case "444bf":
+      case "555bf":
+        // case "333mbf":
+        // case "fto":
+        // case "master_tetraminx":
+        // case "kilominx":
+        // case "redi_cube":m
+        return wasm();
+      case "333":
+      case "333oh":
+      case "333ft":
+        return measurePerf("random333Scramble", random333Scramble, {
+          isPrefetch: options?.isPrefetch,
+        });
+      case "333bf":
+      case "333mbf":
+        return measurePerf(
+          "random333OrientedScramble",
+          random333OrientedScramble,
+        );
+      case "444":
+        return measurePerf("random444Scramble", random444Scramble, {
+          isPrefetch: options?.isPrefetch,
+        });
+      case "444bf":
+        return measurePerf(
+          "random444OrientedScramble",
+          random444OrientedScramble,
+        );
+      case "sq1":
+        return measurePerf(
+          "getRandomSquare1Scramble",
+          getRandomSquare1Scramble,
+          {
+            isPrefetch: options?.isPrefetch,
+          },
+        );
+      case "fto":
+        return measurePerf("randomFTOScramble", randomFTOScramble, {
+          isPrefetch: options?.isPrefetch,
+        });
+      case "master_tetraminx":
+        return measurePerf(
+          "randomMasterTetraminxScramble",
+          randomMasterTetraminxScramble,
+        );
+      case "kilominx":
+        return measurePerf("randomKilominxScramble", randomKilominxScramble, {
+          isPrefetch: options?.isPrefetch,
+        });
+      case "redi_cube":
+        return measurePerf("randomRediCubeScramble", randomRediCubeScramble, {
+          isPrefetch: options?.isPrefetch,
+        });
+      default:
+        throw new Error(`unsupported event: ${eventID}`);
+    }
+  })());
 }
 
 export enum PrefetchLevel {
