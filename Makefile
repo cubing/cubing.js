@@ -231,6 +231,9 @@ roll-vendored-twsearch:
 	mkdir -p ./src/cubing/vendor/mpl/twsearch
 	rm -rf ./src/cubing/vendor/mpl/twsearch/*
 	cp -R ../twsearch/dist/wasm/* ./src/cubing/vendor/mpl/twsearch/
+	# TODO: why does using normal `echo -n` ignore the `-n` here?
+	printf "https://github.com/cubing/twsearch/tree/" > ./src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
+	git -C ../twsearch/ rev-parse HEAD >> ./src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
 	${BUN_RUN} script/fix-vendored-twsearch.ts
 .PHONY: update-create-cubing-app
 update-create-cubing-app:
