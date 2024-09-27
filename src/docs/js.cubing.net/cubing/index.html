@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4285f4">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../main.css">
-  <script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
+  <script src="https://cdn.cubing.net/v0/js/cubing/twisty" type="module"></script>
 </head>
 
 <body>
@@ -35,10 +35,11 @@
       <div class="code-demo">
         <code class="sample">
           &lt;script
-            src=&quot;https://cdn.cubing.net/js/cubing/twisty&quot;
-            type=&quot;module&quot;&gt;&lt;/script&gt;<br>
-<br>
-<span>&lt;twisty-player alg=&quot;R U R&#x27; U R U2&#x27; R&#x27;&quot;&gt;&lt;/twisty-player&gt;</span>
+            src=&quot;<code class="boilerplate"
+            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/twisty&quot;
+        type=&quot;module&quot;&gt;&lt;/script&gt;<br>
+        <br>
+        <span>&lt;twisty-player alg=&quot;R U R&#x27; U R U2&#x27; R&#x27;&quot;&gt;&lt;/twisty-player&gt;</span>
         </code>
         <twisty-player alg="R U R' U R U2' R'">
         </twisty-player>
@@ -58,7 +59,7 @@
           <code class="sample">
 <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
           import { Alg } from &quot;<code class="boilerplate"
-            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
+            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;;<br>
           <br>
           const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
           commutator.invert().expand().log();<br>
@@ -83,7 +84,7 @@
           <code class="sample">
 <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
           import { randomScrambleForEvent } from &quot;<code class="boilerplate"
-            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/scramble&quot;;<br>
+            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/scramble&quot;;<br>
           <br>
           const scramble = await randomScrambleForEvent("333");<br>
           scramble.log();<br>
@@ -124,7 +125,7 @@ import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
       </code>
       <p>
         Most examples on this site use CDN import paths for convenient copy-and-pasting. To import from
-        <code>npm</code>, remove the <code class="boilerplate">https://cdn.cubing.net/js/</code> prefix from any
+        <code>npm</code>, remove the <code class="boilerplate">https://cdn.cubing.net/v0/js/</code> prefix from any
         relevant imports.
       </p>
       <section id="create-cubing-app" class="inline no-header">

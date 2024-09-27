@@ -17,7 +17,9 @@
     </div>
     <section class="no-header">
       <p>
-        <code>cubing/kpuzzle</code> is the part of <code>cubing.js</code> that lets you calculate transformations and patterns for puzzles using the KPuzzle definition format (based on <a href="https://github.com/cubing/ksolve++">ksolve</a>).
+        <code>cubing/kpuzzle</code> is the part of <code>cubing.js</code> that lets you calculate transformations and
+        patterns for puzzles using the KPuzzle definition format (based on <a
+          href="https://github.com/cubing/ksolve++">ksolve</a>).
       </p>
     </section>
 
@@ -27,13 +29,13 @@
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { cube3x3x3 } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/puzzles&quot;;<br>
-<br>
-const kpuzzle = await cube3x3x3.kpuzzle();<br>
-const suneTransformation =<br>
-&nbsp;&nbsp;kpuzzle.algToTransformation(&quot;R U R' U R U2' R'&quot;);<br>
-<br>
-console.log(suneTransformation.repetitionOrder());</span>
+            <span>import { cube3x3x3 } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/puzzles&quot;;<br>
+          <br>
+          const kpuzzle = await cube3x3x3.kpuzzle();<br>
+          const suneTransformation =<br>
+          &nbsp;&nbsp;kpuzzle.algToTransformation(&quot;R U R' U R U2' R'&quot;);<br>
+          <br>
+          console.log(suneTransformation.repetitionOrder());</span>
           </code>
         </div>
         <code class="sample output">

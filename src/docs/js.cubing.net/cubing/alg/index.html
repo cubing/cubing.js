@@ -23,15 +23,16 @@
 
     <section id="string-conversion">
       <h1><a href="#string-conversion">String conversion</a></h1>
-      <p>Parse an alg by passing it to the <code>Alg</code> constructor. You can call <code>.toString()</code> to get back a string representation.</p>
+      <p>Parse an alg by passing it to the <code>Alg</code> constructor. You can call <code>.toString()</code> to get
+        back a string representation.</p>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;<br>
-<br>
-const alg = new Alg(&quot;R U R' U R U2' R'&quot;);<br>
-console.log(alg);<br>
-console.log(alg.toString());</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;<br>
+          <br>
+          const alg = new Alg(&quot;R U R' U R U2' R'&quot;);<br>
+          console.log(alg);<br>
+          console.log(alg.toString());</span>
           </code>
         </div>
         <code class="sample output">
@@ -39,13 +40,16 @@ console.log(alg.toString());</span>
           <span>&quot;R U R' U R U2' R'&quot;</span>
         </code>
       </div>
-      <p>As a convenience, you can use <code>.log()</code> to view an alg in a JavaScript console (e.g. <a href="https://nodejs.org/en/about/"><code>node</code></a> or <a href="https://developer.chrome.com/docs/devtools/console/javascript/">DevTools</a>). We'll use that for all the examples from now on:</p>
+      <p>As a convenience, you can use <code>.log()</code> to view an alg in a JavaScript console (e.g. <a
+          href="https://nodejs.org/en/about/"><code>node</code></a> or <a
+          href="https://developer.chrome.com/docs/devtools/console/javascript/">DevTools</a>). We'll use that for all
+        the examples from now on:</p>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;<br>
-<br>
-new Alg(&quot;R U R' U R U2' R'&quot;).log();</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;<br>
+          <br>
+          new Alg(&quot;R U R' U R U2' R'&quot;).log();</span>
           </code>
         </div>
         <code class="sample output">
@@ -56,10 +60,11 @@ new Alg(&quot;R U R' U R U2' R'&quot;).log();</span>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;<br>
-<br>
-const alg = new Alg(&quot;&nbsp;R&nbsp;&nbsp;&nbsp;U&nbsp;R'&nbsp;&nbsp;&nbsp;U&nbsp;R&nbsp;U2'&nbsp;&nbsp;&nbsp;R'&quot;);<br>
-alg.log();</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;<br>
+          <br>
+          const alg = new
+          Alg(&quot;&nbsp;R&nbsp;&nbsp;&nbsp;U&nbsp;R'&nbsp;&nbsp;&nbsp;U&nbsp;R&nbsp;U2'&nbsp;&nbsp;&nbsp;R'&quot;);<br>
+          alg.log();</span>
           </code>
         </div>
         <code class="sample output">
@@ -70,22 +75,23 @@ alg.log();</span>
 
     <section id="methods">
       <h1><a href="#methods">Methods</a></h1>
-      <p><code>Alg</code> objects are immutable (cannot be modified directly). If you want a modified version of an <code>Alg</code>, you can call its methods:
-        <ul>
-          <li><code>alg.invert()</code></li>
-          <li><code>alg.concat(alg2)</code></li>
-          <li><code>alg.expand()</code></li>
-          <li><code>alg.experimentalSimplify()</code></li>
-        </ul>
+      <p><code>Alg</code> objects are immutable (cannot be modified directly). If you want a modified version of an
+        <code>Alg</code>, you can call its methods:
+      <ul>
+        <li><code>alg.invert()</code></li>
+        <li><code>alg.concat(alg2)</code></li>
+        <li><code>alg.expand()</code></li>
+        <li><code>alg.experimentalSimplify()</code></li>
+      </ul>
       </p>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
-<br>
-const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
-commutator<b><u>.expand()</u></b>.log();
-</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;;<br>
+          <br>
+          const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
+          commutator<b><u>.expand()</u></b>.log();
+          </span>
           </code>
         </div>
         <code class="sample output">
@@ -97,14 +103,14 @@ commutator<b><u>.expand()</u></b>.log();
         <div>
           <!-- TODO: The number of underlines match the number of output lines, which might deceivingly imply they match up. Can we make this clear in another way? -->
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
-const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
-<br>
-const niklas = commutator<b><u>.concat(&quot;U'&quot;)</u></b>;<br>
-niklas.log();<br>
-niklas<b><u>.expand()</u></b>.log();<br>
-niklas<b><u>.expand().simplify({cancel: true})</u></b>.log();
-</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;;<br>
+          const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
+          <br>
+          const niklas = commutator<b><u>.concat(&quot;U'&quot;)</u></b>;<br>
+          niklas.log();<br>
+          niklas<b><u>.expand()</u></b>.log();<br>
+          niklas<b><u>.expand().simplify({cancel: true})</u></b>.log();
+          </span>
           </code>
         </div>
         <code class="sample output">
@@ -117,16 +123,16 @@ niklas<b><u>.expand().simplify({cancel: true})</u></b>.log();
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
-<br>
-const sune = new Alg(&quot;[R U R2', [R: U]]&quot;);<br>
-const antiSune = sune.<b><u>invert()</u></b>;<br>
-antiSune.log();<br>
-antiSune<b><u>.expand()</u></b>.log();
-</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;;<br>
+          <br>
+          const sune = new Alg(&quot;[R U R2', [R: U]]&quot;);<br>
+          const antiSune = sune.<b><u>invert()</u></b>;<br>
+          antiSune.log();<br>
+          antiSune<b><u>.expand()</u></b>.log();
+          </span>
           </code>
         </div>
-          <code class="sample output">
+        <code class="sample output">
             <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;[[R: U], R U R2']&quot;</span>
             <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U2 R' U' R U' R'&quot;</span>
           </code>
@@ -135,15 +141,15 @@ antiSune<b><u>.expand()</u></b>.log();
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
-const antiSune = new Alg(&quot;[[R: U], R U R2']&quot;);<br>
-const niklas = new Alg(&quot;[R, [U': L']] U'&quot;);<br>
-<br>
-const jPerm = antiSune<b><u>.concat(niklas)</u></b>;<br>
-jPerm.log();<br>
-jPerm<b><u>.expand()</u></b>.log();<br>
-jPerm<b><u>.expand()</u></b>.simplify({cancel: true}).log();
-</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;;<br>
+          const antiSune = new Alg(&quot;[[R: U], R U R2']&quot;);<br>
+          const niklas = new Alg(&quot;[R, [U': L']] U'&quot;);<br>
+          <br>
+          const jPerm = antiSune<b><u>.concat(niklas)</u></b>;<br>
+          jPerm.log();<br>
+          jPerm<b><u>.expand()</u></b>.log();<br>
+          jPerm<b><u>.expand()</u></b>.simplify({cancel: true}).log();
+          </span>
           </code>
         </div>
         <code class="sample output">
@@ -156,11 +162,11 @@ jPerm<b><u>.expand()</u></b>.simplify({cancel: true}).log();
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
-<br>
-const oll = new Alg(&quot;[F: [R, U]]&quot;);<br>
-<b><u>oll.expand({depth: 1})</u></b>.log();<br>
-</span>
+            <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;;<br>
+          <br>
+          const oll = new Alg(&quot;[F: [R, U]]&quot;);<br>
+          <b><u>oll.expand({depth: 1})</u></b>.log();<br>
+          </span>
           </code>
         </div>
         <code class="sample output">

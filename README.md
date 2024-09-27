@@ -13,7 +13,7 @@ Twizzle</a> is the spiritual successor to [alg.cubing.net](https://alg.cubing.ne
 If you're just getting started, the easiest way to use `cubing.js` is through `cdn.cubing.net`:
 
 ```html
-<script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
+<script src="https://cdn.cubing.net/v0/js/cubing/twisty" type="module"></script>
 <twisty-player alg="R U R' U R U2' R'"></twisty-player>
 ```
 
