@@ -68,7 +68,6 @@ twisty-player {
   grid-template-columns: 1fr auto;
 }
 
-
 .results-qr {
   text-align: center;
   padding: 0 50px;
@@ -79,7 +78,7 @@ twisty-player {
 }
 
 .time-display {
-  font-family: "digital-7-mono";
+  font-family: "digital-7-mono", monospace;
   font-size: 6em;
   width: 100%;
   color: rgb(255, 0, 0);

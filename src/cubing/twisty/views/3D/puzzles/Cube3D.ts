@@ -749,7 +749,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
               const hintStickeringMask =
                 typeof faceletStickeringMask === "string"
                   ? stickeringMask
-                  : faceletStickeringMask.hintMask ?? stickeringMask;
+                  : (faceletStickeringMask.hintMask ?? stickeringMask);
               if (faceletInfo.hintFacelet) {
                 faceletInfo.hintFacelet.material =
                   axesInfo[faceletInfo.faceIdx].hintStickerMaterial[

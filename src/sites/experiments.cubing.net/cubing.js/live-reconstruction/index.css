@@ -3,11 +3,11 @@
   src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
 }
 
-
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
-  font-family: "Ubuntu";
+  font-family: "Ubuntu", sans-serif;
   font-size: 1.2em;
 }
 

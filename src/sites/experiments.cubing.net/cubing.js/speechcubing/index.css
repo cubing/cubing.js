@@ -1,9 +1,14 @@
+@font-face {
+  font-family: "Ubuntu";
+  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
+}
+
 /* Add CSS below. */
 html,
 body {
   margin: 0;
   height: 100%;
-  font-family: Ubuntu;
+  font-family: Ubuntu, sans-serif;
 }
 
 body {

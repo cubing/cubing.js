@@ -145,8 +145,8 @@ swipe-grid.theme-cross-hairs div:nth-child(9)::before {
 
 swipe-grid.theme-box div:nth-child(5) {
   border: 4px solid rgba(255, 255, 255, 0.75);
-  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.75),
-    inset 0 0 24px 0 rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.75), inset 0 0 24px 0
+    rgba(0, 0, 0, 0.75);
 }
 
 swipe-grid.theme-HUD div:nth-child(1) {

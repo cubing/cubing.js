@@ -35,7 +35,7 @@ body > div:nth-child(2) {
 }
 
 textarea {
-  font-family: "Ubuntu";
+  font-family: "Ubuntu", "Tahoma", sans-serif;
 }
 
 .saved {

@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   display: grid;
   place-content: center;
 }
@@ -7,7 +8,7 @@ factoid-section {
   display: grid;
   align-items: center;
   justify-content: justify;
-  width: 512px;;
+  width: 512px;
   max-width: 90vw;
 }
 

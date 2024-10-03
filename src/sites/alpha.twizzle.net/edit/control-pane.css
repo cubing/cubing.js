@@ -45,7 +45,7 @@ control-pane .metadata-url {
 }
 
 control-pane .move-count-header {
-  display: grid ;
+  display: grid;
   grid-template-columns: auto 1fr;
 }
 
