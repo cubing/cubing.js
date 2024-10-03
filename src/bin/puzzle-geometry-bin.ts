@@ -142,8 +142,8 @@ little chop, pyramorphix, mastermorphix, pyraminx, Jing pyraminx,
 master paramorphix, megaminx, gigaminx, pentultimate, starminx,
 starminx 2, pyraminx crystal, chopasaurus, big chop, skewb diamond,
 FTO, Christopher's jewel, octastar, Trajber's octahedron, radio chop,
-icosamate, icosahedron 2, icosahedron 3, icosahedron static faces,
-icosahedron moving faces, and Eitan's star.
+icosamate, Regular Astrominx, Regular Astrominx + Big Chop,
+Redicosahedron, Redicosahedron with centers,Icosaminx, and Eitan's star.
 
 Examples:
    puzzlegeometry --ss 2x2x2

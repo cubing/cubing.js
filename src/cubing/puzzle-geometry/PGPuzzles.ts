@@ -72,10 +72,11 @@ export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
   "Trajber's octahedron": "o v 0.433012701892219",
   "radio chop": "i f 0",
   icosamate: "i v 0",
-  "icosahedron 2": "i v 0.18759247376021",
-  "icosahedron 3": "i v 0.18759247376021 e 0",
-  "icosahedron static faces": "i v 0.84",
-  "icosahedron moving faces": "i v 0.73",
+  "Regular Astrominx": "i v 0.18759247376021",
+  "Regular Astrominx + Big Chop": "i v 0.18759247376021 e 0",
+  Redicosahedron: "i v 0.794654472291766",
+  "Redicosahedron with centers": "i v 0.84",
+  Icosaminx: "i v 0.73",
   "Eitan's star": "i f 0.61803398874989",
   "2x2x2 + dino": "c f 0 v 0.577350269189626",
   "2x2x2 + little chop": "c f 0 e 0",
@@ -83,6 +84,13 @@ export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
   "2x2x2 + dino + little chop": "c f 0 v 0.577350269189626 e 0",
   "megaminx + chopasaurus": "d f 0.61803398875 v 0",
   "starminx combo": "d f 0.23606797749979 v 0.937962370425399",
+};
+
+export const legacyPuzzleNameMapping: Partial<Record<string, string>> = {
+  "icosahedron 2": "Regular Astrominx",
+  "icosahedron 3": "Regular Astrominx + Big Chop",
+  "icosahedron static faces": "Redicosahedron with centers",
+  "icosahedron moving faces": "Icosaminx",
 };
 
 export type PuzzleName = keyof typeof PGPuzzles;

@@ -80,14 +80,15 @@ const expectedData: { [name: string]: string | null } = {
   "Trajber's octahedron": "Trajber's octahedron, 8, 7, 26, 3, 9, 120",
   "radio chop": "radio chop, 20, 10, 92, 3, 20, 41580",
   icosamate: slow("icosamate, 20, 4, 32, 2, 12, 720"),
-  "icosahedron 2": slow("icosahedron 2, 20, 9, 102, 3, 18, 432630"),
-  "icosahedron 3": slow("icosahedron 3, 20, 18, 360, 6, 48, 1615854240"),
-  "icosahedron static faces": slow(
-    "icosahedron static faces, 20, 7, 62, 3, 18, 180",
+  "Regular Astrominx": slow("Regular Astrominx, 20, 9, 102, 3, 18, 432630"),
+  "Regular Astrominx + Big Chop": slow(
+    "Regular Astrominx + Big Chop, 20, 18, 360, 6, 48, 1615854240",
   ),
-  "icosahedron moving faces": slow(
-    "icosahedron moving faces, 20, 7, 62, 3, 18, 180",
+  Redicosahedron: slow("Redicosahedron, 20, 6, 42, 2, 18, 180"),
+  "Redicosahedron with centers": slow(
+    "Redicosahedron with centers, 20, 7, 62, 3, 18, 180",
   ),
+  Icosaminx: slow("Icosaminx, 20, 7, 62, 3, 18, 180"),
   "Eitan's star": slow("Eitan's star, 20, 13, 152, 4, 30, 384560"),
   "2x2x2 + dino": "2x2x2 + dino, 6, 8, 24, 1, 18, 70",
   "2x2x2 + little chop": "2x2x2 + little chop, 6, 8, 48, 2, 18, 168",

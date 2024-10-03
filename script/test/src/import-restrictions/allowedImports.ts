@@ -148,6 +148,9 @@ export const mainAllowedImports: AllowedImports = {
   "src/sites/experiments.cubing.net/cubing.js/rust/wasm": {
     static: ["getbuiltinmodule-ponyfill"],
   },
+  "src/sites/alpha.twizzle.net/explore": {
+    static: ["src/cubing/puzzle-geometry/cubing-private"],
+  },
 };
 
 // This is a separate definition because the `spec` files are interleaved with source files, and it's easier to run a separate check for them.

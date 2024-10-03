@@ -1,12 +1,13 @@
 // TODO: implement URL listener.
 
 import { Alg } from "../../../cubing/alg";
+import { legacyPuzzleNameMapping } from "../../../cubing/puzzle-geometry/cubing-private";
 
 export interface PartialURLParamValues {
   alg?: Alg;
   puzzle?: string;
   puzzlegeometry?: string;
-  "puzzle-description": string;
+  "puzzle-description"?: string;
   "debug-show-render-stats"?: boolean;
   tempo?: string;
 }
@@ -134,4 +135,9 @@ export function setURLParams(newParams: PartialURLParamValues): void {
     }
   }
   window.history.replaceState("", "", url.toString());
+}
+
+const remappedPuzzleName = legacyPuzzleNameMapping[getURLParam("puzzle")];
+if (remappedPuzzleName) {
+  setURLParams({ puzzle: remappedPuzzleName });
 }
