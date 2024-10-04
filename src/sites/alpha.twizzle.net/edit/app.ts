@@ -530,9 +530,9 @@ class ControlPane {
       for (const puzzleOptInfo of puzzles) {
         const option = document.createElement("option");
         option.value = puzzleOptInfo.name;
-        option.textContent = `${puzzleOptInfo.symbol} ${supportedPuzzles[
+        option.textContent = `${supportedPuzzles[
           puzzleOptInfo.name
-        ].displayName()}`;
+        ].displayName()} ${puzzleOptInfo.symbol}`;
         optgroup.appendChild(option);
         if (puzzleOptInfo.name === initialPuzzleName) {
           option.selected = true;
