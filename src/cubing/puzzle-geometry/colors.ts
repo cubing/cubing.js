@@ -67,7 +67,7 @@ export function defaultPlatonicColorSchemes(): any {
       BR: PGColors.BoldBlue,
       BL: PGColors.Yellow,
       I: PGColors.Orange,
-      D: PGColors.LightGray,
+      D: PGColors.MediumGray,
     },
     20: {
       R: PGColors.Yellow,
