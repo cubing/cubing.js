@@ -118,6 +118,53 @@ export class App {
     initialConfig.viewerLink = "none";
     this.twistyPlayer = new TwistyPlayer(initialConfig);
     this.puzzlePane.appendChild(this.twistyPlayer);
+    const originalPuzzleID = initialConfig.puzzle ?? "3x3x3";
+    (async () => {
+      const [puzzleAlgWithIssue, puzzleSetupAlgWithIssue] = await Promise.all([
+        this.twistyPlayer.experimentalModel.puzzleAlg.get(),
+        this.twistyPlayer.experimentalModel.puzzleSetupAlg.get(),
+      ]);
+      if (
+        puzzleAlgWithIssue.issues.errors.length > 0 ||
+        puzzleSetupAlgWithIssue.issues.errors.length > 0
+      ) {
+        const [algWithIssue, setupAlgWithIssue] = await Promise.all([
+          this.twistyPlayer.experimentalModel.alg.get(),
+          this.twistyPlayer.experimentalModel.setupAlg.get(),
+        ]);
+        for (const puzzleID of ["square1", "clock", "megaminx"]) {
+          const puzzleLoader = puzzles[puzzleID];
+          const kpuzzle = await puzzleLoader.kpuzzle();
+          try {
+            if (
+              algWithIssue.issues.errors.length === 0 &&
+              setupAlgWithIssue.issues.errors.length === 0 &&
+              kpuzzle.defaultPattern().applyAlg(algWithIssue.alg) &&
+              kpuzzle.defaultPattern().applyAlg(setupAlgWithIssue.alg) // TODO: This ignores e.g. bandaging
+            ) {
+              this.element.querySelector(".auto-notation-puzzle")!.textContent =
+                puzzleLoader.fullName;
+              this.element.querySelector<HTMLSpanElement>(
+                ".auto-notation",
+              )!.hidden = false;
+              this.controlPane.puzzleSelect.value = puzzleID;
+              this.controlPane.puzzleSelectChanged();
+              this.element
+                .querySelector(".auto-notation-undo")!
+                .addEventListener("click", () => {
+                  this.controlPane.puzzleSelect.value = originalPuzzleID;
+                  this.controlPane.puzzleSelectChanged();
+                  this.element.querySelector(
+                    ".auto-notation-changed-back",
+                  )!.textContent =
+                    `This has been changed back to ${puzzles[originalPuzzleID].fullName}.`;
+                });
+              return;
+            }
+          } catch {}
+        }
+      }
+    })();
   }
 
   async solve(): Promise<void> {
@@ -545,7 +592,7 @@ class ControlPane {
     );
   }
 
-  private puzzleSelectChanged(): void {
+  puzzleSelectChanged(): void {
     const option = this.puzzleSelect.selectedOptions[0];
     this.twistyPlayer.puzzle = option.value as PuzzleID;
   }
