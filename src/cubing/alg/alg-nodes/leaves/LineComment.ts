@@ -1,3 +1,4 @@
+import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
 import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { AlgLeaf } from "../AlgNode";
@@ -36,7 +37,9 @@ export class LineComment extends AlgCommon<LineComment> {
     yield this;
   }
 
-  toString(): string {
+  toString(
+    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+  ): string {
     return `//${this.#text}`;
   }
   // toJSON(): LineCommentJSON {

@@ -1,10 +1,11 @@
+import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
 import { parseMove, parseQuantumMove, transferCharIndex } from "../../parseAlg";
 import { warnOnce } from "../../warnOnce";
-import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { AlgLeaf } from "../AlgNode";
+import { QuantumWithAmount } from "../QuantumWithAmount";
 
 interface QuantumMoveModifications {
   outerLayer?: number;
@@ -114,7 +115,9 @@ export class QuantumMove extends Comparable {
     );
   }
 
-  override toString(): string {
+  override toString(
+    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+  ): string {
     let s = this.#family;
     if (this.#innerLayer !== null) {
       s = String(this.#innerLayer) + s;
@@ -171,7 +174,10 @@ export class Move extends AlgCommon<Move> {
     // TODO: handle char indices more consistently among alg nodes.
     return transferCharIndex(
       this,
-      new Move(this.#quantumWithAmount.quantum, -this.amount),
+      new Move(
+        this.#quantumWithAmount.quantum,
+        this.#isSlash() ? this.amount : -this.amount,
+      ),
     );
   }
 
@@ -229,29 +235,38 @@ export class Move extends AlgCommon<Move> {
     return this.#quantumWithAmount.quantum.innerLayer ?? undefined;
   }
 
-  toString(): string {
-    if (this.family === "_SLASH_") {
-      return "/"; // TODO: validate no amount
-    }
-    if (this.family.endsWith("_PLUS_")) {
-      return (
-        this.#quantumWithAmount.quantum.toString().slice(0, -6) +
-        Math.abs(this.amount) +
-        (this.amount < 0 ? "-" : "+")
-      ); // TODO
-    }
-    if (this.family.endsWith("_PLUSPLUS_")) {
-      const absAmount = Math.abs(this.amount);
-      return (
-        this.#quantumWithAmount.quantum.toString().slice(0, -10) +
-        (absAmount === 1 ? "" : absAmount) +
-        (this.amount < 0 ? "--" : "++")
-      ); // TODO
-    }
+  #cachedSlashMove: Move | undefined;
+  #isSlash(): boolean {
+    return this.isIdentical((this.#cachedSlashMove ??= new Move("_SLASH_")));
+  }
 
+  toString(
+    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+  ): string {
+    if (experimentalSerializationOptions?.notation !== "LGN") {
+      if (this.#isSlash()) {
+        return "/"; // TODO: validate no amount
+      }
+      if (this.family.endsWith("_PLUS_")) {
+        return (
+          this.#quantumWithAmount.quantum.toString().slice(0, -6) +
+          Math.abs(this.amount) +
+          (this.amount < 0 ? "-" : "+")
+        ); // TODO
+      }
+      if (this.family.endsWith("_PLUSPLUS_")) {
+        const absAmount = Math.abs(this.amount);
+        return (
+          this.#quantumWithAmount.quantum.toString().slice(0, -10) +
+          (absAmount === 1 ? "" : absAmount) +
+          (this.amount < 0 ? "--" : "++")
+        ); // TODO
+      }
+    }
     return (
-      this.#quantumWithAmount.quantum.toString() +
-      this.#quantumWithAmount.suffix()
+      this.#quantumWithAmount.quantum.toString(
+        experimentalSerializationOptions,
+      ) + this.#quantumWithAmount.suffix()
     );
   }
   // // TODO: Serialize as a string?

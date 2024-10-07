@@ -1,10 +1,10 @@
 // To run this file directly:
 // bun run src/bin/scramble.ts -- 333
 
+import type { Alg, ExperimentalSerializationOptions } from "cubing/alg";
 import { eventInfo } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
-import type { Alg } from "cubing/alg";
 
 // TODO: completions for `bash`, `zsh`, and `fish`: https://github.com/loilo/completarr
 
@@ -36,6 +36,11 @@ const argv = await yargs(
     choices: ["text", "link", "json-text"],
     alias: "f",
   })
+  .option("notation", {
+    describe: "Notation type.",
+    default: "auto",
+    choices: ["auto", "LGN"],
+  })
   .option("text", {
     type: "boolean",
     describe: "Convenient shorthand for `--format text`.",
@@ -57,14 +62,17 @@ format ??= argv.text || !process.stdout.isTTY ? "text" : "auto";
 setSearchDebug({ logPerf: false, showWorkerInstantiationWarnings: false });
 
 function scrambleText(scramble: Alg): string {
-  return scramble.toString();
+  return scramble.toString({
+    // TODO: any
+    notation: (argv as ExperimentalSerializationOptions).notation,
+  });
 }
 
 function scrambleLink(scramble: Alg): string {
   const url = new URL("https://alpha.twizzle.net/edit/");
   const puzzleID = eventInfo(eventID)?.puzzleID;
   puzzleID && url.searchParams.set("puzzle", puzzleID);
-  url.searchParams.set("alg", scramble.toString());
+  url.searchParams.set("alg", scrambleText(scramble));
   return url.toString();
 }
 

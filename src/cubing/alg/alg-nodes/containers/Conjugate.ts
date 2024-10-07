@@ -1,3 +1,4 @@
+import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
 import {
   experimentalEnsureAlg,
   type Alg,
@@ -52,7 +53,9 @@ export class Conjugate extends AlgCommon<Conjugate> {
     }
   }
 
-  toString(): string {
-    return `[${this.A}: ${this.B}]`;
+  toString(
+    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+  ): string {
+    return `[${this.A.toString(experimentalSerializationOptions)}: ${this.B.toString(experimentalSerializationOptions)}]`;
   }
 }

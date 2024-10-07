@@ -1,6 +1,7 @@
 import type { Alg } from "./Alg";
-import type { IterationDirection } from "./iteration";
 import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
+import type { IterationDirection } from "./iteration";
+import type { ExperimentalSerializationOptions } from "./SerializationOptions";
 
 let writeAlgDebugField = false;
 export function setAlgDebugField(debug: boolean): void {
@@ -50,7 +51,9 @@ export abstract class AlgCommon<T extends Alg | AlgNode>
     ) => void;
   }
 
-  abstract override toString(): string;
+  abstract override toString(
+    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+  ): string;
 
   abstract invert(): T;
 
