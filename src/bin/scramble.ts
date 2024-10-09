@@ -106,11 +106,11 @@ if (format !== "json-text" && argv.amount === 1) {
 
   switch (format) {
     case "text": {
-      console.log(scrambleText(scramble));
+      // console.log(scrambleText(scramble));
       break;
     }
     case "link": {
-      console.log(scrambleLink(scramble));
+      // console.log(scrambleLink(scramble));
       break;
     }
     case "json-text": {
@@ -119,9 +119,9 @@ if (format !== "json-text" && argv.amount === 1) {
       );
     }
     case "auto": {
-      console.log(`${scrambleText(scramble)}
+      //       console.log(`${scrambleText(scramble)}
 
-🔗 ${scrambleLink(scramble)}`);
+      // 🔗 ${scrambleLink(scramble)}`);
       break;
     }
     default: {
