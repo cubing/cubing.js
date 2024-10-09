@@ -158,10 +158,6 @@ export class App {
   #autofixEnabled: boolean = true;
   // TODO: factor this out into a class
   async #onSetupOrAlgChange() {
-    console.log(this.#autofixEnabled);
-    if (!this.#autofixEnabled) {
-      return;
-    }
     (async () => {
       const [originalPuzzleID, puzzleAlgWithIssue, puzzleSetupAlgWithIssue] =
         await Promise.all([
@@ -195,29 +191,37 @@ export class App {
               this.#autoNotationPuzzleOld = originalPuzzleID;
               this.#autoNotationPuzzleNew = puzzleID;
 
-              for (const elem of this.element.querySelectorAll(
-                ".auto-notation-puzzle-old",
-              )) {
-                elem.textContent = puzzles[originalPuzzleID].fullName;
-              }
-              for (const elem of this.element.querySelectorAll(
-                ".auto-notation-puzzle-new",
-              )) {
-                elem.textContent = puzzleLoader.fullName;
-              }
+              if (this.#autofixEnabled) {
+                for (const elem of this.element.querySelectorAll(
+                  ".auto-notation-puzzle-old",
+                )) {
+                  elem.textContent = puzzles[originalPuzzleID].fullName;
+                }
+                for (const elem of this.element.querySelectorAll(
+                  ".auto-notation-puzzle-new",
+                )) {
+                  elem.textContent = puzzleLoader.fullName;
+                }
 
-              this.element.querySelector<HTMLSpanElement>(
-                ".auto-notation",
-              )!.hidden = false;
-              this.element.querySelector<HTMLSpanElement>(
-                ".auto-notation-change-back",
-              )!.hidden = false;
-              this.element.querySelector<HTMLSpanElement>(
-                ".auto-notation-change-redo",
-              )!.hidden = true;
+                this.element.querySelector<HTMLSpanElement>(
+                  ".auto-notation",
+                )!.hidden = false;
+                this.element.querySelector<HTMLSpanElement>(
+                  ".auto-notation-change-back",
+                )!.hidden = false;
+                this.element.querySelector<HTMLSpanElement>(
+                  ".auto-notation-change-redo",
+                )!.hidden = true;
 
-              this.controlPane.puzzleSelect.value = puzzleID;
-              this.controlPane.puzzleSelectChanged();
+                this.controlPane.puzzleSelect.value = puzzleID;
+                this.controlPane.puzzleSelectChanged();
+              } else {
+                for (const elem of this.element.querySelectorAll(
+                  ".auto-notation-puzzle-new-new",
+                )) {
+                  elem.textContent = puzzleLoader.fullName;
+                }
+              }
               return;
             }
           } catch {}
