@@ -339,7 +339,11 @@ class StickerDef {
         break;
       }
       case "oriented": {
-        c = 0xff88ff;
+        c = 0x44ddcc;
+        break;
+      }
+      case "experimentalOriented2": {
+        c = 0xfffdaa;
         break;
       }
       case "ignored": {
