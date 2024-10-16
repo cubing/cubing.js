@@ -3,9 +3,9 @@ import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   type PieceSet,
   PieceStickering,
-  type StickeringMask,
   PuzzleStickering,
   StickeringManager,
+  type StickeringMask,
 } from "./mask";
 import { experimentalStickerings } from "./puzzle-stickerings";
 
@@ -266,12 +266,16 @@ export async function cubeLikePuzzleStickering(
       puzzleStickering.set(m.not(L6E()), PieceStickering.Dim);
       puzzleStickering.set(
         L6E(),
-        PieceStickering.OrientationWithoutPermutation,
+        PieceStickering.ExperimentalOrientationWithoutPermutation2,
       );
       puzzleStickering.set(
         m.and([CENTERS(), orUD()]),
-        PieceStickering.OrientationStickers,
+        PieceStickering.ExperimentalOrientationWithoutPermutation2,
       ); // For PG
+      puzzleStickering.set(
+        m.and([m.move("M"), m.move("E")]),
+        PieceStickering.Ignored,
+      );
       break;
     }
     case "Daisy": {
