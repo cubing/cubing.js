@@ -359,6 +359,26 @@ export async function cubeLikePuzzleStickering(
       );
       break;
     }
+    case "EODF": {
+      dimF2L();
+      puzzleStickering.set(
+        m.or([cornerDFR(), m.and([LL(), CORNERS()])]),
+        PieceStickering.Ignored,
+      );
+      puzzleStickering.set(
+        m.or([m.and([LL(), EDGES()]), edgeFR()]),
+        PieceStickering.OrientationWithoutPermutation,
+      );
+      puzzleStickering.set(
+        m.and([m.and(m.moves(["D", "F"])), EDGES()]),
+        PieceStickering.Regular,
+      );
+      puzzleStickering.set(
+        m.and([m.and(m.moves(["F"])), CENTERS()]),
+        PieceStickering.Regular,
+      );
+      break;
+    }
     case "Void Cube": {
       puzzleStickering.set(CENTERS(), PieceStickering.Invisible);
       break;
