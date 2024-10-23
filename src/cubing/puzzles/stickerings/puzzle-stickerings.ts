@@ -41,13 +41,15 @@ export const experimentalStickerings: Record<
   EO: { groups: { "3x3x3": "ZZ" } },
   EOline: { groups: { "3x3x3": "ZZ" } },
   EOcross: { groups: { "3x3x3": "ZZ" } },
-  EODF: { groups: { "3x3x3": "Nautilus" } },
+  FirstBlock: { groups: { "3x3x3": "Roux" } },
+  SecondBlock: { groups: { "3x3x3": "Roux" } },
   CMLL: { groups: { "3x3x3": "Roux" } },
   L10P: { groups: { "3x3x3": "Roux" } },
   L6E: { groups: { "3x3x3": "Roux" } },
   L6EO: { groups: { "3x3x3": "Roux" } },
   "2x2x2": { groups: { "3x3x3": "Petrus" } },
   "2x2x3": { groups: { "3x3x3": "Petrus" } },
+  EODF: { groups: { "3x3x3": "Nautilus" } },
   G1: { groups: { "3x3x3": "FMC" } },
   L2C: {
     groups: {

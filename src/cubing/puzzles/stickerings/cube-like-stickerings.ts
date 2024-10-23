@@ -35,7 +35,11 @@ export async function cubeLikePuzzleStickering(
   const F2L = (): PieceSet => m.not(LL());
 
   const CENTERS = (): PieceSet => m.orbitPrefix("CENTER");
+  const CENTER = (faceMove: string): PieceSet =>
+    m.and([m.move(faceMove), CENTERS()]);
   const EDGES = (): PieceSet => m.orbitPrefix("EDGE");
+  const EDGE = (faceMoves: string[]): PieceSet =>
+    m.and([m.and(m.moves(faceMoves)), EDGES()]);
   const CORNERS = (): PieceSet =>
     m.or([
       m.orbitPrefix("CORNER"),
@@ -47,6 +51,7 @@ export async function cubeLikePuzzleStickering(
   const centerLL = (): PieceSet => m.and([LL(), CENTERS()]);
 
   const edgeFR = (): PieceSet => m.and([m.and(m.moves(["F", "R"])), EDGES()]);
+  // Handles Megaminx
   const cornerDFR = (): PieceSet =>
     m.and([m.and(m.moves(["F", "R"])), CORNERS(), m.not(LL())]);
   const slotFR = (): PieceSet => m.or([cornerDFR(), edgeFR()]);
@@ -359,6 +364,29 @@ export async function cubeLikePuzzleStickering(
       );
       break;
     }
+    case "FirstBlock": {
+      puzzleStickering.set(
+        m.not(m.and([m.and(m.moves(["L"])), m.not(LL())])),
+        PieceStickering.Ignored,
+      );
+      puzzleStickering.set(CENTER("R"), PieceStickering.Dim);
+      break;
+    }
+    case "SecondBlock": {
+      puzzleStickering.set(
+        m.not(m.and([m.and(m.moves(["L"])), m.not(LL())])),
+        PieceStickering.Ignored,
+      );
+      puzzleStickering.set(
+        m.and([m.and(m.moves(["L"])), m.not(LL())]),
+        PieceStickering.Dim,
+      );
+      puzzleStickering.set(
+        m.and([m.and(m.moves(["R"])), m.not(LL())]),
+        PieceStickering.Regular,
+      );
+      break;
+    }
     case "EODF": {
       dimF2L();
       puzzleStickering.set(
@@ -369,14 +397,8 @@ export async function cubeLikePuzzleStickering(
         m.or([m.and([LL(), EDGES()]), edgeFR()]),
         PieceStickering.OrientationWithoutPermutation,
       );
-      puzzleStickering.set(
-        m.and([m.and(m.moves(["D", "F"])), EDGES()]),
-        PieceStickering.Regular,
-      );
-      puzzleStickering.set(
-        m.and([m.and(m.moves(["F"])), CENTERS()]),
-        PieceStickering.Regular,
-      );
+      puzzleStickering.set(EDGE(["D", "F"]), PieceStickering.Regular);
+      puzzleStickering.set(CENTER("F"), PieceStickering.Regular);
       break;
     }
     case "Void Cube": {
