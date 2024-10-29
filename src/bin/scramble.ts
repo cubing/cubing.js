@@ -5,6 +5,7 @@
 try {
   await import("cmd-ts");
 } catch (e) {
+  // Note that this doesn't fail when installed using `bun install --global`, as `bun` automatically loads deps.
   throw new Error(
     "Could not import `cmd-ts`, which is not automatically installed as a regular dependency of `cubing`. Please run `npm install cmd-ts` (or the equivalent) separately.",
   );
