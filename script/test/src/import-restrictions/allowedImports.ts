@@ -35,17 +35,17 @@ export const mainAllowedImports: AllowedImports = {
       "esbuild",
       "node-fetch",
       "playwright",
-      "yargs",
+      "cmd-ts",
     ],
     dynamic: ["cubing", "node:repl"],
   },
   // src/bin
   "src/bin": {
-    static: ["cubing"],
+    static: ["cubing", "cmd-ts"],
   },
   "src/bin/scramble.ts": {
-    static: ["src/cubing"],
-    dynamic: ["yargs"],
+    static: ["cmd-ts", "src/cubing"],
+    dynamic: ["cmd-ts"],
   },
   // src/lib
   "src/cubing/alg": {},

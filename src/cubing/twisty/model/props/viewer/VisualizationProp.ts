@@ -7,7 +7,7 @@ export const visualizationFormats = {
   "experimental-2D-LL": true, // TODO
   "experimental-2D-LL-face": true, // TODO
   PG3D: true,
-};
+} as const;
 export type VisualizationFormat = keyof typeof visualizationFormats;
 export type VisualizationFormatWithAuto = VisualizationFormat | "auto";
 

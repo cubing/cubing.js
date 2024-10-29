@@ -58,6 +58,7 @@
   "dependencies": {
     "@types/three": "^0.169.0",
     "@types/web-bluetooth": "^0.0.20",
+    "cmd-ts": "^0.13.0",
     "comlink": "^4.4.1",
     "random-uint-below": "v3.3.0",
     "three": "^0.169.0"
@@ -69,7 +70,6 @@
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/mocha": "^10.0.8",
     "@types/node": "^22.7.4",
-    "@types/yargs": "^17.0.33",
     "@web/dev-server-esbuild": "^1.0.2",
     "@web/test-runner": "^0.19.0",
     "@web/test-runner-playwright": "^0.11.0",
@@ -82,8 +82,7 @@
     "playwright": "^1.47.2",
     "tsup": "^8.3.0",
     "typedoc": "^0.26.7",
-    "typescript": "^5.6.2",
-    "yargs": "^17.7.2"
+    "typescript": "^5.6.2"
   },
   "minimalDevDependencies": [
     "getbuiltinmodule-ponyfill",
@@ -91,7 +90,7 @@
     "esbuild",
     "jszip",
     "@biomejs/biome",
-    "yargs"
+    "cmd-ts"
   ],
   "engines": {
     "node": ">=20.16.0",

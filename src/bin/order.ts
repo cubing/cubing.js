@@ -1,35 +1,58 @@
 // To run this file directly:
-// bun run src/bin/order.ts -- <program args>
+// bun run src/bin/order.ts -- 3x3x3 "R U R' U R U2' R'"
 
+import {
+  binary,
+  string as cmdString,
+  command,
+  positional,
+  run,
+  type Type,
+} from "cmd-ts";
+import { Alg } from "cubing/alg";
 import { KPuzzle } from "cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "cubing/puzzle-geometry";
 import { puzzles } from "cubing/puzzles";
 
-/*
- *   Given a puzzle name and an algorithm, calculate the order of that
- *   algorithm (how many repetitions are needed for the algorithm to be
- *   the no-op).
- */
+// TODO: dedup with `screenshot` implementation.
+const ReadAlg: Type<string, Alg> = {
+  async from(str) {
+    return Alg.fromString(str);
+  },
+};
 
-const puzzleName = process.argv[2];
-const algString = process.argv[3];
+const app = command({
+  name: "order",
+  description: "Example: order 3x3x3 \"R U R' U R U2' R'\"",
+  args: {
+    puzzleGeometryID: positional({
+      type: cmdString,
+      displayName: "Puzzle geometry ID",
+    }),
+    alg: positional({
+      type: ReadAlg,
+      displayName: "Alg",
+    }),
+  },
+  handler: async ({ puzzleGeometryID, alg }) => {
+    /*
+     *   Turn a name into a geometry.
+     */
 
-if (!(puzzleName && algString)) {
-  console.log("Usage: order <puzzle-geometry-id> <alg>");
-  console.log("");
-  console.log("Example: order 3x3x3 \"R U R' U R U2' R'\"");
-  process.exit(0);
-}
+    const puzzleLoader = puzzles[puzzleGeometryID];
+    const kpuzzle = await (async () => {
+      if (puzzleLoader) {
+        return await puzzles[puzzleGeometryID].kpuzzle();
+      } else {
+        const pg = getPuzzleGeometryByName(puzzleGeometryID, {
+          allMoves: true,
+        });
+        return new KPuzzle(pg.getKPuzzleDefinition(true));
+      }
+    })();
+    const order = kpuzzle.algToTransformation(alg).repetitionOrder();
+    console.log(order);
+  },
+});
 
-/*
- *   Turn a name into a geometry.
- */
-
-// @ts-ignore: Top-level await is okay because this is not part of the main library.
-let kpuzzle = await puzzles[puzzleName].kpuzzle();
-if (!kpuzzle) {
-  const pg = getPuzzleGeometryByName(puzzleName, { allMoves: true });
-  kpuzzle = new KPuzzle(pg.getKPuzzleDefinition(true));
-}
-const order = kpuzzle.algToTransformation(algString).repetitionOrder();
-console.log(order);
+await run(binary(app), process.argv);
