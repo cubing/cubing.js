@@ -138,7 +138,6 @@ await checkAllowedImports(
   [
     "script/**/*.ts",
     "script/**/*.js",
-    "src/bin/**/*.js",
     "src/bin/**/*.ts",
     // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
     ...packageNames.map((packageName) =>

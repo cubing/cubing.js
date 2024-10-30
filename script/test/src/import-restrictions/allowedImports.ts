@@ -45,6 +45,8 @@ export const mainAllowedImports: AllowedImports = {
   },
   "src/bin/scramble.ts": {
     static: ["cmd-ts", "src/cubing"],
+  },
+  "src/bin/guards/cmd-ts-guard.ts": {
     dynamic: ["cmd-ts"],
   },
   // src/lib
