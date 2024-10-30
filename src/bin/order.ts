@@ -1,18 +1,21 @@
 // To run this file directly:
 // bun run src/bin/order.ts -- 3x3x3 "R U R' U R U2' R'"
 
-import {
-  binary,
-  string as cmdString,
-  command,
-  positional,
-  run,
-  type Type,
-} from "cmd-ts";
 import { Alg } from "cubing/alg";
 import { KPuzzle } from "cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "cubing/puzzle-geometry";
 import { puzzles } from "cubing/puzzles";
+
+import type { Type } from "cmd-ts";
+import "./guards/cmd-ts-guard";
+
+const {
+  binary,
+  string: cmdString,
+  command,
+  positional,
+  run,
+} = await import("cmd-ts");
 
 // TODO: dedup with `screenshot` implementation.
 const ReadAlg: Type<string, Alg> = {

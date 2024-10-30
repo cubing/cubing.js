@@ -41,12 +41,11 @@ export const mainAllowedImports: AllowedImports = {
   },
   // src/bin
   "src/bin": {
-    static: ["cubing", "cmd-ts"],
-  },
-  "src/bin/scramble.ts": {
-    static: ["cmd-ts", "src/cubing"],
+    static: ["cubing"],
+    dynamic: ["cmd-ts"],
   },
   "src/bin/guards/cmd-ts-guard.ts": {
+    static: ["node:process"],
     dynamic: ["cmd-ts"],
   },
   // src/lib

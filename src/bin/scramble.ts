@@ -4,12 +4,17 @@
 // TODO: completions for `bash`, `zsh`, and `fish`: https://github.com/loilo/completarr
 
 // Important! We import this instead of inlining, because `esbuild` preserves import order semantics but hoists imports above any code inlined here.
+
+import type { Alg } from "cubing/alg";
+import { eventInfo } from "cubing/puzzles";
+import { randomScrambleForEvent } from "cubing/scramble";
+import { setSearchDebug } from "cubing/search";
 import "./guards/cmd-ts-guard";
 
-import {
+const {
   binary,
-  number as cmdNumber,
-  string as cmdString,
+  number: cmdNumber,
+  string: cmdString,
   command,
   flag,
   oneOf,
@@ -17,11 +22,7 @@ import {
   optional,
   positional,
   run,
-} from "cmd-ts";
-import type { Alg } from "cubing/alg";
-import { eventInfo } from "cubing/puzzles";
-import { randomScrambleForEvent } from "cubing/scramble";
-import { setSearchDebug } from "cubing/search";
+} = await import("cmd-ts");
 
 // TODO: file an issue about printing these values.
 const outputFormats = ["text", "link", "json-text"] as const;
