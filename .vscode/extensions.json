@@ -1,8 +1,4 @@
 {
-  "recommendations": [
-    "biomejs.biome"
-  ],
-  "unwantedRecommendations": [
-    "ms-vscode-remote.remote-containers"
-  ]
+  "recommendations": ["biomejs.biome"],
+  "unwantedRecommendations": ["ms-vscode-remote.remote-containers"]
 }

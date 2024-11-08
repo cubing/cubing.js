@@ -199,7 +199,7 @@ test-dist-bin-npm-exec: build-bin
 	time ${NPM} exec scramble -- 222
 .PHONY: format
 format:
-	${BIOME} check --apply ./script ./src
+	${BIOME} check --write
 .PHONY: setup
 setup:
 	${BUN} install --no-save # TODO: was `npm ci`
@@ -207,10 +207,10 @@ setup:
 quick-setup: | node_modules
 .PHONY: lint
 lint:
-	${BIOME} check ./script ./src
+	${BIOME} check
 .PHONY: lint-ci
 lint-ci:
-	${BIOME} ci ./script ./src
+	${BIOME} ci
 .PHONY: prepack
 prepack: clean build test-dist-lib-node-import test-dist-lib-node-scramble test-dist-lib-plain-esbuild-compat
 .PHONY: prepublishOnly

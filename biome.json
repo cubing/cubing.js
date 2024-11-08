@@ -1,4 +1,18 @@
 {
+  "files": {
+    "ignore": [
+      "./.temp",
+      "./dist",
+      "./package.json",
+      "./*/index.d.ts",
+      "./src/cubing/vendor/mit/cs0x7f/**/*",
+      "./src/cubing/vendor/mpl/twsearch/*.js",
+      "./src/cubing/vendor/mpl/xyzzy/*.js",
+      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
+      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
+      "./src/test/vendor/bun-types-workaround.d.ts"
+    ]
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -24,28 +38,11 @@
       "performance": {
         "noDelete": "off"
       }
-    },
-    "ignore": [
-      "./src/cubing/vendor/mit/cs0x7f/**/*",
-      "./src/cubing/vendor/mpl/twsearch/*.js",
-      "./src/cubing/vendor/mpl/xyzzy/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
-      "./src/test/vendor/bun-types-workaround.d.ts"
-    ]
+    }
   },
   "formatter": {
     "indentStyle": "space",
-    "indentWidth": 2,
-    "ignore": [
-      "./package.json",
-      "./src/cubing/vendor/mit/cs0x7f/**/*",
-      "./src/cubing/vendor/mpl/twsearch/*.js",
-      "./src/cubing/vendor/mpl/xyzzy/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
-      "./src/test/vendor/bun-types-workaround.d.ts"
-    ]
+    "indentWidth": 2
   },
   "organizeImports": {
     "enabled": false

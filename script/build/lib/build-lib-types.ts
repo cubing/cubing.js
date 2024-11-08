@@ -54,7 +54,8 @@ for (const packageName of packageNames) {
         packageName,
         TYPESCRIPT_DECLARATION_INDEX,
       ),
-    )};`,
+    )};
+`,
     "utf-8",
   );
 }

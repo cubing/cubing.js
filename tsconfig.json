@@ -23,15 +23,10 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       // Workaround for the `bin` build: https://github.com/cubing/cubing.js/issues/292
-      "cubing/*": [
-        "./src/cubing/*"
-      ]
+      "cubing/*": ["./src/cubing/*"]
     }
   },
-  "include": [
-    "script",
-    "src"
-  ],
+  "include": ["script", "src"],
   "exclude": [
     "script/test/dist" // Avoid indexing `dist`.
   ],
