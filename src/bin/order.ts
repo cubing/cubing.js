@@ -6,8 +6,8 @@ import { KPuzzle } from "cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "cubing/puzzle-geometry";
 import { puzzles } from "cubing/puzzles";
 
-import type { Type } from "cmd-ts";
-import "./guards/cmd-ts-guard";
+import type { Type } from "cmd-ts-too";
+import "./guards/cmd-ts-too-guard";
 
 const {
   binary,
@@ -15,7 +15,7 @@ const {
   command,
   positional,
   run,
-} = await import("cmd-ts");
+} = await import("cmd-ts-too");
 
 // TODO: dedup with `screenshot` implementation.
 const ReadAlg: Type<string, Alg> = {

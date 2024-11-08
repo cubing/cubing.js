@@ -35,18 +35,18 @@ export const mainAllowedImports: AllowedImports = {
       "esbuild",
       "node-fetch",
       "playwright",
-      "cmd-ts",
+      "cmd-ts-too",
     ],
     dynamic: ["cubing", "node:repl"],
   },
   // src/bin
   "src/bin": {
     static: ["cubing"],
-    dynamic: ["cmd-ts"],
+    dynamic: ["cmd-ts-too"],
   },
-  "src/bin/guards/cmd-ts-guard.ts": {
+  "src/bin/guards/cmd-ts-too-guard.ts": {
     static: ["node:process"],
-    dynamic: ["cmd-ts"],
+    dynamic: ["cmd-ts-too"],
   },
   // src/lib
   "src/cubing/alg": {},

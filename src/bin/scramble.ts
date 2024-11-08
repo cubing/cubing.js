@@ -9,7 +9,7 @@ import type { Alg } from "cubing/alg";
 import { eventInfo } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
-import "./guards/cmd-ts-guard";
+import "./guards/cmd-ts-too-guard";
 
 const {
   binary,
@@ -22,7 +22,7 @@ const {
   optional,
   positional,
   run,
-} = await import("cmd-ts");
+} = await import("cmd-ts-too");
 
 // TODO: file an issue about printing these values.
 const outputFormats = ["text", "link", "json-text"] as const;
@@ -52,7 +52,7 @@ const app = command({
     }),
     text: flag({
       description: "Convenient shorthand for `--format text`.",
-      long: "t", // TODO: https://github.com/Schniz/cmd-ts/issues/221
+      long: "t", // TODO: https://github.com/lgarron/cmd-ts-too/issues/6
       short: "t",
     }),
     eventID: positional({

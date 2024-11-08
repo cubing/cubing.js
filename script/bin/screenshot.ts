@@ -17,7 +17,7 @@ import {
   positional,
   run,
   type Type,
-} from "cmd-ts";
+} from "cmd-ts-too";
 import { Alg } from "cubing/alg";
 
 // We would use named imports, but that doesn't seem to be an option.
@@ -76,7 +76,7 @@ const app = command({
       long: "debug",
     }),
     outFile: option({
-      // TODO: implement a file path that does *not* exist: https://cmd-ts.vercel.app/batteries_file_system.html
+      // TODO: implement a file path that does *not* exist: https://cmd-ts-too.vercel.app/batteries_file_system.html
       type: optional(cmdString),
       long: "out-file",
     }),
