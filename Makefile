@@ -261,7 +261,7 @@ node_modules:
 .PHONY: publish
 .PHONY: publish
 publish:
-	${NPM} publish
+	${NPM} publish --globalconfig=$HOME/.config/npm/cubing-publish.npmrc
 
 .PHONY: pack
 .PHONY: pack
