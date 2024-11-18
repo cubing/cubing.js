@@ -74,7 +74,7 @@
     "@web/test-runner-playwright": "^0.11.0",
     "barely-a-dev-server": "latest",
     "chai": "^5.1.1",
-    "cmd-ts-too": "v0.15.0",
+    "cmd-ts-too": "v0.15.3",
     "esbuild": "latest",
     "getbuiltinmodule-ponyfill": "^1.0.1",
     "jszip": "^3.10.1",
