@@ -38,6 +38,7 @@ textarea {
   background: none;
   z-index: 2;
   border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
+  overflow: hidden;
 }
 
 .carbon-copy {
