@@ -274,7 +274,7 @@ class StickerDef {
   private foundationCoords(coords: number[]): number[] {
     const ncoords = coords.slice();
     for (let i = 0; i < coords.length; i++) {
-      ncoords[i] = coords[i] * 0.999;
+      ncoords[i] = coords[i] * 0.995;
     }
     return ncoords;
   }
