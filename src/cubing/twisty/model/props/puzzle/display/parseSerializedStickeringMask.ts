@@ -21,6 +21,7 @@ const charMap: Record<string, ExperimentalPieceStickering> = {
   P: ExperimentalPieceStickering.PermuteNonPrimary, // Example: PLL
   o: ExperimentalPieceStickering.Ignoriented, // Example: LL edges during CLS
   "?": ExperimentalPieceStickering.OrientationWithoutPermutation, // ACube: ignore position
+  M: ExperimentalPieceStickering.Mystery, // This piece needs highlighting, but we know nothing about it.
   "@": ExperimentalPieceStickering.Regular, // ACube: ignore orientation // TODO: distinguish from "regular"
 };
 

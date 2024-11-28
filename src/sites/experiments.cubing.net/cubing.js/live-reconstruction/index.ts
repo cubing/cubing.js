@@ -103,6 +103,7 @@ document.addEventListener("copy", (e: ClipboardEvent) => {
 
 const IGNORED_PIECE_VALUE = 9999; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
 const ORIENTATION_ONLY_PIECE_VALUE = 9998; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
+const MYSTERY_PIECE_VALUE = 9997; // TODO: This should really be set to the lowest otherwise unused piece number in the orbit.
 
 type FlatPuzzleStickering = Record<string, PieceStickering[]>;
 function applyPuzzleStickering(
@@ -153,6 +154,12 @@ function applyPuzzleStickering(
           newOrbitData.orientationMod.push(
             patternOrbit.orientationMod?.[i] ?? 0,
           );
+          break;
+        }
+        case PieceStickering.Mystery: {
+          newOrbitData.pieces.push(MYSTERY_PIECE_VALUE);
+          newOrbitData.orientation.push(0);
+          newOrbitData.orientationMod.push(1);
           break;
         }
         default: {

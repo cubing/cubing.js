@@ -9,7 +9,8 @@ export type FaceletMeshStickeringMask =
   | "oriented"
   | "experimentalOriented2" // TODO
   | "ignored"
-  | "invisible";
+  | "invisible"
+  | "mystery";
 
 export type FaceletStickeringMask = {
   mask: FaceletMeshStickeringMask;
@@ -73,6 +74,7 @@ export enum PieceStickering {
   PermuteNonPrimary = "PermuteNonPrimary",
   OrientationWithoutPermutation = "OrientationWithoutPermutation",
   ExperimentalOrientationWithoutPermutation2 = "ExperimentalOrientationWithoutPermutation2", // TODO
+  Mystery = "Mystery", // TODO
 }
 
 export class PieceAnnotation<T> {
@@ -93,6 +95,7 @@ const oriented = "oriented";
 const experimentalOriented2 = "experimentalOriented2";
 const invisible = "invisible";
 const dim = "dim";
+const mystery = "mystery";
 
 // We specify 5 facelets, because that's the maximum we need for any built-in puzzles (e.g. Megaminx centers or icosa vertices).
 // TODO: use "primary" and "non-primary" fields instead of listing all non-primary facelets.
@@ -151,6 +154,10 @@ const pieceStickerings: Record<string, PieceStickeringMask> = {
   [PieceStickering.ExperimentalOrientationWithoutPermutation2]: {
     // oiiii
     facelets: [experimentalOriented2, ignored, ignored, ignored, ignored],
+  },
+  [PieceStickering.Mystery]: {
+    // oiiii
+    facelets: [mystery, mystery, mystery, mystery, mystery],
   },
 };
 

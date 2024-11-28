@@ -350,6 +350,10 @@ class StickerDef {
         c = 0x444444;
         break;
       }
+      case "mystery": {
+        c = 0xf2cbcb;
+        break;
+      }
       case "invisible":
         c = this.origColor;
     }

@@ -60,10 +60,6 @@ const orientedMaterial = new MeshBasicMaterial({
   color: 0x44ddcc,
 });
 
-const experimentalOriented2Material = new MeshBasicMaterial({
-  color: 0xfffdaa,
-});
-
 const orientedMaterialHint = new MeshBasicMaterial({
   color: 0x44ddcc,
   side: BackSide,
@@ -71,8 +67,23 @@ const orientedMaterialHint = new MeshBasicMaterial({
   opacity: 0.5,
 });
 
+const experimentalOriented2Material = new MeshBasicMaterial({
+  color: 0xfffdaa,
+});
+
 const experimentalOriented2MaterialHint = new MeshBasicMaterial({
   color: 0xfff979,
+  side: BackSide,
+  transparent: true,
+  opacity: 0.5,
+});
+
+const mysteryMaterial = new MeshBasicMaterial({
+  color: 0xf2cbcb,
+});
+
+const mysterMaterialHint = new MeshBasicMaterial({
+  color: 0xf2cbcb,
   side: BackSide,
   transparent: true,
   opacity: 0.5,
@@ -113,6 +124,7 @@ class AxisInfo {
       experimentalOriented2: experimentalOriented2Material,
       ignored: ignoredMaterial,
       invisible: invisibleMaterial,
+      mystery: mysteryMaterial,
     };
     this.hintStickerMaterial = {
       regular: new MeshBasicMaterial({
@@ -133,6 +145,7 @@ class AxisInfo {
       experimentalOriented2: experimentalOriented2MaterialHint,
       ignored: ignoredMaterialHint,
       invisible: invisibleMaterial,
+      mystery: mysterMaterialHint,
     };
   }
 }
