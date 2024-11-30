@@ -1,6 +1,4 @@
 import { Alg } from "./Alg";
-import { AlgBuilder } from "./AlgBuilder";
-import { algDebugGlobals } from "./debug";
 import type { AlgNode } from "./alg-nodes";
 import { Commutator } from "./alg-nodes/containers/Commutator";
 import { Conjugate } from "./alg-nodes/containers/Conjugate";
@@ -9,6 +7,8 @@ import { LineComment } from "./alg-nodes/leaves/LineComment";
 import { Move, QuantumMove } from "./alg-nodes/leaves/Move";
 import { Newline } from "./alg-nodes/leaves/Newline";
 import { Pause } from "./alg-nodes/leaves/Pause";
+import { AlgBuilder } from "./AlgBuilder";
+import { algDebugGlobals } from "./debug";
 
 type StoppingChar = "," | ":" | "]" | ")";
 
@@ -35,9 +35,12 @@ export function parseQuantumMove(s: string): QuantumMove {
   return new AlgParser().parseQuantumMove(s);
 }
 
+export const startCharIndexKey = Symbol("startCharIndex");
+export const endCharIndexKey = Symbol("endCharIndex");
+
 export interface ParserIndexed {
-  startCharIndex: number;
-  endCharIndex: number;
+  [startCharIndexKey]: number;
+  [endCharIndexKey]: number;
 }
 
 export type Parsed<T extends Alg | AlgNode> = T & ParserIndexed;
@@ -49,17 +52,19 @@ function addCharIndices<T extends Alg | AlgNode>(
   endCharIndex: number,
 ): Parsed<T> {
   const parsedT = t as ParserIndexed & T;
-  parsedT.startCharIndex = startCharIndex;
-  parsedT.endCharIndex = endCharIndex;
+  parsedT[startCharIndexKey] = startCharIndex;
+  parsedT[endCharIndexKey] = endCharIndex;
   return parsedT;
 }
 
 export function transferCharIndex<T extends Alg | AlgNode>(from: T, to: T): T {
-  if ("startCharIndex" in from) {
-    (to as Parsed<T>).startCharIndex = (from as Parsed<T>).startCharIndex;
+  if (startCharIndexKey in from) {
+    (to as Parsed<T>)[startCharIndexKey] = (from as Parsed<T>)[
+      startCharIndexKey
+    ];
   }
-  if ("endCharIndex" in from) {
-    (to as Parsed<T>).endCharIndex = (from as Parsed<T>).endCharIndex;
+  if (endCharIndexKey in from) {
+    (to as Parsed<T>)[endCharIndexKey] = (from as Parsed<T>)[endCharIndexKey];
   }
   return to;
 }
@@ -84,7 +89,10 @@ class AlgParser {
       }
     }
     const newAlg = new Alg(algNodes) as Parsed<Alg>;
-    const { startCharIndex, endCharIndex } = alg;
+    const {
+      [startCharIndexKey]: startCharIndex,
+      [endCharIndexKey]: endCharIndex,
+    } = alg;
     addCharIndices(newAlg, startCharIndex, endCharIndex);
     return newAlg;
   }

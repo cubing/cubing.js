@@ -1,5 +1,9 @@
 import { Alg, type AlgNode } from "../../../../cubing/alg";
-import type { Parsed } from "../../../../cubing/alg/parseAlg";
+import {
+  endCharIndexKey,
+  startCharIndexKey,
+  type Parsed,
+} from "../../../../cubing/alg/parseAlg";
 import { extract } from "./extractor";
 
 const algElem = document.querySelector("#alg") as HTMLTextAreaElement;
@@ -22,15 +26,18 @@ function updateInspector(s: string): void {
       const parsed = v as Parsed<Alg | AlgNode>;
       inspectorElem.textContent += "\n";
       inspectorElem.textContent += `${name}: `.padStart(12, " ");
-      inspectorElem.textContent += "".padStart(parsed.startCharIndex, " ");
+      inspectorElem.textContent += "".padStart(parsed[startCharIndexKey], " ");
       inspectorElem.textContent += singleLineS.slice(
-        parsed.startCharIndex,
-        parsed.endCharIndex,
+        parsed[startCharIndexKey],
+        parsed[endCharIndexKey],
       );
       inspectorElem.textContent += "\n";
-      inspectorElem.textContent += "".padEnd(12 + parsed.startCharIndex, " ");
+      inspectorElem.textContent += "".padEnd(
+        12 + parsed[startCharIndexKey],
+        " ",
+      );
       inspectorElem.textContent += bracket(
-        parsed.endCharIndex - parsed.startCharIndex,
+        parsed[endCharIndexKey] - parsed[startCharIndexKey],
       );
     }
   } catch (e) {

@@ -15,7 +15,7 @@ import {
   ExperimentalIterationDirection,
   experimentalDirect,
 } from "../../alg/cubing-private";
-import type { Parsed } from "../../alg/parseAlg";
+import { startCharIndexKey, type Parsed } from "../../alg/parseAlg";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import type { CurrentMoveInfo } from "../controllers/indexer/AlgIndexer";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
@@ -255,7 +255,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       true,
     );
     dataDown.twistyAlgViewer.highlighter.addMove(
-      (move as Parsed<Move>).startCharIndex,
+      (move as Parsed<Move>)[startCharIndexKey],
       element,
     );
     return {
@@ -387,7 +387,7 @@ class MoveHighlighter {
 
   set(move: Parsed<Move> | null): void {
     const newElem = move
-      ? (this.moveCharIndexMap.get(move.startCharIndex) ?? null)
+      ? (this.moveCharIndexMap.get(move[startCharIndexKey]) ?? null)
       : null;
     if (this.currentElem === newElem) {
       return;
@@ -455,7 +455,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
       .alg;
     // TODO: Use proper architecture instead of a heuristic to ensure we have a parsed alg annotated with char indices.
     const parsedAlg =
-      "startCharIndex" in (sourceAlg as Partial<Parsed<Alg>>)
+      startCharIndexKey in (sourceAlg as Partial<Parsed<Alg>>)
         ? sourceAlg
         : Alg.fromString(sourceAlg.toString());
     this.setAlg(parsedAlg);

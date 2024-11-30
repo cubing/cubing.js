@@ -13,7 +13,11 @@
 
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, type Move, type Pause } from "../../../alg";
-import type { Parsed } from "../../../alg/parseAlg";
+import {
+  endCharIndexKey,
+  startCharIndexKey,
+  type Parsed,
+} from "../../../alg/parseAlg";
 import type {
   AlgProp,
   AlgWithIssues,
@@ -219,14 +223,14 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     this.#highlightedLeaf = leaf;
     this.#carbonCopyPrefix.textContent = this.#textarea.value.slice(
       0,
-      leaf.startCharIndex,
+      leaf[startCharIndexKey],
     );
     this.#carbonCopyHighlight.textContent = this.#textarea.value.slice(
-      leaf.startCharIndex,
-      leaf.endCharIndex,
+      leaf[startCharIndexKey],
+      leaf[endCharIndexKey],
     );
     this.#carbonCopySuffix.textContent = this.#padSuffix(
-      this.#textarea.value.slice(leaf.endCharIndex),
+      this.#textarea.value.slice(leaf[endCharIndexKey]),
     );
     this.#carbonCopyHighlight.hidden = false;
   }

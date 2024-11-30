@@ -1,7 +1,11 @@
 // TODO: Move this?
 
 import type { Alg } from "../../../alg";
-import type { Parsed } from "../../../alg/parseAlg";
+import {
+  endCharIndexKey,
+  type Parsed,
+  startCharIndexKey,
+} from "../../../alg/parseAlg";
 import {
   type AlgWithIssues,
   algWithIssuesFromString,
@@ -122,13 +126,13 @@ class LeafToHighlightProp extends TwistyPropDerived<
         return null;
       }
       let where: HighlightWhere;
-      if (inputs.targetChar < leafInfo.leaf.startCharIndex) {
+      if (inputs.targetChar < leafInfo.leaf[startCharIndexKey]) {
         where = "before";
-      } else if (inputs.targetChar === leafInfo.leaf.startCharIndex) {
+      } else if (inputs.targetChar === leafInfo.leaf[startCharIndexKey]) {
         where = "start";
-      } else if (inputs.targetChar < leafInfo.leaf.endCharIndex) {
+      } else if (inputs.targetChar < leafInfo.leaf[endCharIndexKey]) {
         where = "inside";
-      } else if (inputs.targetChar === leafInfo.leaf.endCharIndex) {
+      } else if (inputs.targetChar === leafInfo.leaf[endCharIndexKey]) {
         where = "end";
       } else {
         where = "after";
@@ -143,12 +147,12 @@ class LeafToHighlightProp extends TwistyPropDerived<
     // TODO: binary search
     for (const leafInfo of inputs.leafTokens) {
       if (
-        inputs.targetChar < leafInfo.leaf.startCharIndex &&
+        inputs.targetChar < leafInfo.leaf[startCharIndexKey] &&
         lastLeafInfo !== null
       ) {
         return withWhere(lastLeafInfo);
       }
-      if (inputs.targetChar <= leafInfo.leaf.endCharIndex) {
+      if (inputs.targetChar <= leafInfo.leaf[endCharIndexKey]) {
         return withWhere(leafInfo);
       }
       lastLeafInfo = leafInfo;
