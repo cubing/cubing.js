@@ -41,5 +41,5 @@ export const cube3x3x3 = {
   ): Promise<StickeringMask> => cubeLikeStickeringMask(cube3x3x3, stickering),
   stickerings: () => cubeLikeStickeringList("3x3x3"),
   puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,
-  keyMapping: async () => cube3x3x3KeyMapping,
+  keyMapping: async () => cube3x3x3KeyMapping, // TODO: async loading
 } satisfies PuzzleLoader;

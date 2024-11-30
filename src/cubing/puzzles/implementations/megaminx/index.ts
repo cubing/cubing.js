@@ -6,6 +6,7 @@ import {
   megaminxStickeringMask,
   megaminxStickerings,
 } from "../../stickerings/megaminx-stickerings";
+import { megaminxKeyMapping } from "./megaminxKeyMapping";
 
 class MegaminxPuzzleLoader extends PGPuzzleLoader {
   constructor() {
@@ -25,6 +26,8 @@ class MegaminxPuzzleLoader extends PGPuzzleLoader {
     return (await import("../dynamic/megaminx/puzzles-dynamic-megaminx"))
       .megaminxLLSVG;
   });
+
+  keyMapping = async () => megaminxKeyMapping; // TODO: async loading
 }
 
 export const megaminx = new MegaminxPuzzleLoader();
