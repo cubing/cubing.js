@@ -17,6 +17,7 @@ import {
   DEFAULT_PUZZLE_ID,
   debugShowRenderStats,
   getPuzzleID,
+  getStickering,
   getTempoScale,
   getVisualizationFormat,
   receivingSocketOrigin,
@@ -357,6 +358,7 @@ window.addEventListener("DOMContentLoaded", () => {
 const swipeyPuzzle = new SwipeyPuzzle(
   getPuzzleID(),
   getVisualizationFormat(),
+  getStickering(),
   getTempoScale(),
   () => {
     /* */

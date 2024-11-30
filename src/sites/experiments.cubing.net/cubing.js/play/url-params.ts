@@ -1,6 +1,10 @@
 import { Alg } from "../../../../cubing/alg";
 import type { QuantumDirectionalCancellation } from "../../../../cubing/alg/cubing-private";
-import type { VisualizationFormat } from "../../../../cubing/twisty";
+import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
+import type {
+  ExperimentalStickering,
+  VisualizationFormat,
+} from "../../../../cubing/twisty";
 import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
 
 // Trick from https://github.com/microsoft/TypeScript/issues/28046#issuecomment-480516434
@@ -46,6 +50,17 @@ export function getVisualizationFormat(): VisualizationFormat {
     DEFAULT_VISUALIZATION,
     Object.keys(visualizationFormats) as VisualizationFormat[],
   );
+}
+export function getStickering(): ExperimentalStickering | null {
+  const validValues = (
+    Object.keys(experimentalStickerings) as (ExperimentalStickering | null)[]
+  ).concat([null]);
+  const s = getURLParamChecked<ExperimentalStickering | null>(
+    "stickering",
+    null,
+    validValues,
+  );
+  return s;
 }
 
 export const DEFAULT_TEMPO_SCALE = 1;
