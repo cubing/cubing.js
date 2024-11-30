@@ -65,6 +65,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.3",
+    "@cubing/deploy": "0.1.7",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/chai": "^5.0.0",
     "@types/dom-speech-recognition": "^0.0.4",
@@ -171,5 +172,11 @@
     "bluetooth",
     "rubik",
     "rubik's"
-  ]
+  ],
+  "@cubing/deploy": {
+    "$schema": "./node_modules/@cubing/deploy/config-schema.json",
+    "https://experiments.cubing.net/cubing.js/": {
+      "fromLocalDir": "./dist/sites/experiments.cubing.net/cubing.js/"
+    }
+  }
 }

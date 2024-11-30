@@ -227,7 +227,7 @@ deploy-twizzle: build-site-twizzle
 	${BUN_RUN} script/deploy/twizzle.ts
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
-	${BUN_RUN} script/deploy/experiments.ts
+	bun x @cubing/deploy
 .PHONY: roll-vendored-twsearch
 roll-vendored-twsearch:
 	test -d ../twsearch/ || exit
