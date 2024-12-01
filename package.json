@@ -85,14 +85,6 @@
     "typedoc": "^0.26.7",
     "typescript": "^5.6.2"
   },
-  "minimalDevDependencies": [
-    "getbuiltinmodule-ponyfill",
-    "barely-a-dev-server",
-    "esbuild",
-    "jszip",
-    "@biomejs/biome",
-    "cmd-ts-too"
-  ],
   "engines": {
     "node": ">=20.16.0",
     "bun": ">=1.0.30"
@@ -149,6 +141,7 @@
     "test-dist-bin-npm-exec": "make test-dist-bin-npm-exec",
     "format": "make format",
     "setup": "make setup",
+    "update-dependencies": "make update-dependencies",
     "quick-setup": "make quick-setup",
     "lint": "make lint",
     "lint-ci": "make lint-ci",

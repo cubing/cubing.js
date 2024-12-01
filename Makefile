@@ -34,10 +34,10 @@ build: clean build-lib build-bin build-sites
 .PHONY: build-lib
 build-lib: build-lib-js build-lib-types
 .PHONY: build-lib-js
-build-lib-js:
+build-lib-js: update-dependencies
 	${BUN_RUN} ./script/build/lib/build-lib-js.ts
 .PHONY: build-lib-types
-build-lib-types:
+build-lib-types: update-dependencies
 	${BUN_RUN} ./script/build/lib/build-lib-types.ts
 .PHONY: build-bin
 build-bin: build-lib-js
@@ -46,19 +46,19 @@ build-bin: build-lib-js
 .PHONY: build-sites
 build-sites: build-site-twizzle build-site-experiments
 .PHONY: build-site-twizzle
-build-site-twizzle:
+build-site-twizzle: update-dependencies
 	${BUN_RUN} ./script/build/sites/build-site-twizzle.ts
 .PHONY: build-site-experiments
-build-site-experiments:
+build-site-experiments: update-dependencies
 	${BUN_RUN} ./script/build/sites/build-site-experiments.ts
 .PHONY: build-site-docs
-build-site-docs:
+build-site-docs: update-dependencies
 	rm -rf ./dist/sites/js.cubing.net/
 	${BUNX} typedoc src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
 .PHONY: dev
-dev: quick-setup
+dev: update-dependencies
 	${BUN_RUN} ./script/build/sites/dev.ts
 .PHONY: link
 link: build
@@ -99,7 +99,7 @@ test-info:
 # The following deps are in a custom order so that the more "useful" tests are first.
 # In case of failure, this is likely to be more helpful.
 .PHONY: test-fast
-test-fast: quick-setup \
+test-fast: update-dependencies \
 	build-lib-js test-spec-bun-fast build-bin build-sites \
 	lint \
 	test-src-import-restrictions test-src-scripts-consistency \
@@ -109,7 +109,7 @@ test-fast: quick-setup \
 .PHONY: test-all
 test-all: test-src test-build test-dist
 .PHONY: test-src
-test-src: \
+test-src: update-dependencies \
 	test-spec \
 	lint-ci \
 	test-src-tsc \
@@ -118,34 +118,34 @@ test-src: \
 .PHONY: test-spec
 test-spec: test-spec-bun test-spec-dom
 .PHONY: test-spec-bun
-test-spec-bun:
+test-spec-bun: update-dependencies
 	${BUN} test
 .PHONY: test-spec-bun-fast
-test-spec-bun-fast:
+test-spec-bun-fast: update-dependencies
 	env CUBING_JS_SKIP_SLOW_TESTS=true ${BUN} test
 .PHONY: test-spec-bun-with-coverage
-test-spec-bun-with-coverage:
+test-spec-bun-with-coverage: update-dependencies
 	${BUN} test
 .PHONY: test-spec-dom
-test-spec-dom:
+test-spec-dom: update-dependencies
 	${WEB_TEST_RUNNER}
 .PHONY: test-spec-dom-with-coverage
-test-spec-dom-with-coverage:
+test-spec-dom-with-coverage: update-dependencies
 	${WEB_TEST_RUNNER} --coverage
 .PHONY: playwright-install
 playwright-install:
 	${BUNX} playwright install
 .PHONY: test-src-import-restrictions
-test-src-import-restrictions:
+test-src-import-restrictions: update-dependencies
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
 .PHONY: test-src-tsc
-test-src-tsc:
+test-src-tsc: update-dependencies
 	${BUNX} tsc --project ./tsconfig.json
 .PHONY: test-src-scripts-consistency
-test-src-scripts-consistency:
+test-src-scripts-consistency: update-dependencies
 	${BUN_RUN} ./script/test/src/scripts-consistency/main.ts
 .PHONY: fix-src-scripts-consistency
-fix-src-scripts-consistency:
+fix-src-scripts-consistency: update-dependencies
 	${BUN_RUN} ./script/test/src/scripts-consistency/main.ts --fix
 .PHONY: test-build
 test-build: \
@@ -198,23 +198,26 @@ test-dist-bin-shebang: build-bin
 test-dist-bin-npm-exec: build-bin
 	time ${NPM} exec scramble -- 222
 .PHONY: format
-format:
+format: update-dependencies
 	${BIOME} check --write
 .PHONY: setup
-setup:
+setup: update-dependencies
+.PHONY: update-dependencies
+update-dependencies:
 	${BUN} install --no-save # TODO: was `npm ci`
 .PHONY: quick-setup
-quick-setup: | node_modules
+quick-setup:
+	@echo "make quick-setup is no longer supported. Dependencies will automatically be kept up to date."
 .PHONY: lint
-lint:
+lint: update-dependencies
 	${BIOME} check
 .PHONY: lint-ci
-lint-ci:
+lint-ci: update-dependencies
 	${BIOME} ci
 .PHONY: prepack
 prepack: clean build test-dist-lib-node-import test-dist-lib-node-scramble test-dist-lib-plain-esbuild-compat
 .PHONY: prepublishOnly
-prepublishOnly:
+prepublishOnly: update-dependencies
 	# Lucas is usually the one publishing, and `mak` is over twice as fast. So we use it when available.
 	# https://github.com/lgarron/mak
 	mak test-all || make test-all
@@ -253,10 +256,6 @@ update-cdn:
 	cd ../cdn.cubing.net/ && make roll-cubing
 
 ######## Only in `Makefile` ########
-
-# Not .PHONY(!)
-node_modules:
-	${BUN_RUN} ./script/quick-setup/main.ts
 
 .PHONY: publish
 .PHONY: publish
