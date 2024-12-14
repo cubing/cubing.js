@@ -536,10 +536,19 @@ export class TwistyPlayer
   private addEventListeners(): void {
     // Using mousedown/mouseup & touchstart/touchend to detect clicks, since click event would always trigger on mouseup.
     // Bind native DOM events to internal handlers
-    this.#visualizationWrapperElem.addEventListener("mousedown", (event) => this.handleMouseDown(event));
-    this.#visualizationWrapperElem.addEventListener("mouseup", (event) => this.handleMouseUp(event));
-    this.#visualizationWrapperElem.addEventListener("touchstart", (event) => this.handleTouchStart(event));
-    this.#visualizationWrapperElem.addEventListener("touchend", (event) => this.handleTouchEnd(event));
+    this.#visualizationWrapperElem.addEventListener(
+      "mousedown",
+      (event) => this.handleMouseDown(event)
+    );
+    this.#visualizationWrapperElem.addEventListener(
+      "mouseup", (event) => this.handleMouseUp(event)
+    );
+    this.#visualizationWrapperElem.addEventListener(
+      "touchstart", (event) => this.handleTouchStart(event)
+    );
+    this.#visualizationWrapperElem.addEventListener("touchend",
+      (event) => this.handleTouchEnd(event)
+    );
   }
 
   private handleMouseDown(event: MouseEvent): void {
@@ -555,7 +564,12 @@ export class TwistyPlayer
     this.onMouseUp?.(event);
 
      // Check if mousedown & mouseup are on the same point.
-    if (this.isSamePoint(this.clickCoordinatesStart, { x: event.clientX, y: event.clientY })) {
+    if (
+      this.isSamePoint(this.clickCoordinatesStart, {
+        x: event.clientX,
+        y: event.clientY
+      })
+    ) {
       // Call the onClick callback if it exists, passing the event as an argument.
       this.onClick?.(event);
     }
@@ -576,7 +590,12 @@ export class TwistyPlayer
 
     // Check if touchstart & touchend are on the same point.
     const touch = event.changedTouches[0];
-    if (this.isSamePoint(this.clickCoordinatesStart, { x: touch.clientX, y: touch.clientY })) {
+    if (
+      this.isSamePoint(this.clickCoordinatesStart, {
+        x: touch.clientX,
+        y: touch.clientY
+      })
+    ) {
       // Call the onClick callback if it exists, passing the event as an argument.
       this.onClick?.(event);
     }
