@@ -201,10 +201,11 @@ export class TwistyPlayer
 
   buttons: TwistyButtons;
 
-  experimentalCanvasClickCallback: (...args: any) => void = () => {};
-  // #onCanvasClick() {
-
-  // }
+  public onMouseDown?: (event: MouseEvent) => void;
+  public onMouseUp?: (event: MouseEvent) => void;
+  public onTouchStart?: (event: TouchEvent) => void;
+  public onTouchEnd?: (event: TouchEvent) => void;
+  public onClick?: (event: MouseEvent | TouchEvent) => void;
 
   private clickCoordinatesStart: Point = { x: 0, y: 0 };
 
@@ -534,34 +535,35 @@ export class TwistyPlayer
 
   private addEventListeners(): void {
     // Using mousedown/mouseup & touchstart/touchend to detect clicks, since click event would always trigger on mouseup.
-    // Event listeners are bound to the instance using .bind(this) to ensure this refers to the class instance.
-    this.#visualizationWrapperElem.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    this.#visualizationWrapperElem.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    this.#visualizationWrapperElem.addEventListener("touchstart", this.handleTouchStart.bind(this));
-    this.#visualizationWrapperElem.addEventListener("touchend", this.handleTouchEnd.bind(this));
+    // Bind native DOM events to internal handlers
+    this.#visualizationWrapperElem.addEventListener("mousedown", (event) => this.handleMouseDown(event));
+    this.#visualizationWrapperElem.addEventListener("mouseup", (event) => this.handleMouseUp(event));
+    this.#visualizationWrapperElem.addEventListener("touchstart", (event) => this.handleTouchStart(event));
+    this.#visualizationWrapperElem.addEventListener("touchend", (event) => this.handleTouchEnd(event));
   }
 
   private handleMouseDown(event: MouseEvent): void {
-    // Dispatches the "canvas-mousedown" event on TwistyPlayer with details of original "mousedown" event.
-    this.dispatchEvent(new MouseEvent("canvas-mousedown", event));
+    // Call the onMouseDown callback if it exists, passing the event as an argument.
+    this.onMouseDown?.(event);
 
-    // Save the mousedown point.
+     // Save the mousedown point.
     this.clickCoordinatesStart = { x: event.clientX, y: event.clientY };
   }
 
   private handleMouseUp(event: MouseEvent): void {
-    // Dispatches the "canvas-mouseup" event on TwistyPlayer with details of original "mouseup" event.
-    this.dispatchEvent(new MouseEvent('canvas-mouseup', event));
+    // Call the onMouseUp callback if it exists, passing the event as an argument.
+    this.onMouseUp?.(event);
 
-    // Check if mousedown & mouseup are on the same point.
+     // Check if mousedown & mouseup are on the same point.
     if (this.isSamePoint(this.clickCoordinatesStart, { x: event.clientX, y: event.clientY })) {
-      this.onClick(event);
+      // Call the onClick callback if it exists, passing the event as an argument.
+      this.onClick?.(event);
     }
   }
 
   private handleTouchStart(event: TouchEvent): void {
-    // Dispatches the "canvas-touchstart" event on TwistyPlayer with details of original "touchstart" event.
-    this.dispatchEvent(new TouchEvent('canvas-touchstart', this.getTouchEventInit(event)));
+    // Call the onTouchStart callback if it exists, passing the event as an argument.
+    this.onTouchStart?.(event);
 
     // Save the touch point.
     const touch = event.touches[0];
@@ -569,41 +571,19 @@ export class TwistyPlayer
   }
 
   private handleTouchEnd(event: TouchEvent): void {
-    // Dispatches the "canvas-touchend" event on TwistyPlayer with details of original "touchend" event.
-    this.dispatchEvent(new TouchEvent('canvas-touchend', this.getTouchEventInit(event)));
+    // Call the onTouchEnd callback if it exists, passing the event as an argument.
+    this.onTouchEnd?.(event);
 
     // Check if touchstart & touchend are on the same point.
     const touch = event.changedTouches[0];
     if (this.isSamePoint(this.clickCoordinatesStart, { x: touch.clientX, y: touch.clientY })) {
-      this.onClick(event);
+      // Call the onClick callback if it exists, passing the event as an argument.
+      this.onClick?.(event);
     }
   }
 
   private isSamePoint(point1: Point, point2: Point): boolean {
-    return point1.x == point2.x && point1.y == point2.y;
-  }
-
-  private onClick(event: MouseEvent | TouchEvent): void {
-    // Dispatches the canvas-click event with details of mouseup or touchend event.
-    this.dispatchEvent(new CustomEvent("canvas-click", { detail: { originalEvent: event } }));
-  }
-
-  private getTouchEventInit(event: TouchEvent): TouchEventInit {
-    // Unlike mouse events, we can't forward the touch event directly since the TouchEvent is structurally not compatible with TouchEventInit.
-    // Instead, a TouchEventInit object must be created with the details of the original event
-    const touchEventInit: TouchEventInit = {
-      bubbles: event.bubbles,
-      cancelable: event.cancelable,
-      composed: event.composed,
-      touches: Array.from(event.touches),
-      targetTouches: Array.from(event.targetTouches),
-      changedTouches: Array.from(event.changedTouches),
-      ctrlKey: event.ctrlKey,
-      shiftKey: event.shiftKey,
-      altKey: event.altKey,
-      metaKey: event.metaKey,
-    };
-    return touchEventInit;
+    return point1.x === point2.x && point1.y === point2.y;
   }
 }
 
