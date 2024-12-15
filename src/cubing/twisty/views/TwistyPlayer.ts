@@ -16,14 +16,14 @@ import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorPro
 import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
-import {
-  type ControlPanelThemeWithAuto,
-  controlsLocations,
-} from "../model/props/viewer/ControlPanelProp";
 import type {
   ColorScheme,
   ColorSchemeWithAuto,
 } from "../model/props/viewer/ColorSchemeRequestProp";
+import {
+  type ControlPanelThemeWithAuto,
+  controlsLocations,
+} from "../model/props/viewer/ControlPanelProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
@@ -536,18 +536,17 @@ export class TwistyPlayer
   private addEventListeners(): void {
     // Using mousedown/mouseup & touchstart/touchend to detect clicks, since click event would always trigger on mouseup.
     // Bind native DOM events to internal handlers
-    this.#visualizationWrapperElem.addEventListener(
-      "mousedown",
-      (event) => this.handleMouseDown(event)
+    this.#visualizationWrapperElem.addEventListener("mousedown", (event) =>
+      this.handleMouseDown(event),
     );
-    this.#visualizationWrapperElem.addEventListener(
-      "mouseup", (event) => this.handleMouseUp(event)
+    this.#visualizationWrapperElem.addEventListener("mouseup", (event) =>
+      this.handleMouseUp(event),
     );
-    this.#visualizationWrapperElem.addEventListener(
-      "touchstart", (event) => this.handleTouchStart(event)
+    this.#visualizationWrapperElem.addEventListener("touchstart", (event) =>
+      this.handleTouchStart(event),
     );
-    this.#visualizationWrapperElem.addEventListener("touchend",
-      (event) => this.handleTouchEnd(event)
+    this.#visualizationWrapperElem.addEventListener("touchend", (event) =>
+      this.handleTouchEnd(event),
     );
   }
 
@@ -555,7 +554,7 @@ export class TwistyPlayer
     // Call the onMouseDown callback if it exists, passing the event as an argument.
     this.onMouseDown?.(event);
 
-     // Save the mousedown point.
+    // Save the mousedown point.
     this.clickCoordinatesStart = { x: event.clientX, y: event.clientY };
   }
 
@@ -563,11 +562,11 @@ export class TwistyPlayer
     // Call the onMouseUp callback if it exists, passing the event as an argument.
     this.onMouseUp?.(event);
 
-     // Check if mousedown & mouseup are on the same point.
+    // Check if mousedown & mouseup are on the same point.
     if (
       this.isSamePoint(this.clickCoordinatesStart, {
         x: event.clientX,
-        y: event.clientY
+        y: event.clientY,
       })
     ) {
       // Call the onClick callback if it exists, passing the event as an argument.
@@ -593,7 +592,7 @@ export class TwistyPlayer
     if (
       this.isSamePoint(this.clickCoordinatesStart, {
         x: touch.clientX,
-        y: touch.clientY
+        y: touch.clientY,
       })
     ) {
       // Call the onClick callback if it exists, passing the event as an argument.
