@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.3",
-    "@cubing/deploy": "0.1.7",
+    "@cubing/deploy": "v0.1.8",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/chai": "^5.0.0",
     "@types/dom-speech-recognition": "^0.0.4",
