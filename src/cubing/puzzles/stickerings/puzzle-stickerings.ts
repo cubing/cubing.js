@@ -67,6 +67,7 @@ export const experimentalStickerings: Record<
   invisible: { groups: { "3x3x3": "Miscellaneous" } },
   picture: { groups: { "3x3x3": "Miscellaneous" } },
   "centers-only": { groups: { "3x3x3": "Miscellaneous" } }, // TODO
+  "opposite-centers": { groups: { "4x4x4": "Reduction" } }, // TODO
   "experimental-centers-U": {},
   "experimental-centers-U-D": {},
   "experimental-centers-U-L-D": {},

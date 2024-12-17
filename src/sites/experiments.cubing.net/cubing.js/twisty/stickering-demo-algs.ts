@@ -23,6 +23,7 @@ export function demo(visualization: VisualizationFormat): void {
 
   addAlg("full", "y L' U R' F' U L2 U2' L' U' L U2' D R' D' F2 R2 U'");
   addAlg("centers-only", "(x y)3");
+  addAlg("opposite-centers", "r2 f2 r2"); // 4x4x4
   addAlg("PLL", "R U R' U' R' F R2 U' R' U' R U R' F'");
   addAlg("CLS", "R U R' U' R U R' U R U' R'");
   addAlg("OLL", "r U R' U R U2 r'");

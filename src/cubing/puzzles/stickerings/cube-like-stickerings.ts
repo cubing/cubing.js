@@ -415,6 +415,13 @@ export async function cubeLikePuzzleStickering(
       puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
       break;
     }
+    case "opposite-centers": {
+      puzzleStickering.set(
+        m.not(m.and([CENTERS(), m.or(m.moves(["U", "D"]))])),
+        PieceStickering.Ignored,
+      );
+      break;
+    }
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
