@@ -4,6 +4,26 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
 
 const currentEventID =
   new URL(location.href).searchParams.get("event") ?? "333";
+const numScrambles = (() => {
+  try {
+    return Number.parseInt(
+      new URL(location.href).searchParams.get("amount") ?? "5",
+    );
+  } catch {
+    console.error("Could not parse amount, defaulting to 5");
+    return 5;
+  }
+})();
+const numExtraScrambles = (() => {
+  try {
+    return Number.parseInt(
+      new URL(location.href).searchParams.get("extra-amount") ?? "2",
+    );
+  } catch {
+    console.error("Could not parse extra amount, defaulting to 2");
+    return 2;
+  }
+})();
 const eventSelect = document.querySelector("select")!;
 
 for (const [eventID, eventInfo] of Object.entries(twizzleEvents)) {
@@ -66,5 +86,9 @@ function addBody(num: number, extra: boolean) {
     addScramble(tbody, i, extra);
   }
 }
-addBody(5, false);
-addBody(2, true);
+if (numScrambles > 0) {
+  addBody(numScrambles, false);
+}
+if (numExtraScrambles > 0) {
+  addBody(numExtraScrambles, true);
+}
