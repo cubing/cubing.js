@@ -117,7 +117,7 @@ export async function solveMegaminx(pattern: KPattern): Promise<Alg> {
 
 export interface SolveTwsearchOptions {
   generatorMoves?: string[];
-  startPattern?: KPattern;
+  targetPattern?: KPattern;
   minDepth?: number;
 }
 
@@ -126,11 +126,10 @@ export async function solveTwsearch(
   pattern: KPattern,
   options?: SolveTwsearchOptions,
 ): Promise<Alg> {
-  const { startPattern, ...otherOptions } = options ?? {};
+  const { targetPattern, ...otherOptions } = options ?? {};
   const apiOptions: TwsearchOptions = otherOptions;
-  if (startPattern) {
-    apiOptions.targetPattern =
-      startPattern.experimentalToTransformation()!.transformationData;
+  if (targetPattern) {
+    apiOptions.targetPattern = targetPattern.patternData;
   }
   const { ...def } = kpuzzle.definition;
   delete def.experimentalIsPatternSolved;
