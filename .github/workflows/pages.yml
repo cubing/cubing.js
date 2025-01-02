@@ -30,7 +30,7 @@ jobs:
       - run: make setup
       - run: make build-site-docs
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1 # TODO: update
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist/sites/js.cubing.net/
           retention-days: 1
@@ -53,4 +53,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
