@@ -31,6 +31,7 @@ const puzzleIDs = {
   megaminx: true,
   kilominx: true,
   tri_quad: true,
+  baby_fto: true,
 };
 export const DEFAULT_PUZZLE_ID = "3x3x3";
 export type PuzzleID = keyof typeof puzzleIDs;

@@ -45,6 +45,10 @@ export const twizzleEvents: Record<string, EventInfo> = {
     puzzleID: "redi_cube",
     eventName: "Redi Cube",
   },
+  baby_fto: {
+    puzzleID: "baby_fto",
+    eventName: "Baby FTO",
+  },
   loopover: {
     puzzleID: "loopover",
     eventName: "Loopover",

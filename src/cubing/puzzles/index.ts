@@ -7,6 +7,7 @@ import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { cube4x4x4 } from "./implementations/4x4x4";
+import { baby_fto } from "./implementations/baby_fto";
 import { clock } from "./implementations/clock";
 import { fto } from "./implementations/fto";
 import { kilominx } from "./implementations/kilominx";
@@ -47,7 +48,7 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 4x4x4 Blindfolded
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
-  fto: fto,
+  fto,
   gigaminx: new PGPuzzleLoader({
     id: "gigaminx",
     fullName: "Gigaminx",
@@ -66,4 +67,5 @@ export const puzzles: Record<string, PuzzleLoader> = {
   melindas2x2x2x2,
   loopover,
   tri_quad,
+  baby_fto,
 };

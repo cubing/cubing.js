@@ -23,6 +23,7 @@ export const puzzleIDs = {
   master_tetraminx: true,
   kilominx: true,
   redi_cube: true,
+  baby_fto: true,
   melindas2x2x2x2: true,
   tri_quad: true,
   loopover: true,
