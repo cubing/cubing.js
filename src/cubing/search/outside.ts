@@ -119,6 +119,7 @@ export interface SolveTwsearchOptions {
   generatorMoves?: string[];
   targetPattern?: KPattern;
   minDepth?: number;
+  maxDepth?: number;
 }
 
 export async function solveTwsearch(

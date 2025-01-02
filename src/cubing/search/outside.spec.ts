@@ -35,3 +35,24 @@ test("`solveTwsearch(…)` can use `targetPattern`", async () => {
     ),
   ).toEqual(6);
 });
+
+test("`solveTwsearch(…)` can use `maxDepth`", async () => {
+  const kpuzzle = await cube3x3x3.kpuzzle();
+  const scramble = kpuzzle.defaultPattern().applyAlg("R U R' F' U2 L'");
+  const sol = await solveTwsearch(kpuzzle, scramble, {
+    generatorMoves: ["U", "L", "F", "R"],
+  });
+  expect(
+    experimentalCountMetricMoves(
+      cube3x3x3,
+      CommonMetric.OuterBlockTurnMetric,
+      sol,
+    ),
+  ).toEqual(4);
+  expect(() =>
+    solveTwsearch(kpuzzle, scramble, {
+      generatorMoves: ["U", "L", "F", "R"],
+      maxDepth: 3,
+    }),
+  ).toThrow("No solution found!");
+});
