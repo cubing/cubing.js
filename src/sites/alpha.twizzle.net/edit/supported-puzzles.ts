@@ -111,6 +111,7 @@ const puzzleData: Partial<
     optgroup: OptGroup.Other,
     symbol: GeometrySymbol.Square,
   },
+  baby_fto: { optgroup: OptGroup.Other, symbol: GeometrySymbol.TriangleDown },
   melindas2x2x2x2: {
     "2D": true,
     optgroup: OptGroup.Other,

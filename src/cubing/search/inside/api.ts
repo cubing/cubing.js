@@ -116,11 +116,12 @@ async function randomScrambleForEvent(
       // case "sq1":
       // case "444bf":
       case "555bf":
-        // case "333mbf":
-        // case "fto":
-        // case "master_tetraminx":
-        // case "kilominx":
-        // case "redi_cube":m
+      // case "333mbf":
+      // case "fto":
+      // case "master_tetraminx":
+      // case "kilominx":
+      // case "redi_cube":
+      case "baby_fto":
         return wasm();
       case "333":
       case "333oh":
