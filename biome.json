@@ -15,9 +15,7 @@
     ]
   },
   "linter": {
-    "enabled": true,
     "rules": {
-      "recommended": true,
       "nursery": {},
       "complexity": {
         "useLiteralKeys": "off"
