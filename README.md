@@ -47,8 +47,8 @@ Working on `cubing.js` requires the following tools:
 - [`GNU make`](https://www.gnu.org/software/make/) (probably included with your OS)
 - [`git`](https://git-scm.com/) (possibly included with your OS)
 - [`git-lfs`](https://git-lfs.com/)
-- [`node` and `npm`](https://nodejs.org/en/download)
 - [`bun`](https://bun.sh/)
+- [`node` and `npm`](https://nodejs.org/en/download)
 
 On macOS, you can install these using [Homebrew](https://brew.sh/):
 
