@@ -26,7 +26,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
+          bun-version: "1.1.43" # TODO(https://github.com/cubing/cubing.js/issues/363): Remove this
       - run: make setup
       - run: make build-site-docs
       - name: Upload artifact
