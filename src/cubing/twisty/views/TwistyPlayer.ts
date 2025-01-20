@@ -16,14 +16,14 @@ import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorPro
 import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
-import {
-  type ControlPanelThemeWithAuto,
-  controlsLocations,
-} from "../model/props/viewer/ControlPanelProp";
 import type {
   ColorScheme,
   ColorSchemeWithAuto,
 } from "../model/props/viewer/ColorSchemeRequestProp";
+import {
+  type ControlPanelThemeWithAuto,
+  controlsLocations,
+} from "../model/props/viewer/ControlPanelProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
@@ -169,6 +169,22 @@ const propOnly: Record<string, boolean> = {
   experimentalMovePressCancelOptions: true,
 };
 
+let cachedSharedIntersectionObserver: IntersectionObserver | undefined;
+const intersectedCallback = Symbol("intersectedCallback");
+function waitForIntersection(player: TwistyPlayer) {
+  cachedSharedIntersectionObserver ??= new IntersectionObserver(
+    (entries, observer) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting && entry.intersectionRect.height > 0) {
+          (entry.target as TwistyPlayer)[intersectedCallback]();
+          observer.unobserve(entry.target);
+        }
+      }
+    },
+  );
+  cachedSharedIntersectionObserver.observe(player);
+}
+
 /**
  * TwistyPlayer is the heart of `cubing.js`. It can be used to display a puzzle on a web page like this:
  *
@@ -232,11 +248,15 @@ export class TwistyPlayer
   #errorElem = document.createElement("div"); // TODO: Better pattern.
   #alreadyConnected = false; // TODO: support resetting
   async connectedCallback(): Promise<void> {
+    this.addCSS(twistyPlayerCSS);
+    waitForIntersection(this);
+  }
+
+  async [intersectedCallback](): Promise<void> {
     if (this.#alreadyConnected) {
       return;
     }
     this.#alreadyConnected = true;
-    this.addCSS(twistyPlayerCSS);
 
     this.addElement(this.#visualizationWrapperElem).classList.add(
       "visualization-wrapper",
