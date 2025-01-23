@@ -16,7 +16,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: "1.1.43" # TODO(https://github.com/cubing/cubing.js/issues/363): Remove this
+          bun-version: "latest"
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -44,7 +44,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: "1.1.43" # TODO(https://github.com/cubing/cubing.js/issues/363): Remove this
+          bun-version: "latest"
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -70,7 +70,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: "1.1.43" # TODO(https://github.com/cubing/cubing.js/issues/363): Remove this
+          bun-version: "latest"
       - name: Use `node` v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -98,7 +98,7 @@ jobs:
             lfs: 'true'
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: "1.1.43" # TODO(https://github.com/cubing/cubing.js/issues/363): Remove this
+          bun-version: "latest"
       - run: make setup
       - name: Set up `node`
         uses: actions/setup-node@v4
