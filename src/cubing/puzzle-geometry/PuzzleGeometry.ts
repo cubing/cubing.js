@@ -2129,42 +2129,45 @@ export class PuzzleGeometry {
         }
         r.push(parsedmove[5]);
       }
-    } else if (this.options.vertexMoves && !this.options.allMoves) {
-      const msg = this.movesetgeos[k];
-      if (msg[1] !== msg[3]) {
-        for (let i = 0; i < slices; i++) {
-          if (msg[1] !== "v") {
-            if (this.options.outerBlockMoves) {
-              r.push([i + 1, slices]);
-            } else {
-              r.push([i + 1]);
-            }
-            r.push(1);
-          } else {
-            if (this.options.outerBlockMoves) {
-              r.push([0, i]);
-            } else {
-              r.push([i, i]);
-            }
-            r.push(1);
-          }
-        }
-      }
     } else {
-      for (let i = 0; i <= slices; i++) {
-        if (!this.options.allMoves && i + i === slices) {
-          continue;
-        }
-        if (this.options.outerBlockMoves) {
-          if (i + i > slices) {
-            r.push([i, slices]);
-          } else {
-            r.push([0, i]);
+      const msg = this.movesetgeos[k];
+      const isTetrahedron = msg[1] !== msg[3];
+      if (this.options.vertexMoves && isTetrahedron && !this.options.allMoves) {
+        if (msg[1] !== msg[3]) {
+          for (let i = 0; i < slices; i++) {
+            if (msg[1] !== "v") {
+              if (this.options.outerBlockMoves) {
+                r.push([i + 1, slices]);
+              } else {
+                r.push([i + 1]);
+              }
+              r.push(1);
+            } else {
+              if (this.options.outerBlockMoves) {
+                r.push([0, i]);
+              } else {
+                r.push([i, i]);
+              }
+              r.push(1);
+            }
           }
-        } else {
-          r.push([i, i]);
         }
-        r.push(1);
+      } else {
+        for (let i = 0; i <= slices; i++) {
+          if (!this.options.allMoves && i + i === slices) {
+            continue;
+          }
+          if (this.options.outerBlockMoves) {
+            if (i + i > slices) {
+              r.push([i, slices]);
+            } else {
+              r.push([0, i]);
+            }
+          } else {
+            r.push([i, i]);
+          }
+          r.push(1);
+        }
       }
     }
     if (this.fixedCubie >= 0) {
