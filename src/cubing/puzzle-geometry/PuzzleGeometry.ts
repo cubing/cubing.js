@@ -2139,7 +2139,7 @@ export class PuzzleGeometry {
               if (this.options.outerBlockMoves) {
                 r.push([i + 1, slices]);
               } else {
-                r.push([i + 1]);
+                r.push([i + 1, i + 1]);
               }
               r.push(1);
             } else {
