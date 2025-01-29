@@ -64,10 +64,12 @@ dev: update-dependencies
 link: build
 	${BUN} link
 .PHONY: clean
-clean:
+clean: clean-types
 	rm -rf \
 		dist .temp coverage ./package-lock.json \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
+.PHONY: clean-types
+clean-types: setup
 	${BUN_RUN} script/build/lib/clean-types.ts
 .PHONY: reset
 reset: clean
@@ -204,6 +206,7 @@ format: update-dependencies
 setup: update-dependencies
 .PHONY: update-dependencies
 update-dependencies:
+	@command -v ${BUN} > /dev/null || { echo "\nPlease install \`bun\` to work on this project:\n\n    # from npm\n    npm install --global bun\n\n    # macOS (Homebrew)\n    brew install oven-sh/bun/bun\n\n    # For other options, see: https://bun.sh/\n" && exit 1 ; }
 	${BUN} install --no-save # TODO: was `npm ci`
 .PHONY: quick-setup
 quick-setup:
