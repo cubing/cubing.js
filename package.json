@@ -143,7 +143,6 @@
     "format": "make format",
     "setup": "make setup",
     "update-dependencies": "make update-dependencies",
-    "quick-setup": "make quick-setup",
     "lint": "make lint",
     "lint-ci": "make lint-ci",
     "prepack": "make prepack",

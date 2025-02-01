@@ -208,9 +208,6 @@ setup: update-dependencies
 update-dependencies:
 	@command -v ${BUN} > /dev/null || { echo "\nPlease install \`bun\` to work on this project:\n\n    # from npm\n    npm install --global bun\n\n    # macOS (Homebrew)\n    brew install oven-sh/bun/bun\n\n    # For other options, see: https://bun.sh/\n" && exit 1 ; }
 	${BUN} install --frozen-lockfile
-.PHONY: quick-setup
-quick-setup:
-	@echo "make quick-setup is no longer supported. Dependencies will automatically be kept up to date."
 .PHONY: lint
 lint: update-dependencies
 	${BIOME} check
