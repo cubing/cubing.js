@@ -1,14 +1,13 @@
-import type { KPuzzle } from "./KPuzzle";
 import type { Alg, Move } from "../alg";
+import { isPatternDataIdentical } from "./calculate";
 import { applyTransformationDataToKPatternData } from "./combine";
-import type { KTransformationSource } from "./KPuzzle";
+import type { KPuzzle, KTransformationSource } from "./KPuzzle";
 import type {
   KPatternData,
   KTransformationData,
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
-import { isPatternDataIdentical } from "./calculate";
 
 export class KPattern {
   constructor(
@@ -86,6 +85,7 @@ export class KPattern {
 
   experimentalIsSolved(options: {
     ignorePuzzleOrientation: boolean;
+    // Note: `ignoreCenterOrientation` must currently be specified even if the puzzle does not have centers with indistinguishable orientations (in which case the value will be ignored).
     ignoreCenterOrientation: boolean;
   }): boolean {
     if (!this.kpuzzle.definition.experimentalIsPatternSolved) {
