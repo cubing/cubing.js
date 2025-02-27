@@ -1,5 +1,6 @@
-// Generated from `twsearch` [object Promise]
-import "./chunk-FTOVDLBG.js";
+// Generated from `twsearch` v0.7.0-14-g42d41c34
+
+import "./chunk-ET6O54B6.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -13,8 +14,7 @@ function getObject(idx) {
 }
 var heap_next = heap.length;
 function addHeapObject(obj) {
-  if (heap_next === heap.length)
-    heap.push(heap.length + 1);
+  if (heap_next === heap.length) heap.push(heap.length + 1);
   const idx = heap_next;
   heap_next = heap[idx];
   heap[idx] = obj;
@@ -45,8 +45,7 @@ function getStringFromWasm0(ptr, len) {
   return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
 }
 function dropObject(idx) {
-  if (idx < 132)
-    return;
+  if (idx < 132) return;
   heap[idx] = heap_next;
   heap_next = idx;
 }
@@ -83,8 +82,7 @@ function passStringToWasm0(arg, malloc, realloc) {
   let offset = 0;
   for (; offset < len; offset++) {
     const code = arg.charCodeAt(offset);
-    if (code > 127)
-      break;
+    if (code > 127) break;
     mem[ptr + offset] = code;
   }
   if (offset !== len) {
@@ -428,8 +426,7 @@ function __wbg_finalize_init(instance, module2) {
   return wasm;
 }
 async function __wbg_init(module_or_path) {
-  if (wasm !== void 0)
-    return wasm;
+  if (wasm !== void 0) return wasm;
   if (typeof module_or_path !== "undefined") {
     if (Object.getPrototypeOf(module_or_path) === Object.prototype) {
       ({ module_or_path } = module_or_path);
@@ -454,7 +451,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-MM4ZLJE4.js")).default;
+    const wasmUint8Array = (await import("./twsearch_wasm_bg-RQZYZCRF.js")).default;
     await twsearch_wasm_default({ module_or_path: wasmUint8Array.buffer });
   })());
 }
@@ -467,6 +464,7 @@ async function wasmTwsearch2(kpuzzleDefinition, searchPattern, options) {
   return new Alg(
     wasmTwsearch(
       JSON.stringify(kpuzzleDefinition),
+      // biome-ignore lint/complexity/useLiteralKeys: JSON field access
       JSON.stringify(searchPattern.toJSON()["patternData"]),
       JSON.stringify(options)
     )
