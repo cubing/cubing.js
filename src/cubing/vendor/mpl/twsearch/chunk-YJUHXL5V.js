@@ -1,4 +1,4 @@
-// Generated from `twsearch` v0.7.0-14-g42d41c34
+// Generated from `twsearch` v0.7.0-18-gb402ce85
 
 var __toBinary = /* @__PURE__ */ (() => {
   var table = new Uint8Array(128);
