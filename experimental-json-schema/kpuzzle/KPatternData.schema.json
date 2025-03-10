@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "numbers": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "AlgString": {
+      "type": "string"
+    },
+    "KPatternOrbitData": {
+      "type": "object",
+      "required": ["pieces", "orientation"],
+      "additionalProperties": false,
+      "properties": {
+        "pieces": {
+          "$ref": "#/definitions/numbers"
+        },
+        "orientation": {
+          "$ref": "#/definitions/numbers"
+        },
+        "orientationMod": {
+          "$ref": "#/definitions/numbers"
+        }
+      }
+    },
+    "KPatternData": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/KPatternOrbitData"
+      },
+      "properties": {
+        "$schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$ref": "#/definitions/KPatternData"
+}

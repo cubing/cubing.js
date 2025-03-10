@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "numbers": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "KTransformationOrbitData": {
+      "type": "object",
+      "required": ["permutation", "orientationDelta"],
+      "additionalProperties": false,
+      "properties": {
+        "permutation": {
+          "$ref": "#/definitions/numbers"
+        },
+        "orientationDelta": {
+          "$ref": "#/definitions/numbers"
+        }
+      }
+    },
+    "KTransformationData": {
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/KTransformationOrbitData"
+      }
+    }
+  },
+  "$ref": "#/definitions/KTransformationData"
+}

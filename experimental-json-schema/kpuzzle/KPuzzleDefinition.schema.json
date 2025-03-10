@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "numbers": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "AlgString": {
+      "type": "string"
+    },
+    "KPatternOrbitData": {
+      "type": "object",
+      "required": ["pieces", "orientation"],
+      "additionalProperties": false,
+      "properties": {
+        "pieces": {
+          "$ref": "#/definitions/numbers"
+        },
+        "orientation": {
+          "$ref": "#/definitions/numbers"
+        },
+        "orientationMod": {
+          "$ref": "#/definitions/numbers"
+        }
+      }
+    },
+    "KPatternData": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/KPatternOrbitData"
+      },
+      "properties": {
+        "$schema": {
+          "type": "string"
+        }
+      }
+    },
+    "KTransformationOrbitData": {
+      "type": "object",
+      "required": ["permutation", "orientationDelta"],
+      "additionalProperties": false,
+      "properties": {
+        "permutation": {
+          "$ref": "#/definitions/numbers"
+        },
+        "orientationDelta": {
+          "$ref": "#/definitions/numbers"
+        }
+      }
+    },
+    "KTransformationData": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/KTransformationOrbitData"
+      }
+    },
+    "KPuzzleOrbitDefinition": {
+      "type": "object",
+      "required": ["orbitName", "numPieces", "numOrientations"],
+      "additionalProperties": false,
+      "properties": {
+        "orbitName": {
+          "type": "string"
+        },
+        "numPieces": {
+          "type": "number"
+        },
+        "numOrientations": {
+          "type": "number"
+        }
+      }
+    },
+    "KPuzzleDefinition": {
+      "type": "object",
+      "required": ["name", "orbits", "defaultPattern", "moves"],
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "orbits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KPuzzleOrbitDefinition"
+          }
+        },
+        "defaultPattern": {
+          "$ref": "#/definitions/KPatternData"
+        },
+        "moves": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/KTransformationData"
+          }
+        },
+        "derivedMoves": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/AlgString"
+          }
+        },
+        "experimentalPuzzleDescription": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "$ref": "#/definitions/KPuzzleDefinition"
+}

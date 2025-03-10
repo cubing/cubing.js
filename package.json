@@ -92,6 +92,7 @@
   "files": [
     "./dist/bin/",
     "./dist/lib/",
+    "./experimental-json-schema",
     "*/index.d.ts"
   ],
   "scripts": {
