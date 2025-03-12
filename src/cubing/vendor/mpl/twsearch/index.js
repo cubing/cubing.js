@@ -1,6 +1,6 @@
-// Generated from `twsearch` v0.7.0-18-gb402ce85
+// Generated from `twsearch` v0.7.0-71-g56437b62
 
-import "./chunk-YJUHXL5V.js";
+import "./chunk-JZ6XLXTR.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -221,6 +221,10 @@ function wasmRandomScrambleForEvent(event_str) {
     wasm.__wbindgen_add_to_stack_pointer(16);
     wasm.__wbindgen_export_1(deferred3_0, deferred3_1, 1);
   }
+}
+function wasmFreeMemoryForAllScrambleFinders() {
+  const ret = wasm.wasmFreeMemoryForAllScrambleFinders();
+  return ret >>> 0;
 }
 async function __wbg_load(module2, imports) {
   if (typeof Response === "function" && module2 instanceof Response) {
@@ -451,7 +455,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-LRRAZVO4.js")).default;
+    const wasmUint8Array = (await import("./twsearch_wasm_bg-BI4JVWGR.js")).default;
     await twsearch_wasm_default({ module_or_path: wasmUint8Array.buffer });
   })());
 }
@@ -470,7 +474,11 @@ async function wasmTwsearch2(kpuzzleDefinition, searchPattern, options) {
     )
   );
 }
+function wasmFreeMemoryForAllScrambleFinders2() {
+  return wasmFreeMemoryForAllScrambleFinders();
+}
 export {
+  wasmFreeMemoryForAllScrambleFinders2 as wasmFreeMemoryForAllScrambleFinders,
   wasmRandomScrambleForEvent2 as wasmRandomScrambleForEvent,
   wasmTwsearch2 as wasmTwsearch
 };
