@@ -1,3 +1,4 @@
+import type { AnimationTimelineLeaves } from "cubing/twisty/model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import { Move, type Alg } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
@@ -68,8 +69,13 @@ export class SimultaneousMoveIndexer {
   constructor(
     private kpuzzle: KPuzzle,
     alg: Alg,
+    options?: { animationTimelineLeaves?: AnimationTimelineLeaves | null },
   ) {
-    this.animLeaves = demos[alg.toString()] ?? simulMoves(alg);
+    this.animLeaves =
+      options?.animationTimelineLeaves ??
+      demos[alg.toString()] ??
+      simulMoves(alg);
+    console.log(this.animLeaves);
     // TODO: Avoid assuming all base moves are block moves.
   }
 

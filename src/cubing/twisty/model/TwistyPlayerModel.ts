@@ -7,6 +7,7 @@ import { URLProp } from "./props/general/URLProp";
 import { AlgProp } from "./props/puzzle/state/AlgProp";
 import { AlgTransformationProp } from "./props/puzzle/state/AlgTransformationProp";
 import { AnchorTransformationProp } from "./props/puzzle/state/AnchorTransformationProp";
+import { AnimationTimelineLeavesRequestProp } from "./props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesSimplified";
 import { CurrentMoveInfoProp } from "./props/puzzle/state/CurrentMoveInfoProp";
@@ -69,6 +70,7 @@ export class TwistyPlayerModel {
   title = new ArbitraryStringProp();
   videoURL = new URLProp();
   competitionID = new ArbitraryStringProp();
+  animationTimelineLeavesRequest = new AnimationTimelineLeavesRequestProp();
 
   // Depth 1
   puzzleLoader = new PuzzleLoaderProp(
@@ -107,6 +109,7 @@ export class TwistyPlayerModel {
     puzzle: this.puzzleID,
     visualizationStrategy: this.visualizationStrategy,
     indexerConstructorRequest: this.indexerConstructorRequest,
+    animationTimelineLeaves: this.animationTimelineLeavesRequest,
   });
 
   setupAlgTransformation = new AlgTransformationProp({
@@ -119,6 +122,7 @@ export class TwistyPlayerModel {
     indexerConstructor: this.indexerConstructor,
     algWithIssues: this.puzzleAlg,
     kpuzzle: this.kpuzzle,
+    animationTimelineLeaves: this.animationTimelineLeavesRequest,
   });
 
   // Depth 6
