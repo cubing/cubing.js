@@ -15,53 +15,6 @@ import {
   type AnimatedLeafAlgNode,
 } from "./simul-moves";
 
-const demos: Record<string, AnimLeafWithRange[]> = {
-  "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2": [
-    { animLeaf: new Move("y", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("y", -1), start: 1000, end: 2000 },
-    { animLeaf: new Move("U", -1), start: 1000, end: 1600 },
-    { animLeaf: new Move("E", 1), start: 1200, end: 1800 },
-    { animLeaf: new Move("D"), start: 1400, end: 2000 },
-    { animLeaf: new Move("R", 2), start: 2000, end: 3500 },
-    { animLeaf: new Move("r", 2), start: 2000, end: 3500 },
-    { animLeaf: new Move("F", 2), start: 3500, end: 4200 },
-    { animLeaf: new Move("B", 2), start: 3800, end: 4500 },
-    { animLeaf: new Move("U", 1), start: 4500, end: 5500 },
-    { animLeaf: new Move("E", 1), start: 4500, end: 5500 },
-    { animLeaf: new Move("D", -1), start: 4500, end: 5500 },
-    { animLeaf: new Move("R", 2), start: 5500, end: 6500 },
-    { animLeaf: new Move("L", -2), start: 5500, end: 6500 },
-    { animLeaf: new Move("z", 2), start: 5500, end: 6500 },
-    { animLeaf: new Move("S", 2), start: 6500, end: 7500 },
-    { animLeaf: new Move("U"), start: 7500, end: 8000 },
-    { animLeaf: new Move("D"), start: 7750, end: 8250 },
-    { animLeaf: new Move("U"), start: 8000, end: 8500 },
-    { animLeaf: new Move("D"), start: 8250, end: 8750 },
-    { animLeaf: new Move("S", 2), start: 8750, end: 9250 },
-    { animLeaf: new Move("F", -2), start: 8750, end: 10000 },
-    { animLeaf: new Move("B", 2), start: 8750, end: 10000 },
-  ],
-  "M' R' U' D' M R": [
-    { animLeaf: new Move("M", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("R", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("U", -1), start: 1000, end: 2000 },
-    { animLeaf: new Move("D", -1), start: 1000, end: 2000 },
-    { animLeaf: new Move("M"), start: 2000, end: 3000 },
-    { animLeaf: new Move("R"), start: 2000, end: 3000 },
-  ],
-  "U' E' r E r2' E r U E": [
-    { animLeaf: new Move("U", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("E", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("r"), start: 1000, end: 2500 },
-    { animLeaf: new Move("E"), start: 2500, end: 3500 },
-    { animLeaf: new Move("r", -2), start: 3500, end: 5000 },
-    { animLeaf: new Move("E"), start: 5000, end: 6000 },
-    { animLeaf: new Move("r"), start: 6000, end: 7000 },
-    { animLeaf: new Move("U"), start: 7000, end: 8000 },
-    { animLeaf: new Move("E"), start: 7000, end: 8000 },
-  ],
-};
-
 export class SimultaneousMoveIndexer {
   private animLeaves: AnimLeafWithRange[];
   // TODO: Allow custom `durationFn`.
@@ -71,11 +24,7 @@ export class SimultaneousMoveIndexer {
     alg: Alg,
     options?: { animationTimelineLeaves?: AnimationTimelineLeaves | null },
   ) {
-    this.animLeaves =
-      options?.animationTimelineLeaves ??
-      demos[alg.toString()] ??
-      simulMoves(alg);
-    console.log(this.animLeaves);
+    this.animLeaves = options?.animationTimelineLeaves ?? simulMoves(alg);
     // TODO: Avoid assuming all base moves are block moves.
   }
 
