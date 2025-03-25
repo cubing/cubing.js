@@ -29,6 +29,7 @@
         "jszip": "^3.10.1",
         "mocha": "^10.7.3",
         "playwright": "^1.47.2",
+        "printable-shell-command": "^0.1.2",
         "tsup": "^8.3.0",
         "typedoc": "^0.26.7",
         "typescript": "^5.6.2",
@@ -873,6 +874,8 @@
     "portfinder": ["portfinder@1.0.32", "", { "dependencies": { "async": "^2.6.4", "debug": "^3.2.7", "mkdirp": "^0.5.6" } }, "sha512-on2ZJVVDXRADWE6jnQaX0ioEylzgBpQk8r55NE4wjXW1ZxO+BgDlY6DXwj20i0V8eB4SenDQ00WEaxfiIQPcxg=="],
 
     "postcss-load-config": ["postcss-load-config@6.0.1", "", { "dependencies": { "lilconfig": "^3.1.1" }, "peerDependencies": { "jiti": ">=1.21.0", "postcss": ">=8.0.9", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["jiti", "postcss", "tsx", "yaml"] }, "sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g=="],
+
+    "printable-shell-command": ["printable-shell-command@0.1.2", "", {}, "sha512-VVMtFpflBbB3rNUsZgFSWGkWfghBJEnfKc5xkWQ6P0WbpYUPSSuz8K5IR3hf7cUmwH+EK6NGjmfFprOWTJHwTw=="],
 
     "process-nextick-args": ["process-nextick-args@2.0.1", "", {}, "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag=="],
 

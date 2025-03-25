@@ -67,3 +67,13 @@ export function spawnPromise(cmd, args) {
     childProcesses.push(childProcess);
   });
 }
+
+/**
+ * @type {string} cmd
+ * @type {string[]} args
+ * @returns {Promise<void>}
+ */
+export function spawnPromiseForPrintableShellCommand(printableShellCommand) {
+  const [commandName, args] = printableShellCommand.forNode();
+  return spawnPromise(commandName, args);
+}
