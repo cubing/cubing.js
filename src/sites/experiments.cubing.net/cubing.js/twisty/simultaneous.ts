@@ -1,5 +1,5 @@
 import { Alg, Move } from "../../../../cubing/alg";
-import { TwistyPlayer } from "../../../../cubing/twisty";
+import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 
 const supercubeSprite = new URL(
   "./supercube-sprite.png",
@@ -69,21 +69,26 @@ const supercubeSprite = new URL(
 }
 
 {
+  const alg = Alg.fromString("U' E' r E r2' E r U E");
   const player = new TwistyPlayer({
-    alg: Alg.fromString("U' E' r E r2' E r U E"),
+    alg,
   });
+  const algNodes = Array.from(alg.childAlgNodes());
   player.experimentalModel.animationTimelineLeavesRequest.set([
-    { animLeaf: new Move("U", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("E", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("r"), start: 1000, end: 2500 },
-    { animLeaf: new Move("E"), start: 2500, end: 3500 },
-    { animLeaf: new Move("r", -2), start: 3500, end: 5000 },
-    { animLeaf: new Move("E"), start: 5000, end: 6000 },
-    { animLeaf: new Move("r"), start: 6000, end: 7000 },
-    { animLeaf: new Move("U"), start: 7000, end: 8000 },
-    { animLeaf: new Move("E"), start: 7000, end: 8000 },
+    { animLeaf: algNodes[0], start: 0, end: 1000 },
+    { animLeaf: algNodes[1], start: 0, end: 1000 },
+    { animLeaf: algNodes[2], start: 1000, end: 2500 },
+    { animLeaf: algNodes[3], start: 2500, end: 3500 },
+    { animLeaf: algNodes[4], start: 3500, end: 5000 },
+    { animLeaf: algNodes[5], start: 5000, end: 6000 },
+    { animLeaf: algNodes[6], start: 6000, end: 7000 },
+    { animLeaf: algNodes[7], start: 7000, end: 8000 },
+    { animLeaf: algNodes[8], start: 7000, end: 8000 },
   ]);
   document.querySelector(".demo4")!.appendChild(player);
+  document
+    .querySelector(".demo4")!
+    .appendChild(new TwistyAlgViewer({ twistyPlayer: player }));
   player.tempoScale = 4;
 }
 
@@ -94,4 +99,25 @@ const supercubeSprite = new URL(
   });
   player.experimentalModel.indexerConstructorRequest.set("simultaneous");
   document.querySelector(".demo5")!.appendChild(player);
+}
+
+{
+  const alg = Alg.fromString("R U R' U R U2' R'");
+  const player = new TwistyPlayer({
+    alg,
+  });
+  const algNodes = Array.from(alg.childAlgNodes());
+  player.experimentalModel.animationTimelineLeavesRequest.set([
+    { animLeaf: algNodes[0], start: 0, end: 120 },
+    { animLeaf: algNodes[1], start: 150, end: 235 },
+    { animLeaf: algNodes[2], start: 240, end: 270 },
+    { animLeaf: algNodes[3], start: 270, end: 310 },
+    { animLeaf: algNodes[4], start: 335, end: 380 },
+    { animLeaf: algNodes[5], start: 380, end: 470 },
+    { animLeaf: algNodes[6], start: 470, end: 535 },
+  ]);
+  document.querySelector(".demo6")!.appendChild(player);
+  document
+    .querySelector(".demo6")!
+    .appendChild(new TwistyAlgViewer({ twistyPlayer: player }));
 }
