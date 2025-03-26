@@ -107,6 +107,14 @@ export class SimultaneousMoveIndexer {
     let patternIndex: number = 0;
     for (const leafWithRange of this.animLeaves) {
       if (leafWithRange.end <= windowEarliestTimestamp) {
+        if (
+          // biome-ignore lint/suspicious/noGlobalIsFinite: TODO: wait on Biome to remove this check by default
+          !isFinite(windowEarliestTimestamp) &&
+          leafWithRange.start > timestamp
+        ) {
+          // Allow for time segments without any active leaf.
+          break;
+        }
         patternIndex++;
       } else if (leafWithRange.start > timestamp) {
         break;
