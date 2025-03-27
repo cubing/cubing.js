@@ -41,6 +41,7 @@ U U // PLL (0.240s)`;
 
   // `.filter(…)` on iterators is not generally available yet: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/filter
   const moves = Array.from(parsedAlg.childAlgNodes()).filter((algNode) =>
+    // We don't have any pauses in this alg, so we just filter out moves for now.
     algNode.is(Move),
   );
   if (moves.length !== solutionMoveTimestamps.length) {
@@ -53,6 +54,7 @@ U U // PLL (0.240s)`;
       start:
         ((solutionMoveTimestamps[i] ?? 0) + solutionMoveTimestamps[i - 1]) / 2,
       end:
+        // Note: this assumes that it's reasonable for each move to bump up against the start of the next one. If there's a gap over, say, 1 second, it would be worth putting a limit.
         (solutionMoveTimestamps[i] +
           (solutionMoveTimestamps[i + 1] ?? duration)) /
         2,
