@@ -29,7 +29,8 @@ import {
   customElementsShim,
 } from "./node-custom-element-shims";
 
-const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
+// TODO: dynamically adjust the fraction to take into account moves that rotate a lot (e.g. `R100`).
+const DEFAULT_OFFSET_FRACTION = 0.25;
 
 class DataDown {
   earliestMoveIndex: number;
@@ -490,7 +491,9 @@ export class TwistyAlgViewer extends HTMLElementShim {
       twistyPlayer.pause();
       const timestampPromise = (async (): Promise<MillisecondTimestamp> => {
         const indexer = await twistyPlayer.experimentalModel.indexer.get();
-        const offset = offsetIntoMove ? DEFAULT_OFFSET_MS : 0;
+        const offset = offsetIntoMove
+          ? indexer.moveDuration(index) * DEFAULT_OFFSET_FRACTION
+          : 0;
         return (
           indexer.indexToMoveStartTimestamp(index) +
           indexer.moveDuration(index) -
