@@ -17,6 +17,11 @@ for (const fileName of await readdir(DIR)) {
     }
     case "index.js": {
       contents = contents.replace(`"cubing/alg"`, `"../../../alg"`);
+      contents = contents.replace(
+        `module_or_path = new URL("twsearch_wasm_bg.wasm", import.meta.url);`,
+        // TODO: change this once the ecosystem is in a better place.
+        `throw new Error("Only base 64 WASM loading is supported at the moment.")`,
+      );
       break;
     }
     default: {
