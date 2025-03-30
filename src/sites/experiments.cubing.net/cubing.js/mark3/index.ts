@@ -1,4 +1,4 @@
-import type { EventID } from "cubing/puzzles/events";
+import { isEventID, type EventID } from "cubing/puzzles/events";
 import { eventInfo, twizzleEvents } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import { TwistyPlayer } from "../../../../cubing/twisty";
@@ -65,7 +65,9 @@ async function addScramble(
   scrambleTD.textContent = "Generating…";
   const playerTD = tr.appendChild(document.createElement("td"));
   const player = new TwistyPlayer({
-    puzzle: eventInfo(currentEventID as EventID)?.puzzleID,
+    puzzle: isEventID(currentEventID)
+      ? eventInfo(currentEventID).puzzleID
+      : undefined,
     visualization: "2D",
     controlPanel: "none",
     background: "none",

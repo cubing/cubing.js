@@ -5,24 +5,29 @@ interface EventInfo {
   eventName: string;
 }
 
-export type WcaEventID =
-  | "333"
-  | "222"
-  | "444"
-  | "555"
-  | "666"
-  | "777"
-  | "333bf"
-  | "333fm"
-  | "333oh"
-  | "clock"
-  | "minx"
-  | "pyram"
-  | "skewb"
-  | "sq1"
-  | "444bf"
-  | "555bf"
-  | "333mbf";
+const wcaEventIDs = [
+  "333",
+  "222",
+  "444",
+  "555",
+  "666",
+  "777",
+  "333bf",
+  "333fm",
+  "333oh",
+  "clock",
+  "minx",
+  "pyram",
+  "skewb",
+  "sq1",
+  "444bf",
+  "555bf",
+  "333mbf",
+] as const;
+export type WcaEventID = (typeof wcaEventIDs)[number];
+export function isWcaEventID(eventID: string): eventID is WcaEventID {
+  return wcaEventIDs.includes(eventID as WcaEventID);
+}
 
 export const wcaEvents: Record<WcaEventID, EventInfo> = {
   "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
@@ -49,15 +54,20 @@ export function wcaEventInfo(event: WcaEventID): EventInfo | null {
   return wcaEvents[event] ?? null;
 }
 
-export type EventID =
-  | WcaEventID
-  | "333ft"
-  | "fto"
-  | "master_tetraminx"
-  | "kilominx"
-  | "redi_cube"
-  | "baby_fto"
-  | "loopover";
+const eventIDs = [
+  ...wcaEventIDs,
+  "333ft",
+  "fto",
+  "master_tetraminx",
+  "kilominx",
+  "redi_cube",
+  "baby_fto",
+  "loopover",
+] as const;
+export type EventID = (typeof eventIDs)[number];
+export function isEventID(eventID: string): eventID is EventID {
+  return eventIDs.includes(eventID as EventID);
+}
 
 export const twizzleEvents: Record<EventID, EventInfo> = {
   ...wcaEvents,
@@ -86,6 +96,6 @@ export const twizzleEvents: Record<EventID, EventInfo> = {
 };
 
 /** @category Event Info */
-export function eventInfo(event: EventID): EventInfo | null {
-  return twizzleEvents[event] ?? null;
+export function eventInfo(event: EventID): EventInfo {
+  return twizzleEvents[event];
 }

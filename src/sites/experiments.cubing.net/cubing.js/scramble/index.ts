@@ -24,7 +24,7 @@ window.addEventListener("DOMContentLoaded", () => {
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";
     try {
-      twistyPlayer.puzzle = eventInfo(select.value as EventID)!.puzzleID;
+      twistyPlayer.puzzle = eventInfo(select.value as EventID).puzzleID;
     } finally {
       // TODO
     }

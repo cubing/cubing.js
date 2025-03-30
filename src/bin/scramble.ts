@@ -10,7 +10,7 @@ import { eventInfo } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
 import "./guards/cmd-ts-too-guard";
-import type { EventID } from "cubing/puzzles/events";
+import { isEventID, type EventID } from "cubing/puzzles/events";
 
 const {
   binary,
@@ -76,8 +76,10 @@ const app = command({
 
     function scrambleLink(scramble: Alg): string {
       const url = new URL("https://alpha.twizzle.net/edit/");
-      const puzzleID = eventInfo(eventID as EventID)?.puzzleID;
-      puzzleID && url.searchParams.set("puzzle", puzzleID);
+      const puzzleID = isEventID(eventID)
+        ? eventInfo(eventID)?.puzzleID
+        : undefined;
+      if (puzzleID) url.searchParams.set("puzzle", puzzleID);
       url.searchParams.set("alg", scrambleText(scramble));
       return url.toString();
     }
