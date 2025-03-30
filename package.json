@@ -77,7 +77,6 @@
     "barely-a-dev-server": "^0.7.1",
     "chai": "^5.1.1",
     "esbuild": "^0.25.0",
-    "getbuiltinmodule-ponyfill": "^1.0.1",
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
     "playwright": "^1.47.2",
@@ -88,7 +87,7 @@
   },
   "engines": {
     "node": ">=20.16.0",
-    "bun": ">=1.2.0"
+    "bun": ">=1.2.7"
   },
   "files": [
     "./dist/bin/",

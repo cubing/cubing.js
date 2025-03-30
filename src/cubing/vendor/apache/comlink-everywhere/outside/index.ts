@@ -1,4 +1,3 @@
-import { getBuiltinModule } from "getbuiltinmodule-ponyfill";
 import nodeEndpoint from "../node-adapter";
 
 export { wrap } from "comlink";
@@ -10,7 +9,9 @@ async function nodeWorker(
   source: string | URL,
   options?: { eval?: boolean },
 ): Promise<Worker> {
-  const { Worker: NodeWorker } = await getBuiltinModule("node:worker_threads");
+  const { Worker: NodeWorker } = globalThis.process.getBuiltinModule(
+    "node:worker_threads",
+  );
   const worker = new NodeWorker(source, options);
   worker.unref();
   return nodeEndpoint(worker);

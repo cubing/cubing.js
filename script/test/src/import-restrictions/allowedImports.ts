@@ -131,14 +131,10 @@ export const mainAllowedImports: AllowedImports = {
     static: ["three", "src/cubing/vendor/mit/three"],
   },
   "src/cubing/vendor": {
-    static: [
-      "src/cubing/alg",
-      "random-uint-below",
-      "getbuiltinmodule-ponyfill",
-    ],
+    static: ["src/cubing/alg", "random-uint-below"],
   },
   "src/cubing/vendor/apache/comlink-everywhere": {
-    static: ["comlink", "getbuiltinmodule-ponyfill"],
+    static: ["comlink"],
   },
   "src/cubing/vendor/mit/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
     static: ["src/cubing/search/cubing-private"],
@@ -147,9 +143,7 @@ export const mainAllowedImports: AllowedImports = {
   "src/sites": {
     static: ["src/cubing", "jszip", "three"],
   },
-  "src/sites/experiments.cubing.net/cubing.js/rust/wasm": {
-    static: ["getbuiltinmodule-ponyfill"],
-  },
+  "src/sites/experiments.cubing.net/cubing.js/rust/wasm": {},
   "src/sites/alpha.twizzle.net/explore": {
     static: ["src/cubing/puzzle-geometry/cubing-private"],
   },
@@ -166,7 +160,6 @@ export const specAllowedImports: AllowedImports = {
       "comlink",
       "three",
       "random-uint-below",
-      "getbuiltinmodule-ponyfill",
     ],
   },
   "src/test/chai-workarounds": {

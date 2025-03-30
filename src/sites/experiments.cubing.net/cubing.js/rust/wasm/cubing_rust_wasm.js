@@ -1,5 +1,3 @@
-import { getBuiltinModule } from "getbuiltinmodule-ponyfill";
-
 let wasm;
 
 const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
@@ -256,7 +254,7 @@ async function init(input) {
             if (!(e instanceof TypeError)) {
                 throw e;
             }
-            input = await getBuiltinModule("node:fs/promises").readFile(input);
+            input = globalThis.process.getBuiltinModule("node:fs/promises").readFile(input);
         }
     }
 

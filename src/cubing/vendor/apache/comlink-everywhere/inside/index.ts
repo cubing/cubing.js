@@ -1,5 +1,4 @@
 import { expose as comlinkExpose } from "comlink";
-import { getBuiltinModule } from "getbuiltinmodule-ponyfill";
 import nodeEndpoint from "../node-adapter";
 
 const useNodeWorkarounds =
@@ -11,7 +10,9 @@ export async function nodeEndpointPort(): Promise<
     nodeWorker?: import("node:worker_threads").Worker;
   }
 > {
-  const { parentPort } = await getBuiltinModule("node:worker_threads");
+  const { parentPort } = globalThis.process.getBuiltinModule(
+    "node:worker_threads",
+  );
   return nodeEndpoint(
     parentPort as unknown as import("node:worker_threads").Worker,
   );
