@@ -1,3 +1,4 @@
+import type { EventID } from "cubing/puzzles/events";
 import type { Alg } from "../../alg";
 import {
   KPattern,
@@ -78,7 +79,7 @@ let queuedPrefetchTimeoutID: ReturnType<typeof setTimeout> | null = null;
 let scrambleActivityLock: Promise<Alg>;
 
 async function randomScrambleForEvent(
-  eventID: string,
+  eventID: EventID,
   options?: { isPrefetch?: boolean },
 ): Promise<Alg> {
   return (scrambleActivityLock = (async () => {
@@ -175,7 +176,7 @@ export enum PrefetchLevel {
 let currentPrefetchLevel = PrefetchLevel.Auto;
 
 export const insideAPI = {
-  initialize: async (eventID: string) => {
+  initialize: async (eventID: EventID) => {
     switch (eventID) {
       case "222":
         return measurePerf("preInitialize222", preInitialize222);
@@ -194,7 +195,7 @@ export const insideAPI = {
     currentPrefetchLevel = prefetchLevel as PrefetchLevel;
   },
 
-  randomScrambleForEvent: async (eventID: string): Promise<Alg> => {
+  randomScrambleForEvent: async (eventID: EventID): Promise<Alg> => {
     let promise = prefetchPromises.get(eventID);
     if (promise) {
       prefetchPromises.delete(eventID);
@@ -227,7 +228,7 @@ export const insideAPI = {
     return promise;
   },
 
-  randomScrambleStringForEvent: async (eventID: string): Promise<string> => {
+  randomScrambleStringForEvent: async (eventID: EventID): Promise<string> => {
     return (await insideAPI.randomScrambleForEvent(eventID)).toString();
   },
 

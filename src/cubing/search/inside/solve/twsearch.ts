@@ -1,3 +1,4 @@
+import type { EventID } from "cubing/puzzles/events";
 import type { Alg } from "../../../alg";
 import type {
   KPattern,
@@ -28,7 +29,7 @@ export async function wasmTwsearch(
 }
 
 export async function wasmRandomScrambleForEvent(
-  eventID: string,
+  eventID: EventID,
 ): Promise<Alg> {
   const { wasmRandomScrambleForEvent } = await twsearchPromise;
   return wasmRandomScrambleForEvent(eventID);

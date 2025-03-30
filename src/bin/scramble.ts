@@ -10,6 +10,7 @@ import { eventInfo } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
 import "./guards/cmd-ts-too-guard";
+import type { EventID } from "cubing/puzzles/events";
 
 const {
   binary,
@@ -75,7 +76,7 @@ const app = command({
 
     function scrambleLink(scramble: Alg): string {
       const url = new URL("https://alpha.twizzle.net/edit/");
-      const puzzleID = eventInfo(eventID)?.puzzleID;
+      const puzzleID = eventInfo(eventID as EventID)?.puzzleID;
       puzzleID && url.searchParams.set("puzzle", puzzleID);
       url.searchParams.set("alg", scrambleText(scramble));
       return url.toString();
@@ -106,7 +107,7 @@ const app = command({
     }
 
     if (format !== "json-text" && amount === 1) {
-      const scramble = await randomScrambleForEvent(eventID);
+      const scramble = await randomScrambleForEvent(eventID as EventID);
 
       switch (format) {
         case "text": {
@@ -138,7 +139,7 @@ const app = command({
         format === "json-text" ? new JSONListPrinter() : undefined;
       for (let i = 0; i < amount; i++) {
         // @ts-ignore: Top-level await is okay because this is not part of the main library.
-        const scramble = await randomScrambleForEvent(eventID);
+        const scramble = await randomScrambleForEvent(eventID as EventID);
         switch (format) {
           case "text": {
             console.log(`// Scramble #${i + 1}`);

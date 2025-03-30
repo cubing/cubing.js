@@ -1,3 +1,4 @@
+import type { EventID } from "cubing/puzzles/events";
 import { Alg } from "../alg";
 import type { KPuzzle } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
@@ -34,7 +35,7 @@ function getCachedWorkerInstance(): Promise<InsideOutsideAPI> {
 // pre-initialize multiple events will initialize them consecutively. Scrambles
 // for a given event cannot be computed while another event is being initialized.
 export function _preInitializationHintForEvent(
-  eventID: string,
+  eventID: EventID,
   // callback?: () => void
 ): void {
   switch (eventID) {
@@ -47,7 +48,7 @@ export function _preInitializationHintForEvent(
   })();
 }
 
-export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
+export async function randomScrambleForEvent(eventID: EventID): Promise<Alg> {
   switch (eventID) {
     case "clock":
       return Alg.fromString(await randomClockScrambleString());
@@ -58,7 +59,7 @@ export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
 }
 
 export async function _randomScrambleStringForEvent(
-  eventID: string,
+  eventID: EventID,
 ): Promise<string> {
   if (searchOutsideDebugGlobals.forceNewWorkerForEveryScramble) {
   }
@@ -69,7 +70,7 @@ export async function _randomScrambleStringForEvent(
 }
 
 export async function randomScrambleStringForEvent(
-  eventID: string,
+  eventID: EventID,
 ): Promise<string> {
   switch (eventID) {
     case "clock":

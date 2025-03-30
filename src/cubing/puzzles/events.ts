@@ -5,7 +5,26 @@ interface EventInfo {
   eventName: string;
 }
 
-export const wcaEvents: Record<string, EventInfo> = {
+export type WcaEventID =
+  | "333"
+  | "222"
+  | "444"
+  | "555"
+  | "666"
+  | "777"
+  | "333bf"
+  | "333fm"
+  | "333oh"
+  | "clock"
+  | "minx"
+  | "pyram"
+  | "skewb"
+  | "sq1"
+  | "444bf"
+  | "555bf"
+  | "333mbf";
+
+export const wcaEvents: Record<WcaEventID, EventInfo> = {
   "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
   "222": { puzzleID: "2x2x2", eventName: "2x2x2 Cube" },
   "444": { puzzleID: "4x4x4", eventName: "4x4x4 Cube" },
@@ -26,12 +45,23 @@ export const wcaEvents: Record<string, EventInfo> = {
 };
 
 /** @category Event Info */
-export function wcaEventInfo(event: string): EventInfo | null {
+export function wcaEventInfo(event: WcaEventID): EventInfo | null {
   return wcaEvents[event] ?? null;
 }
 
-export const twizzleEvents: Record<string, EventInfo> = {
+export type EventID =
+  | WcaEventID
+  | "333ft"
+  | "fto"
+  | "master_tetraminx"
+  | "kilominx"
+  | "redi_cube"
+  | "baby_fto"
+  | "loopover";
+
+export const twizzleEvents: Record<EventID, EventInfo> = {
   ...wcaEvents,
+  "333ft": { puzzleID: "3x3x3", eventName: "3x3x3 With Feet" },
   fto: { puzzleID: "fto", eventName: "Face-Turning Octahedron" },
   master_tetraminx: {
     puzzleID: "master_tetraminx",
@@ -56,6 +86,6 @@ export const twizzleEvents: Record<string, EventInfo> = {
 };
 
 /** @category Event Info */
-export function eventInfo(event: string): EventInfo | null {
+export function eventInfo(event: EventID): EventInfo | null {
   return twizzleEvents[event] ?? null;
 }

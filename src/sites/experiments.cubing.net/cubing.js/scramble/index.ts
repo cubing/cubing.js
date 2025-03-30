@@ -1,3 +1,4 @@
+import type { EventID } from "cubing/puzzles/events";
 import { eventInfo } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import "../../../../cubing/twisty";
@@ -13,7 +14,7 @@ const button = document.querySelector("button") as HTMLButtonElement;
 async function newScramble() {
   scrambleStringDiv.textContent = "⏳";
   twistyPlayer.alg = "";
-  const scramble = await randomScrambleForEvent(select.value);
+  const scramble = await randomScrambleForEvent(select.value as EventID);
   scrambleStringDiv.textContent = scramble.toString();
   twistyPlayer.alg = scramble;
 }
@@ -23,7 +24,7 @@ window.addEventListener("DOMContentLoaded", () => {
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";
     try {
-      twistyPlayer.puzzle = eventInfo(select.value)!.puzzleID;
+      twistyPlayer.puzzle = eventInfo(select.value as EventID)!.puzzleID;
     } finally {
       // TODO
     }
