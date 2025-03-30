@@ -1,6 +1,6 @@
-// Generated from `twsearch` v0.7.0-71-g56437b62
+// Generated from `twsearch` --g
 
-import "./chunk-JZ6XLXTR.js";
+import "./chunk-I5UGWVXE.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -439,7 +439,7 @@ async function __wbg_init(module_or_path) {
     }
   }
   if (typeof module_or_path === "undefined") {
-    module_or_path = new URL("twsearch_wasm_bg.wasm", import.meta.url);
+    throw new Error("Only base 64 WASM loading is supported at the moment.")
   }
   const imports = __wbg_get_imports();
   if (typeof module_or_path === "string" || typeof Request === "function" && module_or_path instanceof Request || typeof URL === "function" && module_or_path instanceof URL) {
@@ -455,7 +455,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-BI4JVWGR.js")).default;
+    const wasmUint8Array = (await import("./twsearch_wasm_bg-FWKR4AQ6.js")).default;
     await twsearch_wasm_default({ module_or_path: wasmUint8Array.buffer });
   })());
 }
