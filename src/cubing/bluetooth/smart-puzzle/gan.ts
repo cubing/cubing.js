@@ -2,7 +2,7 @@
 
 import { Quaternion } from "three";
 import { Move } from "../../alg";
-import type { KPuzzle, KPatternData } from "../../kpuzzle";
+import type { KPatternData, KPuzzle } from "../../kpuzzle";
 import { KPattern } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import {
@@ -164,7 +164,7 @@ const commands: { [cmd: string]: BufferSource } = {
   ]),
 };
 
-function buf2hex(buffer: ArrayBuffer): string {
+function buf2hex(buffer: ArrayBufferLike): string {
   // buffer is an ArrayBuffer
   return (
     Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
@@ -452,7 +452,7 @@ export class GanCube extends BluetoothPuzzle {
     await faceletStatus1Characteristic.writeValue(commands.reset);
   }
 
-  public async readFaceletStatus1Characteristic(): Promise<ArrayBuffer> {
+  public async readFaceletStatus1Characteristic(): Promise<ArrayBufferLike> {
     const faceletStatus1Characteristic =
       await this.faceletStatus1Characteristic();
     return (await faceletStatus1Characteristic.readValue()).buffer;
@@ -464,7 +464,7 @@ export class GanCube extends BluetoothPuzzle {
     return buf2hex((await faceletStatus2Characteristic.readValue()).buffer);
   }
 
-  public async readActualAngleAndBatteryCharacteristic(): Promise<ArrayBuffer> {
+  public async readActualAngleAndBatteryCharacteristic(): Promise<ArrayBufferLike> {
     const actualAngleAndBatteryCharacteristic =
       await this.actualAngleAndBatteryCharacteristic();
     return (await actualAngleAndBatteryCharacteristic.readValue()).buffer;
