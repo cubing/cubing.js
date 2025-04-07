@@ -92,7 +92,7 @@ export const clockJSON: KPuzzleDefinition = {
           6, 3, 0, 7, 4, 1, 8, 5, 2, 11, 14, 17, 10, 13, 16, 9, 12, 15,
         ],
         orientationDelta: [
-          3, 3, 3, 3, 3, 3, 3, 3, 3, -3, -3, -3, -3, -3, -3, -3, -3, -3,
+          3, 3, 3, 3, 3, 3, 3, 3, 3, 9, 9, 9, 9, 9, 9, 9, 9, 9,
         ],
       },
       FACES: {
@@ -153,8 +153,8 @@ export const clockJSON: KPuzzleDefinition = {
 
     BMUL_PLUS_: "[y2: MUR_PLUS_']",
     BMUR_PLUS_: "[y2: MUL_PLUS_']",
-    BMDR_PLUS_: "[y2: MDR_PLUS_']",
-    BMDL_PLUS_: "[y2: MDL_PLUS_']",
+    BMDR_PLUS_: "[y2: MDL_PLUS_']",
+    BMDL_PLUS_: "[y2: MDR_PLUS_']",
 
     UL: ".",
     UR: ".",
