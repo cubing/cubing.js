@@ -35,57 +35,10 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
   <g>
     <g transform="translate(24, 24)">
       <use href="#frame" id="FRAME-l0-o0" style="fill: #113366"/>
-      <use id="PEG_CAPS-l0-o0" href="#peg" transform="translate(66, 66)" style="fill: #446699"/>
-      <use id="PEG_CAPS-l0-o1" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o2" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o3" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o4" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o5" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o6" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o7" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o8" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o9" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o10" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l0-o11" href="#peg" transform="translate(66, 66)" style="fill: #44669900"/>
-      
-      <use id="PEG_CAPS-l1-o0" href="#peg" transform="translate(126, 66)" style="fill: #446699"/>
-      <use id="PEG_CAPS-l1-o1" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o2" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o3" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o4" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o5" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o6" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o7" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o8" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o9" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o10" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l1-o11" href="#peg" transform="translate(126, 66)" style="fill: #44669900"/>
-      
-      <use id="PEG_CAPS-l2-o0" href="#peg" transform="translate(126, 126)" style="fill: #446699"/>
-      <use id="PEG_CAPS-l2-o1" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o2" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o3" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o4" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o5" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o6" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o7" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o8" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o9" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o10" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l2-o11" href="#peg" transform="translate(126, 126)" style="fill: #44669900"/>
-      
-      <use id="PEG_CAPS-l3-o0" href="#peg" transform="translate(66, 126)" style="fill: #446699"/>
-      <use id="PEG_CAPS-l3-o1" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o2" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o3" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o4" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o5" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o6" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o7" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o8" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o9" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o10" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
-      <use id="PEG_CAPS-l3-o11" href="#peg" transform="translate(66, 126)" style="fill: #44669900"/>
+      <use href="#peg" transform="translate(66, 66)" style="fill: #446699"/>
+      <use href="#peg" transform="translate(126, 66)" style="fill: #446699"/>
+      <use href="#peg" transform="translate(126, 126)" style="fill: #446699"/>
+      <use href="#peg" transform="translate(66, 126)" style="fill: #446699"/>
 
       <g transform="translate(36, 36)">
         <circle id="FACES-l0-o0" stroke="#000000" style="fill: #CCDDEE" r="20"></circle>
@@ -311,57 +264,10 @@ export const clockSVG = `<?xml version="1.0" encoding="UTF-8"?>
       </g>
       <use href="#frame" id="FRAME-l0-o1" style="fill: #CCDDEE"/>
 
-      <use id="PEG_CAPS-l4-o0" href="#peg" transform="translate(66, 66)" style="fill: #88AACC"/>
-      <use id="PEG_CAPS-l4-o1" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o2" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o3" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o4" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o5" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o6" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o7" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o8" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o9" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o10" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l4-o11" href="#peg" transform="translate(66, 66)" style="fill: #88AACC00"/>
-      
-      <use id="PEG_CAPS-l5-o0" href="#peg" transform="translate(126, 66)" style="fill: #88AACC"/>
-      <use id="PEG_CAPS-l5-o1" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o2" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o3" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o4" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o5" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o6" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o7" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o8" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o9" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o10" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l5-o11" href="#peg" transform="translate(126, 66)" style="fill: #88AACC00"/>
-      
-      <use id="PEG_CAPS-l6-o0" href="#peg" transform="translate(126, 126)" style="fill: #88AACC"/>
-      <use id="PEG_CAPS-l6-o1" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o2" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o3" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o4" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o5" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o6" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o7" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o8" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o9" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o10" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l6-o11" href="#peg" transform="translate(126, 126)" style="fill: #88AACC00"/>
-      
-      <use id="PEG_CAPS-l7-o0" href="#peg" transform="translate(66, 126)" style="fill: #88AACC"/>
-      <use id="PEG_CAPS-l7-o1" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o2" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o3" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o4" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o5" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o6" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o7" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o8" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o9" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o10" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
-      <use id="PEG_CAPS-l7-o11" href="#peg" transform="translate(66, 126)" style="fill: #88AACC00"/>
+      <use href="#peg" transform="translate(66, 66)" style="fill: #88AACC"/>
+      <use href="#peg" transform="translate(126, 66)" style="fill: #88AACC"/>
+      <use href="#peg" transform="translate(126, 126)" style="fill: #88AACC"/>
+      <use href="#peg" transform="translate(66, 126)" style="fill: #88AACC"/>
 
       <g transform="translate(36, 36)">
         <circle id="FACES-l9-o0" stroke="#000000" style="fill: #113366" r="20"></circle>

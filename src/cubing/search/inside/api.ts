@@ -14,11 +14,7 @@ import {
   random333Scramble,
   solve333,
 } from "./solve/puzzles/3x3x3";
-import {
-  initialize444,
-  random444OrientedScramble,
-  random444Scramble,
-} from "./solve/puzzles/4x4x4";
+import { initialize444 } from "./solve/puzzles/4x4x4";
 import { randomFTOScramble } from "./solve/puzzles/fto";
 import { randomKilominxScramble } from "./solve/puzzles/kilominx";
 import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx";
@@ -101,7 +97,7 @@ async function randomScrambleForEvent(
             quantumMoveOrder: () => 4,
           },
         });
-      // case "444":
+      case "444":
       case "555":
       case "666":
       case "777":
@@ -134,15 +130,15 @@ async function randomScrambleForEvent(
           "random333OrientedScramble",
           random333OrientedScramble,
         );
-      case "444":
-        return measurePerf("random444Scramble", random444Scramble, {
-          isPrefetch: options?.isPrefetch,
-        });
-      case "444bf":
-        return measurePerf(
-          "random444OrientedScramble",
-          random444OrientedScramble,
-        );
+      // case "444":
+      //   return measurePerf("random444Scramble", random444Scramble, {
+      //     isPrefetch: options?.isPrefetch,
+      //   });
+      // case "444bf":
+      //   return measurePerf(
+      //     "random444OrientedScramble",
+      //     random444OrientedScramble,
+      //   );
       case "fto":
         return measurePerf("randomFTOScramble", randomFTOScramble, {
           isPrefetch: options?.isPrefetch,
