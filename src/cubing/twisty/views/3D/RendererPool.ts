@@ -11,13 +11,8 @@
 
 // const sharedRenderer: WebGLRenderer | null = null;
 
+import type { Camera, LinearSRGBColorSpace, Scene, WebGLRenderer } from "three";
 import { THREEJS } from "../../heavy-code-imports/3d";
-import {
-  type Camera,
-  type Scene,
-  type WebGLRenderer,
-  LinearSRGBColorSpace,
-} from "three";
 import { pixelRatio } from "../canvas";
 
 const renderers: Promise<WebGLRenderer>[] = [];
@@ -65,13 +60,17 @@ export async function renderPooled(
   context.drawImage(rendererCanvas, 0, 0);
 }
 
+// Workaround to avoid an import of `three`.
+const linearSRGBColorSpace =
+  "srgb-linear" satisfies typeof LinearSRGBColorSpace;
+
 export async function newRenderer(): Promise<WebGLRenderer> {
   const rendererConstructor = (await THREEJS).WebGLRenderer;
   const renderer = new rendererConstructor({
     antialias: true,
     alpha: true,
   });
-  renderer.outputColorSpace = LinearSRGBColorSpace; // TODO(https://github.com/cubing/cubing.js/issues/308): remove this
+  renderer.outputColorSpace = linearSRGBColorSpace; // TODO(https://github.com/cubing/cubing.js/issues/308): remove this
   renderer.setPixelRatio(pixelRatio());
   return renderer;
 }
