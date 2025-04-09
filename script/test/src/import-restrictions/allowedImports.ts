@@ -128,6 +128,9 @@ export const mainAllowedImports: AllowedImports = {
     static: ["three"],
   },
   "src/cubing/twisty/views/3D": {
+    static: ["src/cubing/vendor/mit/three"],
+  },
+  "src/cubing/twisty/views/3D/puzzles": {
     static: ["three", "src/cubing/vendor/mit/three"],
   },
   "src/cubing/vendor": {

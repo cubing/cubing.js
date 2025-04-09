@@ -11,8 +11,13 @@
 
 // const sharedRenderer: WebGLRenderer | null = null;
 
-import type { Camera, LinearSRGBColorSpace, Scene, WebGLRenderer } from "three";
 import { THREEJS } from "../../heavy-code-imports/3d";
+import type {
+  Camera,
+  LinearSRGBColorSpace,
+  Scene,
+  WebGLRenderer,
+} from "../../heavy-code-imports/three-types";
 import { pixelRatio } from "../canvas";
 
 const renderers: Promise<WebGLRenderer>[] = [];
