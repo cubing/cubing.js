@@ -200,7 +200,7 @@ test-dist-lib: \
 	test-dist-lib-perf \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-lib-build-size \
-	test-dist-sites-experiments # keep CI.yml in sync with this
+	test-dist-sites-twizzle # keep CI.yml in sync with this
 
 .PHONY: test-dist-lib-node-import
 test-dist-lib-node-import: build-lib-js
@@ -226,9 +226,9 @@ test-dist-lib-plain-esbuild-compat: build-lib-js
 test-dist-lib-build-size: build-lib-js
 	${BUN_RUN} ./script/test/dist/lib/cubing/build-size/main.ts
 
-.PHONY: test-dist-sites-experiments
-test-dist-sites-experiments: playwright-install build-sites
-	${BUN} ./script/test/dist/sites/experiments.cubing.net/main.js
+.PHONY: test-dist-sites-twizzle
+test-dist-sites-twizzle: playwright-install build-sites
+	${NODE} ./script/test/dist/sites/alpha.twizzle.net/main.js
 
 .PHONY: test-dist-bin
 test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec

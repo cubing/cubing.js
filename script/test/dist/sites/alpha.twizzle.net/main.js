@@ -1,8 +1,17 @@
+import { env } from "node:process";
 import { chromium } from "playwright";
 import { startServer } from "../../../../lib/experiments-server/index.js";
 
-const OPEN_REPL = false; // Set to `true` for testing.
-const HEADLESS = !OPEN_REPL;
+const OPEN_REPL = env["OPEN_REPL_FOR_BROWSER_TESTS"] === "true"; // Set to `true` for testing.
+const HEADLESS = !OPEN_REPL; // TODO: doesn't work?
+
+if (!OPEN_REPL) {
+  console.error(`To test with a repl and browser, run:
+
+    env OPEN_REPL_FOR_BROWSER_TESTS=true make test-dist-sites-twizzle
+
+`);
+}
 
 let exitCode = 0;
 function assert(description, expected, observed) {
@@ -52,6 +61,40 @@ async function runTest() {
     new URL(page.url()).searchParams.get("puzzle"),
   );
 
+  await page.goto("http://localhost:4443/alpha.twizzle.net/edit/?puzzle=clock");
+  assert(
+    "three.js initially loaded",
+    "undefined",
+    await page.evaluate(() => {
+      return typeof globalThis.__THREE__;
+    }),
+  );
+  await (await page.waitForSelector(".puzzle")).selectOption("3x3x3");
+
+  // TODO: this implementation is very manual, and therefor brittle to maintain.
+  await (async () => {
+    for (
+      let waitMilliseconds = 1;
+      waitMilliseconds < 5000;
+      waitMilliseconds *= 2
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, waitMilliseconds));
+      const typeof__THREE__ = await page.evaluate(() => {
+        return typeof globalThis.__THREE__;
+      });
+      if (typeof__THREE__ === "string") {
+        return;
+      }
+    }
+  })();
+  assert(
+    "three.js loaded after switching to 3×3×3",
+    "string",
+    await page.evaluate(() => {
+      return typeof globalThis.__THREE__;
+    }),
+  );
+
   if (OPEN_REPL) {
     globalThis.page = page;
     (await import("node:repl")).start();
@@ -59,6 +102,12 @@ async function runTest() {
     await browser.close();
     process.exit(exitCode);
   }
+
+  // await page.screenshot({
+  //   path: "out.png",
+  //   omitBackground: true,
+  //   fullPage: true,
+  // });
 }
 
 startServer();

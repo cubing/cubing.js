@@ -86,7 +86,7 @@ jobs:
       - run: make build-bin
       - run: make test-dist-bin
       - run: make build-sites
-      - run: make test-dist-sites-experiments
+      - run: make test-dist-sites-twizzle
       - run: make clean
 
   test-make-test-fast:
