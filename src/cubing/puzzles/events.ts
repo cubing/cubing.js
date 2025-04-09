@@ -5,7 +5,31 @@ interface EventInfo {
   eventName: string;
 }
 
-export const wcaEvents: Record<string, EventInfo> = {
+const wcaEventIDs = [
+  "333",
+  "222",
+  "444",
+  "555",
+  "666",
+  "777",
+  "333bf",
+  "333fm",
+  "333oh",
+  "clock",
+  "minx",
+  "pyram",
+  "skewb",
+  "sq1",
+  "444bf",
+  "555bf",
+  "333mbf",
+] as const;
+export type WcaEventID = (typeof wcaEventIDs)[number];
+export function isWcaEventID(eventID: string): eventID is WcaEventID {
+  return wcaEventIDs.includes(eventID as WcaEventID);
+}
+
+export const wcaEvents: Record<WcaEventID, EventInfo> = {
   "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
   "222": { puzzleID: "2x2x2", eventName: "2x2x2 Cube" },
   "444": { puzzleID: "4x4x4", eventName: "4x4x4 Cube" },
@@ -26,12 +50,28 @@ export const wcaEvents: Record<string, EventInfo> = {
 };
 
 /** @category Event Info */
-export function wcaEventInfo(event: string): EventInfo | null {
+export function wcaEventInfo(event: WcaEventID): EventInfo | null {
   return wcaEvents[event] ?? null;
 }
 
-export const twizzleEvents: Record<string, EventInfo> = {
+const eventIDs = [
+  ...wcaEventIDs,
+  "333ft",
+  "fto",
+  "master_tetraminx",
+  "kilominx",
+  "redi_cube",
+  "baby_fto",
+  "loopover",
+] as const;
+export type EventID = (typeof eventIDs)[number];
+export function isEventID(eventID: string): eventID is EventID {
+  return eventIDs.includes(eventID as EventID);
+}
+
+export const twizzleEvents: Record<EventID, EventInfo> = {
   ...wcaEvents,
+  "333ft": { puzzleID: "3x3x3", eventName: "3x3x3 With Feet" },
   fto: { puzzleID: "fto", eventName: "Face-Turning Octahedron" },
   master_tetraminx: {
     puzzleID: "master_tetraminx",
@@ -56,6 +96,6 @@ export const twizzleEvents: Record<string, EventInfo> = {
 };
 
 /** @category Event Info */
-export function eventInfo(event: string): EventInfo | null {
-  return twizzleEvents[event] ?? null;
+export function eventInfo(event: EventID): EventInfo {
+  return twizzleEvents[event];
 }
