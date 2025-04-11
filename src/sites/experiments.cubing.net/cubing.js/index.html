@@ -6,12 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.75" />
   <title>cubing.js | Development Apps</title>
   <style>
+    :root {
+      color-scheme: light dark;
+    }
+
     body {
       font-family: Helvetica, sans-serif;
       font-size: 1.5rem;
       display: grid;
       place-content: center;
-      background: rgba(0, 128, 255, 0.1);
+      background: light-dark(rgba(0, 128, 255, 0.1), #012);
+      margin-bottom: 4rem;
     }
 
     h2 {
@@ -19,7 +24,7 @@
     }
 
     section {
-      background: white;
+      background: light-dark(white, #024);
       padding: 1.5em;
       margin-top: 0.5em;
       box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.4);
