@@ -491,7 +491,7 @@ function findelement(a: Quat[][], p: Quat): number {
       return i;
     }
   }
-  throw new Error("Element not found");
+  throw Error("Element not found");
 }
 
 export function getPG3DNamedPuzzles(): {
@@ -557,7 +557,7 @@ export function getPuzzleGeometryByDesc(
 ): PuzzleGeometry {
   const parsed = parsePuzzleDescription(desc);
   if (parsed === null) {
-    throw new Error("Could not parse the puzzle description");
+    throw Error("Could not parse the puzzle description");
   }
   const pg = new PuzzleGeometry(
     parsed,
@@ -604,7 +604,7 @@ function getmovename(
       movenamePrefix = String(bits[1] + 1);
     }
   } else {
-    throw new Error(
+    throw Error(
       `We only support slice and outer block moves right now. ${bits}`,
     );
   }
@@ -633,7 +633,7 @@ function splitByFaceNames(s: string, facenames: [Quat[], string][]): string[] {
       r.push(currentMatch);
       at += currentMatch.length;
     } else {
-      throw new Error(`Could not split ${s} into face names.`);
+      throw Error(`Could not split ${s} into face names.`);
     }
   }
   return r;
@@ -712,7 +712,7 @@ export class PuzzleGeometry {
   private swizzler: FaceNameSwizzler;
   public notationMapper: NotationMapper = new NullMapper();
   private addNotationMapper: string = "";
-  private setReidOrder: boolean = false;
+  private setReidOrSpeffzOrder: boolean = false;
 
   private options: PuzzleGeometryFullOptions;
 
@@ -764,7 +764,7 @@ export class PuzzleGeometry {
         break;
       }
       default:
-        throw new Error(`Bad shape argument: ${shape}`);
+        throw Error(`Bad shape argument: ${shape}`);
     }
     this.rotations = closure(g);
     if (this.options.verbosity) {
@@ -826,7 +826,7 @@ export class PuzzleGeometry {
           break;
         }
         default:
-          throw new Error(`Bad cut argument: ${cut.cutType}`);
+          throw Error(`Bad cut argument: ${cut.cutType}`);
       }
       cutplanes.push(normal.makecut(cut.distance));
       intersects.push(cut.distance < distance);
@@ -890,7 +890,7 @@ export class PuzzleGeometry {
         } else if (i === el[2]) {
           facelist.push(el[1]);
         } else {
-          throw new Error("Could not find edge");
+          throw Error("Could not find edge");
         }
       }
       otherfaces.push(facelist);
@@ -905,7 +905,7 @@ export class PuzzleGeometry {
       const f0 = neti[0];
       const fi = facenametoindex[f0];
       if (fi === undefined) {
-        throw new Error("Bad edge description; first edge not connected");
+        throw Error("Bad edge description; first edge not connected");
       }
       let ii = -1;
       for (let j = 0; j < otherfaces[fi].length; j++) {
@@ -916,7 +916,7 @@ export class PuzzleGeometry {
         }
       }
       if (ii < 0) {
-        throw new Error("First element of a net not known");
+        throw Error("First element of a net not known");
       }
       for (let j = 2; j < neti.length; j++) {
         if (neti[j] === "") {
@@ -925,7 +925,7 @@ export class PuzzleGeometry {
         const of = otherfaces[fi][(j + ii - 1) % edgesperface];
         const fn2 = faceindextoname[of];
         if (fn2 !== undefined && fn2 !== neti[j]) {
-          throw new Error("Face mismatch in net");
+          throw Error("Face mismatch in net");
         }
         faceindextoname[of] = neti[j];
         facenametoindex[neti[j]] = of;
@@ -992,7 +992,7 @@ export class PuzzleGeometry {
     }
     for (let i = 0; i < edgenames.length; i++) {
       if (edgenames[i].length !== 3) {
-        throw new Error(`Bad length in edge names ${edgenames[i]}`);
+        throw Error(`Bad length in edge names ${edgenames[i]}`);
       }
       const f1 = edgenames[i][1];
       const f2 = edgenames[i][2];
@@ -1010,7 +1010,7 @@ export class PuzzleGeometry {
     for (let i = 0; i < vertexnames.length; i++) {
       let bits = 0;
       if (vertexnames[i].length < 4) {
-        throw new Error("Bad length in vertex names");
+        throw Error("Bad length in vertex names");
       }
       for (let j = 1; j < vertexnames[i].length; j++) {
         bits |= 1 << facenametoindex[vertexnames[i][j][0]];
@@ -1023,7 +1023,7 @@ export class PuzzleGeometry {
         }
       }
       if (st < 0) {
-        throw new Error(
+        throw Error(
           "Internal error; couldn't find face name when fixing corners",
         );
       }
@@ -1175,7 +1175,7 @@ export class PuzzleGeometry {
       // know the number of slices.
       this.addNotationMapper = "NxNxNCubeMapper";
       // try to set Reid order of the cubies within an orbit
-      this.setReidOrder = true;
+      this.setReidOrSpeffzOrder = true;
     }
     if (shape === "c" && sawvertex && !sawface && !sawedge) {
       this.addNotationMapper = "SkewbMapper";
@@ -1325,6 +1325,17 @@ export class PuzzleGeometry {
     return [x1, y1, off];
   }
 
+  // Given an string of uppercase letters, make a bitmask
+  // indicating what letters are in it.  Cheap swizzling
+  // for internal use.
+  private upperStringToBitSet(geo: string): number {
+    let r = 0;
+    for (let i = 0; i < geo.length; i++) {
+      r |= 1 << (geo.charCodeAt(i) - 65);
+    }
+    return r;
+  }
+
   public allstickers(): void {
     const t1 = tstart("allstickers");
     // next step is to calculate all the stickers and orbits
@@ -1436,7 +1447,7 @@ export class PuzzleGeometry {
         }
       }
       if (pos === null || neg === null) {
-        throw new Error("Saw positive or negative sides as null");
+        throw Error("Saw positive or negative sides as null");
       }
       movesetgeos.push([
         pos[0],
@@ -1557,7 +1568,7 @@ export class PuzzleGeometry {
             break;
           }
           if (looplimit > 1000) {
-            throw new Error("Bad epsilon math; too close to border");
+            throw Error("Bad epsilon math; too close to border");
           }
         }
         // set the orientations by finding the marked face and putting it first.
@@ -1573,7 +1584,7 @@ export class PuzzleGeometry {
           }
         }
         if (mini < 0) {
-          throw new Error("Could not find marked face in list");
+          throw Error("Could not find marked face in list");
         }
         if (mini !== 0) {
           const ofacelist = facelist.slice();
@@ -1658,11 +1669,7 @@ export class PuzzleGeometry {
       }
       cubiesetnum++;
     }
-    if (
-      this.setReidOrder &&
-      4 <= this.stickersperface &&
-      this.stickersperface <= 9
-    ) {
+    if (this.setReidOrSpeffzOrder && 4 <= this.stickersperface) {
       const reidorder = [
         [
           "UF",
@@ -1681,28 +1688,144 @@ export class PuzzleGeometry {
         ["UFR", "URB", "UBL", "ULF", "DRF", "DFL", "DLB", "DBR"],
         ["U", "L", "F", "R", "B", "D"],
       ];
+      const spefffaceorder = ["U", "L", "F", "R", "B", "D"];
+      // These are the corners around each face in clockwise order.
+      // Each corner should give the face letters in counterclockwise
+      // order.  And they should always start with U or D.
+      const speffcornerorder = [
+        "UBL",
+        "URB",
+        "UFR",
+        "ULF",
+        "UBL",
+        "ULF",
+        "DFL",
+        "DLB",
+        "ULF",
+        "UFR",
+        "DRF",
+        "DFL",
+        "UFR",
+        "URB",
+        "DBR",
+        "DRF",
+        "URB",
+        "UBL",
+        "DLB",
+        "DBR",
+        "DFL",
+        "DRF",
+        "DBR",
+        "DLB",
+      ];
       const reidmap: { [key: number]: number } = {};
       for (const cubie of reidorder) {
         for (let j = 0; j < cubie.length; j++) {
-          let mask = 0;
-          for (let k = 0; k < cubie[j].length; k++) {
-            mask |= 1 << (cubie[j].charCodeAt(k) - 65);
-          }
-          reidmap[mask] = j;
+          reidmap[this.upperStringToBitSet(cubie[j])] = j;
+        }
+      }
+      const cornerloc: { [key: number]: Quat } = {};
+      const spefffacelookup: { [key: string]: number } = {};
+      const speffcornerlocs: Quat[] = [];
+      const speffuncorner = [
+        -1, 0, 1, 0, 2, -1, 1, -1, 3, 3, -1, -1, 2, -1, -1, -1,
+      ];
+      if (this.stickersperface > 9) {
+        for (const vertex of this.vertexnames) {
+          cornerloc[this.upperStringToBitSet(vertex[1])] = vertex[0];
+        }
+        for (let i = 0; i < 6; i++) {
+          spefffacelookup[spefffaceorder[i]] = i;
+        }
+        for (const co of speffcornerorder) {
+          speffcornerlocs.push(cornerloc[this.upperStringToBitSet(co)]);
         }
       }
       for (const cubieset of cubiesetcubies) {
         for (const cubienum of cubieset) {
-          let mask = 0;
-          for (const cubie of cubies[cubienum]) {
-            mask |=
-              1 <<
-              (this.facenames[this.getfaceindex(cubie)][1].charCodeAt(0) - 65);
+          // corners are always Reid.  For 333, edges and centers are also
+          // Reid.
+          if (cubies[cubienum].length === 3 || this.stickersperface <= 9) {
+            let mask = 0;
+            for (const cubie of cubies[cubienum]) {
+              mask |=
+                1 <<
+                (this.facenames[this.getfaceindex(cubie)][1].charCodeAt(0) -
+                  65);
+            }
+            cubieordnums[cubienum] = reidmap[mask];
+            // for larger cubes, centers and edges are Speffz.
+          } else {
+            if (cubies[cubienum].length <= 2) {
+              const ordset: [number, string][] = [];
+              for (let k = 0; k < cubies[cubienum].length; k++) {
+                const sticker = cubies[cubienum][k];
+                const facekey =
+                  spefffacelookup[
+                    this.facenames[this.getfaceindex(sticker)][1]
+                  ];
+                let bestdist = 1e20;
+                const cubieloc = this.faces[sticker].centermass();
+                let bestmask = 0;
+                for (let i = 0; i < 4; i++) {
+                  const t = cubieloc.dist(speffcornerlocs[4 * facekey + i]);
+                  if (t + eps < bestdist) {
+                    bestdist = t;
+                    bestmask = 1 << i;
+                  } else if (t < bestdist + eps) {
+                    bestmask |= 1 << i;
+                  }
+                }
+                bestmask = speffuncorner[bestmask];
+                if (bestmask >= 0) {
+                  const speffind = 4 * facekey + bestmask;
+                  ordset.push([speffind, speffcornerorder[speffind]]);
+                }
+              }
+              if (ordset.length > 0) {
+                if (cubies[cubienum].length === 1) {
+                  cubieordnums[cubienum] = ordset[0][0];
+                } else if (
+                  ordset.length === 2 &&
+                  ordset[0][1] === ordset[1][1]
+                ) {
+                  // we have an edge, which has two faces (given by the
+                  // ordset[*][0] values divided by 4), as well as a single
+                  // corner, for which face names are given in counterclockwise
+                  // order.  The relevant speffz face (thus indicating which
+                  // of the two indices should be used) is the first one
+                  // rotationally counterclockwise.
+                  let k = 0;
+                  const f0c = spefffaceorder[ordset[0][0] >> 2];
+                  const f1c = spefffaceorder[ordset[1][0] >> 2];
+                  const corn = ordset[0][1];
+                  while (
+                    k < 3 &&
+                    (f0c === corn.charAt(k) || f1c === corn.charAt(k))
+                  ) {
+                    k++;
+                  }
+                  if (k === 3) {
+                    throw Error("Internal error (2) in Speffz");
+                  }
+                  k = (k + 1) % 3;
+                  if (f0c === corn.charAt(k)) {
+                    cubieordnums[cubienum] = ordset[0][0];
+                  } else if (f1c === corn.charAt(k)) {
+                    cubieordnums[cubienum] = ordset[1][0];
+                  } else {
+                    console.log(f0c, f1c, corn, k, ordset);
+                    throw Error("Internal error (3) in Speffz");
+                  }
+                }
+              }
+            }
+            // TODO:  make this work for edges too.
           }
-          cubieordnums[cubienum] = reidmap[mask];
         }
       }
     }
+    //console.log(this.vertexnames);
     this.cubiesetnums = cubiesetnums;
     this.cubieordnums = cubieordnums;
     this.cubiesetnames = cubiesetnames;
@@ -1723,7 +1846,7 @@ export class PuzzleGeometry {
         }
       }
       if (this.fixedCubie < 0) {
-        throw new Error(
+        throw Error(
           `Could not find a cubie of type ${this.options.fixedPieceType} to fix.`,
         );
       }
@@ -1750,14 +1873,14 @@ export class PuzzleGeometry {
     const re = /^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$/;
     const p = mv.match(re);
     if (p === null) {
-      throw new Error(`Bad move passed ${mv}`);
+      throw Error(`Bad move passed ${mv}`);
     }
     const grip = p[4];
     let loslice = undefined;
     let hislice = undefined;
     if (p[2] !== undefined) {
       if (p[3] === undefined) {
-        throw new Error("Missing second number in range");
+        throw Error("Missing second number in range");
       }
       loslice = parseInt(p[2], 10);
     }
@@ -1781,14 +1904,14 @@ export class PuzzleGeometry {
   ): [string | undefined, number, number, number, boolean, number] {
     const bm = this.notationMapper.notationToInternal(move); // pluggable notation
     if (bm === null) {
-      throw new Error(`Bad move ${move.family}`);
+      throw Error(`Bad move ${move.family}`);
     }
     move = bm;
     let grip = move.family;
     let fullrotation = false;
     if (grip.endsWith("v") && grip[0] <= "Z") {
       if (move.innerLayer !== undefined || move.outerLayer !== undefined) {
-        throw new Error("Cannot use a prefix with full cube rotations");
+        throw Error("Cannot use a prefix with full cube rotations");
       }
       grip = grip.slice(0, -1);
       fullrotation = true;
@@ -1819,7 +1942,7 @@ export class PuzzleGeometry {
       hislice = 2;
     }
     if (geo === undefined) {
-      throw new Error(`Bad grip in move ${move.family}`);
+      throw Error(`Bad grip in move ${move.family}`);
     }
     if (move.outerLayer !== undefined) {
       loslice = move.outerLayer;
@@ -1853,7 +1976,7 @@ export class PuzzleGeometry {
       hislice < 0 ||
       hislice > this.moveplanesets[msi].length
     ) {
-      throw new Error(
+      throw Error(
         `Bad slice spec ${loslice} ${hislice} vs ${this.moveplanesets[msi].length}`,
       );
     }
@@ -1863,9 +1986,7 @@ export class PuzzleGeometry {
       hislice === this.moveplanesets[msi].length &&
       !fullrotation
     ) {
-      throw new Error(
-        "! full puzzle rotations must be specified with v suffix.",
-      );
+      throw Error("! full puzzle rotations must be specified with v suffix.");
     }
     return [undefined, msi, loslice, hislice, firstgrip, move.amount];
   }
@@ -2034,7 +2155,7 @@ export class PuzzleGeometry {
                 }
               }
               if (o < 0) {
-                throw new Error(
+                throw Error(
                   "Couldn't find rotation of center faces; ignoring for now.",
                 );
               } else {
@@ -2062,7 +2183,7 @@ export class PuzzleGeometry {
         }
         if (b.length > 2 && !cubiedone[b[0]]) {
           if (b.length !== 2 * this.movesetorders[k]) {
-            throw new Error("Bad length in perm gen");
+            throw Error("Bad length in perm gen");
           }
           for (const v of b) {
             axiscmoves[sc].push(v);
@@ -2316,7 +2437,7 @@ export class PuzzleGeometry {
     (internalDefinition as any).experimentalPuzzleDescription =
       this.puzzleDescription;
     if (!internalDefinition) {
-      throw new Error("Missing definition!");
+      throw Error("Missing definition!");
     }
     return internalDefinition;
   }
@@ -2510,7 +2631,7 @@ export class PuzzleGeometry {
               }
             }
             if (found < 0) {
-              throw new Error("Could not find rotation");
+              throw Error("Could not find rotation");
             }
             const cmp = mps[found];
             if (
@@ -2541,7 +2662,7 @@ export class PuzzleGeometry {
         } else if (addrot[i] === 3) {
           addrot[i] = 0;
         } else {
-          throw new Error("Impossible addrot val");
+          throw Error("Impossible addrot val");
         }
       }
     }
@@ -2561,7 +2682,7 @@ export class PuzzleGeometry {
             moveset[i][0] === moveset[j][0] &&
             moveset[i][1] === moveset[j][1]
           ) {
-            throw new Error("Redundant moves in moveset.");
+            throw Error("Redundant moves in moveset.");
           }
         }
       }
@@ -2755,10 +2876,10 @@ export class PuzzleGeometry {
       }
     }
     if (!feature1) {
-      throw new Error(`Could not find feature ${feature1name}`);
+      throw Error(`Could not find feature ${feature1name}`);
     }
     if (!feature2) {
-      throw new Error(`Could not find feature ${feature2name}`);
+      throw Error(`Could not find feature ${feature2name}`);
     }
     const r1 = feature1.pointrotation(direction1);
     const feature2rot = feature2.rotatepoint(r1);
@@ -2782,7 +2903,7 @@ export class PuzzleGeometry {
       orientationDescription = defaultOrientations()[basefacecount];
     }
     if (!orientationDescription) {
-      throw new Error("No default orientation?");
+      throw Error("No default orientation?");
     }
     return this.getOrientationRotation(orientationDescription);
   }
@@ -2820,7 +2941,7 @@ export class PuzzleGeometry {
     const polyn = face0.length; // number of vertices; 3, 4, or 5
     const net = this.net;
     if (net === null) {
-      throw new Error("No net?");
+      throw Error("No net?");
     }
     const edges: any = {};
     let minx = 0;
@@ -2835,7 +2956,7 @@ export class PuzzleGeometry {
     for (const neti of net) {
       const f0 = neti[0];
       if (!edges[f0]) {
-        throw new Error("Bad edge description; first edge not connected.");
+        throw Error("Bad edge description; first edge not connected.");
       }
       for (let j = 1; j < neti.length; j++) {
         const f1 = neti[j];
@@ -2876,7 +2997,7 @@ export class PuzzleGeometry {
     for (const neti of net) {
       const f0 = neti[0];
       if (!edges2[f0]) {
-        throw new Error("Bad edge description; first edge not connected.");
+        throw Error("Bad edge description; first edge not connected.");
       }
       let gfi = -1;
       for (let j = 0; j < bg.facenames.length; j++) {
@@ -2886,7 +3007,7 @@ export class PuzzleGeometry {
         }
       }
       if (gfi < 0) {
-        throw new Error(`Could not find first face name ${f0}`);
+        throw Error(`Could not find first face name ${f0}`);
       }
       const thisface = bg.facenames[gfi][0];
       for (let j = 1; j < neti.length; j++) {
@@ -2916,7 +3037,7 @@ export class PuzzleGeometry {
           }
         }
         if (gf1i < 0) {
-          throw new Error("Could not find second face name");
+          throw Error("Could not find second face name");
         }
         const otherface = bg.facenames[gf1i][0];
         for (let k = 0; k < otherface.length; k++) {
