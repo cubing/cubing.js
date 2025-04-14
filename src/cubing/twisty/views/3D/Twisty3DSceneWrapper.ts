@@ -166,7 +166,7 @@ export class Twisty3DSceneWrapper
         scene.remove(await old.twisty3DPuzzle());
       }
     }
-    this.#initialWrapperTracker.handleNewValue(twisty3DPuzzleWrapper);
+    this.#initialWrapperTracker.resolve(twisty3DPuzzleWrapper);
   }
 
   #initialWrapperTracker = new InitialValueTracker<Twisty3DPuzzleWrapper>();

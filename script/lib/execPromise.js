@@ -22,16 +22,16 @@ export function killAllChildProcesses() {
  * @returns {Promise<string>}
  */
 export function execPromise(cmd) {
-  return new Promise((resolve, reject) => {
-    const childProcess = exec(cmd, {}, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      }
-      // console.log(stdout);
-      resolve(stdout ? stdout : stderr);
-    });
-    childProcesses.push(childProcess);
+  const { promise, resolve, reject } = Promise.withResolvers();
+  const childProcess = exec(cmd, {}, (error, stdout, stderr) => {
+    if (error) {
+      reject(error);
+    }
+    // console.log(stdout);
+    resolve(stdout ? stdout : stderr);
   });
+  childProcesses.push(childProcess);
+  return promise;
 }
 
 /**
@@ -49,23 +49,23 @@ export async function execPromiseLogged(cmd) {
  * @returns {Promise<void>}
  */
 export function spawnPromise(cmd, args) {
-  return new Promise((resolve, reject) => {
-    const childProcess = spawn(cmd, args, {
-      stdio: "inherit",
-      // stderr: "inherit", // TODO
-    }); // Output to shell.
-    childProcess.on("error", (error) => {
-      console.error(error);
-      reject();
-    });
-    childProcess.on("close", (exitCode) => {
-      exitCode === 0 ? resolve() : reject();
-    });
-    childProcess.on("exit", (exitCode) => {
-      exitCode === 0 ? resolve() : reject();
-    });
-    childProcesses.push(childProcess);
+  const { promise, resolve, reject } = Promise.withResolvers();
+  const childProcess = spawn(cmd, args, {
+    stdio: "inherit",
+    // stderr: "inherit", // TODO
+  }); // Output to shell.
+  childProcess.on("error", (error) => {
+    console.error(error);
+    reject();
   });
+  childProcess.on("close", (exitCode) => {
+    exitCode === 0 ? resolve() : reject();
+  });
+  childProcess.on("exit", (exitCode) => {
+    exitCode === 0 ? resolve() : reject();
+  });
+  childProcesses.push(childProcess);
+  return promise;
 }
 
 /**

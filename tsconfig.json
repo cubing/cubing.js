@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2022",
+    "target": "ES2022",
     "module": "es2022",
+    "lib": ["es2024", "DOM", "DOM.Iterable"],
     "moduleResolution": "bundler",
     "declaration": true,
     "noEmit": true,

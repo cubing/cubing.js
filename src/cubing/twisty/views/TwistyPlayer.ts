@@ -361,7 +361,7 @@ export class TwistyPlayer
         case "PG3D": {
           // TODO: Properly wire this up so we can set PG3D for the cube.
           newWrapper = new Twisty3DSceneWrapper(this.experimentalModel);
-          this.#initial3DVisualizationWrapper.handleNewValue(newWrapper);
+          this.#initial3DVisualizationWrapper.resolve(newWrapper);
           break;
         }
         default:
