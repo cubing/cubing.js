@@ -4,7 +4,6 @@
     "ignore": [
       "./.temp",
       "./dist",
-      "./package.json",
       "./*/index.d.ts",
       "./src/cubing/vendor/mit/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
