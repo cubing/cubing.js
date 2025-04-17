@@ -1,5 +1,5 @@
+import { proxy3D } from "cubing/twisty/heavy-code-imports/3d";
 import type { Scene as ThreeScene } from "three/src/Three.js";
-import { THREEJS } from "../../heavy-code-imports/3d";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 import type { Twisty3DRenderTarget } from "./Twisty3DRenderTarget";
 
@@ -8,7 +8,7 @@ export class Twisty3DScene implements Twisty3DRenderTarget {
   public twisty3Ds: Set<Twisty3DPuzzle> = new Set();
 
   threeJSScene: Promise<ThreeScene> = (async () =>
-    new (await THREEJS).Scene())();
+    new (await proxy3D()).ThreeScene())();
 
   addRenderTarget(renderTarget: Twisty3DRenderTarget): void {
     this.renderTargets.add(renderTarget);

@@ -1,10 +1,10 @@
+import { proxy3D } from "cubing/twisty/heavy-code-imports/3d";
 import type { Texture, TextureLoader } from "three/src/Three.js";
-import { THREEJS } from "../../../../heavy-code-imports/3d";
 import { TwistyPropDerived } from "../../TwistyProp";
 
 let cachedLoader: TextureLoader | null = null;
 async function loader(): Promise<TextureLoader> {
-  return (cachedLoader ??= new (await THREEJS).TextureLoader());
+  return (cachedLoader ??= new (await proxy3D()).ThreeTextureLoader());
 }
 
 type SpritePropInputs = {

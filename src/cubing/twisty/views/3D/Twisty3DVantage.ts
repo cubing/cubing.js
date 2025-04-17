@@ -1,8 +1,8 @@
+import { proxy3D } from "cubing/twisty/heavy-code-imports/3d";
 import type { PerspectiveCamera, WebGLRenderer } from "three/src/Three.js";
 import { Stats } from "../../../vendor/mit/three/examples/jsm/libs/stats.modified.module";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { twistyDebugGlobals } from "../../debug";
-import { THREEJS } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { DragInputMode } from "../../model/props/puzzle/state/DragInputProp";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";
@@ -23,7 +23,7 @@ export async function setCameraFromOrbitCoordinates(
   orbitCoordinates: OrbitCoordinates,
   backView: boolean = false,
 ): Promise<void> {
-  const spherical = new (await THREEJS).Spherical(
+  const spherical = new (await proxy3D()).ThreeSpherical(
     orbitCoordinates.distance,
     (90 - (backView ? -1 : 1) * orbitCoordinates.latitude) / DEGREES_PER_RADIAN,
     ((backView ? 180 : 0) + orbitCoordinates.longitude) / DEGREES_PER_RADIAN,
@@ -230,14 +230,14 @@ export class Twisty3DVantage extends ManagedCustomElement {
   #cachedCamera: Promise<PerspectiveCamera> | null = null;
   async camera(): Promise<PerspectiveCamera> {
     return (this.#cachedCamera ??= (async () => {
-      const camera = new (await THREEJS).PerspectiveCamera(
+      const camera = new (await proxy3D()).ThreePerspectiveCamera(
         20,
         1, // We rely on the resize logic to handle this.
         0.1,
         20,
       );
       camera.position.copy(
-        new (await THREEJS).Vector3(2, 4, 4).multiplyScalar(
+        new (await proxy3D()).ThreeVector3(2, 4, 4).multiplyScalar(
           this.options?.backView ? -1 : 1,
         ),
       );

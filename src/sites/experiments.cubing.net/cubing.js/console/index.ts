@@ -29,6 +29,3 @@ for (const [moduleName, moduleExport] of Object.entries(cubingGlobalExports)) {
   console.log(moduleName, moduleExport);
   (window as any)[moduleName] = moduleExport;
 }
-
-console.log("three/src/Three.js", three);
-(window as any).three = three;
