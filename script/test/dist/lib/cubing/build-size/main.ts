@@ -7,7 +7,7 @@ import { needPath } from "../../../../../lib/needPath.js";
 
 import { fileURLToPath } from "node:url";
 import { default as packageJSON } from "../../../../../../package.json" assert {
-  type: "json"
+  type: "json",
 };
 const { exports } = packageJSON;
 
@@ -116,41 +116,24 @@ const humanResults = {
 
 const BYTES_PER_KILOBYTE = 1000;
 function check(description: string, value: number, maxKilobytes: number) {
-if (value > maxKilobytes * BYTES_PER_KILOBYTE) {
-  throw new Error("❌ " + description + " build size (" + (value / BYTES_PER_KILOBYTE) +") is over " + maxKilobytes+ "kB");
-} else {
-  console.log("✅ " + description + " build size (" + (value / BYTES_PER_KILOBYTE) +") is ≤ " + maxKilobytes+ "kB");
+  if (value > maxKilobytes * BYTES_PER_KILOBYTE) {
+    throw new Error(
+      `❌ ${description} build size (${value / BYTES_PER_KILOBYTE}) is over ${maxKilobytes}kB.`,
+    );
+  } else {
+    console.log(
+      `✅ ${description} build size (${value / BYTES_PER_KILOBYTE}) is ≤ ${maxKilobytes}kB.`,
+    );
+  }
 }
-}
 
-// if (valueResults["twisty"].gzippedSize > 300_000) {
-//   throw new Error("❌ Gzipped `cubing/twisty` build size is over 300kB");
-// } else {
-//   console.log("✅ Gzipped `cubing/twisty` build size is ≤ 300kB");
-// }
-
-// if (valueResults["twisty"].gzippedSizeNoTHREE > 128_000) {
-//   throw new Error(
-//     "❌ Gzipped no-THREE `cubing/twisty` build size is over 128kB",
-//   );
-// } else {
-//   console.log("✅ Gzipped no-THREE `cubing/twisty` build size is ≤ 100kB");
-// }
-
-// if (valueResults["puzzles"].gzippedSizeNoTHREE > 100_000) {
-//   throw new Error("❌ Gzipped `cubing/puzzles` build size is over 100kB");
-// } else {
-//   console.log("✅ Gzipped `cubing/puzzles` build size is ≤ 100kB");
-// }
-
-// if (valueResults["search"].size > 2_000_000) {
-//   throw new Error("❌ Total (uncompressed) build size is over 2mB");
-// } else {
-//   console.log("✅ Total (uncompressed) build size is ≤ 2mB");
-// }
-
-// if (valueResults["(total)"].size > 3_000_000) {
-//   throw new Error("❌ Total (uncompressed) build size is over 2mB");
-// } else {
-//   console.log("✅ Total (uncompressed) build size is ≤ 2mB");
-// }
+check("Gzipped `cubing/twisty`", valueResults["twisty"].gzippedSize, 275);
+check(
+  "Gzipped no-THREE `cubing/twisty`",
+  valueResults["twisty"].gzippedSizeNoTHREE,
+  125,
+);
+check("Gzipped `cubing/puzzles`", valueResults["puzzles"].size, 400);
+check("`cubing/search` (uncompressed)", valueResults["search"].size, 1500);
+check("Total (uncompressed)", valueResults["(total)"].size, 2000);
+check("Total (gzipped)", valueResults["(total)"].gzippedSizeNoTHREE, 500);
