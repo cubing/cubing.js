@@ -38,7 +38,7 @@ export const mainAllowedImports: AllowedImports = {
       "cmd-ts-too",
       "printable-shell-command",
     ],
-    dynamic: ["cubing", "node:repl"],
+    dynamic: ["cubing", "node:repl", "node:process"],
   },
   // src/bin
   "src/bin": {
