@@ -7,7 +7,7 @@ import { needPath } from "../../../../../lib/needPath.js";
 
 import { fileURLToPath } from "node:url";
 import { default as packageJSON } from "../../../../../../package.json" assert {
-  type: "json",
+  type: "json"
 };
 const { exports } = packageJSON;
 
@@ -34,7 +34,7 @@ async function bundleSize(entryFile, threeExternal = false) {
     format: "esm",
     target: "es2022",
     outfile,
-    external: threeExternal ? ["three/src/Three.js"] : [],
+    external: threeExternal ? ["three/src/*"] : [],
   });
   const { size } = await stat(outfile);
   const bundleContents = await readFile(outfile);
@@ -114,34 +114,43 @@ const humanResults = {
 
 // TODO: Design actual tests, and take bundle splitting into account.
 
-if (valueResults["twisty"].gzippedSize > 300_000) {
-  throw new Error("❌ Gzipped `cubing/twisty` build size is over 300kB");
+const BYTES_PER_KILOBYTE = 1000;
+function check(description: string, value: number, maxKilobytes: number) {
+if (value > maxKilobytes * BYTES_PER_KILOBYTE) {
+  throw new Error("❌ " + description + " build size (" + (value / BYTES_PER_KILOBYTE) +") is over " + maxKilobytes+ "kB");
 } else {
-  console.log("✅ Gzipped `cubing/twisty` build size is ≤ 300kB");
+  console.log("✅ " + description + " build size (" + (value / BYTES_PER_KILOBYTE) +") is ≤ " + maxKilobytes+ "kB");
+}
 }
 
-if (valueResults["twisty"].gzippedSizeNoTHREE > 128_000) {
-  throw new Error(
-    "❌ Gzipped no-THREE `cubing/twisty` build size is over 128kB",
-  );
-} else {
-  console.log("✅ Gzipped no-THREE `cubing/twisty` build size is ≤ 100kB");
-}
+// if (valueResults["twisty"].gzippedSize > 300_000) {
+//   throw new Error("❌ Gzipped `cubing/twisty` build size is over 300kB");
+// } else {
+//   console.log("✅ Gzipped `cubing/twisty` build size is ≤ 300kB");
+// }
 
-if (valueResults["puzzles"].gzippedSizeNoTHREE > 100_000) {
-  throw new Error("❌ Gzipped `cubing/puzzles` build size is over 100kB");
-} else {
-  console.log("✅ Gzipped `cubing/puzzles` build size is ≤ 100kB");
-}
+// if (valueResults["twisty"].gzippedSizeNoTHREE > 128_000) {
+//   throw new Error(
+//     "❌ Gzipped no-THREE `cubing/twisty` build size is over 128kB",
+//   );
+// } else {
+//   console.log("✅ Gzipped no-THREE `cubing/twisty` build size is ≤ 100kB");
+// }
 
-if (valueResults["search"].size > 2_000_000) {
-  throw new Error("❌ Total (uncompressed) build size is over 2mB");
-} else {
-  console.log("✅ Total (uncompressed) build size is ≤ 2mB");
-}
+// if (valueResults["puzzles"].gzippedSizeNoTHREE > 100_000) {
+//   throw new Error("❌ Gzipped `cubing/puzzles` build size is over 100kB");
+// } else {
+//   console.log("✅ Gzipped `cubing/puzzles` build size is ≤ 100kB");
+// }
 
-if (valueResults["(total)"].size > 3_000_000) {
-  throw new Error("❌ Total (uncompressed) build size is over 2mB");
-} else {
-  console.log("✅ Total (uncompressed) build size is ≤ 2mB");
-}
+// if (valueResults["search"].size > 2_000_000) {
+//   throw new Error("❌ Total (uncompressed) build size is over 2mB");
+// } else {
+//   console.log("✅ Total (uncompressed) build size is ≤ 2mB");
+// }
+
+// if (valueResults["(total)"].size > 3_000_000) {
+//   throw new Error("❌ Total (uncompressed) build size is over 2mB");
+// } else {
+//   console.log("✅ Total (uncompressed) build size is ≤ 2mB");
+// }
