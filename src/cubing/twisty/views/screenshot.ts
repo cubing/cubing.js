@@ -1,5 +1,5 @@
 import type { PerspectiveCamera } from "three/src/Three.js";
-import { proxy3D } from "../heavy-code-imports/3d";
+import { bulk3DCode } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { rawRenderPooled } from "./3D/RendererPool";
 import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper";
@@ -29,7 +29,7 @@ export async function screenshot(
     orbitCoordinates,
   ] = await Promise.all([
     (async () => {
-      const { ThreePerspectiveCamera, ThreeScene } = await proxy3D();
+      const { ThreePerspectiveCamera, ThreeScene } = await bulk3DCode();
       return { ThreePerspectiveCamera, ThreeScene };
     })(),
     await model.puzzleLoader.get(),

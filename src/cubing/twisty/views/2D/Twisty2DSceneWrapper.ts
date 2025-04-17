@@ -1,7 +1,7 @@
-import { proxy3D } from "cubing/twisty/heavy-code-imports/3d";
 import type { Scene as ThreeScene } from "three/src/Three.js";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { Schedulable } from "../../controllers/RenderScheduler";
+import { bulk3DCode } from "../../heavy-code-imports/3d";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { TwistySceneModel } from "../../model/TwistySceneModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
@@ -41,7 +41,7 @@ export class Twisty2DSceneWrapper
   #cachedScene: Promise<ThreeScene> | null;
   async scene(): Promise<ThreeScene> {
     return (this.#cachedScene ??= (async () =>
-      new (await proxy3D()).ThreeScene())());
+      new (await bulk3DCode()).ThreeScene())());
   }
 
   scheduleRender(): void {

@@ -10,8 +10,7 @@
     "types": [
       "web-bluetooth",
       "dom-speech-recognition",
-      "./src/test/vendor/bun-types-workaround.d.ts",
-      "three/src"
+      "./src/test/vendor/bun-types-workaround.d.ts"
     ],
     // Stricter defaults.
     "allowJs": true,

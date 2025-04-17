@@ -1,10 +1,10 @@
-import { proxy3D } from "cubing/twisty/heavy-code-imports/3d";
 import type {
   PerspectiveCamera,
   Scene as ThreeScene,
 } from "three/src/Three.js";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { Schedulable } from "../../controllers/RenderScheduler";
+import { bulk3DCode } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type {
@@ -102,7 +102,7 @@ export class Twisty3DSceneWrapper
       const [camera, { ThreeRaycaster, ThreeVector2 }] = await Promise.all([
         e.detail.cameraPromise,
         (async () => {
-          const { ThreeRaycaster, ThreeVector2 } = await proxy3D();
+          const { ThreeRaycaster, ThreeVector2 } = await bulk3DCode();
           return { ThreeRaycaster, ThreeVector2 };
         })(),
       ]);
@@ -129,7 +129,7 @@ export class Twisty3DSceneWrapper
   #cachedScene: Promise<ThreeScene> | null;
   async scene(): Promise<ThreeScene> {
     return (this.#cachedScene ??= (async () =>
-      new (await proxy3D()).ThreeScene())());
+      new (await bulk3DCode()).ThreeScene())());
   }
 
   #vantages: Set<Twisty3DVantage> = new Set();

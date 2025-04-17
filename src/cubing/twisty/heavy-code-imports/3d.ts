@@ -5,7 +5,7 @@ let cachedConstructorProxy: Promise<
   typeof import("./dynamic-entries/twisty-dynamic-3d")
 > | null = null;
 
-export async function proxy3D(): Promise<
+export async function bulk3DCode(): Promise<
   typeof import("./dynamic-entries/twisty-dynamic-3d")
 > {
   return (cachedConstructorProxy ??= import(
