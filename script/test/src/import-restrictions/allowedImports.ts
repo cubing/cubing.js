@@ -43,7 +43,7 @@ export const mainAllowedImports: AllowedImports = {
   // src/bin
   "src/bin": {
     static: ["cubing"],
-    dynamic: ["cmd-ts-too"],
+    dynamic: ["cmd-ts-too", "node:process"],
   },
   "src/bin/guards/cmd-ts-too-guard.ts": {
     static: ["node:process"],
