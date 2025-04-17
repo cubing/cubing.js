@@ -11,7 +11,7 @@
 
 // const sharedRenderer: WebGLRenderer | null = null;
 
-import { THREEJS } from "../../heavy-code-imports/3d";
+import { bulk3DCode } from "../../heavy-code-imports/3d";
 import type {
   Camera,
   LinearSRGBColorSpace,
@@ -70,7 +70,7 @@ const linearSRGBColorSpace =
   "srgb-linear" satisfies typeof LinearSRGBColorSpace;
 
 export async function newRenderer(): Promise<WebGLRenderer> {
-  const rendererConstructor = (await THREEJS).WebGLRenderer;
+  const rendererConstructor = (await bulk3DCode()).ThreeWebGLRenderer;
   const renderer = new rendererConstructor({
     antialias: true,
     alpha: true,

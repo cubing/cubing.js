@@ -1,1 +1,1 @@
-export type * from "three";
+export type * from "three/src/Three.js";

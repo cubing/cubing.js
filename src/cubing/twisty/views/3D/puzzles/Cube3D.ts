@@ -1,23 +1,19 @@
-import {
-  BackSide,
-  BoxGeometry,
-  BufferAttribute,
-  BufferGeometry,
-  Color,
-  DoubleSide,
-  Euler,
-  FrontSide,
-  Group,
-  Matrix4,
-  Mesh,
-  MeshBasicMaterial,
-  Object3D,
-  Quaternion,
-  TextureLoader,
-  Vector2,
-  Vector3,
-  type Texture,
-} from "three";
+import { BackSide, DoubleSide, FrontSide } from "three/src/constants.js";
+import { BufferAttribute } from "three/src/core/BufferAttribute.js";
+import { BufferGeometry } from "three/src/core/BufferGeometry.js";
+import { Object3D } from "three/src/core/Object3D.js";
+import { BoxGeometry } from "three/src/geometries/BoxGeometry.js";
+import { TextureLoader } from "three/src/loaders/TextureLoader.js";
+import { MeshBasicMaterial } from "three/src/materials/MeshBasicMaterial.js";
+import { Color } from "three/src/math/Color.js";
+import { Euler } from "three/src/math/Euler.js";
+import { Matrix4 } from "three/src/math/Matrix4.js";
+import { Quaternion } from "three/src/math/Quaternion.js";
+import { Vector2 } from "three/src/math/Vector2.js";
+import { Vector3 } from "three/src/math/Vector3.js";
+import { Group } from "three/src/objects/Group.js";
+import { Mesh } from "three/src/objects/Mesh.js";
+import type { Texture } from "three/src/textures/Texture.js";
 import type { KPuzzle } from "../../../../kpuzzle";
 import type { ExperimentalStickeringMask } from "../../../../puzzles/cubing-private";
 import type {

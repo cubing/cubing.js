@@ -1,9 +1,9 @@
-import type { Raycaster, Texture as ThreeTexture } from "three";
+import type { Raycaster, Texture as ThreeTexture } from "three/src/Three.js";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { PuzzlePosition } from "../../controllers/AnimationTypes";
 import type { Schedulable } from "../../controllers/RenderScheduler";
-import { proxy3D } from "../../heavy-code-imports/3d";
+import { bulk3DCode } from "../../heavy-code-imports/3d";
 import type { FoundationDisplay } from "../../model/props/puzzle/display/FoundationDisplayProp";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
@@ -133,7 +133,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
   #cachedTwisty3DPuzzle: Promise<Twisty3DPuzzle> | null = null;
   async twisty3DPuzzle(): Promise<Twisty3DPuzzle> {
     return (this.#cachedTwisty3DPuzzle ??= (async () => {
-      const proxyPromise = proxy3D();
+      const proxyPromise = bulk3DCode();
       if (
         this.puzzleLoader.id === "3x3x3" &&
         this.visualizationStrategy === "Cube3D"

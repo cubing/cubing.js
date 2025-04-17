@@ -43,7 +43,7 @@ export const mainAllowedImports: AllowedImports = {
   // src/bin
   "src/bin": {
     static: ["cubing"],
-    dynamic: ["cmd-ts-too"],
+    dynamic: ["cmd-ts-too", "node:process"],
   },
   "src/bin/guards/cmd-ts-too-guard.ts": {
     static: ["node:process"],
@@ -58,7 +58,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/protocol",
       "src/cubing/puzzles",
       "src/cubing/vendor/public-domain/unsafe-raw-aes",
-      "three",
+      "three/src",
     ],
     dynamic: ["src/cubing/puzzles"],
   },
@@ -125,13 +125,26 @@ export const mainAllowedImports: AllowedImports = {
     ],
   },
   "src/cubing/twisty/heavy-code-imports": {
-    static: ["three"],
+    static: ["three/src"],
+  },
+  "src/cubing/twisty/model/props/puzzle/display/SpriteProp.ts": {
+    static: ["src/cubing/twisty/heavy-code-imports/3d"],
+  },
+  "src/cubing/twisty/views/2D": {
+    static: ["src/cubing/twisty/heavy-code-imports/3d"],
   },
   "src/cubing/twisty/views/3D": {
-    static: ["src/cubing/vendor/mit/three"],
+    static: [
+      "src/cubing/vendor/mit/three",
+      "src/cubing/twisty/heavy-code-imports/3d",
+    ],
   },
   "src/cubing/twisty/views/3D/puzzles": {
-    static: ["three", "src/cubing/vendor/mit/three"],
+    static: [
+      "three/src",
+      "src/cubing/twisty/heavy-code-imports/3d",
+      "src/cubing/vendor/mit/three",
+    ],
   },
   "src/cubing/vendor": {
     static: ["src/cubing/alg", "random-uint-below"],
@@ -144,7 +157,7 @@ export const mainAllowedImports: AllowedImports = {
   },
   // src/sites
   "src/sites": {
-    static: ["src/cubing", "jszip", "three"],
+    static: ["src/cubing", "jszip", "three/src", "three/examples/jsm"],
   },
   "src/sites/experiments.cubing.net/cubing.js/rust/wasm": {},
   "src/sites/alpha.twizzle.net/explore": {
@@ -161,7 +174,7 @@ export const specAllowedImports: AllowedImports = {
       "src/test/SKIP_SLOW_TESTS.ts",
 
       "comlink",
-      "three",
+      "three/src",
       "random-uint-below",
     ],
   },

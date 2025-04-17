@@ -1,6 +1,6 @@
-import type { Vector3 } from "three";
+import type { Vector3 } from "three/src/Three.js";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
-import { THREEJS } from "../../heavy-code-imports/3d";
+import { bulk3DCode } from "../../heavy-code-imports/3d";
 import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { DragMovementInfo, DragTracker } from "./DragTracker";
@@ -71,7 +71,7 @@ class Inertia {
 export async function positionToOrbitCoordinates(
   position: Vector3,
 ): Promise<OrbitCoordinates> {
-  const spherical = new (await THREEJS).Spherical();
+  const spherical = new (await bulk3DCode()).ThreeSpherical();
   spherical.setFromVector3(position);
   return {
     latitude: 90 - spherical.phi * DEGREES_PER_RADIAN,

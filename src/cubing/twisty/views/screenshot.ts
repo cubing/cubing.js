@@ -1,5 +1,5 @@
-import type { PerspectiveCamera } from "three";
-import { THREEJS } from "../heavy-code-imports/3d";
+import type { PerspectiveCamera } from "three/src/Three.js";
+import { bulk3DCode } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { rawRenderPooled } from "./3D/RendererPool";
 import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper";
@@ -20,7 +20,7 @@ export async function screenshot(
 
   // TODO: Avoid the `_stickering` and `_legacyPosition` calls in favor of proper callbacks.
   const [
-    { PerspectiveCamera, Scene },
+    { ThreePerspectiveCamera, ThreeScene },
     puzzleLoader,
     visualizationStrategy,
     _stickering, // TODO
@@ -28,7 +28,10 @@ export async function screenshot(
     _legacyPosition,
     orbitCoordinates,
   ] = await Promise.all([
-    THREEJS,
+    (async () => {
+      const { ThreePerspectiveCamera, ThreeScene } = await bulk3DCode();
+      return { ThreePerspectiveCamera, ThreeScene };
+    })(),
     await model.puzzleLoader.get(),
     await model.visualizationStrategy.get(),
     await model.twistySceneModel.stickeringRequest.get(),
@@ -41,10 +44,10 @@ export async function screenshot(
   const height = options?.height ?? 2048;
   const aspectRatio = width / height;
   const camera = (cachedCamera ??= await (async () => {
-    return new PerspectiveCamera(20, aspectRatio, 0.1, 20);
+    return new ThreePerspectiveCamera(20, aspectRatio, 0.1, 20);
   })());
 
-  const scene = new Scene();
+  const scene = new ThreeScene();
   const twisty3DWrapper = new Twisty3DPuzzleWrapper(
     model,
     { scheduleRender: () => {} },

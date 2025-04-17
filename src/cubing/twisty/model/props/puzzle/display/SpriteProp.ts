@@ -1,10 +1,10 @@
-import type { Texture, TextureLoader } from "three";
-import { THREEJS } from "../../../../heavy-code-imports/3d";
+import type { Texture, TextureLoader } from "three/src/Three.js";
+import { bulk3DCode } from "../../../../heavy-code-imports/3d";
 import { TwistyPropDerived } from "../../TwistyProp";
 
 let cachedLoader: TextureLoader | null = null;
 async function loader(): Promise<TextureLoader> {
-  return (cachedLoader ??= new (await THREEJS).TextureLoader());
+  return (cachedLoader ??= new (await bulk3DCode()).ThreeTextureLoader());
 }
 
 type SpritePropInputs = {

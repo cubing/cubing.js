@@ -1,4 +1,4 @@
-import type { Object3D } from "three";
+import type { Object3D } from "three/src/Three.js";
 import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";

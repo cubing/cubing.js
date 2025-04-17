@@ -4,9 +4,16 @@ import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFace
 import { Cube3D, type Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 
-// Mangled to avoid autocompleting.
-// This must not be imported directly.
-export * as T3I from "three";
+// TODO: figure out how to load these dynamically without a bottleneck.
+export { PerspectiveCamera as ThreePerspectiveCamera } from "three/src/cameras/PerspectiveCamera.js";
+export { Raycaster as ThreeRaycaster } from "three/src/core/Raycaster.js";
+export { TextureLoader as ThreeTextureLoader } from "three/src/loaders/TextureLoader.js";
+export { Spherical as ThreeSpherical } from "three/src/math/Spherical.js";
+export { Vector2 as ThreeVector2 } from "three/src/math/Vector2.js";
+export { Vector3 as ThreeVector3 } from "three/src/math/Vector3.js";
+export { WebGLRenderer as ThreeWebGLRenderer } from "three/src/renderers/WebGLRenderer.js";
+export { Scene as ThreeScene } from "three/src/scenes/Scene.js";
+
 export { Cube3D } from "../../views/3D/puzzles/Cube3D";
 export { PG3D } from "../../views/3D/puzzles/PG3D";
 export { Twisty3DScene } from "../../views/3D/Twisty3DScene";

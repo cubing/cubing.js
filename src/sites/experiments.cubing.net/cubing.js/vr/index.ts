@@ -1,4 +1,4 @@
-// import { PerspectiveCamera, WebGLRenderer } from "three";
+// import { PerspectiveCamera, WebGLRenderer } from "three/src/Three.js";
 // import { VRButton } from "three/examples/jsm/webxr/VRButton";
 // import { initialHeight } from "./config";
 // import { Room } from "./room";

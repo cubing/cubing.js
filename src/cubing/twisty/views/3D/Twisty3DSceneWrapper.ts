@@ -1,7 +1,10 @@
-import type { PerspectiveCamera, Scene as ThreeScene } from "three";
+import type {
+  PerspectiveCamera,
+  Scene as ThreeScene,
+} from "three/src/Three.js";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { Schedulable } from "../../controllers/RenderScheduler";
-import { THREEJS } from "../../heavy-code-imports/3d";
+import { bulk3DCode } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type {
@@ -96,13 +99,16 @@ export class Twisty3DSceneWrapper
     }
 
     const raycasterPromise = (async () => {
-      const [camera, three] = await Promise.all([
+      const [camera, { ThreeRaycaster, ThreeVector2 }] = await Promise.all([
         e.detail.cameraPromise,
-        THREEJS,
+        (async () => {
+          const { ThreeRaycaster, ThreeVector2 } = await bulk3DCode();
+          return { ThreeRaycaster, ThreeVector2 };
+        })(),
       ]);
 
-      const raycaster = new three.Raycaster();
-      const mouse = new (await THREEJS).Vector2(
+      const raycaster = new ThreeRaycaster();
+      const mouse = new ThreeVector2(
         e.detail.pressInfo.normalizedX,
         e.detail.pressInfo.normalizedY,
       );
@@ -122,7 +128,8 @@ export class Twisty3DSceneWrapper
 
   #cachedScene: Promise<ThreeScene> | null;
   async scene(): Promise<ThreeScene> {
-    return (this.#cachedScene ??= (async () => new (await THREEJS).Scene())());
+    return (this.#cachedScene ??= (async () =>
+      new (await bulk3DCode()).ThreeScene())());
   }
 
   #vantages: Set<Twisty3DVantage> = new Set();

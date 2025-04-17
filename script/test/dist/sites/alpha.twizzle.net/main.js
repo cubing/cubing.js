@@ -61,39 +61,20 @@ async function runTest() {
     new URL(page.url()).searchParams.get("puzzle"),
   );
 
-  await page.goto("http://localhost:4443/alpha.twizzle.net/edit/?puzzle=clock");
-  assert(
-    "three.js initially loaded",
-    "undefined",
-    await page.evaluate(() => {
-      return typeof globalThis.__THREE__;
-    }),
-  );
-  await (await page.waitForSelector(".puzzle")).selectOption("3x3x3");
+  async function numCanvases() {
+    return page.evaluate(async () => {
+      return (
+        await document
+          .querySelector("twisty-player")
+          .experimentalCurrentCanvases()
+      ).length;
+    });
+  }
 
-  // TODO: this implementation is very manual, and therefor brittle to maintain.
-  await (async () => {
-    for (
-      let waitMilliseconds = 1;
-      waitMilliseconds < 5000;
-      waitMilliseconds *= 2
-    ) {
-      await new Promise((resolve) => setTimeout(resolve, waitMilliseconds));
-      const typeof__THREE__ = await page.evaluate(() => {
-        return typeof globalThis.__THREE__;
-      });
-      if (typeof__THREE__ === "string") {
-        return;
-      }
-    }
-  })();
-  assert(
-    "three.js loaded after switching to 3×3×3",
-    "string",
-    await page.evaluate(() => {
-      return typeof globalThis.__THREE__;
-    }),
-  );
+  await page.goto("http://localhost:4443/alpha.twizzle.net/edit/?puzzle=clock");
+  assert("no canvas loaded initially", 0, await numCanvases());
+  await (await page.waitForSelector(".puzzle")).selectOption("3x3x3");
+  assert("canvas loaded after switching to 3×3×3", 1, await numCanvases());
 
   if (OPEN_REPL) {
     globalThis.page = page;

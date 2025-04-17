@@ -169,6 +169,9 @@ ${scrambleText(scramble)}
       }
       jsonListPrinter?.finish();
     }
+
+    // TODO(https://github.com/cubing/cubing.js/issues/358): this shouldn't be needed.
+    (await import("node:process")).exit(0);
   },
 });
 

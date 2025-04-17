@@ -9,7 +9,7 @@
 //   Texture,
 //   TextureLoader,
 //   Vector3,
-// } from "three";
+// } from "three/src/Three.js";
 // import { SVGLoader, SVGResult } from "three/examples/jsm/loaders/SVGLoader";
 // import {
 //   Cube3D,

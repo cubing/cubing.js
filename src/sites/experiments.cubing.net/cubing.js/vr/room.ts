@@ -1,11 +1,9 @@
-import {
-  Color,
-  HemisphereLight,
-  LineBasicMaterial,
-  LineSegments,
-  Scene,
-} from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
+import { HemisphereLight } from "three/src/lights/HemisphereLight.js";
+import { LineBasicMaterial } from "three/src/materials/LineBasicMaterial.js";
+import { Color } from "three/src/math/Color.js";
+import { LineSegments } from "three/src/objects/LineSegments.js";
+import { Scene } from "three/src/scenes/Scene.js";
 import type { VRInput } from "./vr-input";
 import type { VRPuzzle } from "./vr-puzzle";
 
