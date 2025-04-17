@@ -1,6 +1,6 @@
 /* tslint:disable no-bitwise */
 
-import { Quaternion } from "three";
+import { Quaternion } from "three/src/math/Quaternion.js";
 import { Move } from "../../alg";
 import type { KPatternData, KPuzzle } from "../../kpuzzle";
 import { KPattern } from "../../kpuzzle";

@@ -58,7 +58,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/protocol",
       "src/cubing/puzzles",
       "src/cubing/vendor/public-domain/unsafe-raw-aes",
-      "three",
+      "three/src/Three.js",
     ],
     dynamic: ["src/cubing/puzzles"],
   },
@@ -125,13 +125,13 @@ export const mainAllowedImports: AllowedImports = {
     ],
   },
   "src/cubing/twisty/heavy-code-imports": {
-    static: ["three"],
+    static: ["three/src/Three.js"],
   },
   "src/cubing/twisty/views/3D": {
     static: ["src/cubing/vendor/mit/three"],
   },
   "src/cubing/twisty/views/3D/puzzles": {
-    static: ["three", "src/cubing/vendor/mit/three"],
+    static: ["three/src/Three.js", "src/cubing/vendor/mit/three"],
   },
   "src/cubing/vendor": {
     static: ["src/cubing/alg", "random-uint-below"],
@@ -144,7 +144,7 @@ export const mainAllowedImports: AllowedImports = {
   },
   // src/sites
   "src/sites": {
-    static: ["src/cubing", "jszip", "three"],
+    static: ["src/cubing", "jszip", "three/src/Three.js"],
   },
   "src/sites/experiments.cubing.net/cubing.js/rust/wasm": {},
   "src/sites/alpha.twizzle.net/explore": {
@@ -161,7 +161,7 @@ export const specAllowedImports: AllowedImports = {
       "src/test/SKIP_SLOW_TESTS.ts",
 
       "comlink",
-      "three",
+      "three/src/Three.js",
       "random-uint-below",
     ],
   },

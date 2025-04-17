@@ -1,4 +1,4 @@
-import type { Vector3 } from "three";
+import type { Vector3 } from "three/src/Three.js";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";

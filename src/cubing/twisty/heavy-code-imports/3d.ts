@@ -15,6 +15,6 @@ export async function proxy3D(): Promise<
   ));
 }
 
-export const THREEJS: Promise<typeof import("three")> = from(
+export const THREEJS: Promise<typeof import("three/src/Three.js")> = from(
   async () => (await proxy3D()).T3I,
 );

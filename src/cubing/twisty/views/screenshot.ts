@@ -1,4 +1,4 @@
-import type { PerspectiveCamera } from "three";
+import type { PerspectiveCamera } from "three/src/Three.js";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { rawRenderPooled } from "./3D/RendererPool";

@@ -1,4 +1,4 @@
-import type { Texture, TextureLoader } from "three";
+import type { Texture, TextureLoader } from "three/src/Three.js";
 import { THREEJS } from "../../../../heavy-code-imports/3d";
 import { TwistyPropDerived } from "../../TwistyProp";
 

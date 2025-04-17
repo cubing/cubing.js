@@ -10,7 +10,7 @@
 //   Quaternion,
 //   Raycaster,
 //   Vector3,
-// } from "three";
+// } from "three/src/Three.js";
 // // Import index files from source.
 // // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../../../cubing/alg";
 // import { Alg, Move } from "../../../../cubing/alg";

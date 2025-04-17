@@ -1,4 +1,4 @@
-import { Quaternion } from "three";
+import { Quaternion } from "three/src/math/Quaternion.js";
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import { debugLog } from "../debug";
 import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";

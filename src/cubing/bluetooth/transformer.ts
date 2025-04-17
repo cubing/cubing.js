@@ -1,4 +1,5 @@
-import { Quaternion, Vector3 } from "three";
+import { Quaternion } from "three/src/math/Quaternion.js";
+import { Vector3 } from "three/src/math/Vector3.js";
 import type {
   AlgLeafEvent,
   OrientationEvent,

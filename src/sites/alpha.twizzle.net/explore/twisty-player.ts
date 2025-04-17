@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import { Vector3 } from "three/src/math/Vector3.js";
 import { getPuzzleDescriptionString } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry";

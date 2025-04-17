@@ -1,4 +1,4 @@
-import type { Raycaster, Texture as ThreeTexture } from "three";
+import type { Raycaster, Texture as ThreeTexture } from "three/src/Three.js";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { PuzzlePosition } from "../../controllers/AnimationTypes";

@@ -1,13 +1,11 @@
-import {
-  AdditiveBlending,
-  BufferGeometry,
-  Float32BufferAttribute,
-  Line,
-  LineBasicMaterial,
-  Vector3,
-  type Group,
-  type WebGLRenderer,
-} from "three";
+import { AdditiveBlending } from "three/src/constants.js";
+import { Float32BufferAttribute } from "three/src/core/BufferAttribute.js";
+import { BufferGeometry } from "three/src/core/BufferGeometry.js";
+import { LineBasicMaterial } from "three/src/materials/LineBasicMaterial.js";
+import { Vector3 } from "three/src/math/Vector3.js";
+import type { Group } from "three/src/objects/Group.js";
+import { Line } from "three/src/objects/Line.js";
+import type { WebGLRenderer } from "three/src/renderers/WebGLRenderer.js";
 
 export enum Status {
   Untargeted,

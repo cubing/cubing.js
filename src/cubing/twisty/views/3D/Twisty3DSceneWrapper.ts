@@ -1,4 +1,7 @@
-import type { PerspectiveCamera, Scene as ThreeScene } from "three";
+import type {
+  PerspectiveCamera,
+  Scene as ThreeScene,
+} from "three/src/Three.js";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import { THREEJS } from "../../heavy-code-imports/3d";

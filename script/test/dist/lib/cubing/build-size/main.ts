@@ -34,7 +34,7 @@ async function bundleSize(entryFile, threeExternal = false) {
     format: "esm",
     target: "es2022",
     outfile,
-    external: threeExternal ? ["three"] : [],
+    external: threeExternal ? ["three/src/Three.js"] : [],
   });
   const { size } = await stat(outfile);
   const bundleContents = await readFile(outfile);

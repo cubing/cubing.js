@@ -1,4 +1,4 @@
-import type { Scene as ThreeScene } from "three";
+import type { Scene as ThreeScene } from "three/src/Three.js";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 import type { Twisty3DRenderTarget } from "./Twisty3DRenderTarget";

@@ -1,18 +1,15 @@
-import {
-  BufferAttribute,
-  BufferGeometry,
-  Color,
-  DoubleSide,
-  Euler,
-  FrontSide,
-  Group,
-  Mesh,
-  MeshBasicMaterial,
-  Object3D,
-  Vector3,
-  type Material,
-  type Texture,
-} from "three";
+import { DoubleSide, FrontSide } from "three/src/constants.js";
+import { BufferAttribute } from "three/src/core/BufferAttribute.js";
+import { BufferGeometry } from "three/src/core/BufferGeometry.js";
+import { Object3D } from "three/src/core/Object3D.js";
+import type { Material } from "three/src/materials/Material.js";
+import { MeshBasicMaterial } from "three/src/materials/MeshBasicMaterial.js";
+import { Color } from "three/src/math/Color.js";
+import { Euler } from "three/src/math/Euler.js";
+import { Vector3 } from "three/src/math/Vector3.js";
+import { Group } from "three/src/objects/Group.js";
+import { Mesh } from "three/src/objects/Mesh.js";
+import type { Texture } from "three/src/textures/Texture.js";
 import { Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type {
