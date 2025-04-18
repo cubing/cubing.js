@@ -82,7 +82,7 @@ clean: clean-types
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
 
 .PHONY: clean-types
-clean-types: setup
+clean-types:
 	${BUN_RUN} script/build/lib/clean-types.ts
 
 .PHONY: reset
