@@ -12,9 +12,9 @@ import {
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import {
-  TwistyPlayer,
   type ExperimentalStickering,
   type PuzzleID,
+  TwistyPlayer,
   type TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import {
@@ -33,6 +33,7 @@ import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
+
 // import { setURLParams } from "./url-params";
 
 // TODO: introduce concepts in `cubing/twisty` for "this is a valid twisty-player value, but not for the current puzzle".

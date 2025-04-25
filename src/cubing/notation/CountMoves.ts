@@ -1,15 +1,15 @@
 // TODO: move this file somewhere permanent.
 import {
-  TraversalUp,
-  functionFromTraversal,
   type Alg,
   type Commutator,
   type Conjugate,
+  functionFromTraversal,
   type Grouping,
   type LineComment,
   type Move,
   type Newline,
   type Pause,
+  TraversalUp,
 } from "../alg";
 import type { PuzzleLoader } from "../puzzles";
 import { CommonMetric } from "./commonMetrics";

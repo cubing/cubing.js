@@ -1,8 +1,8 @@
 import type { ButtonCommand } from "../../../views/control-panel/TwistyButtons";
 import { fullscreenEnabled } from "../../../views/control-panel/webkit-fullscreen";
-import type { ViewerLinkPageWithAuto } from "./ViewerLinkProp";
-import type { CoarseTimelineInfo } from "../timeline/CoarseTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
+import type { CoarseTimelineInfo } from "../timeline/CoarseTimelineInfoProp";
+import type { ViewerLinkPageWithAuto } from "./ViewerLinkProp";
 
 export const buttonIcons = [
   "skip-to-start",

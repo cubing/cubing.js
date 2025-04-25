@@ -1,9 +1,9 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
+  type MoveEvent as algLeafEvent,
   type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
-  type MoveEvent as algLeafEvent,
 } from "../../../../cubing/bluetooth";
 import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
 import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot";

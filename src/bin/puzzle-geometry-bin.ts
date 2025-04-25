@@ -2,12 +2,12 @@
 // bun run src/bin/puzzle-geometry-bin.ts -- <program args>
 
 import {
-  PuzzleGeometry,
-  getPG3DNamedPuzzles,
-  parsePuzzleDescription,
   type ExperimentalPuzzleBaseShape,
   type ExperimentalPuzzleCutType,
   type ExperimentalPuzzleGeometryOptions,
+  getPG3DNamedPuzzles,
+  PuzzleGeometry,
+  parsePuzzleDescription,
 } from "cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "cubing/puzzle-geometry/PGPuzzles";
 import type {

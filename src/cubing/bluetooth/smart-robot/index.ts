@@ -1,6 +1,6 @@
-import { bluetoothConnect, type BluetoothConnectOptions } from "../connect";
+import { type BluetoothConnectOptions, bluetoothConnect } from "../connect";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
-import { ganTimerConfig, type GanRobot } from "./GanRobot";
+import { type GanRobot, ganTimerConfig } from "./GanRobot";
 
 /** @category Robots */
 export type BluetoothRobot = GanRobot; // TODO

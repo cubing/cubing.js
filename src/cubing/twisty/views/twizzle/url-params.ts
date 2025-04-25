@@ -3,12 +3,12 @@ import type {
   AlgProp,
   AlgWithIssues,
 } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
 import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp";
+import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
 import {
   type TwistyPlayerAttribute,
-  twistyPlayerAttributeMap,
   type TwistyPlayerConfig,
+  twistyPlayerAttributeMap,
 } from "../../../../cubing/twisty/views/TwistyPlayer";
 
 function updateURL(url: URL): void {

@@ -1,7 +1,7 @@
 export { cachedData222 } from "./2x2x2.sgs";
 export {
-  cachedSGSDataMegaminx,
   cachedMegaminxKPuzzleWithoutMO,
+  cachedSGSDataMegaminx,
 } from "./megaminx.sgs";
 export {
   sgsDataPyraminx,

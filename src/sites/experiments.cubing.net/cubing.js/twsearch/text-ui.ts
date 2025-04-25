@@ -1,9 +1,9 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
-  KPuzzle,
   KPattern,
-  type KPuzzleDefinition,
   type KPatternData,
+  KPuzzle,
+  type KPuzzleDefinition,
 } from "../../../../cubing/kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";

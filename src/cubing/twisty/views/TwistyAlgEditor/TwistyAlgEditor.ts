@@ -15,8 +15,8 @@ import type { ExperimentalParsed } from "../../../alg";
 import { Alg, type Move, type Pause } from "../../../alg";
 import {
   endCharIndexKey,
-  startCharIndexKey,
   type Parsed,
+  startCharIndexKey,
 } from "../../../alg/parseAlg";
 import type {
   AlgProp,
@@ -27,7 +27,7 @@ import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { TwistyPlayer } from "../TwistyPlayer";
-import { TwistyAlgEditorModel, type HighlightInfo } from "./model";
+import { type HighlightInfo, TwistyAlgEditorModel } from "./model";
 import { pasteIntoTextArea } from "./paste";
 import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";
 

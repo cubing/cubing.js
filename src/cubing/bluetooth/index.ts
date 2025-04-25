@@ -1,8 +1,8 @@
 export { enableDebugLogging } from "./debug";
 export { debugKeyboardConnect, KeyboardPuzzle } from "./keyboard";
 export type {
-  BluetoothPuzzle,
   AlgLeafEvent as MoveEvent,
+  BluetoothPuzzle,
   OrientationEvent,
 } from "./smart-puzzle/bluetooth-puzzle";
 export { connectSmartPuzzle } from "./smart-puzzle/connect";

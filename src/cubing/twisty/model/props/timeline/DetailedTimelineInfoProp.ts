@@ -2,10 +2,10 @@ import type {
   MillisecondTimestamp,
   TimeRange,
 } from "../../../controllers/AnimationTypes";
-import type { TimestampRequest } from "./TimestampRequestProp";
-import { TwistyPropDerived } from "../TwistyProp";
-import type { SetupToLocation } from "../puzzle/state/SetupAnchorProp";
 import type { AlgWithIssues } from "../puzzle/state/AlgProp";
+import type { SetupToLocation } from "../puzzle/state/SetupAnchorProp";
+import { TwistyPropDerived } from "../TwistyProp";
+import type { TimestampRequest } from "./TimestampRequestProp";
 
 interface DetailedTimelineInfoInputs {
   timestampRequest: TimestampRequest;

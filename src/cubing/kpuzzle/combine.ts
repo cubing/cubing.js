@@ -1,8 +1,8 @@
 import { isOrbitTransformationDataIdentityUncached } from "./calculate";
 import type {
-  KPuzzleDefinition,
   KPatternData,
   KPatternOrbitData,
+  KPuzzleDefinition,
   KTransformationData,
 } from "./KPuzzleDefinition";
 

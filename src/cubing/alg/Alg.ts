@@ -7,10 +7,10 @@ import { Move } from "./alg-nodes/leaves/Move";
 import { Newline } from "./alg-nodes/leaves/Newline";
 import { AlgCommon, type Comparable } from "./common";
 import { experimentalIs, experimentalIsAlgNode } from "./is";
-import { IterationDirection, direct, reverse } from "./iteration";
+import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parseAlg";
 import type { ExperimentalSerializationOptions } from "./SerializationOptions";
-import { simplify, type SimplifyOptions } from "./simplify";
+import { type SimplifyOptions, simplify } from "./simplify";
 import { warnOnce } from "./warnOnce";
 
 export type FlexibleAlgSource = string | Iterable<AlgNode> | Alg;

@@ -1,7 +1,7 @@
 import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
 import {
-  experimentalEnsureAlg,
   type Alg,
+  experimentalEnsureAlg,
   type FlexibleAlgSource,
 } from "../../Alg";
 import { AlgCommon, type Comparable } from "../../common";

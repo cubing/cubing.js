@@ -1,6 +1,6 @@
 import { offsetMod } from "../../../../cubing/alg/cubing-private";
 import { KPattern, type KPuzzle } from "../../../../cubing/kpuzzle";
-import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
+import { type PuzzleLoader, puzzles } from "../../../../cubing/puzzles";
 import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG";
 import { defToString, patternToString } from "../3x3x3-formats/convert";
 

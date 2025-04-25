@@ -1,8 +1,8 @@
 import { Move } from "../../../alg";
 import type { KeyboardPuzzle } from "../../../bluetooth/keyboard";
 import type {
-  BluetoothPuzzle,
   AlgLeafEvent,
+  BluetoothPuzzle,
 } from "../../../bluetooth/smart-puzzle/bluetooth-puzzle";
 import type { ExperimentalTwizzleStreamServer } from "../../../stream";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../stream/process/ReorientedStream";

@@ -12,8 +12,8 @@ import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-priv
 import { ExperimentalSVGAnimator } from "../../../../cubing/twisty";
 import {
   kpatternToReidString,
-  patternToStickers,
   patternToString as kpatternToString,
+  patternToStickers,
   reidStringToKPattern,
   stickersToKPattern,
 } from "./convert";

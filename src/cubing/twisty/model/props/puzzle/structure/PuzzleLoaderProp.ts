@@ -2,11 +2,12 @@ import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/PGP
 import { cube3x3x3, type PuzzleLoader, puzzles } from "../../../../../puzzles";
 import { experimentalCustomPGPuzzleLoader } from "../../../../../puzzles/cubing-private";
 import {
-  type NoValueType,
   NO_VALUE,
+  type NoValueType,
   TwistyPropDerived,
 } from "../../TwistyProp";
 import type { PuzzleID } from "./PuzzleIDRequestProp";
+
 8;
 interface PuzzleLoaderPropInputs {
   puzzleIDRequest: PuzzleID | NoValueType;

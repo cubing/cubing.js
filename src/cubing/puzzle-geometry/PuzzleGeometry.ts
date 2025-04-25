@@ -6,19 +6,19 @@ import {
   FaceRenamingMapper,
   FTONotationMapper,
   MegaminxScramblingNotationMapper,
+  type NotationMapper,
   NullMapper,
   NxNxNCubeMapper,
   PyraminxNotationMapper,
   SkewbNotationMapper,
   TetraminxNotationMapper,
-  type NotationMapper,
 } from "./notation-mapping";
 import { remapKPuzzleDefinition } from "./notation-mapping/NotationMapper";
 import {
-  PuzzleGeometryFullOptions,
   type BaseFaceCount,
   type FaceBasedOrientationDescription,
   type FaceBasedOrientationDescriptionLookup,
+  PuzzleGeometryFullOptions,
   type PuzzleGeometryOptions,
 } from "./Options";
 import { iota, Perm, zeros } from "./Perm";

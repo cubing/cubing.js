@@ -1,12 +1,12 @@
-import { twistyScrubberCSS } from "./TwistyScrubber.css";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
+import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
+import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
 import type { DetailedTimelineInfo } from "../../model/props/timeline/DetailedTimelineInfoProp";
+import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { globalSafeDocument } from "../document";
-import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
-import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
-import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
+import { twistyScrubberCSS } from "./TwistyScrubber.css";
 
 const SLOW_DOWN_SCRUBBING = false;
 

@@ -2,7 +2,6 @@ export { eventInfo, twizzleEvents, wcaEventInfo, wcaEvents } from "./events";
 export { cube2x2x2, cube3x3x3 };
 export type { PuzzleLoader };
 
-import type { PuzzleLoader } from "./PuzzleLoader";
 import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
@@ -18,6 +17,7 @@ import { pyraminx } from "./implementations/pyraminx";
 import { rediCube } from "./implementations/redi-cube";
 import { square1 } from "./implementations/square1";
 import { tri_quad } from "./implementations/tri_quad";
+import type { PuzzleLoader } from "./PuzzleLoader";
 
 /** @category All Puzzles */
 export const puzzles: Record<string, PuzzleLoader> = {

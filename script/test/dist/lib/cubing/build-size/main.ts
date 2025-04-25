@@ -1,12 +1,11 @@
-import { build } from "esbuild";
 import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { gzip } from "node:zlib";
-import { needPath } from "../../../../../lib/needPath.js";
-
-import { fileURLToPath } from "node:url";
-import { default as packageJSON } from "../../../../../../package.json" assert {
+import { build } from "esbuild";
+import { default as packageJSON } from "../../../../../../package.json" 
+import { needPath } from "../../../../../lib/needPath.js";assert {
   type: "json",
 };
 const { exports } = packageJSON;

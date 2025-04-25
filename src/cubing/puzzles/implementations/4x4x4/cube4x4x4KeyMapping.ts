@@ -1,4 +1,4 @@
-import { Move, type AlgLeaf } from "../../../alg";
+import { type AlgLeaf, Move } from "../../../alg";
 import { cube3x3x3KeyMapping } from "../3x3x3/cube3x3x3KeyMapping";
 
 // See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code

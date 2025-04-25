@@ -1,14 +1,14 @@
 import {
-  functionFromTraversal,
-  TraversalDownUp,
   type Alg,
   type Commutator,
   type Conjugate,
+  functionFromTraversal,
   type Grouping,
   type LineComment,
   type Move,
   type Newline,
   type Pause,
+  TraversalDownUp,
 } from "../alg";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";

@@ -1,4 +1,5 @@
 import { Alg } from "./Alg";
+import { AlgBuilder } from "./AlgBuilder";
 import type { AlgNode } from "./alg-nodes";
 import { Commutator } from "./alg-nodes/containers/Commutator";
 import { Conjugate } from "./alg-nodes/containers/Conjugate";
@@ -7,7 +8,6 @@ import { LineComment } from "./alg-nodes/leaves/LineComment";
 import { Move, QuantumMove } from "./alg-nodes/leaves/Move";
 import { Newline } from "./alg-nodes/leaves/Newline";
 import { Pause } from "./alg-nodes/leaves/Pause";
-import { AlgBuilder } from "./AlgBuilder";
 import { algDebugGlobals } from "./debug";
 
 type StoppingChar = "," | ":" | "]" | ")";

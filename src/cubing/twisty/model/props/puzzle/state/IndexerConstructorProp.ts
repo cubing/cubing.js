@@ -1,7 +1,7 @@
-import type { AlgIndexer } from "../../../..";
 import type { Alg } from "../../../../../alg";
 import type { KPuzzle } from "../../../../../kpuzzle";
 import { countLeavesInExpansionForSimultaneousMoveIndexer } from "../../../../../notation/CountMoves";
+import type { AlgIndexer } from "../../../..";
 import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer";
 import { SimultaneousMoveIndexer } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexer";
 import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";

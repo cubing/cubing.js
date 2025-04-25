@@ -1,8 +1,8 @@
 import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
-import { Commutator, Conjugate } from "..";
 import { Alg, experimentalEnsureAlg, type FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
+import { Commutator, Conjugate } from "..";
 import type { AlgLeaf, AlgNode } from "../AlgNode";
 import { Move, QuantumMove } from "../leaves/Move";
 import type { Pause } from "../leaves/Pause";

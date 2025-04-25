@@ -5,10 +5,10 @@
 // } from "./mask";
 
 import {
-  experimentalGetPieceStickeringMask,
   ExperimentalPieceStickering,
   type ExperimentalPieceStickeringMask,
   type ExperimentalStickeringMask,
+  experimentalGetPieceStickeringMask,
 } from "../../../../../puzzles/cubing-private";
 
 const charMap: Record<string, ExperimentalPieceStickering> = {

@@ -1,7 +1,7 @@
 import {
   NO_VALUE,
-  SimpleTwistyPropSource,
   type NoValueType,
+  SimpleTwistyPropSource,
 } from "../../TwistyProp";
 
 export const puzzleIDs = {

@@ -1,6 +1,6 @@
 export {
-  directedGenerator as experimentalDirectedGenerator,
   direct as experimentalDirect,
+  directedGenerator as experimentalDirectedGenerator,
   IterationDirection as ExperimentalIterationDirection,
 } from "../iteration";
 

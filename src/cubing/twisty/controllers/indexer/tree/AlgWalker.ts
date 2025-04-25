@@ -1,7 +1,5 @@
 import {
   Alg,
-  TraversalDownUp,
-  TraversalUp,
   type AlgNode,
   type Commutator,
   type Conjugate,
@@ -10,6 +8,8 @@ import {
   type Move,
   type Newline,
   type Pause,
+  TraversalDownUp,
+  TraversalUp,
 } from "../../../../alg";
 import {
   ExperimentalIterationDirection,

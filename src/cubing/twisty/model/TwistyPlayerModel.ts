@@ -24,12 +24,12 @@ import { PGPuzzleDescriptionStringProp } from "./props/puzzle/structure/PuzzleDe
 import { PuzzleIDProp } from "./props/puzzle/structure/PuzzleIDProp";
 import { PuzzleIDRequestProp } from "./props/puzzle/structure/PuzzleIDRequestProp";
 import { PuzzleLoaderProp } from "./props/puzzle/structure/PuzzleLoaderProp";
+import { NO_VALUE } from "./props/TwistyProp";
 import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
 import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
 import { PlayingInfoProp } from "./props/timeline/PlayingInfoProp";
 import { TempoScaleProp } from "./props/timeline/TempoScaleProp";
 import { TimestampRequestProp } from "./props/timeline/TimestampRequestProp";
-import { NO_VALUE } from "./props/TwistyProp";
 import { BackViewProp } from "./props/viewer/BackViewProp";
 import { ButtonAppearanceProp } from "./props/viewer/ButtonAppearanceProp";
 import { ControlPanelProp } from "./props/viewer/ControlPanelProp";

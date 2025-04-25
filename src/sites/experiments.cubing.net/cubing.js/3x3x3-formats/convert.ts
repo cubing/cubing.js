@@ -1,8 +1,8 @@
-import type {
-  KPuzzleDefinition,
-  KPatternOrbitData,
-} from "../../../../cubing/kpuzzle/KPuzzleDefinition";
 import { KPattern } from "../../../../cubing/kpuzzle";
+import type {
+  KPatternOrbitData,
+  KPuzzleDefinition,
+} from "../../../../cubing/kpuzzle/KPuzzleDefinition";
 import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
 
 function neatStringify(data: any): string {

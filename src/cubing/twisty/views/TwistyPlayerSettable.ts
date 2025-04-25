@@ -13,8 +13,8 @@ import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorPro
 import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
-import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
 import type { ColorSchemeWithAuto } from "../model/props/viewer/ColorSchemeRequestProp";
+import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";

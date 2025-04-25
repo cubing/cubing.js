@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 
 import {
-  permutationToLex,
   lexToPermutation,
-  orientationsToMask,
   maskToOrientations,
+  orientationsToMask,
+  permutationToLex,
 } from "./orbit-indexing";
 
 test("indexes", () => {

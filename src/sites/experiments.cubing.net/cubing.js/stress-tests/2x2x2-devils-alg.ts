@@ -3,9 +3,9 @@
 
 import {
   AlgBuilder,
+  type AlgNode,
   Grouping,
   Move,
-  type AlgNode,
 } from "../../../../cubing/alg";
 import { experimentalCountMoves } from "../../../../cubing/notation";
 import { TwistyPlayer } from "../../../../cubing/twisty";

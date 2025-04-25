@@ -1,21 +1,21 @@
 import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
-import { buttonCSS, buttonGridCSS } from "./TwistyButtons.css";
-import { ClassListManager } from "../ClassListManager";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
+import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
 import {
   type ButtonAppearances,
   type ButtonIcon,
   buttonIcons,
 } from "../../model/props/viewer/ButtonAppearanceProp";
+import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
+import { ClassListManager } from "../ClassListManager";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
+import { buttonCSS, buttonGridCSS } from "./TwistyButtons.css";
 import {
   documentExitFullscreen,
   documentFullscreenElement,
   requestFullscreen,
 } from "./webkit-fullscreen";
-import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
 
 const buttonCommands = {
   fullscreen: true,

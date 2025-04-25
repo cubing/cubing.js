@@ -5,8 +5,8 @@ import type { Duration, Timestamp } from "../../AnimationTypes";
 import type { AlgIndexer } from "../AlgIndexer";
 import {
   AlgWalker,
-  DecoratorConstructor,
   type AlgWalkerDecoration,
+  DecoratorConstructor,
 } from "./AlgWalker";
 import { chunkAlgs } from "./chunkAlgs";
 

@@ -1,7 +1,7 @@
 import type { PuzzleLoader } from "../../../../../puzzles";
 import type {
-  ExperimentalStickeringMask,
   ExperimentalPieceStickeringMask,
+  ExperimentalStickeringMask,
 } from "../../../../../puzzles/cubing-private";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { ExperimentalStickering } from "./StickeringRequestProp";

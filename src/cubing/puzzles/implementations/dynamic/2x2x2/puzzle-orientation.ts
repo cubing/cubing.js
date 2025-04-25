@@ -1,5 +1,5 @@
 import { Alg } from "../../../../alg";
-import type { KPuzzle, KPattern, KTransformation } from "../../../../kpuzzle";
+import type { KPattern, KPuzzle, KTransformation } from "../../../../kpuzzle";
 
 export function puzzleOrientation2x2x2Idx(pattern: KPattern): number {
   const inverse = pattern.experimentalToTransformation()!.invert();

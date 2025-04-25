@@ -1,6 +1,6 @@
 import {
-  HTMLElementShim,
   customElementsShim,
+  HTMLElementShim,
 } from "./node-custom-element-shims";
 
 // - Wrapped element

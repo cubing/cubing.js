@@ -1,5 +1,5 @@
-import { Alg, Grouping } from "../..";
 import { expect, test } from "bun:test";
+import { Alg, Grouping } from "../..";
 
 test("Grouping can invert a Square-1 tuple", () => {
   expect(new Alg("(5, 4)").invert().toString()).toStrictEqual("(-5, -4)");
