@@ -145,7 +145,7 @@ class AlgParser {
         if (algBuilder.experimentalNumAlgNodes() === 0) {
           algStartIdx = this.#idx;
         }
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
         // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (MOVE_START_REGEX.test(this.#input[this.#idx])) {
@@ -155,7 +155,7 @@ class AlgParser {
         crowded = true;
         algEndIdx = this.#idx;
 
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
         // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
@@ -186,7 +186,7 @@ class AlgParser {
           crowded = true;
           algEndIdx = this.#idx;
 
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
           // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         } else {
@@ -203,7 +203,7 @@ class AlgParser {
           crowded = true;
           algEndIdx = this.#idx;
 
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
           // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         }
@@ -277,7 +277,7 @@ class AlgParser {
         crowded = true;
         algEndIdx = this.#idx;
 
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
         // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("\n")) {
@@ -287,7 +287,7 @@ class AlgParser {
         crowded = false;
         algEndIdx = this.#idx;
 
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
         // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
@@ -300,7 +300,7 @@ class AlgParser {
           crowded = false;
           algEndIdx = this.#idx;
 
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
           // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         } else {
@@ -311,7 +311,7 @@ class AlgParser {
           crowded = true;
           algEndIdx = this.#idx;
 
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+          // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
           // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
           continue mainLoop;
         }
@@ -321,7 +321,7 @@ class AlgParser {
         crowded = true;
         algEndIdx = this.#idx;
 
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
+        // biome-ignore lint/correctness/noUselessContinue: This line allows for more robust refactoring.
         // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
         continue mainLoop;
       } else {

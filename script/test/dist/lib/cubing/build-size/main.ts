@@ -1,9 +1,9 @@
-import { build } from "esbuild";
 import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { gzip } from "node:zlib";
+import { build } from "esbuild";
 import { needPath } from "../../../../../lib/needPath.js";
 import { packageJSON } from "./main.biome-workarounds"; // TODO(https://github.com/biomejs/biome/issues/5771): remove
 
