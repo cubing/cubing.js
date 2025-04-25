@@ -4,8 +4,11 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { gzip } from "node:zlib";
 import { build } from "esbuild";
+import { default as packageJSON } from "../../../../../../package.json" with {
+  type: "json",
+};
+
 import { needPath } from "../../../../../lib/needPath.js";
-import { packageJSON } from "./main.biome-workarounds"; // TODO(https://github.com/biomejs/biome/issues/5771): remove
 
 const { exports } = packageJSON;
 
