@@ -1,48 +1,68 @@
 {
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "files": {
-    "ignore": [
-      "./.temp",
-      "./dist",
-      "./*/index.d.ts",
-      "./src/cubing/vendor/mit/cs0x7f/**/*",
-      "./src/cubing/vendor/mpl/twsearch/*.js",
-      "./src/cubing/vendor/mpl/xyzzy/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
-      "./src/test/vendor/bun-types-workaround.d.ts"
-    ]
-  },
-  "linter": {
-    "rules": {
-      "nursery": {},
-      "complexity": {
-        "useLiteralKeys": "off"
-      },
-      "style": {
-        "noNegationElse": "off",
-        "noShoutyConstants": "off",
-        "noInferrableTypes": "off",
-        "noNonNullAssertion": "off",
-        "noParameterAssign": "off",
-        "useEnumInitializers": "off",
-        "noUselessElse": "off",
-        "useNumberNamespace": "off"
-      },
-      "suspicious": {
-        "noAssignInExpressions": "off",
-        "noExplicitAny": "off"
-      },
-      "performance": {
-        "noDelete": "off"
-      }
-    }
-  },
-  "formatter": {
-    "indentStyle": "space",
-    "indentWidth": 2
-  },
-  "organizeImports": {
-    "enabled": false
-  }
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"files": {
+		"includes": [
+			"**",
+			"!.temp",
+			"!dist",
+			"!*/index.d.ts",
+			"!src/cubing/vendor/mit/cs0x7f/**/*",
+			"!src/cubing/vendor/mpl/twsearch/*.js",
+			"!src/cubing/vendor/mpl/xyzzy/*.js",
+			"!src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
+			"!src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts",
+			"!src/test/vendor/bun-types-workaround.d.ts"
+		]
+	},
+	"linter": {
+		"rules": {
+			"style": {
+				"noNegationElse": "off",
+				"noShoutyConstants": "off",
+				"noInferrableTypes": "off",
+				"noNonNullAssertion": "off",
+				"noParameterAssign": "off",
+				"useEnumInitializers": "off",
+				"noUselessElse": "off",
+				"useNumberNamespace": "off",
+				"useLiteralEnumMembers": "error",
+				"noCommaOperator": "error",
+				"useNodejsImportProtocol": "error",
+				"useAsConstAssertion": "error",
+				"useNumericLiterals": "error",
+				"useSelfClosingElements": "error",
+				"useConst": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useExponentiationOperator": "error",
+				"useTemplate": "error",
+				"useDefaultParameterLast": "error",
+				"noArguments": "error",
+				"useImportType": "error",
+				"useExportType": "error",
+				"useShorthandFunctionType": "error"
+			},
+			"performance": {
+				"noDelete": "off"
+			},
+			"complexity": {
+				"useLiteralKeys": "off"
+			},
+			"suspicious": {
+				"noAssignInExpressions": "off",
+				"noExplicitAny": "off"
+			}
+		}
+	},
+	"formatter": {
+		"indentStyle": "space",
+		"indentWidth": 2
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	}
 }
