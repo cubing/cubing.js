@@ -1,4 +1,4 @@
-import { ChildProcess, exec, spawn } from "node:child_process";
+import { exec, spawn } from "node:child_process";
 
 /** @type ChildProcess[] */
 const childProcesses = [];
