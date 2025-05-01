@@ -1,16 +1,19 @@
-import { execPromiseLogged } from "../lib/execPromise";
+import { PrintableShellCommand } from "printable-shell-command";
 
 export async function rsync(
   localFolder: string,
   remoteFolder: string,
   options?: { delete?: boolean; exclude?: string[] },
 ) {
-  const excludeArgs = (options?.exclude ?? [".DS_Store", ".git"])
-    .map((s) => `--exclude "${s}"`)
-    .join(" ");
-  await execPromiseLogged(
-    `rsync -avz ${excludeArgs} ${
-      options?.delete ? "--delete" : ""
-    } "${localFolder}" "${remoteFolder}"`,
-  );
+  const excludeArgs: [string, string][] = (
+    options?.exclude ?? [".DS_Store", ".git"]
+  ).map((s) => ["--exclude", s]);
+  const deleteArgs = options?.delete ? ["--delete"] : [];
+  await new PrintableShellCommand("rsync", [
+    "-avz",
+    ...excludeArgs,
+    ...deleteArgs,
+    localFolder,
+    remoteFolder,
+  ]).shellOutBun();
 }

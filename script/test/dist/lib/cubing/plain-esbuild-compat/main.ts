@@ -1,8 +1,7 @@
 import { join } from "node:path";
-import { stdout } from "node:process";
 import { fileURLToPath } from "node:url";
+import { PrintableShellCommand } from "printable-shell-command";
 import { packageNames } from "../../../../../build/common/package-info.js";
-import { execPromiseLogged } from "../../../../../lib/execPromise.js";
 import { needPath } from "../../../../../lib/needPath.js";
 
 // TODO: relative
@@ -13,15 +12,19 @@ needPath(
   "make build-lib-js",
 );
 
-const dist_entries = packageNames
-  .map((e) => join("dist/lib/cubing/", e, "/index.js"))
-  .join(" ");
-const cmd = `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`;
-console.log(cmd);
-stdout.write(
+const dist_entries = packageNames.map((e) =>
+  join("dist/lib/cubing/", e, "/index.js"),
+);
+console.log(
   "Testing that the ESM build can be transpiled by `esbuild` with default compat settings...",
 );
-await execPromiseLogged(
-  `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`,
-);
+await new PrintableShellCommand("npx", [
+  "esbuild",
+  "--bundle",
+  "--splitting",
+  `--outdir=${OUT_DIR}`,
+  "--format=esm",
+  "--minify",
+  ...dist_entries,
+]).shellOutBun();
 console.log(" ✅ Success!");

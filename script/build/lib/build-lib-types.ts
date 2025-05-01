@@ -1,7 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { PrintableShellCommand } from "printable-shell-command";
-import { spawnPromiseForPrintableShellCommand } from "../../lib/execPromise";
 import { packageNames } from "../common/package-info";
 
 console.warn(`
@@ -22,8 +21,7 @@ const tsupCommand = new PrintableShellCommand("bun", [
   ["--format", "esm"],
   ["--out-dir", "dist/lib/cubing"],
 ]);
-tsupCommand.print();
-await spawnPromiseForPrintableShellCommand(tsupCommand);
+await tsupCommand.shellOutBun();
 
 // TODO: remove this once TypeScript resolves types from the `package.json` exports out of the box (by default).
 for (const packageName of packageNames) {
