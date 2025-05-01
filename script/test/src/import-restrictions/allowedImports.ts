@@ -28,6 +28,8 @@ export const mainAllowedImports: AllowedImports = {
       "node:url",
       "node:zlib",
 
+      "bun",
+
       "package.json",
       "cubing",
 

@@ -1,15 +1,13 @@
+import { $ } from "bun";
 import * as assert from "node:assert";
 import { readFile } from "node:fs/promises";
 import { PrintableShellCommand } from "printable-shell-command";
 import type { VersionJSON } from "../build/sites/barelyServeSite";
-import { execPromise } from "../lib/execPromise";
 import { rsync } from "./rsync";
 
-const gitDescribeVersion = (await execPromise("git describe --tags")).trim();
+const gitDescribeVersion = (await $`git describe --tags`.text()).trim();
 const versionFolderName = (
-  await execPromise(
-    `date "+%Y-%m-%d@%H-%M-%S-%Z@${gitDescribeVersion}@unixtime%s"`,
-  )
+  await $`date "+%Y-%m-%d@%H-%M-%S-%Z@${gitDescribeVersion}@unixtime%s"`.text()
 ).trim();
 const twizzleSSHServer = "cubing_deploy@twizzle.net";
 const twizzleSFTPPath = "~/alpha.twizzle.net";

@@ -1,10 +1,10 @@
 import { barelyServe } from "barely-a-dev-server";
+import { $ } from "bun";
 import type { Plugin } from "esbuild";
 import { exec } from "node:child_process";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { execPromise } from "../../lib/execPromise";
 import { needPath } from "../../lib/needPath";
 
 needPath(
@@ -57,13 +57,11 @@ export interface VersionJSON {
 async function writeVersionJSON(siteFolder: string) {
   // https://git-scm.com/docs/git-describe
   const gitDescribeVersion = (
-    await execPromise("git describe --tags || echo v0.0.0")
+    await $`git describe --tags || echo v0.0.0`.text()
   ).trim();
-  const gitBranch = (
-    await execPromise("git rev-parse --abbrev-ref HEAD")
-  ).trim();
-  const date = (await execPromise("date")).trim();
-  const commitHash = (await execPromise("git rev-parse HEAD")).trim();
+  const gitBranch = (await $`git rev-parse --abbrev-ref HEAD`.text()).trim();
+  const date = (await $`date`.text()).trim();
+  const commitHash = (await $`git rev-parse HEAD`.text()).trim();
   const commitGitHubURL = `https://github.com/cubing/cubing.js/commit/${commitHash}`;
 
   await writeFile(
