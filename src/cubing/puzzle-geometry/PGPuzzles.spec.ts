@@ -143,6 +143,6 @@ for (const [name, desc] of Object.entries(PGPuzzles)) {
       o,
     ].join("");
     const exp = expectedData[name];
-    expect(dat).toStrictEqual(exp);
+    expect(dat as string | null).toStrictEqual(exp);
   });
 }
