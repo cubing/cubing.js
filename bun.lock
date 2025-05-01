@@ -28,7 +28,7 @@
         "jszip": "^3.10.1",
         "mocha": "^10.7.3",
         "playwright": "^1.47.2",
-        "printable-shell-command": "v0.3.0",
+        "printable-shell-command": "v0.3.1",
         "tsup": "^8.3.0",
         "typedoc": "v0.28.2",
         "typescript": "v5.8.3",
@@ -834,7 +834,7 @@
 
     "postcss-load-config": ["postcss-load-config@6.0.1", "", { "dependencies": { "lilconfig": "^3.1.1" }, "peerDependencies": { "jiti": ">=1.21.0", "postcss": ">=8.0.9", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["jiti", "postcss", "tsx", "yaml"] }, "sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g=="],
 
-    "printable-shell-command": ["printable-shell-command@0.3.0", "", { "optionalDependencies": { "@types/bun": "^1.2.11", "@types/node": "^22.15.3" } }, "sha512-65R1me7Cv/+7soxharDfyaKE9Dzolhyjm3dj0sKwCwFOqyWR8M473FsrzK9XDCsb3G8F+Bm4BPwY6LOuXfzeIg=="],
+    "printable-shell-command": ["printable-shell-command@0.3.1", "", { "optionalDependencies": { "@types/bun": "^1.2.11", "@types/node": "^22.15.3" } }, "sha512-yUrenY7dxf9yT2exL39B06/rsx0l6GBE9HCr8d3bKpkYyoJdb9LRe1+xsS87VCcCkvDSqfRcV25jFi3fRxGjIQ=="],
 
     "process-nextick-args": ["process-nextick-args@2.0.1", "", {}, "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag=="],
 
