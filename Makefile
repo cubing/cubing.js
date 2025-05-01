@@ -122,7 +122,8 @@ test-info:
 test-fast: update-dependencies \
 	build-lib-js test-spec-bun-fast build-bin build-sites \
 	lint \
-	test-src-import-restrictions test-src-scripts-consistency \
+	test-src-import-restrictions \
+	test-src-scripts-consistency \
 	test-dist-lib-node-import \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
