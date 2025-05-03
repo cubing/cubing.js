@@ -13,7 +13,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "v1.9.4",
-        "@cubing/deploy": "v0.1.8",
+        "@cubing/deploy": "v0.1.12",
         "@esm-bundle/chai": "^4.3.4-fix.0",
         "@types/bun": "^1.2.11",
         "@types/chai": "^5.0.0",
@@ -59,7 +59,7 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@1.9.4", "", { "os": "win32", "cpu": "x64" }, "sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA=="],
 
-    "@cubing/deploy": ["@cubing/deploy@0.1.8", "", { "bin": { "deploy": "src/main.ts" } }, "sha512-3lCjmSQea4S/t+E76Ioq1SlOd/rj7bTRJO21Rph5kdHmYux45coPubYBxqqJ/gJ5/BB1BwNR1RCC6KKpK/Xk1g=="],
+    "@cubing/deploy": ["@cubing/deploy@0.1.12", "", { "dependencies": { "printable-shell-command": "v0.3.2" }, "bin": { "deploy": "src/main.ts" } }, "sha512-8qOW75Fpap6EdlvGZCUt2zp4VvdbzhpePj41R5mr5yLOxcCJBGu/PYGXTzi5qAsTooPOYYrdNNjMBhxV66q8Hg=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-wCIboOL2yXZym2cgm6mlA742s9QeJ8DjGVaL39dLN4rRwrOgOyYSnOaFPhKZGLb2ngj4EyfAFjsNJwPXZvseag=="],
 
