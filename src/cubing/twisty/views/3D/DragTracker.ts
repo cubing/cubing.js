@@ -35,7 +35,7 @@ export interface PressInfo {
   };
 }
 
-// Chrome can report movements as low as `0.0000152587890625` even if the cursor did not move at all. So we need a treshold insteadl.
+// Chrome can report movements as low as `0.0000152587890625` even if the cursor did not move at all. So we need a treshold instead.
 const MOVEMENT_EPSILON = 0.1; // px
 
 export class DragTracker extends EventTarget {
