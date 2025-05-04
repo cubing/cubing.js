@@ -13,7 +13,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "v1.9.4",
-        "@cubing/deploy": "v0.1.12",
+        "@cubing/deploy": "v0.2.1",
         "@esm-bundle/chai": "^4.3.4-fix.0",
         "@types/bun": "^1.2.11",
         "@types/chai": "^5.0.0",
@@ -59,7 +59,7 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@1.9.4", "", { "os": "win32", "cpu": "x64" }, "sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA=="],
 
-    "@cubing/deploy": ["@cubing/deploy@0.1.12", "", { "dependencies": { "printable-shell-command": "v0.3.2" }, "bin": { "deploy": "src/main.ts" } }, "sha512-8qOW75Fpap6EdlvGZCUt2zp4VvdbzhpePj41R5mr5yLOxcCJBGu/PYGXTzi5qAsTooPOYYrdNNjMBhxV66q8Hg=="],
+    "@cubing/deploy": ["@cubing/deploy@0.2.1", "", { "dependencies": { "printable-shell-command": "0.1.0-pre3", "typescript": "^5.8.3" }, "bin": { "deploy": "dist/lib/@cubing/deploy/main.js" } }, "sha512-sOK/W8B/LeL7nLKnNE6nmczLeeLvmEO+OtNKhL+JDBQ+ggnM33x81zzpziSONVs/Ax1r6LZdH0zVV5NI05w6ow=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-wCIboOL2yXZym2cgm6mlA742s9QeJ8DjGVaL39dLN4rRwrOgOyYSnOaFPhKZGLb2ngj4EyfAFjsNJwPXZvseag=="],
 
@@ -1049,7 +1049,7 @@
 
     "zod": ["zod@3.23.8", "", {}, "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="],
 
-    "@cubing/deploy/printable-shell-command": ["printable-shell-command@0.3.2", "", { "optionalDependencies": { "@types/bun": "^1.2.11", "@types/node": "^22.15.3" } }, "sha512-qA8I8ZffoXPBiVgAKqQRFLOJ5fjPQSL8tYie1mkdGhBB9zIgiC3Poo0M9Fg9T1Wiu2jiuPiDz0AFXDYKnOThZA=="],
+    "@cubing/deploy/printable-shell-command": ["printable-shell-command@0.1.0-pre3", "", { "optionalDependencies": { "@types/bun": "^1.2.11", "@types/node": "^22.15.3" } }, "sha512-8/fSZ3piSi3o5gjJjbb7lK1hIz0lxMkWKpKl4nus3AUzS0bzosL48xTEtshy9TCMofw5GhT1dfCQNbY0bRwrng=="],
 
     "@esm-bundle/chai/@types/chai": ["@types/chai@4.3.20", "", {}, "sha512-/pC9HAB5I/xMlc5FP77qjCnI16ChlJfW0tGa0IUcFn38VJrTV6DeZ60NU5KZBtaOZqjdpwTWohz5HU1RrhiYxQ=="],
 
