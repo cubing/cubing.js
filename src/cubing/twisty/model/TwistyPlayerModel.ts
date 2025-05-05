@@ -50,7 +50,8 @@ export class TwistyPlayerModel {
 
   // TODO: Redistribute and group props with controllers.
 
-  // Depth 0
+  /******************************** Depth 0 ********************************/
+
   alg = new AlgProp();
   backView = new BackViewProp();
   controlPanel = new ControlPanelProp();
@@ -70,9 +71,43 @@ export class TwistyPlayerModel {
   title = new ArbitraryStringProp();
   videoURL = new URLProp();
   competitionID = new ArbitraryStringProp();
+  /**
+   * `<twisty-player>` interally supports associating custom timing information
+   * for this move, but there is not an API for this yet. In order to support
+   * exploratory use cases for such a feature in the future, this property
+   * allows setting timeline information.
+   *
+   * Note that this feature may not work as expected when combined with other
+   * features. In particular, it will cause sync issues with an associated
+   * `<twisty-alg-viewer>` depending on how the alg/moves are constructed.
+   *
+   * Usage example:
+   *
+   * ```ts
+   * import { Move, Pause } from "cubing/alg";
+   * import { TwistyPlayer } from "cubing/twisty";
+   *
+   * const player = document.body.appendChild(new TwistyPlayer());
+   * player.alg = "R U' D2 R'";
+   *
+   * // Note that:
+   * // - The leaves must match those of the alg. (No consistency checks are performed at this time.)
+   * // - Leaves may overlap if they can be simultaneously animated.
+   * // - There must always be at least one animating leaf at any moment. You can use a `Pause` for this if there is a gap between moves.
+   * player.experimentalModel.animationTimelineLeavesRequest.set([
+   *   { animLeaf: new Move("R", 1), start: 0, end: 200 },
+   *   { animLeaf: new Pause(), start: 200, end: 218 },
+   *   { animLeaf: new Move("U", -1), start: 218, end: 370 },
+   *   { animLeaf: new Move("D", 2), start: 249, end: 520 },
+   *   { animLeaf: new Pause(), start: 520, end: 530 },
+   *   { animLeaf: new Move("R", -1), start: 530, end: 790 },
+   * ]);
+   * ```
+   */
   animationTimelineLeavesRequest = new AnimationTimelineLeavesRequestProp();
 
-  // Depth 1
+  /******************************** Depth 1 ********************************/
+
   puzzleLoader = new PuzzleLoaderProp(
     {
       puzzleIDRequest: this.puzzleIDRequest,
@@ -81,12 +116,13 @@ export class TwistyPlayerModel {
     this.userVisibleErrorTracker,
   );
 
-  // Depth 2
+  /******************************** Depth 2 ********************************/
+
   kpuzzle = new KPuzzleProp({ puzzleLoader: this.puzzleLoader });
 
   puzzleID = new PuzzleIDProp({ puzzleLoader: this.puzzleLoader });
 
-  // Depth 3
+  /******************************** Depth 3 ********************************/
 
   puzzleAlg = new PuzzleAlgProp({
     algWithIssues: this.alg,
@@ -103,7 +139,8 @@ export class TwistyPlayerModel {
     puzzleID: this.puzzleID,
   });
 
-  // Depth 4
+  /******************************** Depth 4 ********************************/
+
   indexerConstructor = new IndexerConstructorProp({
     alg: this.alg,
     puzzle: this.puzzleID,
@@ -117,7 +154,8 @@ export class TwistyPlayerModel {
     kpuzzle: this.kpuzzle,
   });
 
-  // Depth 5
+  /******************************** Depth 5 ********************************/
+
   indexer = new IndexerProp({
     indexerConstructor: this.indexerConstructor,
     algWithIssues: this.puzzleAlg,
@@ -125,7 +163,8 @@ export class TwistyPlayerModel {
     animationTimelineLeaves: this.animationTimelineLeavesRequest,
   });
 
-  // Depth 6
+  /******************************** Depth 6 ********************************/
+
   anchorTransformation = new AnchorTransformationProp({
     setupTransformation: this.setupTransformation,
     setupAnchor: this.setupAnchor,
@@ -137,7 +176,8 @@ export class TwistyPlayerModel {
     indexer: this.indexer,
   });
 
-  // Depth 7
+  /******************************** Depth 7 ********************************/
+
   detailedTimelineInfo: DetailedTimelineInfoProp = new DetailedTimelineInfoProp(
     {
       timestampRequest: this.timestampRequest,
@@ -147,7 +187,8 @@ export class TwistyPlayerModel {
     },
   );
 
-  // Depth 8
+  /******************************** Depth 8 ********************************/
+
   coarseTimelineInfo = new CoarseTimelineInfoProp({
     detailedTimelineInfo: this.detailedTimelineInfo,
     playingInfo: this.playingInfo,
@@ -159,7 +200,8 @@ export class TwistyPlayerModel {
     catchUpMove: this.catchUpMove,
   });
 
-  // Depth 9
+  /******************************** Depth 9 ********************************/
+
   // TODO: Inline Twisty3D management.
   buttonAppearance = new ButtonAppearanceProp({
     coarseTimelineInfo: this.coarseTimelineInfo,
@@ -170,14 +212,16 @@ export class TwistyPlayerModel {
     currentMoveInfo: this.currentMoveInfo,
   });
 
-  // Depth 10
+  /******************************** Depth 10 ********************************/
+
   currentPattern = new CurrentPatternProp({
     anchoredStart: this.anchorTransformation,
     currentLeavesSimplified: this.currentLeavesSimplified,
     indexer: this.indexer,
   });
 
-  // Depth 11
+  /******************************** Depth 11 ********************************/
+
   legacyPosition = new LegacyPositionProp({
     currentMoveInfo: this.currentMoveInfo,
     currentPattern: this.currentPattern,
