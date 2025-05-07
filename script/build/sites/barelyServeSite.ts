@@ -14,7 +14,7 @@ needPath(
   "make setup",
 );
 
-function plugins(dev: boolean) {
+function plugins(dev: boolean): Plugin[] {
   const plugins = [];
   // TODO: convenience hack for @lgarron; figure out how to either generalize this or add light auto-refresh to `barely-a-dev-server`
   if (
@@ -92,7 +92,6 @@ export async function barelyServeSite(srcFolder: string, dev: boolean) {
       chunkNames: "chunks/[name]-[hash]",
       target: "es2022",
       plugins: plugins(dev),
-      minify: !dev,
     },
   });
   if (!dev) {
