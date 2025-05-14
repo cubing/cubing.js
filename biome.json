@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["./node_modules/@cubing/dev-config/biome/biome.json"],
   "files": {
     "ignore": [
       "./.temp",
@@ -40,14 +41,5 @@
         "noUnusedImports": "error"
       }
     }
-  },
-  "formatter": {
-    "indentStyle": "space",
-    "indentWidth": 2
-  },
-  "vcs": {
-    "clientKind": "git",
-    "enabled": true,
-    "useIgnoreFile": true
   }
 }
