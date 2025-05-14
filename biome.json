@@ -26,7 +26,8 @@
         "noParameterAssign": "off",
         "useEnumInitializers": "off",
         "noUselessElse": "off",
-        "useNumberNamespace": "off"
+        "useNumberNamespace": "off",
+        "useBlockStatements": "error"
       },
       "suspicious": {
         "noAssignInExpressions": "off",
