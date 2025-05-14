@@ -46,5 +46,10 @@
   },
   "organizeImports": {
     "enabled": false
+  },
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
   }
 }
