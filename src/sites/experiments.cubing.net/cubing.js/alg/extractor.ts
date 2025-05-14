@@ -1,6 +1,4 @@
 import {
-  TraversalUp,
-  functionFromTraversal,
   type Alg,
   type AlgNode,
   type Commutator,
@@ -10,6 +8,8 @@ import {
   type Move,
   type Newline,
   type Pause,
+  TraversalUp,
+  functionFromTraversal,
 } from "../../../../cubing/alg";
 
 class Extractor extends TraversalUp<Generator<[string, AlgNode | Alg]>> {

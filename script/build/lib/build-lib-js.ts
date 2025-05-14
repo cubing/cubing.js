@@ -1,5 +1,5 @@
-import { build, type BuildOptions } from "esbuild";
 import { mkdir, writeFile } from "node:fs/promises";
+import { type BuildOptions, build } from "esbuild";
 import { packageEntryPointsWithSearchWorkerEntry } from "../common/package-info";
 
 // In theory we could set `packages: "external"` here and rely on `make

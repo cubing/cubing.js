@@ -19,9 +19,9 @@ import type {
 } from "../../../../puzzle-geometry";
 import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
 import {
-  experimentalGetFaceletStickeringMask,
   type ExperimentalFaceletMeshStickeringMask,
   type ExperimentalStickeringMask,
+  experimentalGetFaceletStickeringMask,
 } from "../../../../puzzles/cubing-private";
 import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";

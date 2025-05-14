@@ -1,5 +1,4 @@
 import {
-  TraversalUp,
   type Alg,
   type Commutator,
   type Conjugate,
@@ -8,6 +7,7 @@ import {
   type Move,
   type Newline,
   type Pause,
+  TraversalUp,
 } from "../../../alg";
 import type { Duration } from "../AnimationTypes";
 

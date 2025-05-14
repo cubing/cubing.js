@@ -12,21 +12,21 @@ import {
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import {
-  TwistyPlayer,
   type ExperimentalStickering,
   type PuzzleID,
+  TwistyPlayer,
   type TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import {
   constructMoveCountDisplay,
   getStickeringGroup,
 } from "../../../cubing/twisty/cubing-private";
-import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
+import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
 import "../../../cubing/twisty/views/stream/TwistyStreamSource";
-import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
+import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
 import { computeAlgFeatures } from "./alg-features";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";

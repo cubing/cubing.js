@@ -1,3 +1,4 @@
+import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 import { URLProp } from "./props/general/URLProp";
 import { FaceletScaleProp } from "./props/puzzle/display/FaceletScaleProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
@@ -17,7 +18,6 @@ import { DOMElementReferenceProp } from "./props/viewer/DOMElementReferenceProp"
 import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
 import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
-import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 
 export class TwistySceneModel {
   // Depth 0

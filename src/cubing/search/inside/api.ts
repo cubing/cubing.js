@@ -1,8 +1,8 @@
 import type { Alg } from "../../alg";
 import {
   KPattern,
-  KPuzzle,
   type KPatternData,
+  KPuzzle,
   type KPuzzleDefinition,
 } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
@@ -27,9 +27,9 @@ import { solvePyraminx } from "./solve/puzzles/pyraminx";
 import { randomRediCubeScramble } from "./solve/puzzles/redi_cube";
 import { solveSkewb } from "./solve/puzzles/skewb";
 import {
+  type TwsearchOptions,
   wasmRandomScrambleForEvent,
   wasmTwsearch,
-  type TwsearchOptions,
 } from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;

@@ -1,11 +1,11 @@
 import type { ExperimentalStickering } from "../../twisty";
+import { from } from "../../vendor/mit/p-lazy/p-lazy";
 import type { PuzzleLoader } from "../PuzzleLoader";
-import type { StickeringMask } from "./mask";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,
 } from "./cube-like-stickerings";
-import { from } from "../../vendor/mit/p-lazy/p-lazy";
+import type { StickeringMask } from "./mask";
 
 // TODO: cache calculations?
 export async function megaminxStickeringMask(

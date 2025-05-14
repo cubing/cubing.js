@@ -1,6 +1,6 @@
 import { KPuzzle } from "../../../kpuzzle";
-import { getCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
+import { getCached } from "../../async/lazy-cached";
 
 export const tri_quad: PuzzleLoader = {
   id: "tri_quad",

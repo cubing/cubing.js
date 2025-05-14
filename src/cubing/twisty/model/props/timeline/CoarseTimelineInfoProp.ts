@@ -1,7 +1,7 @@
 import type { ButtonCommand } from "../../../views/control-panel/TwistyButtons";
-import type { PlayingInfo } from "./PlayingInfoProp";
-import type { DetailedTimelineInfo } from "./DetailedTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
+import type { DetailedTimelineInfo } from "./DetailedTimelineInfoProp";
+import type { PlayingInfo } from "./PlayingInfoProp";
 
 interface ButtonAppearance {
   enabled: boolean;

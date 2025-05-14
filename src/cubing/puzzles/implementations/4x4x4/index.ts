@@ -1,6 +1,6 @@
+import type { PuzzleLoader } from "../../PuzzleLoader";
 import { CubePGPuzzleLoader } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
-import type { PuzzleLoader } from "../../PuzzleLoader";
 import { cube4x4x4KeyMapping } from "./cube4x4x4KeyMapping";
 
 const cube4x4x4: PuzzleLoader = new CubePGPuzzleLoader({

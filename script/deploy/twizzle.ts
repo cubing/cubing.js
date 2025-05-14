@@ -1,6 +1,6 @@
-import { $ } from "bun";
 import * as assert from "node:assert";
 import { readFile } from "node:fs/promises";
+import { $ } from "bun";
 import { PrintableShellCommand } from "printable-shell-command";
 import type { VersionJSON } from "../build/sites/barelyServeSite";
 import { rsync } from "./rsync";

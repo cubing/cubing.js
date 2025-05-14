@@ -5,11 +5,11 @@ import {
   experimentalCountMetricMoves,
 } from "../../../notation";
 import { puzzles } from "../../../puzzles";
-import type { ColorSchemeWithAuto } from "../../model/props/viewer/ColorSchemeRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import type { ColorSchemeWithAuto } from "../../model/props/viewer/ColorSchemeRequestProp";
 import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
 import { TwistyAlgViewer } from "../TwistyAlgViewer";
+import { customElementsShim } from "../node-custom-element-shims";
 import { twizzleLinkCSS, twizzleLinkForumTweaksCSS } from "./TwizzleLink.css";
 import { getConfigFromURL } from "./url-params";
 /** @category Other Custom Elements */

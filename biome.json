@@ -45,9 +45,6 @@
     "indentStyle": "space",
     "indentWidth": 2
   },
-  "organizeImports": {
-    "enabled": false
-  },
   "vcs": {
     "clientKind": "git",
     "enabled": true,

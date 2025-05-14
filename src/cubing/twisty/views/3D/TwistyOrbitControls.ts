@@ -1,8 +1,8 @@
 import type { Vector3 } from "three/src/Three.js";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { bulk3DCode } from "../../heavy-code-imports/3d";
-import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { DragMovementInfo, DragTracker } from "./DragTracker";
 import { DEGREES_PER_RADIAN } from "./TAU";
 

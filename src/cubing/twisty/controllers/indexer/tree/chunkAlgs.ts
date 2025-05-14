@@ -1,16 +1,16 @@
 import {
-  AlgBuilder,
-  Conjugate,
-  Grouping,
-  TraversalUp,
-  functionFromTraversal,
   type Alg,
+  AlgBuilder,
   type AlgNode,
   type Commutator,
+  Conjugate,
+  Grouping,
   type LineComment,
   type Move,
   type Newline,
   type Pause,
+  TraversalUp,
+  functionFromTraversal,
 } from "../../../../alg";
 
 const MIN_CHUNKING_THRESHOLD = 16;

@@ -3,7 +3,7 @@ import type { KPattern } from "../../../../kpuzzle/KPattern";
 import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
-import { randomPatternFromSGS, TrembleSolver } from "../tremble";
+import { TrembleSolver, randomPatternFromSGS } from "../tremble";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
 
 const TREMBLE_DEPTH = 3;

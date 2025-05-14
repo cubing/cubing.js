@@ -1,14 +1,14 @@
 import {
-  LineComment,
-  Move,
-  Newline,
-  TraversalUp,
-  functionFromTraversal,
   type Alg,
   type Commutator,
   type Conjugate,
   type Grouping,
+  LineComment,
+  Move,
+  Newline,
   type Pause,
+  TraversalUp,
+  functionFromTraversal,
 } from "../../../../alg";
 import type { MillisecondTimestamp } from "../../AnimationTypes";
 import { defaultDurationForAmount } from "../AlgDuration";

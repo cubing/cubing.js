@@ -27,8 +27,8 @@ import type {
 import { smootherStep } from "../../../controllers/easing";
 import type { FaceletScale } from "../../../model/props/puzzle/display/FaceletScaleProp";
 import {
-  hintFaceletStyles,
   type HintFaceletStyle,
+  hintFaceletStyles,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
 import type { InitialHintFaceletsAnimation } from "../../../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
 import { TAU } from "../TAU";

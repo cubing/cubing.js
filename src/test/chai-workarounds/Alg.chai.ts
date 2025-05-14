@@ -13,7 +13,7 @@
  */
 
 import { Alg, experimentalEnsureAlg } from "../../cubing/alg/Alg";
-import { expect, Assertion } from "./chai";
+import { Assertion, expect } from "./chai";
 
 Assertion.addMethod("identicalAlg", function (expected: Alg | string): void {
   expect(this._obj).to.be.instanceOf(Alg);

@@ -1,5 +1,5 @@
 import type { Repeatable } from "../common";
-import { toggleDirection, type IterationDirection } from "../iteration";
+import { type IterationDirection, toggleDirection } from "../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION, MIN_INT } from "../limits";
 import type { AlgLeaf } from "./AlgNode";
 

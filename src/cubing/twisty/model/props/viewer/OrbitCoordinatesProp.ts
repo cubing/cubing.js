@@ -1,11 +1,11 @@
 import { DEGREES_PER_RADIAN } from "../../../views/3D/TAU";
-import type { PuzzleID } from "../puzzle/structure/PuzzleIDRequestProp";
 import { TwistyPropDerived } from "../TwistyProp";
+import type { PuzzleID } from "../puzzle/structure/PuzzleIDRequestProp";
 import {
-  orbitCoordinatesEqual,
   type CoordinateDegrees,
   type OrbitCoordinates,
   type OrbitCoordinatesRequest,
+  orbitCoordinatesEqual,
 } from "./OrbitCoordinatesRequestProp";
 import type { VisualizationStrategy } from "./VisualizationStrategyProp";
 

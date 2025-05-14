@@ -1,9 +1,9 @@
 import {
+  EXPERIMENTAL_PUZZLE_CUT_TYPES,
   type ExperimentalPuzzleBaseShape,
   type ExperimentalPuzzleCutDescription,
   type ExperimentalPuzzleCutType,
   type ExperimentalPuzzleDescription,
-  EXPERIMENTAL_PUZZLE_CUT_TYPES,
 } from "../../../cubing/puzzle-geometry";
 import type {
   PuzzleBaseShape,

@@ -1,14 +1,14 @@
 import { Alg, Move } from "../alg";
 import type { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
-import { algToTransformation } from "./calculate";
-import { moveToTransformationUncached } from "./construct";
+import { KPattern } from "./KPattern";
 import type {
   KPuzzleDefinition,
   KPuzzleOrbitDefinition,
   KTransformationData,
 } from "./KPuzzleDefinition";
-import { KPattern } from "./KPattern";
 import { KTransformation } from "./KTransformation";
+import { algToTransformation } from "./calculate";
+import { moveToTransformationUncached } from "./construct";
 
 export type KTransformationSource = Alg | Move | string | KTransformation;
 

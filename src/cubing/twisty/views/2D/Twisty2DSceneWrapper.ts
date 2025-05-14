@@ -2,11 +2,11 @@ import type { Scene as ThreeScene } from "three/src/Three.js";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import { bulk3DCode } from "../../heavy-code-imports/3d";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { TwistySceneModel } from "../../model/TwistySceneModel";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
 import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css";
+import { customElementsShim } from "../node-custom-element-shims";
 import { Twisty2DPuzzleWrapper } from "./Twisty2DPuzzleWrapper";
 
 export class Twisty2DSceneWrapper

@@ -1,6 +1,4 @@
 import type { Alg, Move } from "../alg";
-import { isPatternDataIdentical } from "./calculate";
-import { applyTransformationDataToKPatternData } from "./combine";
 import type { KPuzzle, KTransformationSource } from "./KPuzzle";
 import type {
   KPatternData,
@@ -8,6 +6,8 @@ import type {
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
+import { isPatternDataIdentical } from "./calculate";
+import { applyTransformationDataToKPatternData } from "./combine";
 
 export class KPattern {
   constructor(

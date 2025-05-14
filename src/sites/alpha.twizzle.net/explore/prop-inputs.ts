@@ -1,6 +1,6 @@
 import type { TwistyPlayer } from "../../../cubing/twisty";
-import type { TempoScaleProp } from "../../../cubing/twisty/model/props/timeline/TempoScaleProp";
 import type { TwistyPropSource } from "../../../cubing/twisty/model/props/TwistyProp";
+import type { TempoScaleProp } from "../../../cubing/twisty/model/props/timeline/TempoScaleProp";
 
 // Returns the initial value.
 function setupPropCheckbox<T extends string>(

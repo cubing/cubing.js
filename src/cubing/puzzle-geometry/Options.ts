@@ -1,6 +1,6 @@
 import {
-  parsePuzzleDescription,
   type PuzzleDescription,
+  parsePuzzleDescription,
 } from "./PuzzleGeometry";
 
 export function parseOptions(argv: string[]): {

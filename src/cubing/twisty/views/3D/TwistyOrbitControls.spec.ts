@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 
+import type { TwistyPropParent } from "../../model/props/TwistyProp";
 import {
   type PuzzleID,
   PuzzleIDRequestProp,
 } from "../../model/props/puzzle/structure/PuzzleIDRequestProp";
-import type { TwistyPropParent } from "../../model/props/TwistyProp";
 import { LatitudeLimitProp } from "../../model/props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "../../model/props/viewer/OrbitCoordinatesProp";
 import { OrbitCoordinatesRequestProp } from "../../model/props/viewer/OrbitCoordinatesRequestProp";

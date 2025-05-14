@@ -2,23 +2,23 @@
 
 import type { Alg } from "../../../alg";
 import {
-  endCharIndexKey,
   type Parsed,
+  endCharIndexKey,
   startCharIndexKey,
 } from "../../../alg/parseAlg";
-import {
-  type AlgWithIssues,
-  algWithIssuesFromString,
-} from "../../model/props/puzzle/state/AlgProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
   TwistyPropSource,
 } from "../../model/props/TwistyProp";
 import {
+  type AlgWithIssues,
+  algWithIssuesFromString,
+} from "../../model/props/puzzle/state/AlgProp";
+import {
   type AnimatedLeafAlgNodeInfo,
-  leafTokens,
   type OrderedLeafTokens,
+  leafTokens,
 } from "./LeafTokens";
 
 export class TwistyAlgEditorValueProp extends SimpleTwistyPropSource<string> {

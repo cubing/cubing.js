@@ -1,6 +1,4 @@
 import {
-  TraversalDownUp,
-  functionFromTraversal,
   type Alg,
   type Commutator,
   type Conjugate,
@@ -9,6 +7,8 @@ import {
   type Move,
   type Newline,
   type Pause,
+  TraversalDownUp,
+  functionFromTraversal,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parseAlg";
 import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves";

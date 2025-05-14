@@ -1,6 +1,4 @@
 import {
-  TraversalUp,
-  functionFromTraversal,
   type Alg,
   type Commutator,
   type Conjugate,
@@ -9,6 +7,8 @@ import {
   type Move,
   type Newline,
   type Pause,
+  TraversalUp,
+  functionFromTraversal,
 } from "../alg";
 
 // TODO: Include Pause, include amounts

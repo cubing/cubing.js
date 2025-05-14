@@ -1,6 +1,4 @@
 import {
-  functionFromTraversal,
-  TraversalDownUp,
   type Alg,
   type Commutator,
   type Conjugate,
@@ -9,8 +7,9 @@ import {
   type Move,
   type Newline,
   type Pause,
+  TraversalDownUp,
+  functionFromTraversal,
 } from "../alg";
-import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type {
   KPatternData,
@@ -21,6 +20,7 @@ import type {
   KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
+import { combineTransformationData } from "./combine";
 
 export function isOrbitTransformationDataIdentityUncached(
   numOrientations: number,

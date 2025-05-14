@@ -1,11 +1,11 @@
-import { build, type ImportKind, type Metafile, type Plugin } from "esbuild";
 import { join } from "node:path";
 import { exit } from "node:process";
+import { type ImportKind, type Metafile, type Plugin, build } from "esbuild";
 import { packageNames } from "../../../build/common/package-info";
 import {
+  type AllowedImports,
   specAllowedImports as allowedImportsIncludingForSpecFiles,
   mainAllowedImports,
-  type AllowedImports,
 } from "./allowedImports";
 
 async function checkAllowedImports(

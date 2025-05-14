@@ -6,6 +6,7 @@
  *  */
 
 import {
+  type Type,
   binary,
   number as cmdNumber,
   string as cmdString,
@@ -16,7 +17,6 @@ import {
   optional,
   positional,
   run,
-  type Type,
 } from "cmd-ts-too";
 import { Alg } from "cubing/alg";
 

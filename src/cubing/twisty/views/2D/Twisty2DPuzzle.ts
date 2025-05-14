@@ -1,7 +1,7 @@
 import type { PuzzleID } from "../..";
 import type { KPuzzle } from "../../../kpuzzle";
-import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { StickeringMask } from "../../../puzzles/stickerings/mask";
 import {
   Direction,
@@ -9,8 +9,8 @@ import {
   type PuzzlePosition,
 } from "../../controllers/AnimationTypes";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";

@@ -1,21 +1,21 @@
 import {
   Alg,
-  Grouping,
-  Pause,
-  TraversalDownUp,
-  functionFromTraversal,
   type AlgNode,
   type Commutator,
   type Conjugate,
+  Grouping,
   type LineComment,
   type Move,
   type Newline,
+  Pause,
+  TraversalDownUp,
+  functionFromTraversal,
 } from "../../alg";
 import {
   ExperimentalIterationDirection,
   experimentalDirect,
 } from "../../alg/cubing-private";
-import { startCharIndexKey, type Parsed } from "../../alg/parseAlg";
+import { type Parsed, startCharIndexKey } from "../../alg/parseAlg";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import type { CurrentMoveInfo } from "../controllers/indexer/AlgIndexer";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";

@@ -1,11 +1,11 @@
 import type { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
+import type { PuzzleLoader } from "./PuzzleLoader";
 import {
   asyncGetKPuzzle,
   puzzleSpecificSimplifyOptionsPromise,
 } from "./async/async-pg3d";
-import type { PuzzleLoader } from "./PuzzleLoader";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function descAsyncGetPuzzleGeometry(

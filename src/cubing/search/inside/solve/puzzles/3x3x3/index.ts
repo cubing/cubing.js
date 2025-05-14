@@ -1,7 +1,7 @@
+import { randomChoice } from "random-uint-below";
 import { Alg } from "../../../../../alg";
 import type { KPattern } from "../../../../../kpuzzle/KPattern";
 import { puzzles } from "../../../../../puzzles";
-import { randomChoice } from "random-uint-below";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";
 import { dynamic3x3x3min2phase } from "../dynamic/3x3x3";

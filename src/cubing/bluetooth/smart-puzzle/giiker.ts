@@ -4,7 +4,7 @@ import { Move } from "../../alg";
 import { KPattern, type KPatternData } from "../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import { debugLog } from "../debug";
-import { BluetoothPuzzle, type BluetoothConfig } from "./bluetooth-puzzle";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
 const MESSAGE_LENGTH = 20;
 

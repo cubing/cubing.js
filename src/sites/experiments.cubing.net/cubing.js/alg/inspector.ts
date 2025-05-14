@@ -1,8 +1,8 @@
 import { Alg, type AlgNode } from "../../../../cubing/alg";
 import {
+  type Parsed,
   endCharIndexKey,
   startCharIndexKey,
-  type Parsed,
 } from "../../../../cubing/alg/parseAlg";
 import { extract } from "./extractor";
 

@@ -1,7 +1,7 @@
 import type { Scene as ThreeScene } from "three/src/Three.js";
 import { bulk3DCode } from "../../heavy-code-imports/3d";
-import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 import type { Twisty3DRenderTarget } from "./Twisty3DRenderTarget";
+import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 
 export class Twisty3DScene implements Twisty3DRenderTarget {
   private renderTargets: Set<Twisty3DRenderTarget> = new Set();

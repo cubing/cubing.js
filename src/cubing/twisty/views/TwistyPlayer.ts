@@ -14,8 +14,8 @@ import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp";
-import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
+import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type {
   ColorScheme,
   ColorSchemeWithAuto,
@@ -28,17 +28,17 @@ import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkPro
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
-import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import type { Twisty3DVantage } from "./3D/Twisty3DVantage";
+import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
 import { ClassListManager } from "./ClassListManager";
-import { TwistyButtons } from "./control-panel/TwistyButtons";
-import { TwistyScrubber } from "./control-panel/TwistyScrubber";
 import { InitialValueTracker } from "./InitialValueTracker";
-import { customElementsShim } from "./node-custom-element-shims";
-import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
+import { TwistyButtons } from "./control-panel/TwistyButtons";
+import { TwistyScrubber } from "./control-panel/TwistyScrubber";
+import { customElementsShim } from "./node-custom-element-shims";
+import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
 
 const DATA_ATTRIBUTE_PREFIX = "data-";
 

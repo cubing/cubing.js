@@ -1,11 +1,11 @@
 import type { Alg } from "../../../../../cubing/alg";
 import { experimentalCountMoves } from "../../../../../cubing/notation";
+import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp";
+import type { AlgIssues } from "../../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 import { ClassListManager } from "../../../../../cubing/twisty/views/ClassListManager";
 import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
-import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
 import type { TwistyPlayer } from "../../../../../cubing/twisty/views/TwistyPlayer";
-import type { AlgIssues } from "../../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp";
+import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
 import {
   twistyPlayerDebuggerCSS,
   twistyPropDebuggerCSS,

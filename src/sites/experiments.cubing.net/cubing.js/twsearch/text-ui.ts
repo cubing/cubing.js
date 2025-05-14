@@ -1,16 +1,16 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
   KPattern,
-  KPuzzle,
   type KPatternData,
+  KPuzzle,
   type KPuzzleDefinition,
 } from "../../../../cubing/kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
 import type { SolveTwsearchOptions } from "../../../../cubing/search/outside";
 import {
-  solveTwsearchServer,
   type TwsearchServerClientOptions,
+  solveTwsearchServer,
 } from "./twsearch-server";
 
 const LOCALSTORAGE_DEF = "twsearch/text-ui/def";

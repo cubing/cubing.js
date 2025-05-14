@@ -1,5 +1,5 @@
 import type { AnimationTimelineLeaves } from "cubing/twisty/model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
-import { Move, type Alg } from "../../../../alg";
+import { type Alg, Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
 import {
@@ -10,9 +10,9 @@ import {
 } from "../../AnimationTypes";
 import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import {
-  simulMoves,
   type AnimLeafWithRange,
   type AnimatedLeafAlgNode,
+  simulMoves,
 } from "./simul-moves";
 
 export class SimultaneousMoveIndexer {

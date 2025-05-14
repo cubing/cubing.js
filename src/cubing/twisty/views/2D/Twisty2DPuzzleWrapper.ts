@@ -1,8 +1,8 @@
 import type { PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { Schedulable } from "../../controllers/RenderScheduler";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import { Twisty2DPuzzle } from "./Twisty2DPuzzle";
 
 export class Twisty2DPuzzleWrapper implements Schedulable {

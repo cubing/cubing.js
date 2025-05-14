@@ -4,11 +4,11 @@ import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private
 import type { PuzzlePosition } from "../../controllers/AnimationTypes";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import { bulk3DCode } from "../../heavy-code-imports/3d";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { FoundationDisplay } from "../../model/props/puzzle/display/FoundationDisplayProp";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { Cube3D } from "./puzzles/Cube3D";
 import type { PG3D } from "./puzzles/PG3D";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";

@@ -1,9 +1,9 @@
-import { Alg, Move, type AlgLeaf } from "../../../../cubing/alg";
+import { Alg, type AlgLeaf, Move } from "../../../../cubing/alg";
 import {
-  connectSmartPuzzle,
-  debugKeyboardConnect,
   type MoveEvent,
   type OrientationEvent,
+  connectSmartPuzzle,
+  debugKeyboardConnect,
 } from "../../../../cubing/bluetooth";
 import { countMetricMoves } from "../../../../cubing/notation/CountMoves";
 import { CommonMetric } from "../../../../cubing/notation/commonMetrics";
@@ -11,7 +11,7 @@ import { cube3x3x3 } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 import { Stats } from "./vendor/timer.cubing.net/Stats";
-import { Timer, type Milliseconds } from "./vendor/timer.cubing.net/Timer";
+import { type Milliseconds, Timer } from "./vendor/timer.cubing.net/Timer";
 
 function appendWithFMCCancellation(alg: Alg, leaf: AlgLeaf): Alg {
   const nodes = [...alg.childAlgNodes()];

@@ -1,6 +1,5 @@
 import type { Alg } from "./Alg";
 
-import { functionFromTraversal, TraversalUp } from "./traversal";
 import type {
   Commutator,
   Conjugate,
@@ -10,6 +9,7 @@ import type {
   Newline,
   Pause,
 } from "./alg-nodes";
+import { TraversalUp, functionFromTraversal } from "./traversal";
 
 export class ValidationError extends Error {}
 

@@ -1,11 +1,11 @@
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
-  type StickeringMask,
-  PuzzleStickering,
-  StickeringManager,
   type PieceSet,
   PieceStickering,
+  PuzzleStickering,
+  StickeringManager,
+  type StickeringMask,
 } from "./mask";
 
 export async function ftoStickering(

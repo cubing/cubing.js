@@ -1,4 +1,4 @@
-import { experimentalIs, Move } from "../../alg";
+import { Move, experimentalIs } from "../../alg";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 
 export interface PuzzleStreamMoveEventDetail {

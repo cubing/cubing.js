@@ -1,5 +1,5 @@
 import { puzzles } from "../../../../../../puzzles";
-import { parseSGS, type SGSCachedData } from "../../../parseSGS";
+import { type SGSCachedData, parseSGS } from "../../../parseSGS";
 
 let cachedData: Promise<SGSCachedData> | null = null;
 export async function sgsDataPyraminx() {
