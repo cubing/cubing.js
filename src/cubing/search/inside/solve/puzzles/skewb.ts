@@ -32,9 +32,9 @@ async function resetCenterOrientation(pattern: KPattern): Promise<KPattern> {
   return new KPattern(
     await (await searchDynamicSideEvents).skewbKPuzzleWithoutMOCached(),
     {
-      CORNERS: pattern.patternData.CORNERS,
+      CORNERS: pattern.patternData["CORNERS"],
       CENTERS: {
-        pieces: pattern.patternData.CENTERS.pieces,
+        pieces: pattern.patternData["CENTERS"].pieces,
         orientation: new Array(6).fill(0),
       },
     },

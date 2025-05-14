@@ -7,18 +7,18 @@ export function isEquivalentTranformationIgnoringCENTERS(
   t2: KPattern,
 ): boolean {
   const t1NoCenterOri = new KPattern(t1.kpuzzle, {
-    EDGES: t1.patternData.EDGES,
-    CORNERS: t1.patternData.CORNERS,
+    EDGES: t1.patternData["EDGES"],
+    CORNERS: t1.patternData["CORNERS"],
     CENTERS: {
-      pieces: t1.patternData.CENTERS.pieces,
+      pieces: t1.patternData["CENTERS"].pieces,
       orientation: new Array(6).fill(0),
     },
   }).experimentalToTransformation()!;
   const t2NoCenterOri = new KPattern(t2.kpuzzle, {
-    EDGES: t2.patternData.EDGES,
-    CORNERS: t2.patternData.CORNERS,
+    EDGES: t2.patternData["EDGES"],
+    CORNERS: t2.patternData["CORNERS"],
     CENTERS: {
-      pieces: t2.patternData.CENTERS.pieces,
+      pieces: t2.patternData["CENTERS"].pieces,
       orientation: new Array(6).fill(0),
     },
   }).experimentalToTransformation()!;

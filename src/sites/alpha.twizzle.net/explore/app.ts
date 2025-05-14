@@ -54,14 +54,14 @@ export class TwizzleExplorerApp {
     );
     twistyPuzzleDescriptionInput.addEventListener(
       "puzzle-change",
-      (
+      ((
         e: CustomEvent<{
           descriptionString: string;
         }>,
       ) => {
         // console.log(e.detail!.descriptionString)
         this.setPuzzleDescription(e.detail.descriptionString);
-      },
+      }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
     );
   }
 
@@ -202,10 +202,16 @@ class SelectUI {
   constructor(private app: TwizzleExplorerApp) {
     (
       document.body.querySelector("#actions") as HTMLSelectElement
-    ).addEventListener("change", this.onChange.bind(this));
+    ).addEventListener(
+      "change",
+      this.onChange.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
     (
       document.body.querySelector("#move-input") as HTMLSelectElement
-    ).addEventListener("change", this.onChange.bind(this));
+    ).addEventListener(
+      "change",
+      this.onChange.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
   }
 
   async onChange(e: MouseEvent) {

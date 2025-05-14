@@ -36,7 +36,7 @@ export async function solveMegaminx(pattern: KPattern): Promise<Alg> {
   const patternDataWithoutMO: KPatternData = structuredClone(
     pattern.patternData,
   );
-  patternDataWithoutMO.CENTERS.orientation = new Array(12).fill(0);
+  patternDataWithoutMO["CENTERS"].orientation = new Array(12).fill(0);
   const patternWithoutMO = new KPattern(
     await (await searchDynamicSideEvents).cachedMegaminxKPuzzleWithoutMO(),
     patternDataWithoutMO,

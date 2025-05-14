@@ -116,7 +116,7 @@ export class QuantumMove extends Comparable {
   }
 
   override toString(
-    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+    _experimentalSerializationOptions?: ExperimentalSerializationOptions,
   ): string {
     let s = this.#family;
     if (this.#innerLayer !== null) {
@@ -138,6 +138,7 @@ export interface MoveModifications {
 
 /** @category Alg Nodes */
 export class Move extends AlgCommon<Move> {
+  // @ts-ignore False positive due to the `return` in the constructor.
   readonly #quantumWithAmount: QuantumWithAmount<QuantumMove>;
 
   constructor(

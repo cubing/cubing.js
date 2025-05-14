@@ -38,7 +38,7 @@ export class Twisty2DSceneWrapper
     }
   }
 
-  #cachedScene: Promise<ThreeScene> | null;
+  #cachedScene?: Promise<ThreeScene>;
   async scene(): Promise<ThreeScene> {
     return (this.#cachedScene ??= (async () =>
       new (await bulk3DCode()).ThreeScene())());
@@ -48,8 +48,8 @@ export class Twisty2DSceneWrapper
     this.#currentTwisty2DPuzzleWrapper?.scheduleRender();
   }
 
-  #currentTwisty2DPuzzleWrapper: Twisty2DPuzzleWrapper | null = null;
-  currentTwisty2DPuzzleWrapper(): Twisty2DPuzzleWrapper | null {
+  #currentTwisty2DPuzzleWrapper: Twisty2DPuzzleWrapper | undefined;
+  currentTwisty2DPuzzleWrapper(): Twisty2DPuzzleWrapper | undefined {
     return this.#currentTwisty2DPuzzleWrapper;
   }
 

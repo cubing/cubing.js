@@ -213,7 +213,7 @@ export class TwistyPlayer
     this,
   );
 
-  buttons: TwistyButtons;
+  buttons?: TwistyButtons;
 
   experimentalCanvasClickCallback: (...args: any) => void = () => {};
   // #onCanvasClick() {
@@ -534,7 +534,7 @@ export class TwistyPlayer
         .currentTwisty2DPuzzleWrapper()!
         .twisty2DPuzzle();
       const str = new XMLSerializer().serializeToString(
-        twisty2DPuzzle.svgWrapper.svgElement,
+        twisty2DPuzzle.svgWrapper!.svgElement,
       );
       const url = URL.createObjectURL(new Blob([str]));
       downloadURL(

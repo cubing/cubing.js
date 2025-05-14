@@ -149,5 +149,5 @@ export function functionFromTraversal<
   const instance = new traversalConstructor(
     ...(constructorArgs ?? ([] as any)),
   );
-  return instance.traverseAlg.bind(instance);
+  return instance.traverseAlg.bind(instance) as any;
 }

@@ -66,6 +66,7 @@
   "devDependencies": {
     "@biomejs/biome": "v1.9.4",
     "@cubing/deploy": "v0.2.1",
+    "@cubing/dev-config": "^0.3.2",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/bun": "^1.2.11",
     "@types/chai": "^5.0.0",

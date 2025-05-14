@@ -44,7 +44,7 @@ const paramsNotImplementedYet: Record<string, true> = {
 };
 
 export class TwistyAnimCube extends ManagedCustomElement {
-  twistyPlayer: TwistyPlayer;
+  twistyPlayer?: TwistyPlayer;
   constructor(
     private finishConnectedCallback?: (twistyAnimCube: TwistyAnimCube) => void,
   ) {
@@ -145,7 +145,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
         if (speed < 0) {
           warnOnce("speed must be a non-negative number");
         }
-        this.twistyPlayer.tempoScale = 10 / speed;
+        this.twistyPlayer!.tempoScale = 10 / speed;
       });
 
       // process("width", (value: string) => {
@@ -190,13 +190,13 @@ window.addEventListener("DOMContentLoaded", () => {
       twisty = new TwistyAnimCube((twistyAnimCube: TwistyAnimCube) => {
         const width = applet.getAttribute("width");
         if (width) {
-          twistyAnimCube.twistyPlayer.style.width = `${parseInt(
+          twistyAnimCube.twistyPlayer!.style.width = `${parseInt(
             width,
           ).toString()}px`;
         }
         const height = applet.getAttribute("height");
         if (height) {
-          twistyAnimCube.twistyPlayer.style.height = `${parseInt(
+          twistyAnimCube.twistyPlayer!.style.height = `${parseInt(
             height,
           ).toString()}px`;
         }

@@ -15,7 +15,7 @@ export async function sgsDataPyraminxFixedOrientation(): Promise<SGSCachedData> 
 // TODO: Reduce info.
 async function uncachedSGSDataPyraminx(): Promise<SGSCachedData> {
   return parseSGS(
-    await puzzles.pyraminx.kpuzzle(),
+    await puzzles["pyraminx"].kpuzzle(),
     `SubgroupSizes 12 9 12 3 10 3 8 6 2 3 3 3 3
 
 Alg B

@@ -65,7 +65,7 @@ export async function bluetoothConnect<T>(
     consecutiveFailures = 0;
   } catch (e) {
     consecutiveFailures++;
-    throw new Error(e);
+    throw e;
   }
   debugLog("Device:", device);
 

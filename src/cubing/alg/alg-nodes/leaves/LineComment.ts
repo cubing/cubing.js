@@ -38,7 +38,7 @@ export class LineComment extends AlgCommon<LineComment> {
   }
 
   toString(
-    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+    _experimentalSerializationOptions?: ExperimentalSerializationOptions,
   ): string {
     return `//${this.#text}`;
   }

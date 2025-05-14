@@ -37,7 +37,7 @@ export class WebSocketProxySender {
     console.log("Sending socket is open!");
   }
 
-  protected onerror(error: Error): void {
+  protected onerror(error: any): void {
     console.error("WebSocket sender error:", error);
   }
 
@@ -45,7 +45,7 @@ export class WebSocketProxySender {
 }
 
 export abstract class WebSocketProxyReceiver {
-  protected websocket: WebSocket;
+  protected websocket?: WebSocket;
   constructor(url: string, socketOrigin?: string) {
     if (!socketOrigin) {
       console.log("No socket origin specified. Will not attempt to connect.");
@@ -62,7 +62,7 @@ export abstract class WebSocketProxyReceiver {
     console.log("Receiving socket is open!");
   }
 
-  protected onerror(error: Error): void {
+  protected onerror(error: any): void {
     console.error("WebSocket receiver error:", error);
   }
 

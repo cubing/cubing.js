@@ -4,18 +4,18 @@ import { ExperimentalWebSocketProxySender } from "../../../../../cubing/stream";
 
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
+import type { GoCube } from "../../../../../cubing/bluetooth";
 import {
   type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
 } from "../../../../../cubing/bluetooth";
-import type { GoCube } from "../../../../../cubing/bluetooth";
 import { socketOrigin } from "../config";
 
 class App {
   private proxySender: ExperimentalWebSocketProxySender;
   // private debugProxyReceiver = new ProxyReceiver();
-  private puzzle: BluetoothPuzzle;
+  private puzzle?: BluetoothPuzzle;
   constructor() {
     if (!socketOrigin) {
       throw new Error("Must specify socket origin in the URL.");
@@ -48,8 +48,8 @@ class App {
 
     document.querySelector("#reset")!.addEventListener("click", async () => {
       this.proxySender.sendResetEvent();
-      if ("reset" in this.puzzle) {
-        (this.puzzle as GoCube).reset();
+      if (this.puzzle && "reset" in this.puzzle) {
+        (this.puzzle as GoCube)?.reset();
       }
     });
   }

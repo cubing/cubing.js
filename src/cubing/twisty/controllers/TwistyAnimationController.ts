@@ -1,3 +1,12 @@
+import { modIntoRange } from "../model/helpers";
+import { StaleDropper } from "../model/PromiseFreshener";
+import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";
+import type {
+  PlayingInfo,
+  SimpleDirection,
+} from "../model/props/timeline/PlayingInfoProp";
+import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
+import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import {
   BoundaryType,
   Direction,
@@ -5,17 +14,8 @@ import {
   type MillisecondTimestamp,
   type TimeRange,
 } from "./AnimationTypes";
-import { RenderScheduler } from "./RenderScheduler";
-import type {
-  PlayingInfo,
-  SimpleDirection,
-} from "../model/props/timeline/PlayingInfoProp";
-import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
-import { StaleDropper } from "../model/PromiseFreshener";
 import type { CurrentMoveInfo } from "./indexer/AlgIndexer";
-import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
-import { modIntoRange } from "../model/helpers";
-import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";
+import { RenderScheduler } from "./RenderScheduler";
 
 // TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
@@ -28,7 +28,7 @@ class CatchUpHelper {
   catchingUp: boolean = false;
   pendingFrame = false;
 
-  tempoScale: number;
+  tempoScale: number = 1; // TODO
   constructor(private model: TwistyPlayerModel) {
     model.tempoScale.addFreshListener((tempoScale) => {
       this.tempoScale = tempoScale;

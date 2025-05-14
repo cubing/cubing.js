@@ -6,7 +6,7 @@ import type { AlgLeaf } from "../AlgNode";
 /** @category Alg Nodes */
 export class Newline extends AlgCommon<Newline> {
   toString(
-    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+    _experimentalSerializationOptions?: ExperimentalSerializationOptions,
   ): string {
     return "\n";
   }

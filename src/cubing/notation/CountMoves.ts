@@ -81,7 +81,7 @@ class CountLeavesInExpansionForSimultaneousMoveIndexer extends TraversalUp<numbe
     return this.traverseAlg(alg) * Math.abs(grouping.amount);
   }
 
-  public traverseMove(move: Move): number {
+  public traverseMove(_move: Move): number {
     return 1;
   }
 
@@ -165,9 +165,7 @@ export const countRangeBlockMovesPG = functionFromTraversal(CountMoves, [
 ]);
 
 export const countLeavesInExpansionForSimultaneousMoveIndexer =
-  functionFromTraversal(CountLeavesInExpansionForSimultaneousMoveIndexer, [
-    baseMetric,
-  ]);
+  functionFromTraversal(CountLeavesInExpansionForSimultaneousMoveIndexer, []);
 
 /**
  * Only implemented so far:

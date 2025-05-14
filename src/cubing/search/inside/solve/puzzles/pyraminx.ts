@@ -17,7 +17,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
         await searchDynamicSideEvents
       ).sgsDataPyraminx();
       return new TrembleSolver(
-        await puzzles.pyraminx.kpuzzle(),
+        await puzzles["pyraminx"].kpuzzle(),
         json,
         "RLUB".split(""),
       );
@@ -40,7 +40,7 @@ export async function randomPyraminxPatternFixedOrientation(): Promise<KPattern>
   mustBeInsideWorker();
   // Note: this sets all center orientations to 0.
   return randomPatternFromSGS(
-    await puzzles.pyraminx.kpuzzle(),
+    await puzzles["pyraminx"].kpuzzle(),
     await (await searchDynamicSideEvents).sgsDataPyraminxFixedOrientation(),
   );
 }

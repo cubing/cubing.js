@@ -1,9 +1,9 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
-  type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
   type MoveEvent as algLeafEvent,
+  type BluetoothPuzzle,
 } from "../../../../cubing/bluetooth";
 import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
 import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot";
@@ -31,8 +31,8 @@ class RobotDemo {
   output: GanRobot | null = null;
   paused: boolean = false;
 
-  sentStorageName: string;
-  recorderStorageName: string;
+  sentStorageName?: string;
+  recorderStorageName?: string;
 
   constructor() {
     this.inputButton?.addEventListener(
@@ -105,13 +105,16 @@ class RobotDemo {
       return;
     }
     const stream = this.streamServer.connect(streamID);
-    stream.addEventListener("move", (moveEvent: CustomEvent) => {
-      console.log("Incoming stream move:", moveEvent.detail.move.toString());
-      this.onAlgLeaf({
-        latestAlgLeaf: moveEvent.detail.move,
-        timeStamp: Date.now(),
-      });
-    });
+    stream.addEventListener(
+      "move",
+      ((moveEvent: CustomEvent) => {
+        console.log("Incoming stream move:", moveEvent.detail.move.toString());
+        this.onAlgLeaf({
+          latestAlgLeaf: moveEvent.detail.move,
+          timeStamp: Date.now(),
+        });
+      }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
   }
 
   async connectBluetoothPuzzleInput(): Promise<void> {
@@ -137,8 +140,8 @@ class RobotDemo {
       this.output.experimentalOptions.singleMoveFixHack = true;
       this.output.experimentalOptions.xAngle = false;
       this.output.experimentalDebugOnSend = (alg: Alg) => {
-        localStorage[this.sentStorageName] = `${
-          (localStorage[this.sentStorageName] ?? "") as string
+        localStorage[this.sentStorageName!] = `${
+          (localStorage[this.sentStorageName!] ?? "") as string
         }${alg.toString()} // ${Date.now()}\n`;
       };
       this.outputButton.textContent = `Output: ${
@@ -171,8 +174,8 @@ class RobotDemo {
   }
 
   recordAlgLeaf(algLeafEvent: AlgLeafEvent): void {
-    localStorage[this.recorderStorageName] = `${
-      (localStorage[this.recorderStorageName] ?? "") as string
+    localStorage[this.recorderStorageName!] = `${
+      (localStorage[this.recorderStorageName!] ?? "") as string
     }${algLeafEvent.latestAlgLeaf.toString()} // ${Date.now()}\n`;
   }
 

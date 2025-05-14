@@ -130,9 +130,9 @@ for (const [name, desc] of Object.entries(PGPuzzles)) {
     const dat = [
       name,
       sep,
-      pg.baseplanerot.length,
+      pg.basePlaneRotations.length,
       sep,
-      pg.stickersperface,
+      pg.stickersPerFace,
       sep,
       pg.cubies.length,
       sep,

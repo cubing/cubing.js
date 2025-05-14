@@ -1,9 +1,9 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
-  KPuzzle,
   KPattern,
-  type KPuzzleDefinition,
+  KPuzzle,
   type KPatternData,
+  type KPuzzleDefinition,
 } from "../../../../cubing/kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
@@ -92,11 +92,11 @@ function validateAndSaveInput(
 
   (
     document.querySelector("#generator-moves-check-all") as HTMLButtonElement
-  ).addEventListener("click", () => mapCheckboxes((e) => true));
+  ).addEventListener("click", () => mapCheckboxes((_e) => true));
 
   (
     document.querySelector("#generator-moves-uncheck-all") as HTMLButtonElement
-  ).addEventListener("click", () => mapCheckboxes((e) => false));
+  ).addEventListener("click", () => mapCheckboxes((_e) => false));
 
   const defElem = document.querySelector("#def") as HTMLTextAreaElement;
   defElem.value = localStorage[LOCALSTORAGE_DEF]
@@ -234,7 +234,7 @@ function validateAndSaveInput(
         ).toString();
       }
     } catch (e) {
-      results.value = e;
+      results.value = (e as { toString(): string }).toString();
       throw e;
     }
   });

@@ -72,7 +72,7 @@ export class PuzzleGeometryFullOptions {
   verbosity: number = 0; // verbosity (console.log)
 
   allMoves: boolean = false; // generate all slice moves in ksolve
-  outerBlockMoves: boolean; // generate outer block moves
+  outerBlockMoves: boolean = false; // generate outer block moves
   vertexMoves: boolean = false; // generate vertex moves
   addRotations: boolean = false; // add symmetry information to ksolve output
   moveList: string[] | null = null; // move list to generate

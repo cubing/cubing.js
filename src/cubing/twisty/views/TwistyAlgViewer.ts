@@ -32,13 +32,13 @@ import {
 // TODO: dynamically adjust the fraction to take into account moves that rotate a lot (e.g. `R100`).
 const DEFAULT_OFFSET_FRACTION = 0.25;
 
-class DataDown {
+interface DataDown {
   earliestMoveIndex: number;
   twistyAlgViewer: TwistyAlgViewer;
   direction: ExperimentalIterationDirection;
 }
 
-class DataUp {
+interface DataUp {
   moveCount: number;
   element: TwistyAlgWrapperElem | TwistyAlgLeafElem;
 }
@@ -404,7 +404,7 @@ class MoveHighlighter {
 /** @category Other Custom Elements */
 export class TwistyAlgViewer extends HTMLElementShim {
   highlighter: MoveHighlighter = new MoveHighlighter();
-  #domTree: TwistyAlgWrapperElem | TwistyAlgLeafElem;
+  #domTree?: TwistyAlgWrapperElem | TwistyAlgLeafElem;
   #twistyPlayer: TwistyPlayer | null = null;
   lastClickTimestamp: number | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {

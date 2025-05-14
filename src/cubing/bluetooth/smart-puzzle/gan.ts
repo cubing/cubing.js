@@ -294,11 +294,17 @@ export class GanCube extends BluetoothPuzzle {
   public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
   private pattern: KPattern;
-  private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
+  private cachedFaceletStatus1Characteristic:
+    | Promise<BluetoothRemoteGATTCharacteristic>
+    | undefined;
 
-  private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
+  private cachedFaceletStatus2Characteristic:
+    | Promise<BluetoothRemoteGATTCharacteristic>
+    | undefined;
 
-  private cachedActualAngleAndBatteryCharacteristic: Promise<BluetoothRemoteGATTCharacteristic>;
+  private cachedActualAngleAndBatteryCharacteristic:
+    | Promise<BluetoothRemoteGATTCharacteristic>
+    | undefined;
 
   private constructor(
     private kpuzzle: KPuzzle,
@@ -411,15 +417,15 @@ export class GanCube extends BluetoothPuzzle {
     for (const cornerMapping of gan356iCornerMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[cornerMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      patternData.CORNERS.pieces.push(pieceInfo.piece);
-      patternData.CORNERS.orientation.push(pieceInfo.orientation);
+      patternData["CORNERS"].pieces.push(pieceInfo.piece);
+      patternData["CORNERS"].orientation.push(pieceInfo.orientation);
     }
 
     for (const edgeMapping of gan356iEdgeMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[edgeMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      patternData.EDGES.pieces.push(pieceInfo.piece);
-      patternData.EDGES.orientation.push(pieceInfo.orientation);
+      patternData["EDGES"].pieces.push(pieceInfo.piece);
+      patternData["EDGES"].orientation.push(pieceInfo.orientation);
     }
 
     return new KPattern(this.kpuzzle, patternData);
@@ -449,7 +455,7 @@ export class GanCube extends BluetoothPuzzle {
   public async reset(): Promise<void> {
     const faceletStatus1Characteristic =
       await this.faceletStatus1Characteristic();
-    await faceletStatus1Characteristic.writeValue(commands.reset);
+    await faceletStatus1Characteristic.writeValue(commands["reset"]);
   }
 
   public async readFaceletStatus1Characteristic(): Promise<ArrayBufferLike> {

@@ -50,29 +50,43 @@ export class DragTracker extends EventTarget {
     this.addTargetListener("pointerdown", this.onPointerDown.bind(this));
     // Prevent right-click on desktop (only tested on macOS Chrome/Safari/Firefox) so we can detect right-click moves.
     // TODO: Can we do this selectively, e.g. only on the puzzle? That way we could allow right-click to download the canvas. Unfortunately, it would probably require a sync calculation.
-    this.addTargetListener("contextmenu", (e) => {
+    this.addTargetListener("contextmenu", (e: MouseEvent) => {
       e.preventDefault();
     });
     // Prevent touch scrolling (preventing default on `pointermove` doesn't work).
-    this.addTargetListener("touchmove", (e) => e.preventDefault());
+    this.addTargetListener("touchmove", (e: PointerEvent) =>
+      e.preventDefault(),
+    );
     // Prevent zooming on double-tap (iOS).
     // This is because `dblclick` works to zoom in, but does *not* work to zoom out. So the user can get stuck zoomed into the player without a way to zoom out.
-    this.addTargetListener("dblclick", (e) => e.preventDefault());
+    this.addTargetListener("dblclick", (e: MouseEvent) => e.preventDefault());
   }
 
   // Idempotent
   stop(): void {
     for (const [eventType, listener] of this.#targetListeners.entries()) {
-      this.target.removeEventListener(eventType, listener);
+      this.target.removeEventListener(
+        eventType,
+        listener as unknown as EventListener,
+      ); // TODO
     }
     this.#targetListeners.clear();
     this.#lazyListenersRegistered = false;
   }
 
-  #targetListeners = new Map<string, (e: MouseEvent) => any>();
-  addTargetListener(eventType: string, listener: (e: MouseEvent) => any) {
+  #targetListeners = new Map<
+    string,
+    ((e: MouseEvent) => any) | ((e: PointerEvent) => any)
+  >();
+  addTargetListener(
+    eventType: string,
+    listener: ((e: MouseEvent) => any) | ((e: PointerEvent) => any),
+  ) {
     if (!this.#targetListeners.has(eventType)) {
-      this.target.addEventListener(eventType, listener);
+      this.target.addEventListener(
+        eventType,
+        listener as unknown as EventListener, // TODO
+      );
       this.#targetListeners.set(eventType, listener);
     }
   }

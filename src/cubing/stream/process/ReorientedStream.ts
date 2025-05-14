@@ -71,8 +71,10 @@ export class ReorientedStream extends EventTarget {
 
   constructor(target: EventTarget) {
     super();
-    target.addEventListener("move", (e: CustomEvent) =>
-      this.onMove(ensurePuzzleStreamMoveEvent(e)),
+    target.addEventListener(
+      "move",
+      ((e: CustomEvent) =>
+        this.onMove(ensurePuzzleStreamMoveEvent(e))) as EventListener, // TODO
     );
   }
 

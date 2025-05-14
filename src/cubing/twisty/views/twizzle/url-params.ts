@@ -3,8 +3,8 @@ import type {
   AlgProp,
   AlgWithIssues,
 } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
 import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp";
+import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
 import {
   type TwistyPlayerAttribute,
   twistyPlayerAttributeMap,
@@ -63,10 +63,10 @@ export class URLParamUpdater {
     updateURL(url);
   }
 
-  async listenToStringSourceProp(
-    prop: TwistyPropSource<string | null>,
+  async listenToStringSourceProp<T extends string>(
+    prop: TwistyPropSource<T>,
     key: string,
-    defaultString?: string,
+    defaultString?: T,
   ): Promise<void> {
     const actualDefaultString =
       defaultString ?? (await prop.getDefaultValue()) ?? ""; // TODO
@@ -85,10 +85,10 @@ export class URLParamUpdater {
     });
   }
 
-  async listenToStringOrNoValueProp(
-    prop: TwistyPropSource<string | typeof EXPERIMENTAL_PROP_NO_VALUE>,
+  async listenToStringOrNoValueProp<T extends string>(
+    prop: TwistyPropSource<T | typeof EXPERIMENTAL_PROP_NO_VALUE>,
     key: string,
-    defaultString: string | typeof EXPERIMENTAL_PROP_NO_VALUE,
+    defaultString: T | typeof EXPERIMENTAL_PROP_NO_VALUE,
   ): Promise<void> {
     prop.addFreshListener((s: string | typeof EXPERIMENTAL_PROP_NO_VALUE) => {
       if (s === EXPERIMENTAL_PROP_NO_VALUE) {

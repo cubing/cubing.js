@@ -21,18 +21,18 @@ const reorienter = new ReorientedStream(twistyStreamSource);
 
 reorienter.addEventListener(
   "move",
-  (e: PuzzleStreamMoveEventRegisterCompatible) => {
+  ((e: PuzzleStreamMoveEventRegisterCompatible) => {
     console.log(e.detail.move.toString());
     reorientedPlayer.experimentalAddMove(e.detail.move);
-  },
+  }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
 );
 twistyStreamSource.addEventListener(
   "move",
-  (e: PuzzleStreamMoveEventRegisterCompatible) => {
+  ((e: PuzzleStreamMoveEventRegisterCompatible) => {
     if (!"xyz".includes(e.detail.move.family)) {
       unreorientedPlayer.experimentalAddMove(e.detail.move);
     }
-  },
+  }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
 );
 
 console.log(reorienter);

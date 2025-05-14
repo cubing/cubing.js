@@ -1,8 +1,8 @@
 import { Move } from "../../../alg";
 import type { KeyboardPuzzle } from "../../../bluetooth/keyboard";
 import type {
-  BluetoothPuzzle,
   AlgLeafEvent,
+  BluetoothPuzzle,
 } from "../../../bluetooth/smart-puzzle/bluetooth-puzzle";
 import type { ExperimentalTwizzleStreamServer } from "../../../stream";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../stream/process/ReorientedStream";
@@ -104,9 +104,9 @@ export class TwistyStreamSource extends ManagedCustomElement {
       button.textContent += " ✅";
       source.addEventListener(
         "move",
-        (e: PuzzleStreamMoveEventRegisterCompatible) => {
+        ((e: PuzzleStreamMoveEventRegisterCompatible) => {
           this.dispatchEvent(new CustomEvent("move", e));
-        },
+        }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
       );
       // TODO: Hook up UI for disconnection.
     });
@@ -152,10 +152,10 @@ export class TwistyStreamSource extends ManagedCustomElement {
       const stream = streamServer!.connect(streamID);
       stream.addEventListener(
         "move",
-        (moveEvent: PuzzleStreamMoveEventRegisterCompatible) => {
+        ((moveEvent: PuzzleStreamMoveEventRegisterCompatible) => {
           console.log(moveEvent);
           this.dispatchEvent(new CustomEvent("move", moveEvent));
-        },
+        }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
       );
     });
   }

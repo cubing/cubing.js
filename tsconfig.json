@@ -1,22 +1,12 @@
 {
+  "extends": "./node_modules/@cubing/dev-config/ts/es2022-types/tsconfig.json",
   "compilerOptions": {
-    "target": "es2022",
-    "module": "es2022",
-    "moduleResolution": "bundler",
-    "declaration": true,
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
     "noEmit": true,
     "verbatimModuleSyntax": true,
     "rootDir": "./",
     "types": ["web-bluetooth", "dom-speech-recognition"],
-    // Stricter defaults.
     "allowJs": true,
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitOverride": true,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "noFallthroughCasesInSwitch": true,
     "paths": {
       // Workaround for the `bin` build: https://github.com/cubing/cubing.js/issues/292
       "cubing/*": ["./src/cubing/*"]

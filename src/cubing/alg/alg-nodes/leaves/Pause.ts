@@ -9,7 +9,7 @@ export class Pause extends AlgCommon<Pause> {
   experimentalNISSGrouping?: Grouping; // TODO: tie this to the alg
 
   toString(
-    experimentalSerializationOptions?: ExperimentalSerializationOptions,
+    _experimentalSerializationOptions?: ExperimentalSerializationOptions,
   ): string {
     return ".";
   }

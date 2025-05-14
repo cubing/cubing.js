@@ -90,10 +90,10 @@ export class TwizzleLink extends ManagedCustomElement {
     this.#cssCDNForumTweaksElem?.remove();
   }
 
-  #cssCDNForumTweaksElem: HTMLStyleElement | undefined;
-  #scrollableRegion: HTMLDivElement;
-  #responsiveWrapper: HTMLDivElement;
-  #moveCountElem: HTMLSpanElement;
+  #cssCDNForumTweaksElem?: HTMLStyleElement;
+  #scrollableRegion?: HTMLDivElement;
+  #responsiveWrapper?: HTMLDivElement;
+  #moveCountElem?: HTMLSpanElement;
   async connectedCallback() {
     this.#responsiveWrapper = this.addElement(document.createElement("div"));
     this.#responsiveWrapper.classList.add("responsive-wrapper");

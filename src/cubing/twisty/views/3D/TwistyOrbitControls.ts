@@ -98,8 +98,14 @@ export class TwistyOrbitControls {
     private canvas: HTMLCanvasElement,
     private dragTracker: DragTracker,
   ) {
-    this.dragTracker.addEventListener("move", this.onMove.bind(this));
-    this.dragTracker.addEventListener("up", this.onUp.bind(this));
+    this.dragTracker.addEventListener(
+      "move",
+      this.onMove.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
+    this.dragTracker.addEventListener(
+      "up",
+      this.onUp.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
   }
 
   // f is the fraction of the canvas traversed per ms.
@@ -161,7 +167,7 @@ export class TwistyOrbitControls {
       "lastTemperedX" in e.detail.attachedInfo &&
       "lastTemperedY" in e.detail.attachedInfo &&
       "timestamp" in e.detail.attachedInfo &&
-      e.timeStamp - e.detail.attachedInfo.timestamp < 60 // TODO
+      e.timeStamp - e.detail.attachedInfo["timestamp"] < 60 // TODO
     ) {
       new Inertia(
         e.timeStamp, // TODO

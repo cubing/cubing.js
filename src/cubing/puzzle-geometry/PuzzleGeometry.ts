@@ -660,42 +660,42 @@ type MoveSetGeo = [string, string, string, string, number];
 /** @category PuzzleGeometry */
 export class PuzzleGeometry {
   private rotations: Quat[]; // all members of the rotation group
-  public baseplanerot: Quat[]; // unique rotations of the baseplane
-  private baseplanes: Quat[]; // planes, corresponding to faces
-  private facenames: [Quat[], string][]; // face names
-  private faceplanes: [Quat, string][]; // face planes
-  private edgenames: [Quat, string][]; // edge names
-  private vertexnames: [Quat, string][]; // vertexnames
-  private geonormals: [Quat, string, string][]; // all geometric directions, with names and types
-  private moveplanes: Quat[]; // the planes that split moves
-  private moveplanes2: Quat[]; // the planes that split moves, filtered
-  public moveplanesets: Quat[][]; // the move planes, in parallel sets
-  private moveplanenormals: Quat[]; // one move plane
-  public movesetorders: number[]; // the order of rotations for each move set
-  public movesetgeos: MoveSetGeo[]; // geometric feature information for move sets
-  private basefaces: Face[]; // polytope faces before cuts
+  public basePlaneRotations: Quat[]; // unique rotations of the baseplane
+  private basePlanes: Quat[]; // planes, corresponding to faces
+  private faceNames: [Quat[], string][]; // face names
+  private facePlanes: [Quat, string][]; // face planes
+  private edgeNames: [Quat, string][]; // edge names
+  private vertexNames: [Quat, string][]; // vertexnames
+  private geometryNormals: [Quat, string, string][]; // all geometric directions, with names and types
+  private movePlanes: Quat[]; // the planes that split moves
+  private movePlanesFiltered: Quat[]; // the planes that split moves, filtered
+  public movePlaneSets?: Quat[][]; // the move planes, in parallel sets
+  private movePlaneNormals?: Quat[]; // one move plane
+  public movesetorders?: number[]; // the order of rotations for each move set
+  public movesetgeos?: MoveSetGeo[]; // geometric feature information for move sets
+  private baseFaces: Face[]; // polytope faces before cuts
   private faces: Face[]; // all the stickers
-  private facecentermass: Quat[]; // center of mass of all faces
+  private faceCenterMass?: Quat[]; // center of mass of all faces
   private baseFaceCount: BaseFaceCount; // number of base faces
-  public stickersperface: number; // number of stickers per face
-  public shortedge: number; // number of stickers per face
-  private markedface: number[]; // given a bitmap of faces, identify the marked one
+  public stickersPerFace: number; // number of stickers per face
+  public shortestEdge: number;
+  private markedFaceLookup: number[]; // given a bitmap of faces, identify the marked one
   public cubies: number[][]; // the cubies
-  private vertexdistance: number; // vertex distance
-  private edgedistance: number; // edge distance
-  private facetocubie: number[]; // map a face to a cubie index
-  private facetoord: number[]; // map a face to a cubie ord
-  private moverotations: Quat[][]; // move rotations
-  private facelisthash: Map<string, number[]>; // face list by key
-  private cubiesetnames: string[]; // cubie set names
-  private cubieords: number[]; // the size of each orbit
-  private cubiesetnums: number[];
-  private cubieordnums: number[];
-  private orbitoris: number[]; // the orientation size of each orbit
-  private cubievaluemap: number[]; // the map for identical cubies
-  private cubiesetcubies: number[][]; // cubies in each cubie set
-  public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
-  public parsedmovelist: [
+  private vertexDistance: number; // vertex distance
+  private edgeDistance: number; // edge distance
+  private faceToCubie?: number[]; // map a face to a cubie index
+  private faceToCubieOrd?: number[]; // map a face to a cubie ord
+  private moveRotations?: Quat[][]; // move rotations
+  private faceListHash?: Map<string, number[]>; // face list by key
+  private cubieSetNames?: string[]; // cubie set names
+  private cubieOrbitSizes?: number[]; // the size of each orbit
+  private cubieSetNums?: number[];
+  private cubieOrdNums?: number[];
+  private orbitOrientations?: number[]; // the orientation size of each orbit
+  private cubieValueMap?: number[]; // the map for identical cubies
+  private cubieSetCubies?: number[][]; // cubies in each cubie set
+  public cmovesBySlice: number[][][] = []; // cmoves as perms by slice
+  public parsedMoveList?: [
     string | undefined,
     number,
     number,
@@ -725,11 +725,7 @@ export class PuzzleGeometry {
     if (this.options.verbosity > 0) {
       console.log(this.header("# "));
     }
-    this.create(puzzleDescription);
-    tend(t1);
-  }
 
-  public create(puzzleDescription: PuzzleDescription): void {
     const { shape, cuts } = puzzleDescription;
 
     // create the shape, doing all the essential geometry
@@ -737,8 +733,8 @@ export class PuzzleGeometry {
     // face, and what the short edge is.  If the short edge is too short,
     // we probably don't want to display or manipulate this one.  How
     // short is too short is hard to say.
-    this.moveplanes = [];
-    this.moveplanes2 = [];
+    this.movePlanes = [];
+    this.movePlanesFiltered = [];
     this.faces = [];
     this.cubies = [];
     let g = null;
@@ -771,9 +767,11 @@ export class PuzzleGeometry {
       console.log(`# Rotations: ${this.rotations.length}`);
     }
     const baseplane = g[0];
-    this.baseplanerot = uniqueplanes(baseplane, this.rotations);
-    const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
-    this.baseplanes = baseplanes;
+    this.basePlaneRotations = uniqueplanes(baseplane, this.rotations);
+    const baseplanes = this.basePlaneRotations.map((_) =>
+      baseplane.rotateplane(_),
+    );
+    this.basePlanes = baseplanes;
     this.baseFaceCount = baseplanes.length as BaseFaceCount;
     const net = defaultnets()[baseplanes.length];
     this.net = net;
@@ -796,8 +794,8 @@ export class PuzzleGeometry {
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
     const firstface = getface(planes);
-    this.edgedistance = firstface[0].sum(firstface[1]).smul(0.5).dist(zero);
-    this.vertexdistance = firstface[0].dist(zero);
+    this.edgeDistance = firstface[0].sum(firstface[1]).smul(0.5).dist(zero);
+    this.vertexDistance = firstface[0].dist(zero);
     const cutplanes = [];
     const intersects = [];
     let sawface = false; // what cuts did we see?
@@ -815,13 +813,13 @@ export class PuzzleGeometry {
         }
         case "v": {
           normal = vertexnormal;
-          distance = this.vertexdistance;
+          distance = this.vertexDistance;
           sawvertex = true;
           break;
         }
         case "e": {
           normal = edgenormal;
-          distance = this.edgedistance;
+          distance = this.edgeDistance;
           sawedge = true;
           break;
         }
@@ -842,10 +840,10 @@ export class PuzzleGeometry {
         cutplanes.push(edgenormal.makecut(10));
       }
     }
-    this.basefaces = [];
-    for (const baseplanerot of this.baseplanerot) {
+    this.baseFaces = [];
+    for (const baseplanerot of this.basePlaneRotations) {
       const face = baseplanerot.rotateface(firstface);
-      this.basefaces.push(new Face(face));
+      this.baseFaces.push(new Face(face));
     }
     //
     //   Determine names for edges, vertices, and planes.  Planes are defined
@@ -869,8 +867,8 @@ export class PuzzleGeometry {
       }
       a.push([p, name]);
     }
-    for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(firstface);
+    for (let i = 0; i < this.basePlaneRotations.length; i++) {
+      const face = this.basePlaneRotations[i].rotateface(firstface);
       for (let j = 0; j < face.length; j++) {
         const jj = (j + 1) % face.length;
         const midpoint = face[j].sum(face[jj]).smul(0.5);
@@ -878,8 +876,8 @@ export class PuzzleGeometry {
       }
     }
     const otherfaces = [];
-    for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(firstface);
+    for (let i = 0; i < this.basePlaneRotations.length; i++) {
+      const face = this.basePlaneRotations[i].rotateface(firstface);
       const facelist = [];
       for (let j = 0; j < face.length; j++) {
         const jj = (j + 1) % face.length;
@@ -931,15 +929,15 @@ export class PuzzleGeometry {
         facenametoindex[neti[j]] = of;
       }
     }
-    for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(firstface);
-      const faceplane = boundary.rotateplane(this.baseplanerot[i]);
+    for (let i = 0; i < this.basePlaneRotations.length; i++) {
+      const face = this.basePlaneRotations[i].rotateface(firstface);
+      const faceplane = boundary.rotateplane(this.basePlaneRotations[i]);
       const facename = faceindextoname[i];
       facenames.push([face, facename]);
       faceplanes.push([faceplane, facename]);
     }
-    for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(firstface);
+    for (let i = 0; i < this.basePlaneRotations.length; i++) {
+      const face = this.basePlaneRotations[i].rotateface(firstface);
       const facename = faceindextoname[i];
       for (let j = 0; j < face.length; j++) {
         const jj = (j + 1) % face.length;
@@ -1043,7 +1041,7 @@ export class PuzzleGeometry {
       }
       vertexnames[i] = [vertexnames[i][0], r];
     }
-    this.markedface = markedface;
+    this.markedFaceLookup = markedface;
     if (this.options.verbosity > 1) {
       console.log(`# Face names: ${facenames.map((_) => _[1]).join(" ")}`);
       // TODO
@@ -1061,17 +1059,17 @@ export class PuzzleGeometry {
     for (const vertexname of vertexnames) {
       geonormals.push([vertexname[0].makenormal(), vertexname[1], "v"]);
     }
-    this.facenames = facenames;
-    this.faceplanes = faceplanes;
-    this.edgenames = edgenames;
-    this.vertexnames = vertexnames;
-    this.geonormals = geonormals;
+    this.faceNames = facenames;
+    this.facePlanes = faceplanes;
+    this.edgeNames = edgenames;
+    this.vertexNames = vertexnames;
+    this.geometryNormals = geonormals;
     const geonormalnames = geonormals.map((_) => _[1]);
     this.swizzler.setGripNames(geonormalnames);
     if (this.options.verbosity > 0) {
       console.log(
-        `# Distances: face ${1} edge ${this.edgedistance} vertex ${
-          this.vertexdistance
+        `# Distances: face ${1} edge ${this.edgeDistance} vertex ${
+          this.vertexDistance
         }`,
       );
     }
@@ -1080,22 +1078,22 @@ export class PuzzleGeometry {
       for (const rotation of this.rotations) {
         const q = cutplanes[c].rotateplane(rotation);
         let wasseen = false;
-        for (const moveplane of this.moveplanes) {
+        for (const moveplane of this.movePlanes) {
           if (q.sameplane(moveplane)) {
             wasseen = true;
             break;
           }
         }
         if (!wasseen) {
-          this.moveplanes.push(q);
+          this.movePlanes.push(q);
           if (intersects[c]) {
-            this.moveplanes2.push(q);
+            this.movePlanesFiltered.push(q);
           }
         }
       }
     }
     let ft = new FaceTree(firstface);
-    const tar = this.moveplanes2.slice();
+    const tar = this.movePlanesFiltered.slice();
     // we want to use Math.random() here but we can't, because when
     // we call multiple times we'll get different orbits/layouts.
     // to resolve this, we use a very simple linear congruential
@@ -1113,7 +1111,7 @@ export class PuzzleGeometry {
     if (this.options.verbosity > 0) {
       console.log(`# Faces is now ${faces.length}`);
     }
-    this.stickersperface = faces.length;
+    this.stickersPerFace = faces.length;
     // the faces when rotated don't preserve the vertex order at this
     // point.  to improve 3d rendering speed, we would like to preserve
     // vertex order on rotation.  First, let's see what rotations preserve
@@ -1156,18 +1154,18 @@ export class PuzzleGeometry {
     }
     //  Find and report the shortest edge in any of the faces.  If this
     //  is small the puzzle is probably not practical or displayable.
-    this.shortedge = 1e99;
+    this.shortestEdge = 1e99;
     for (const face of faces) {
       for (let j = 0; j < face.length; j++) {
         const k = (j + 1) % face.length;
         const t = face.get(j).dist(face.get(k));
-        if (t < this.shortedge) {
-          this.shortedge = t;
+        if (t < this.shortestEdge) {
+          this.shortestEdge = t;
         }
       }
     }
     if (this.options.verbosity > 0) {
-      console.log(`# Short edge is ${this.shortedge}`);
+      console.log(`# Short edge is ${this.shortestEdge}`);
     }
     // add nxnxn cube notation if it has cube face moves
     if (shape === "c" && sawface && !sawedge && !sawvertex) {
@@ -1212,6 +1210,7 @@ export class PuzzleGeometry {
         ]),
       );
     }
+    tend(t1);
   }
 
   private keyface(face: Face): string {
@@ -1222,7 +1221,7 @@ export class PuzzleGeometry {
     // take a face and figure out the sides of each move plane
     let s = "";
     const sfcc = String.fromCharCode;
-    for (const moveplaneset of this.moveplanesets) {
+    for (const moveplaneset of this.movePlaneSets! /* TODO */) {
       if (moveplaneset.length > 0) {
         const dv = cm.dot(moveplaneset[0]);
         let t = 0;
@@ -1259,7 +1258,7 @@ export class PuzzleGeometry {
     const cm = face.centermass();
     // take a face and figure out the sides of each move plane
     const r = [];
-    for (const moveplaneset of this.moveplanesets) {
+    for (const moveplaneset of this.movePlaneSets! /* TODO*/) {
       if (moveplaneset.length > 0) {
         const dv = cm.dot(moveplaneset[0]);
         let t = 0;
@@ -1280,13 +1279,14 @@ export class PuzzleGeometry {
 
   private findface(cm: Quat): number {
     const key = this.keyface2(cm);
-    const arr = this.facelisthash.get(key)!;
+    const arr = this.faceListHash!.get(key)!; // TODO: refactor to avoid non-null-assertion
     if (arr.length === 1) {
       return arr[0];
     }
     for (let i = 0; i + 1 < arr.length; i++) {
-      const face2 = this.facelisthash.get(key)![i];
-      if (Math.abs(cm.dist(this.facecentermass[face2])) < eps) {
+      const face2 = this.faceListHash!.get(key)![i]; // TODO: refactor to avoid non-null-assertion
+      // TODO: refactor to avoid non-null-assertion
+      if (Math.abs(cm.dist(this.faceCenterMass![face2])) < eps) {
         return face2;
       }
     }
@@ -1302,9 +1302,9 @@ export class PuzzleGeometry {
     //  face to a given 2D vector.  The face is given as an index into the
     //  facenames/baseplane arrays, and the edge is given as an offset into
     //  the vertices.
-    const face = this.facenames[facen][0];
+    const face = this.faceNames[facen][0];
     const edgen2 = (edgen + 1) % face.length;
-    const plane = this.baseplanes[facen];
+    const plane = this.basePlanes[facen];
     let x0 = face[edgen2].sub(face[edgen]);
     const olen = x0.len();
     x0 = x0.normalize();
@@ -1342,19 +1342,19 @@ export class PuzzleGeometry {
     // We do enough work here to display the cube on the screen.
     // take our newly split base face and expand it by the rotation matrix.
     // this generates our full set of "stickers".
-    this.faces = expandfaces(this.baseplanerot, this.faces);
+    this.faces = expandfaces(this.basePlaneRotations, this.faces);
     if (this.options.verbosity > 0) {
       console.log(`# Total stickers is now ${this.faces.length}`);
     }
-    this.facecentermass = new Array(this.faces.length);
+    this.faceCenterMass = new Array(this.faces.length);
     for (let i = 0; i < this.faces.length; i++) {
-      this.facecentermass[i] = this.faces[i].centermass();
+      this.faceCenterMass[i] = this.faces[i].centermass();
     }
     // Split moveplanes into a list of parallel planes.
     const moveplanesets: Quat[][] = [];
     const moveplanenormals: Quat[] = [];
     // get the normals, first, from unfiltered moveplanes.
-    for (const q of this.moveplanes) {
+    for (const q of this.movePlanes) {
       const qnormal = q.makenormal();
       let wasseen = false;
       for (const moveplanenormal of moveplanenormals) {
@@ -1367,7 +1367,7 @@ export class PuzzleGeometry {
         moveplanesets.push([]);
       }
     }
-    for (const q of this.moveplanes2) {
+    for (const q of this.movePlanesFiltered) {
       const qnormal = q.makenormal();
       for (let j = 0; j < moveplanenormals.length; j++) {
         if (qnormal.sameplane(moveplanenormals[j])) {
@@ -1388,8 +1388,8 @@ export class PuzzleGeometry {
       q.sort((a, b) => a.a - b.a);
       moveplanesets[i] = q;
     }
-    this.moveplanesets = moveplanesets;
-    this.moveplanenormals = moveplanenormals;
+    this.movePlaneSets = moveplanesets;
+    this.movePlaneNormals = moveplanenormals;
     const sizes = moveplanesets.map((_) => _.length);
     if (this.options.verbosity > 0) {
       console.log(`# Move plane sets: ${sizes}`);
@@ -1411,7 +1411,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    this.moverotations = moverotations;
+    this.moveRotations = moverotations;
     //  Sort the rotations by the angle of rotation.  A bit tricky because
     //  while the norms should be the same, they need not be.  So we start
     //  by making the norms the same, and then sorting.
@@ -1436,7 +1436,7 @@ export class PuzzleGeometry {
       const p0 = moveplanenormals[i];
       let neg = null;
       let pos = null;
-      for (const geonormal of this.geonormals) {
+      for (const geonormal of this.geometryNormals) {
         const d = p0.dot(geonormal[0]);
         if (Math.abs(d - 1) < eps) {
           pos = [geonormal[1], geonormal[2]];
@@ -1530,7 +1530,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    this.facelisthash = facelisthash;
+    this.faceListHash = facelisthash;
     if (this.options.verbosity > 0) {
       console.log(`# Cubies: ${facelisthash.size}`);
     }
@@ -1574,12 +1574,12 @@ export class PuzzleGeometry {
         // set the orientations by finding the marked face and putting it first.
         let bits = 0;
         for (const f of facelist) {
-          bits |= 1 << Math.floor(f / this.stickersperface);
+          bits |= 1 << Math.floor(f / this.stickersPerFace);
         }
-        const markedface = this.markedface[bits]!;
+        const markedface = this.markedFaceLookup[bits]!;
         let mini = -1;
         for (let i = 0; i < facelist.length; i++) {
-          if (Math.floor(facelist[i] / this.stickersperface) === markedface) {
+          if (Math.floor(facelist[i] / this.stickersPerFace) === markedface) {
             mini = i;
           }
         }
@@ -1601,8 +1601,8 @@ export class PuzzleGeometry {
       cubies.push(facelist);
     }
     this.cubies = cubies;
-    this.facetocubie = facetocubie;
-    this.facetoord = facetoord;
+    this.faceToCubie = facetocubie;
+    this.faceToCubieOrd = facetoord;
     //  Calculate the orbits of each cubie.  Assumes we do all moves.
     //  Also calculates which cubies are identical.
     const typenames = ["?", "CENTERS", "EDGES", "CORNERS", "C4RNER", "C5RNER"];
@@ -1656,10 +1656,10 @@ export class PuzzleGeometry {
         cubiesetcubies[cubiesetnum].push(cind);
         cubieordnums[cind] = cubieords[cubiesetnum]++;
         if (queue.length < this.rotations.length) {
-          const cm = this.facecentermass[cubies[cind][0]];
+          const cm: Quat = this.faceCenterMass![cubies[cind][0]]; // TODO: refactor to avoid non-null-assertion
           for (const moverotation of moverotations) {
             const tq =
-              this.facetocubie[this.findface(cm.rotatepoint(moverotation[0]))];
+              this.faceToCubie[this.findface(cm.rotatepoint(moverotation[0]))];
             if (!seen[tq]) {
               queue.push(tq);
               seen[tq] = true;
@@ -1669,7 +1669,7 @@ export class PuzzleGeometry {
       }
       cubiesetnum++;
     }
-    if (this.setReidOrSpeffzOrder && 4 <= this.stickersperface) {
+    if (this.setReidOrSpeffzOrder && 4 <= this.stickersPerFace) {
       const reidorder = [
         [
           "UF",
@@ -1730,8 +1730,8 @@ export class PuzzleGeometry {
       const speffuncorner = [
         -1, 0, 1, 0, 2, -1, 1, -1, 3, 3, -1, -1, 2, -1, -1, -1,
       ];
-      if (this.stickersperface > 9) {
-        for (const vertex of this.vertexnames) {
+      if (this.stickersPerFace > 9) {
+        for (const vertex of this.vertexNames) {
           cornerloc[this.upperStringToBitSet(vertex[1])] = vertex[0];
         }
         for (let i = 0; i < 6; i++) {
@@ -1745,12 +1745,12 @@ export class PuzzleGeometry {
         for (const cubienum of cubieset) {
           // corners are always Reid.  For 333, edges and centers are also
           // Reid.
-          if (cubies[cubienum].length === 3 || this.stickersperface <= 9) {
+          if (cubies[cubienum].length === 3 || this.stickersPerFace <= 9) {
             let mask = 0;
             for (const cubie of cubies[cubienum]) {
               mask |=
                 1 <<
-                (this.facenames[this.getfaceindex(cubie)][1].charCodeAt(0) -
+                (this.faceNames[this.getfaceindex(cubie)][1].charCodeAt(0) -
                   65);
             }
             cubieordnums[cubienum] = reidmap[mask];
@@ -1762,7 +1762,7 @@ export class PuzzleGeometry {
                 const sticker = cubies[cubienum][k];
                 const facekey =
                   spefffacelookup[
-                    this.facenames[this.getfaceindex(sticker)][1]
+                    this.faceNames[this.getfaceindex(sticker)][1]
                   ];
                 let bestdist = 1e20;
                 const cubieloc = this.faces[sticker].centermass();
@@ -1826,13 +1826,13 @@ export class PuzzleGeometry {
       }
     }
     //console.log(this.vertexnames);
-    this.cubiesetnums = cubiesetnums;
-    this.cubieordnums = cubieordnums;
-    this.cubiesetnames = cubiesetnames;
-    this.cubieords = cubieords;
-    this.orbitoris = orbitoris;
-    this.cubievaluemap = cubievaluemap;
-    this.cubiesetcubies = cubiesetcubies;
+    this.cubieSetNums = cubiesetnums;
+    this.cubieOrdNums = cubieordnums;
+    this.cubieSetNames = cubiesetnames;
+    this.cubieOrbitSizes = cubieords;
+    this.orbitOrientations = orbitoris;
+    this.cubieValueMap = cubievaluemap;
+    this.cubieSetCubies = cubiesetcubies;
     // if we fix a cubie, find a cubie to fix
     if (this.options.fixedPieceType !== null) {
       for (let i = 0; i < cubies.length; i++) {
@@ -1923,8 +1923,9 @@ export class PuzzleGeometry {
     let msi = -1;
     const geoname = this.swizzler.unswizzle(grip);
     let firstgrip = false;
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const g = this.movesetgeos[i];
+    // TODO: refactor to avoid non-null-assertion
+    for (let i = 0; i < this.movesetgeos!.length; i++) {
+      const g = this.movesetgeos![i]; // TODO: refactor to avoid non-null-assertion
       if (geoname === g[0]) {
         firstgrip = true;
         geo = g;
@@ -1966,24 +1967,25 @@ export class PuzzleGeometry {
     }
     loslice--;
     hislice--;
+    const movePlaneSets = this.movePlaneSets!; // TODO: refactor to avoid non-null-assertion
     if (fullrotation) {
       loslice = 0;
-      hislice = this.moveplanesets[msi].length;
+      hislice = movePlaneSets[msi].length;
     }
     if (
       loslice < 0 ||
-      loslice > this.moveplanesets[msi].length ||
+      loslice > movePlaneSets[msi].length ||
       hislice < 0 ||
-      hislice > this.moveplanesets[msi].length
+      hislice > movePlaneSets[msi].length
     ) {
       throw Error(
-        `Bad slice spec ${loslice} ${hislice} vs ${this.moveplanesets[msi].length}`,
+        `Bad slice spec ${loslice} ${hislice} vs ${movePlaneSets[msi].length}`,
       );
     }
     if (
       !permissivieMoveParsing &&
       loslice === 0 &&
-      hislice === this.moveplanesets[msi].length &&
+      hislice === movePlaneSets[msi].length &&
       !fullrotation
     ) {
       throw Error("! full puzzle rotations must be specified with v suffix.");
@@ -2002,7 +2004,7 @@ export class PuzzleGeometry {
   public genperms(): void {
     const t1 = tstart("genperms");
     // generate permutations for moves
-    if (this.cmovesbyslice.length > 0) {
+    if (this.cmovesBySlice.length > 0) {
       // did this already?
       return;
     }
@@ -2018,11 +2020,12 @@ export class PuzzleGeometry {
         if (this.cubies[k].length === 1) {
           const kk = this.cubies[k][0];
           const i = this.getfaceindex(kk);
-          const center = this.basefaces[i].centermass();
-          if (center.dist(this.facecentermass[kk]) < eps) {
+          const center = this.baseFaces[i].centermass();
+          // TODO: refactor to avoid non-null-assertion
+          if (center.dist(this.faceCenterMass![kk]) < eps) {
             const bits = (1 << i) | (1 << this.baseFaceCount);
-            const towards = this.markedface[bits];
-            const normal = this.baseplanes[towards].makenormal();
+            const towards = this.markedFaceLookup[bits];
+            const normal = this.basePlanes[towards].makenormal();
             let hiv = -1;
             let hii = -1;
             for (let ii = 0; ii < this.faces[kk].length; ii++) {
@@ -2049,19 +2052,20 @@ export class PuzzleGeometry {
               }
               this.faces[kk] = new Face(qs);
             }
-            const o = this.basefaces[i].length;
+            const o = this.baseFaces[i].length;
             for (let m = 1; m < o; m++) {
               this.cubies[k].push(this.cubies[k][m - 1]);
             }
             this.duplicatedFaces[kk] = o;
             this.duplicatedCubies[k] = o;
-            this.orbitoris[this.cubiesetnums[k]] = o;
+            this.orbitOrientations![this.cubieSetNums![k]] = o; // TODO: refactor to avoid non-null-assertion
           }
         }
       }
     }
-    for (let k = 0; k < this.moveplanesets.length; k++) {
-      const moveplaneset = this.moveplanesets[k];
+    // TODO: refactor to avoid non-null-assertion
+    for (let k = 0; k < this.movePlaneSets!.length; k++) {
+      const moveplaneset = this.movePlaneSets![k]; // TODO: refactor to avoid non-null-assertion
       const slicenum = [];
       const slicecnts = [moveplaneset.length + 1, 0];
       let bhi = 1;
@@ -2071,7 +2075,7 @@ export class PuzzleGeometry {
       for (let i = 0; i < this.faces.length; i++) {
         let t = 0;
         if (moveplaneset.length > 0) {
-          const dv = this.facecentermass[i].dot(moveplaneset[0]);
+          const dv = this.faceCenterMass![i].dot(moveplaneset[0]); // TODO: refactor to avoid non-null-assertion
           for (let b = bhi; b > 0; b >>= 1) {
             if (
               t + b <= moveplaneset.length &&
@@ -2097,19 +2101,19 @@ export class PuzzleGeometry {
         if (slicenum[i] < 0) {
           continue;
         }
-        const b = [this.facetocubie[i], this.facetoord[i]];
-        let cm = this.facecentermass[i];
+        const b = [this.faceToCubie![i], this.faceToCubieOrd![i]]; // TODO: refactor to avoid non-null-assertion
+        let cm = this.faceCenterMass![i]; // TODO: refactor to avoid non-null-assertion
         const ocm = cm;
         let fi2 = i;
         const sc = slicenum[fi2];
         for (;;) {
           slicenum[fi2] = -1;
-          const cm2 = cm.rotatepoint(this.moverotations[k][0]);
+          const cm2 = cm.rotatepoint(this.moveRotations![k][0]); // TODO: refactor to avoid non-null-assertion
           if (cm2.dist(ocm) < eps) {
             break;
           }
           fi2 = this.findface(cm2);
-          b.push(this.facetocubie[fi2], this.facetoord[fi2]);
+          b.push(this.faceToCubie![fi2], this.faceToCubieOrd![fi2]); // TODO: refactor to avoid non-null-assertion
           cm = cm2;
         }
         // If an oriented center is moving, we need to figure out
@@ -2139,8 +2143,9 @@ export class PuzzleGeometry {
         ) {
           // is this a real center cubie, around an axis?
           if (
-            this.facecentermass[i].dist(
-              this.basefaces[this.getfaceindex(i)].centermass(),
+            // TODO: refactor to avoid non-null-assertion
+            this.faceCenterMass![i].dist(
+              this.baseFaces[this.getfaceindex(i)].centermass(),
             ) < eps
           ) {
             // how does remapping of the face/point set map to the original?
@@ -2160,7 +2165,7 @@ export class PuzzleGeometry {
                 );
               } else {
                 b[ii + 1] = o;
-                face1 = face1.rotate(this.moverotations[k][0]);
+                face1 = face1.rotate(this.moveRotations![k][0]); // TODO: refactor to avoid non-null-assertion
               }
             }
           }
@@ -2169,20 +2174,22 @@ export class PuzzleGeometry {
         // in this case we add duplicate stickers
         // so that we can make it animate properly in a 3D world.
         if (b.length === 2 && this.options.orientCenters) {
-          const dir = this.facecentermass[i].dot(this.moveplanenormals[k]);
-          for (let ii = 1; ii < this.movesetorders[k]; ii++) {
+          const dir = this.faceCenterMass![i].dot(this.movePlaneNormals![k]); // TODO: refactor to avoid non-null-assertion
+          // TODO: refactor to avoid non-null-assertion
+          for (let ii = 1; ii < this.movesetorders![k]; ii++) {
             if (dir > 0) {
               b.push(b[0], ii);
             } else {
               b.push(
                 b[0],
-                (this.movesetorders[k] - ii) % this.movesetorders[k],
+                (this.movesetorders![k] - ii) % this.movesetorders![k], // TODO: refactor to avoid non-null-assertion
               );
             }
           }
         }
         if (b.length > 2 && !cubiedone[b[0]]) {
-          if (b.length !== 2 * this.movesetorders[k]) {
+          // TODO: refactor to avoid non-null-assertion
+          if (b.length !== 2 * this.movesetorders![k]) {
             throw Error("Bad length in perm gen");
           }
           for (const v of b) {
@@ -2198,7 +2205,7 @@ export class PuzzleGeometry {
       }
       cmovesbyslice.push(axiscmoves);
     }
-    this.cmovesbyslice = cmovesbyslice;
+    this.cmovesBySlice = cmovesbyslice;
     if (this.options.moveList) {
       const parsedmovelist: [
         string | undefined,
@@ -2212,22 +2219,22 @@ export class PuzzleGeometry {
       for (const moveString of this.options.moveList) {
         parsedmovelist.push(this.parsemove(moveString));
       }
-      this.parsedmovelist = parsedmovelist;
+      this.parsedMoveList = parsedmovelist;
     }
-    this.facelisthash.clear();
-    this.facecentermass = [];
+    this.faceListHash!.clear(); // TODO: refactor to avoid non-null-assertion
+    this.faceCenterMass = [];
     tend(t1);
   }
 
   private getboundarygeometry(): any {
     // get the boundary geometry
     return {
-      baseplanes: this.baseplanes,
-      facenames: this.facenames,
-      faceplanes: this.faceplanes,
-      vertexnames: this.vertexnames,
-      edgenames: this.edgenames,
-      geonormals: this.geonormals,
+      baseplanes: this.basePlanes,
+      facenames: this.faceNames,
+      faceplanes: this.facePlanes,
+      vertexnames: this.vertexNames,
+      edgenames: this.edgeNames,
+      geonormals: this.geometryNormals,
     };
   }
 
@@ -2236,10 +2243,10 @@ export class PuzzleGeometry {
     // for even values we omit the middle "slice".  This isn't perfect
     // but it is what we do for now.
     // if there was a move list specified, pull values from that
-    const slices = this.moveplanesets[k].length;
+    const slices = this.movePlaneSets![k].length; // TODO: refactor to avoid non-null-assertion
     let r: any[] = [];
-    if (this.parsedmovelist !== undefined) {
-      for (const parsedmove of this.parsedmovelist) {
+    if (this.parsedMoveList !== undefined) {
+      for (const parsedmove of this.parsedMoveList) {
         if (parsedmove[1] !== k) {
           continue;
         }
@@ -2251,7 +2258,7 @@ export class PuzzleGeometry {
         r.push(parsedmove[5]);
       }
     } else {
-      const msg = this.movesetgeos[k];
+      const msg = this.movesetgeos![k]; // TODO: refactor to avoid non-null-assertion
       const isTetrahedron = msg[1] !== msg[3];
       if (this.options.vertexMoves && isTetrahedron && !this.options.allMoves) {
         if (msg[1] !== msg[3]) {
@@ -2453,7 +2460,8 @@ export class PuzzleGeometry {
     const moveorbits: PGOrbit[] = [];
     const perms = [];
     const oris = [];
-    for (const len of this.cubieords) {
+    // TODO: refactor to avoid non-null-assertion
+    for (const len of this.cubieOrbitSizes!) {
       perms.push(iota(len));
       oris.push(zeros(len));
     }
@@ -2461,9 +2469,9 @@ export class PuzzleGeometry {
       const slicecmoves = axiscmoves[m];
       for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
         const mperm = slicecmoves.slice(j, j + 2 * movesetorder);
-        const setnum = this.cubiesetnums[mperm[0]];
+        const setnum = this.cubieSetNums![mperm[0]]; // TODO: refactor to avoid non-null-assertion
         for (let ii = 0; ii < mperm.length; ii += 2) {
-          mperm[ii] = this.cubieordnums[mperm[ii]];
+          mperm[ii] = this.cubieOrdNums![mperm[ii]]; // TODO: refactor to avoid non-null-assertion
         }
         let inc = 2;
         let oinc = 3;
@@ -2471,30 +2479,39 @@ export class PuzzleGeometry {
           inc = mperm.length - 2;
           oinc = mperm.length - 1;
         }
-        if (perms[setnum] === iota(this.cubieords[setnum])) {
+        if (perms[setnum] === iota(this.cubieOrbitSizes![setnum])) {
+          // TODO: refactor to avoid non-null-assertion
           perms[setnum] = perms[setnum].slice();
-          if (this.orbitoris[setnum] > 1 && !this.options.fixedOrientation) {
+          if (
+            this.orbitOrientations![setnum] > 1 && // TODO: refactor to avoid non-null-assertion
+            !this.options.fixedOrientation
+          ) {
             oris[setnum] = oris[setnum].slice();
           }
         }
         for (let ii = 0; ii < mperm.length; ii += 2) {
           perms[setnum][mperm[(ii + inc) % mperm.length]] = mperm[ii];
-          if (this.orbitoris[setnum] > 1 && !this.options.fixedOrientation) {
+          if (
+            this.orbitOrientations![setnum] > 1 && // TODO: refactor to avoid non-null-assertion
+            !this.options.fixedOrientation
+          ) {
             oris[setnum][mperm[ii]] =
               (mperm[(ii + oinc) % mperm.length] -
                 mperm[(ii + 1) % mperm.length] +
-                2 * this.orbitoris[setnum]) %
-              this.orbitoris[setnum];
+                2 * this.orbitOrientations![setnum]) % // TODO: refactor to avoid non-null-assertion
+              this.orbitOrientations![setnum]; // TODO: refactor to avoid non-null-assertion
           }
         }
       }
     }
     let lastId = new PGOrbit(iota(24), zeros(24), 1);
-    for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
+    for (let ii = 0; ii < this.cubieSetNames!.length; ii++) {
+      // TODO: refactor to avoid non-null-assertion
       if (setmoves && !setmoves[ii]) {
         continue;
       }
-      if (this.orbitoris[ii] === 1 || this.options.fixedOrientation) {
+      if (this.orbitOrientations![ii] === 1 || this.options.fixedOrientation) {
+        // TODO: refactor to avoid non-null-assertion
         if (perms[ii] === iota(lastId.perm.length)) {
           if (perms[ii] !== lastId.perm) {
             lastId = new PGOrbit(perms[ii], oris[ii], 1);
@@ -2509,7 +2526,9 @@ export class PuzzleGeometry {
         for (let jj = 0; jj < perms[ii].length; jj++) {
           no[jj] = oris[ii][perms[ii][jj]];
         }
-        moveorbits.push(new PGOrbit(perms[ii], no, this.orbitoris[ii]));
+        moveorbits.push(
+          new PGOrbit(perms[ii], no, this.orbitOrientations![ii]),
+        ); // TODO: refactor to avoid non-null-assertion
       }
     }
     let mv = new PGTransform(moveorbits);
@@ -2565,7 +2584,8 @@ export class PuzzleGeometry {
     // generate a representation of the puzzle
     const setmoves = [];
     if (fortwisty) {
-      for (let i = 0; i < this.cubiesetnames.length; i++) {
+      // TODO: refactor to avoid non-null-assertion
+      for (let i = 0; i < this.cubieSetNames!.length; i++) {
         setmoves.push(1);
       }
     }
@@ -2575,7 +2595,8 @@ export class PuzzleGeometry {
     // that do not preserve the movelist.
     const mps = [];
     const addrot = [];
-    for (let k = 0; k < this.moveplanesets.length; k++) {
+    // TODO: refactor to avoid non-null-assertion
+    for (let k = 0; k < this.movePlaneSets!.length; k++) {
       const moveset = this.getmovesets(k);
       mps.push(moveset);
       if (this.options.addRotations) {
@@ -2585,8 +2606,9 @@ export class PuzzleGeometry {
       }
     }
     const hasrotation = [];
-    for (let k = 0; k < this.moveplanesets.length; k++) {
-      const slices = this.moveplanesets[k].length;
+    // TODO: refactor to avoid non-null-assertion
+    for (let k = 0; k < this.movePlaneSets!.length; k++) {
+      const slices = this.movePlaneSets![k].length; // TODO: refactor to avoid non-null-assertion
       // if the move set includes a rotation around this axis, don't add any more
       let sawone = false;
       const moveset = mps[k];
@@ -2601,30 +2623,37 @@ export class PuzzleGeometry {
       this.options.addRotations &&
       (this.options.moveList || this.options.fixedPieceType !== null)
     ) {
-      for (let i = 0; i < this.moverotations.length; i++) {
+      for (let i = 0; i < this.moveRotations!.length; i++) {
+        // TODO: refactor to avoid non-null-assertion
         addrot[i] = 0;
       }
-      for (let k = 0; k < this.moveplanesets.length; k++) {
+      for (let k = 0; k < this.movePlaneSets!.length; k++) {
+        // TODO: refactor to avoid non-null-assertion
         // if the move set includes a rotation around this axis, don't add any more
         if (hasrotation[k]) {
           addrot[k] = 3;
           continue;
         }
         // does a rotation around k preserve the move set?
-        for (let i = 0; i < this.moverotations.length; i++) {
-          let nn = this.moveplanenormals[k];
-          for (let ii = 1; ii * 2 <= this.movesetorders[i]; ii++) {
-            nn = nn.rotatepoint(this.moverotations[i][0]);
+        for (let i = 0; i < this.moveRotations!.length; i++) {
+          // TODO
+          let nn = this.movePlaneNormals![k]; // TODO
+          for (let ii = 1; ii * 2 <= this.movesetorders![i]; ii++) {
+            // TODO
+            nn = nn.rotatepoint(this.moveRotations![i][0]); // TODO
             if (addrot[i] & ii) {
               continue;
             }
             let found = -1;
             let neg = false;
-            for (let j = 0; j < this.moveplanenormals.length; j++) {
-              if (nn.dist(this.moveplanenormals[j]) < eps) {
+            for (let j = 0; j < this.movePlaneNormals!.length; j++) {
+              // TODO
+              if (nn.dist(this.movePlaneNormals![j]) < eps) {
+                // TODO
                 found = j;
                 break;
-              } else if (nn.dist(this.moveplanenormals[j].smul(-1)) < eps) {
+              } else if (nn.dist(this.movePlaneNormals![j].smul(-1)) < eps) {
+                // TODO
                 found = j;
                 neg = true;
                 break;
@@ -2636,12 +2665,12 @@ export class PuzzleGeometry {
             const cmp = mps[found];
             if (
               cmp.length !== mps[k].length ||
-              this.moveplanesets[k].length !==
-                this.moveplanesets[found].length ||
+              this.movePlaneSets![k].length !== // TODO
+                this.movePlaneSets![found].length || // TODO
               this.diffmvsets(
                 cmp,
                 mps[k],
-                this.moveplanesets[found].length,
+                this.movePlaneSets![found].length, // TODO
                 neg,
               )
             ) {
@@ -2650,11 +2679,13 @@ export class PuzzleGeometry {
           }
         }
       }
-      for (let i = 0; i < this.moverotations.length; i++) {
+      for (let i = 0; i < this.moveRotations!.length; i++) {
+        // TODO: refactor to avoid non-null-assertion
         if (addrot[i] === 0) {
           addrot[i] = 1;
         } else if (addrot[i] === 1) {
-          if (this.movesetorders[i] > 3) {
+          if (this.movesetorders![i] > 3) {
+            // TODO: refactor to avoid non-null-assertion
             addrot[i] = 2;
           } else {
             addrot[i] = 0;
@@ -2666,15 +2697,17 @@ export class PuzzleGeometry {
         }
       }
     }
-    for (let k = 0; k < this.moveplanesets.length; k++) {
+    for (let k = 0; k < this.movePlaneSets!.length; k++) {
+      // TODO: refactor to avoid non-null-assertion
       if (addrot[k] !== 0 && !hasrotation[k]) {
-        mps[k].push([0, this.moveplanesets[k].length]);
+        mps[k].push([0, this.movePlaneSets![k].length]); // TODO: refactor to avoid non-null-assertion
         mps[k].push(addrot[k]);
       }
     }
-    for (let k = 0; k < this.moveplanesets.length; k++) {
+    for (let k = 0; k < this.movePlaneSets!.length; k++) {
+      // TODO: refactor to avoid non-null-assertion
       const moveset = mps[k];
-      const movesetorder = this.movesetorders[k];
+      const movesetorder = this.movesetorders![k]; // TODO: refactor to avoid non-null-assertion
       // check there's no redundancy in moveset.
       for (let i = 0; i < moveset.length; i += 2) {
         for (let j = 0; j < i; j += 2) {
@@ -2692,7 +2725,7 @@ export class PuzzleGeometry {
           allbits[j] = 1;
         }
       }
-      const axiscmoves = this.cmovesbyslice[k];
+      const axiscmoves = this.cmovesBySlice[k];
       for (let i = 0; i < axiscmoves.length; i++) {
         if (allbits[i] !== 1) {
           continue;
@@ -2702,43 +2735,48 @@ export class PuzzleGeometry {
           if (this.skipcubie(slicecmoves[j])) {
             continue;
           }
-          const ind = this.cubiesetnums[slicecmoves[j]];
+          const ind = this.cubieSetNums![slicecmoves[j]]; // TODO: refactor to avoid non-null-assertion
           setmoves[ind] = 1;
         }
       }
     }
-    for (let i = 0; i < this.cubiesetnames.length; i++) {
+    for (let i = 0; i < this.cubieSetNames!.length; i++) {
+      // TODO: refactor to avoid non-null-assertion
       if (!setmoves[i]) {
         continue;
       }
-      if (this.omitSet(this.cubiesetnames[i])) {
+      if (this.omitSet(this.cubieSetNames![i])) {
+        // TODO: refactor to avoid non-null-assertion
         setmoves[i] = 0;
         continue;
       }
-      setnames.push(this.cubiesetnames[i]);
+      setnames.push(this.cubieSetNames![i]); // TODO: refactor to avoid non-null-assertion
       setdefs.push(
         new PGOrbitDef(
-          this.cubieords[i],
-          this.options.fixedOrientation ? 1 : this.orbitoris[i],
+          this.cubieOrbitSizes![i], // TODO: refactor to avoid non-null-assertion
+          this.options.fixedOrientation ? 1 : this.orbitOrientations![i], // TODO: refactor to avoid non-null-assertion
         ),
       );
     }
     const solved: PGOrbit[] = [];
-    for (let i = 0; i < this.cubiesetnames.length; i++) {
+    for (let i = 0; i < this.cubieSetNames!.length; i++) {
+      // TODO: refactor to avoid non-null-assertion
       if (!setmoves[i]) {
         continue;
       }
-      if (this.omitSet(this.cubiesetnames[i])) {
+      if (this.omitSet(this.cubieSetNames![i])) {
+        // TODO: refactor to avoid non-null-assertion
         continue;
       }
       const p = [];
       const o = [];
-      for (let j = 0; j < this.cubieords[i]; j++) {
+      for (let j = 0; j < this.cubieOrbitSizes![i]; j++) {
+        // TODO: refactor to avoid non-null-assertion
         if (fortwisty) {
           p.push(j);
         } else {
-          const cubie = this.cubiesetcubies[i][j];
-          p.push(this.cubievaluemap[cubie]);
+          const cubie = this.cubieSetCubies![i][j]; // TODO: refactor to avoid non-null-assertion
+          p.push(this.cubieValueMap![cubie]); // TODO: refactor to avoid non-null-assertion
         }
         o.push(0);
       }
@@ -2746,7 +2784,7 @@ export class PuzzleGeometry {
         new PGOrbit(
           p,
           o,
-          this.options.fixedOrientation ? 1 : this.orbitoris[i],
+          this.options.fixedOrientation ? 1 : this.orbitOrientations![i], // TODO: refactor to avoid non-null-assertion
         ),
       );
     }
@@ -2755,19 +2793,20 @@ export class PuzzleGeometry {
     const moves: PGTransform[] = [];
     const isrots: boolean[] = [];
     if (includemoves) {
-      for (let k = 0; k < this.moveplanesets.length; k++) {
-        const moveplaneset = this.moveplanesets[k];
+      for (let k = 0; k < this.movePlaneSets!.length; k++) {
+        // TODO: refactor to avoid non-null-assertion
+        const moveplaneset = this.movePlaneSets![k]; // TODO: refactor to avoid non-null-assertion
         const slices = moveplaneset.length;
         const moveset = mps[k];
-        const movesetgeo = this.movesetgeos[k];
+        const movesetgeo = this.movesetgeos![k]; // TODO: refactor to avoid non-null-assertion
         for (let i = 0; i < moveset.length; i += 2) {
           const movebits = moveset[i];
           // did these movebits come from a specified move?
           // if they did, we need to use that name.
           let nameoverride: string | undefined;
           let inverted = false;
-          if (this.parsedmovelist !== undefined) {
-            for (const parsedmove of this.parsedmovelist) {
+          if (this.parsedMoveList !== undefined) {
+            for (const parsedmove of this.parsedMoveList) {
               if (parsedmove[1] !== k) {
                 continue;
               }
@@ -2802,9 +2841,9 @@ export class PuzzleGeometry {
             movebits,
             moveset[i + 1],
             inverted,
-            this.cmovesbyslice[k],
+            this.cmovesBySlice[k],
             setmoves,
-            this.movesetorders[k],
+            this.movesetorders![k], // TODO: refactor to avoid non-null-assertion
           );
           moves.push(mv);
         }
@@ -2846,7 +2885,7 @@ export class PuzzleGeometry {
     // get a solved position
     const r = [];
     for (let i = 0; i < this.baseFaceCount; i++) {
-      for (let j = 0; j < this.stickersperface; j++) {
+      for (let j = 0; j < this.stickersPerFace; j++) {
         r.push(i);
       }
     }
@@ -2867,7 +2906,7 @@ export class PuzzleGeometry {
     let feature2: Quat | null = null;
     const feature1geoname = this.swizzler.unswizzle(feature1name);
     const feature2geoname = this.swizzler.unswizzle(feature2name);
-    for (const gn of this.geonormals) {
+    for (const gn of this.geometryNormals) {
       if (feature1geoname === gn[1]) {
         feature1 = gn[0];
       }
@@ -2988,7 +3027,7 @@ export class PuzzleGeometry {
     ];
     edges2[net[0][0]] = initv;
     extendedges(edges2[net[0][0]], polyn);
-    geos[this.facenames[0][1]] = this.project2d(0, 0, [
+    geos[this.faceNames[0][1]] = this.project2d(0, 0, [
       new Quat(0, initv[0][0], initv[0][1], 0),
       new Quat(0, initv[1][0], initv[1][1], 0),
     ]);
@@ -3027,7 +3066,7 @@ export class PuzzleGeometry {
           .smul(0.5);
         const epi = findelement(bg.edgenames, mp);
         const edgename = bg.edgenames[epi][1];
-        const el = splitByFaceNames(edgename, this.facenames);
+        const el = splitByFaceNames(edgename, this.faceNames);
         const gf1 = el[f0 === el[0] ? 1 : 0];
         let gf1i = -1;
         for (let k = 0; k < bg.facenames.length; k++) {
@@ -3072,13 +3111,13 @@ export class PuzzleGeometry {
       if (threed) {
         q = q.rotatepoint(rot);
         const xoff2 = 0.5 * trim + 0.25 * w;
-        const xmul = this.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1;
+        const xmul = this.basePlanes[fn].rotateplane(rot).d < 0 ? 1 : -1;
         return [
           trim + w * 0.5 + xmul * (xoff2 - q.b * sc2),
           trim + h * 0.5 + q.c * sc2,
         ];
       } else {
-        const g = geos[this.facenames[fn][1]];
+        const g = geos[this.faceNames[fn][1]];
         return [
           trim + twodshrink * q.dot(g[0]) + g[2].b,
           trim + h - twodshrink * q.dot(g[1]) - g[2].c,
@@ -3108,11 +3147,11 @@ export class PuzzleGeometry {
     const colormap = [];
     const facegeo = [];
     for (let i = 0; i < this.baseFaceCount; i++) {
-      colormap[i] = this.colors[this.facenames[i][1]];
+      colormap[i] = this.colors[this.faceNames[i][1]];
     }
     for (let i = 0; i < this.faces.length; i++) {
       const face = this.faces[i];
-      const facenum = Math.floor(i / this.stickersperface);
+      const facenum = Math.floor(i / this.stickersPerFace);
       const fg = [];
       for (let j = 0; j < face.length; j++) {
         fg.push(mappt2d(facenum, face.get(j)));
@@ -3123,19 +3162,19 @@ export class PuzzleGeometry {
     // group each base face so we can add a hover element
     for (let j = 0; j < this.baseFaceCount; j++) {
       svg.push("<g>");
-      svg.push(`<title>${this.facenames[j][1]}</title>\n`);
-      for (let ii = 0; ii < this.stickersperface; ii++) {
-        const i = j * this.stickersperface + ii;
-        const cubie = this.facetocubie[i];
-        const cubieori = this.facetoord[i];
-        const cubiesetnum = this.cubiesetnums[cubie];
-        const cubieord = this.cubieordnums[cubie];
+      svg.push(`<title>${this.faceNames[j][1]}</title>\n`);
+      for (let ii = 0; ii < this.stickersPerFace; ii++) {
+        const i = j * this.stickersPerFace + ii;
+        const cubie = this.faceToCubie![i]; // TODO: refactor to avoid non-null-assertion
+        const cubieori = this.faceToCubieOrd![i]; // TODO: refactor to avoid non-null-assertion
+        const cubiesetnum = this.cubieSetNums![cubie]; // TODO: refactor to avoid non-null-assertion
+        const cubieord = this.cubieOrdNums![cubie]; // TODO: refactor to avoid non-null-assertion
         const color = this.graybyori(cubie) ? "#808080" : colormap[pos.p[i]];
-        let id = `${this.cubiesetnames[cubiesetnum]}-l${cubieord}-o${cubieori}`;
+        let id = `${this.cubieSetNames![cubiesetnum]}-l${cubieord}-o${cubieori}`; // TODO: refactor to avoid non-null-assertion
         svg.push(drawedges(id, facegeo[i], color));
         if (this.duplicatedFaces[i]) {
           for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
-            id = `${this.cubiesetnames[cubiesetnum]}-l${cubieord}-o${jj}`;
+            id = `${this.cubieSetNames![cubiesetnum]}-l${cubieord}-o${jj}`; // TODO: refactor to avoid non-null-assertion
             svg.push(drawedges(id, facegeo[i], color));
           }
         }
@@ -3159,23 +3198,23 @@ export class PuzzleGeometry {
     const stickers = [];
     const rot = this.getInitial3DRotation();
     const faces = [];
-    const maxdist: number = 0.52 * this.basefaces[0].get(0).len();
-    for (let i = 0; i < this.basefaces.length; i++) {
-      const coords = this.basefaces[i].rotate(rot);
-      const name = this.facenames[i][1];
+    const maxdist: number = 0.52 * this.baseFaces[0].get(0).len();
+    for (let i = 0; i < this.baseFaces.length; i++) {
+      const coords = this.baseFaces[i].rotate(rot);
+      const name = this.faceNames[i][1];
       faces.push({ coords: toFaceCoords(coords, maxdist), name });
     }
     for (let i = 0; i < this.faces.length; i++) {
-      const facenum = Math.floor(i / this.stickersperface);
-      const cubie = this.facetocubie[i];
-      const cubieori = this.facetoord[i];
-      const cubiesetnum = this.cubiesetnums[cubie];
-      const cubieord = this.cubieordnums[cubie];
+      const facenum = Math.floor(i / this.stickersPerFace);
+      const cubie = this.faceToCubie![i]; // TODO: refactor to avoid non-null-assertion
+      const cubieori = this.faceToCubieOrd![i]; // TODO: refactor to avoid non-null-assertion
+      const cubiesetnum = this.cubieSetNums![cubie]; // TODO: refactor to avoid non-null-assertion
+      const cubieord = this.cubieOrdNums![cubie]; // TODO: refactor to avoid non-null-assertion
       let color = this.graybyori(cubie)
         ? options?.darkIgnoredOrbits
           ? "#222222"
           : "#808080"
-        : this.colors[this.facenames[facenum][1]];
+        : this.colors[this.faceNames[facenum][1]];
       if (options?.stickerColors) {
         color = options.stickerColors[i];
       }
@@ -3183,7 +3222,7 @@ export class PuzzleGeometry {
       stickers.push({
         coords: toFaceCoords(coords, maxdist),
         color,
-        orbit: this.cubiesetnames[cubiesetnum],
+        orbit: this.cubieSetNames![cubiesetnum], // TODO: refactor to avoid non-null-assertion
         ord: cubieord,
         ori: cubieori,
         face: facenum,
@@ -3198,7 +3237,7 @@ export class PuzzleGeometry {
           stickers.push({
             coords: toFaceCoords(fcoords, maxdist),
             color,
-            orbit: this.cubiesetnames[cubiesetnum],
+            orbit: this.cubieSetNames![cubiesetnum], // TODO: refactor to avoid non-null-assertion
             ord: cubieord,
             ori: jj,
             face: facenum,
@@ -3208,10 +3247,11 @@ export class PuzzleGeometry {
       }
     }
     const grips: StickerDatAxis[] = [];
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const msg = this.movesetgeos[i];
-      const order = this.movesetorders[i];
-      for (const gn of this.geonormals) {
+    // TODO: refactor to avoid non-null-assertion
+    for (let i = 0; i < this.movesetgeos!.length; i++) {
+      const msg = this.movesetgeos![i]; // TODO: refactor to avoid non-null-assertion
+      const order = this.movesetorders![i]; // TODO: refactor to avoid non-null-assertion
+      for (const gn of this.geometryNormals) {
         if (msg[0] === gn[1] && msg[1] === gn[2]) {
           grips.push({
             coordinates: toCoords(gn[0].rotatepoint(rot), 1),
@@ -3261,7 +3301,7 @@ export class PuzzleGeometry {
   public getGeoNormal(geoname: string): number[] | undefined {
     const rot = this.getInitial3DRotation();
     const grip = this.swizzler.unswizzle(geoname);
-    for (const gn of this.geonormals) {
+    for (const gn of this.geometryNormals) {
       if (grip === gn[1]) {
         const r = toCoords(gn[0].rotatepoint(rot), 1);
         //  This routine is intended to use for the camera location.
@@ -3281,17 +3321,17 @@ export class PuzzleGeometry {
   }
 
   private getfaceindex(facenum: number): number {
-    const divid = this.stickersperface;
+    const divid = this.stickersPerFace;
     return Math.floor(facenum / divid);
   }
 
   public textForTwizzleExplorer(): string {
-    return `Faces ${this.baseplanerot.length}
-Stickers per face ${this.stickersperface}
-Short edge ${this.shortedge}
+    return `Faces ${this.basePlaneRotations.length}
+Stickers per face ${this.stickersPerFace}
+Short edge ${this.shortestEdge}
 Cubies ${this.cubies.length}
-Edge distance ${this.edgedistance}
-Vertex distance ${this.vertexdistance}`;
+Edge distance ${this.edgeDistance}
+Vertex distance ${this.vertexDistance}`;
   }
 
   writeSchreierSims(tw: (s: string) => void) {
@@ -3316,9 +3356,9 @@ export class PGNotation {
   public lookupMove(move: Move): KTransformationData | null {
     const mv = this.pg.parseMove(move);
     // if a move list subset is defined, don't return moves outside the subset.
-    if (this.pg.parsedmovelist) {
+    if (this.pg.parsedMoveList) {
       let found = false;
-      for (const parsedmove of this.pg.parsedmovelist) {
+      for (const parsedmove of this.pg.parsedMoveList) {
         if (
           parsedmove[1] === mv[1] &&
           parsedmove[2] === mv[2] &&
@@ -3334,16 +3374,17 @@ export class PGNotation {
     }
     let bits = [mv[2], mv[3]];
     if (!mv[4]) {
-      const slices = this.pg.moveplanesets[mv[1]].length;
+      // TODO: refactor to avoid non-null-assertion
+      const slices = this.pg.movePlaneSets![mv[1]].length;
       bits = [slices - mv[3], slices - mv[2]];
     }
     const pgmv = this.pg.getMoveFromBits(
       bits,
       mv[5],
       !mv[4],
-      this.pg.cmovesbyslice[mv[1]],
+      this.pg.cmovesBySlice[mv[1]],
       undefined,
-      this.pg.movesetorders[mv[1]],
+      this.pg.movesetorders![mv[1]], // TODO: refactor to avoid non-null-assertion
     );
     const r = PGOrbitsDef.transformToKTransformationData(this.orbitNames, pgmv);
     return r;

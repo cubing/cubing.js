@@ -1,4 +1,4 @@
-import { Alg, type Move } from "../../alg";
+import { Alg, Move as AlgNode, Move } from "../../alg";
 import { cube3x3x3 } from "../../puzzles";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
@@ -84,9 +84,9 @@ function nibbleDuration(nibble: number): number {
     : QUANTUM_TURN_DURATION_MS;
 }
 
-function throwInvalidMove(move: Move) {
-  console.error("invalid move", move, move.toString());
-  throw new Error("invalid move!");
+function throwInvalidAlgNode(algNode: AlgNode): never {
+  console.error("invalid alg node", algNode, algNode.toString());
+  throw new Error("invalid alg node!");
 }
 
 function sleep(ms: number): Promise<void> {
@@ -167,12 +167,16 @@ export class GanRobot extends EventTarget {
     this.dispatchEvent(new CustomEvent("disconnect"));
   }
 
-  private moveToNibble(move: Move): number {
+  private algNodeToNibble(algNode: AlgNode): number {
+    const move = algNode.as(AlgNode);
+    if (!move) {
+      throwInvalidAlgNode(algNode);
+    }
     const nibble =
       (this.experimentalOptions.xAngle ? moveMapX : moveMap)[move.toString()] ??
       null;
     if (nibble === null) {
-      throwInvalidMove(move);
+      throwInvalidAlgNode(move);
     }
     return nibble;
   }
@@ -240,27 +244,35 @@ export class GanRobot extends EventTarget {
         }
         // await this.writeNibbles([0xf, 0xf]);
         while (this.moveQueue.experimentalNumChildAlgNodes() > 0) {
-          let algNodes = Array.from(this.moveQueue.childAlgNodes());
+          // @ts-ignore: Is TypeScript just straight-up false positiving here?
+          let algNodes: AlgNode[] = Array.from(this.moveQueue.childAlgNodes());
           if (
             this.experimentalOptions.singleMoveFixHack &&
             algNodes.length === 1
           ) {
-            const move = algNodes[0] as Move;
-            if (move.amount === 2) {
-              algNodes = [
-                move.modified({ amount: 1 }),
-                move.modified({ amount: 1 }),
-              ];
-            } else {
-              algNodes = [
-                move.modified({ amount: -move.amount }),
-                move.modified({ amount: 2 }),
-              ];
+            const move = algNodes[0].as(Move);
+            if (move) {
+              if (move.amount === 2) {
+                algNodes = [
+                  move.modified({ amount: 1 }) as AlgNode,
+                  move.modified({ amount: 1 }) as AlgNode,
+                ];
+              } else {
+                algNodes = [
+                  move.modified({ amount: -move.amount }),
+                  move.modified({ amount: 2 }) as AlgNode,
+                ];
+              }
             }
           }
-          const moves = algNodes.splice(0, MAX_NIBBLES_PER_WRITE);
-          const nibbles: number[] = moves.map(this.moveToNibble.bind(this));
-          const sending = new Alg(moves);
+          const splicedAlgNodes: AlgNode[] = algNodes.splice(
+            0,
+            MAX_NIBBLES_PER_WRITE,
+          );
+          const nibbles: number[] = splicedAlgNodes.map(
+            this.algNodeToNibble.bind(this),
+          );
+          const sending = new Alg(splicedAlgNodes);
           this.experimentalDebugLog("SENDING", sending.toString());
           if (this.experimentalDebugOnSend) {
             this.experimentalDebugOnSend(sending);
@@ -275,7 +287,7 @@ export class GanRobot extends EventTarget {
     }
   }
 
-  async applyMoves(moves: Iterable<Move>): Promise<void> {
+  async applyMoves(moves: Iterable<AlgNode>): Promise<void> {
     // const nibbles: number[] = [];
     for (const move of moves) {
       const str = move.toString();

@@ -53,15 +53,14 @@ class App {
     }
 
     const puzzle = new URL(location.href).searchParams.get("puzzle") || "3x3x3";
-    if (puzzle) {
-      if (puzzle in puzzles) {
-        this.puzzle = PuzzlePatternEditor.createAsync(puzzles[puzzle], () =>
-          this.displayPatternText(),
-        );
-        puzzleSelect.value = puzzle;
-      } else {
-        console.error("Invalid puzzle:", puzzle);
-      }
+    if (puzzle in puzzles) {
+      this.puzzle = PuzzlePatternEditor.createAsync(puzzles[puzzle], () =>
+        this.displayPatternText(),
+      );
+      puzzleSelect.value = puzzle;
+    } else {
+      console.error("Invalid puzzle:", puzzle);
+      throw new Error("Invalid puzzle.");
     }
 
     puzzleSelect?.addEventListener("change", () => {
@@ -109,13 +108,13 @@ class App {
 }
 
 class PuzzlePatternEditor {
-  selectedFacelet: Facelet | null;
+  selectedFacelet?: Facelet;
   pieces = new Map<string, { [position: number]: PieceFacelets }>();
 
-  svgAnimator: TwistyAnimatedSVG;
-  svgString: string;
-  kpuzzle: KPuzzle;
-  pattern: KPattern;
+  svgAnimator!: TwistyAnimatedSVG; // TODO: Refactor to avoid non-null assertion.
+  svgString!: string; // TODO: Refactor to avoid non-null assertion.
+  kpuzzle!: KPuzzle; // TODO: Refactor to avoid non-null assertion.
+  pattern!: KPattern; // TODO: Refactor to avoid non-null assertion.
 
   private constructor(private displayPatternText: () => void) {
     this.displayPatternText();
@@ -160,7 +159,7 @@ class PuzzlePatternEditor {
 
     this.display();
 
-    this.selectedFacelet = null;
+    this.selectedFacelet = undefined;
   }
 
   async setPuzzle(puzzle: PuzzleLoader) {
@@ -276,9 +275,12 @@ class Facelet {
     this.element = document.getElementById(
       this.getId(),
     )! as HTMLOrSVGImageElement;
-    this.element.addEventListener("pointerdown", (e: PointerEvent) => {
-      this.click(e);
-    });
+    this.element.addEventListener(
+      "pointerdown",
+      ((e: PointerEvent) => {
+        this.click(e);
+      }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
   }
 
   getId() {
@@ -286,7 +288,7 @@ class Facelet {
   }
 
   async deselect() {
-    (await app.puzzle).selectedFacelet = null;
+    (await app.puzzle).selectedFacelet = undefined;
     this.element.style.opacity = "1";
   }
 

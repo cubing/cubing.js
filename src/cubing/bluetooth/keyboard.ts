@@ -7,10 +7,11 @@ import { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
 
 /** @category Keyboard Puzzles */
 export class KeyboardPuzzle extends BluetoothPuzzle {
-  private keyMappingPromise: Promise<KeyMapping | undefined>;
-  private pattern: Promise<KPattern>;
+  private keyMappingAndPatternPromise: Promise<
+    [KeyMapping | undefined, KPattern]
+  >;
 
-  listener: (e: KeyboardEvent) => Promise<void>;
+  listener: EventListener; // (e: KeyboardEvent) => Promise<void>;
 
   // TODO: Decide on the right arguments.
   // TODO: support tying the puzzle to a TwistyPlayer.
@@ -20,32 +21,33 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
   ) {
     super();
     // TODO: Filter out repeated keydown?
-    this.listener = this.onKeyDown.bind(this);
+    // TODO: how do we avoid this awkward cast?
+    this.listener = this.onKeyDown.bind(this) as any as EventListener;
     target.addEventListener("keydown", this.listener);
-    this.setPuzzle(puzzle);
+    this.keyMappingAndPatternPromise = this.setPuzzleInternal(puzzle);
   }
 
   public name(): string | undefined {
     return "Keyboard Input";
   }
 
-  public async setPuzzle(puzzle: PuzzleID | PuzzleLoader) {
-    const puzzlePromise = (async () =>
+  async setPuzzleInternal(
+    puzzle: PuzzleID | PuzzleLoader,
+  ): Promise<[KeyMapping | undefined, KPattern]> {
+    const puzzleLoader = await (async () =>
       typeof puzzle === "string"
         ? (await import("../puzzles")).puzzles[puzzle]
         : puzzle)();
-    const kpuzzlePromise = (async () => (await puzzlePromise).kpuzzle())();
-    this.keyMappingPromise = (async () =>
-      (await puzzlePromise).keyMapping?.())();
-    this.pattern = (async () => (await kpuzzlePromise).defaultPattern())();
+    const kpuzzle = await (async () => puzzleLoader.kpuzzle())();
+    return Promise.all([puzzleLoader.keyMapping?.(), kpuzzle.defaultPattern()]);
   }
 
   disconnect() {
-    this.target.removeEventListener("keydown", this.listener);
+    this.target.removeEventListener("keydown", this.listener as EventListener);
   }
 
   public override async getPattern(): Promise<KPattern> {
-    return this.pattern;
+    return (await this.keyMappingAndPatternPromise)[1];
   }
 
   private async onKeyDown(e: KeyboardEvent): Promise<void> {
@@ -53,17 +55,21 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
       return;
     }
 
-    const algLeaf = keyToMove(await this.keyMappingPromise, e);
-    if (algLeaf) {
-      const newPattern = (await this.pattern).applyAlg(new Alg([algLeaf])); // TODO
-      this.pattern = Promise.resolve(newPattern);
-      this.dispatchAlgLeaf({
-        latestAlgLeaf: algLeaf,
-        timeStamp: e.timeStamp,
-        pattern: newPattern,
-      });
-      e.preventDefault();
-    }
+    this.keyMappingAndPatternPromise = (async () => {
+      const [keyMapping, pattern] = await this.keyMappingAndPatternPromise;
+      const algLeaf = keyToMove(keyMapping, e);
+      let newPattern: KPattern | undefined;
+      if (algLeaf) {
+        newPattern = pattern.applyAlg(new Alg([algLeaf])); // TODO
+        this.dispatchAlgLeaf({
+          latestAlgLeaf: algLeaf,
+          timeStamp: e.timeStamp,
+          pattern: newPattern,
+        });
+        e.preventDefault();
+      }
+      return [keyMapping, newPattern ?? pattern];
+    })();
   }
 }
 

@@ -68,10 +68,10 @@ export function experimentalIs3x3x3Solved(
   // TODO(orientationMod)
   if (options.ignoreCenterOrientation) {
     pattern = new KPattern(pattern.kpuzzle, {
-      EDGES: pattern.patternData.EDGES,
-      CORNERS: pattern.patternData.CORNERS,
+      EDGES: pattern.patternData["EDGES"],
+      CORNERS: pattern.patternData["CORNERS"],
       CENTERS: {
-        pieces: pattern.patternData.CENTERS.pieces,
+        pieces: pattern.patternData["CENTERS"].pieces,
         orientation: new Array(6).fill(0),
       },
     });

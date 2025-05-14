@@ -206,36 +206,36 @@ const face: { [s: string]: number } = {
 };
 
 const familyToAxis: { [s: string]: number } = {
-  U: face.U,
-  u: face.U,
-  Uw: face.U,
-  Uv: face.U,
-  y: face.U,
-  L: face.L,
-  l: face.L,
-  Lw: face.L,
-  Lv: face.L,
-  M: face.L,
-  F: face.F,
-  f: face.F,
-  Fw: face.F,
-  Fv: face.F,
-  S: face.F,
-  z: face.F,
-  R: face.R,
-  r: face.R,
-  Rw: face.R,
-  Rv: face.R,
-  x: face.R,
-  B: face.B,
-  b: face.B,
-  Bw: face.B,
-  Bv: face.B,
-  D: face.D,
-  d: face.D,
-  Dw: face.D,
-  Dv: face.D,
-  E: face.D,
+  U: face["U"],
+  u: face["U"],
+  Uw: face["U"],
+  Uv: face["U"],
+  y: face["U"],
+  L: face["L"],
+  l: face["L"],
+  Lw: face["L"],
+  Lv: face["L"],
+  M: face["L"],
+  F: face["F"],
+  f: face["F"],
+  Fw: face["F"],
+  Fv: face["F"],
+  S: face["F"],
+  z: face["F"],
+  R: face["R"],
+  r: face["R"],
+  Rw: face["R"],
+  Rv: face["R"],
+  x: face["R"],
+  B: face["B"],
+  b: face["B"],
+  Bw: face["B"],
+  Bv: face["B"],
+  D: face["D"],
+  d: face["D"],
+  Dw: face["D"],
+  Dv: face["D"],
+  E: face["D"],
 };
 
 const cubieDimensions = {
@@ -346,24 +346,24 @@ const firstPiecePosition: OrbitIndexed<Vector3> = {
 const orientationRotation: OrbitIndexed<Matrix4[]> = {
   EDGES: [0, 1].map((i) =>
     new Matrix4().makeRotationAxis(
-      firstPiecePosition.EDGES.clone().normalize(),
+      firstPiecePosition["EDGES"].clone().normalize(),
       (-i * TAU) / 2,
     ),
   ),
   CORNERS: [0, 1, 2].map((i) =>
     new Matrix4().makeRotationAxis(
-      firstPiecePosition.CORNERS.clone().normalize(),
+      firstPiecePosition["CORNERS"].clone().normalize(),
       (-i * TAU) / 3,
     ),
   ),
   CENTERS: [0, 1, 2, 3].map((i) =>
     new Matrix4().makeRotationAxis(
-      firstPiecePosition.CENTERS.clone().normalize(),
+      firstPiecePosition["CENTERS"].clone().normalize(),
       (-i * TAU) / 4,
     ),
   ),
 };
-const cubieStickerOrder = [face.U, face.F, face.R];
+const cubieStickerOrder = [face["U"], face["F"], face["R"]];
 
 const pieceDefs: PieceIndexed<CubieDef> = {
   EDGES: [
@@ -584,9 +584,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   private experimentalHintStickerMeshes: Mesh[] = [];
   private experimentalFoundationMeshes: Mesh[] = [];
 
-  private setSpriteURL: (url: string) => void;
+  #setSpriteURL: ((url: string) => void) | undefined;
   private sprite: Texture | Promise<Texture> = new Promise((resolve) => {
-    this.setSpriteURL = (url: string): void => {
+    this.#setSpriteURL = (url: string): void => {
       svgLoader.load(url, resolve);
     };
   });
@@ -597,9 +597,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.sprite = texture;
   }
 
-  private setHintSpriteURL: (url: string) => void;
+  #setHintSpriteURL: ((url: string) => void) | undefined;
   private hintSprite: Texture | Promise<Texture> = new Promise((resolve) => {
-    this.setHintSpriteURL = (url: string): void => {
+    this.#setHintSpriteURL = (url: string): void => {
       svgLoader.load(url, resolve);
     };
   });
@@ -700,13 +700,13 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   // Can only be called once.
   /** @deprecated */
   experimentalSetStickerSpriteURL(stickerSpriteURL: string): void {
-    this.setSpriteURL(stickerSpriteURL);
+    this.#setSpriteURL?.(stickerSpriteURL);
   }
 
   // Can only be called once.
   /** @deprecated */
   experimentalSetHintStickerSpriteURL(hintStickerSpriteURL: string): void {
-    this.setHintSpriteURL(hintStickerSpriteURL);
+    this.#setHintSpriteURL?.(hintStickerSpriteURL);
   }
 
   setStickeringMask(stickeringMask: StickeringMask): void {

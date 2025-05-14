@@ -97,21 +97,24 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
   async #setupBasicPresses(): Promise<void> {
     const dragTracker = await this.#dragTracker();
-    dragTracker.addEventListener("press", async (e: CustomEvent<PressInfo>) => {
-      const movePressInput =
-        await this.model!.twistySceneModel.movePressInput.get();
-      if (movePressInput !== "basic") {
-        return;
-      }
-      this.dispatchEvent(
-        new CustomEvent("press", {
-          detail: {
-            pressInfo: e.detail,
-            cameraPromise: this.camera(),
-          },
-        }),
-      );
-    });
+    dragTracker.addEventListener(
+      "press",
+      (async (e: CustomEvent<PressInfo>) => {
+        const movePressInput =
+          await this.model!.twistySceneModel.movePressInput.get();
+        if (movePressInput !== "basic") {
+          return;
+        }
+        this.dispatchEvent(
+          new CustomEvent("press", {
+            detail: {
+              pressInfo: e.detail,
+              cameraPromise: this.camera(),
+            },
+          }),
+        );
+      }) as any as EventListener, // TODO
+    );
   }
 
   #onResizeStaleDropper = new StaleDropper<PerspectiveCamera>();

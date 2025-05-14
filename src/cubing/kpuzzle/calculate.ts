@@ -302,24 +302,23 @@ export const algToTransformation = functionFromTraversal(
   AlgToTransformationTraversal,
 );
 
-export function canConvertDefaultPatternToUniqueTransformationUncached(
-  definition: KPuzzleDefinition,
-): boolean {
-  for (const orbitDefinition of definition.orbits) {
-    const pieces = new Array(orbitDefinition.numPieces).fill(false);
-    for (const piece of this.definition.defaultPattern[
-      orbitDefinition.orbitName
-    ].pieces) {
-      pieces[piece] = true;
-    }
-    for (const piece of pieces) {
-      if (!piece) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
+// export function canConvertDefaultPatternToUniqueTransformationUncached(
+//   definition: KPuzzleDefinition,
+// ): boolean {
+//   for (const orbitDefinition of definition.orbits) {
+//     const pieces = new Array(orbitDefinition.numPieces).fill(false);
+//     for (const piece of definition.defaultPattern[orbitDefinition.orbitName]
+//       .pieces) {
+//       pieces[piece] = true;
+//     }
+//     for (const piece of pieces) {
+//       if (!piece) {
+//         return false;
+//       }
+//     }
+//   }
+//   return true;
+// }
 
 function gcd(a: number, b: number): number {
   if (b) {

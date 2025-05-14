@@ -7,10 +7,7 @@ import type { Schedulable } from "../../controllers/RenderScheduler";
 import { bulk3DCode } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type {
-  BackViewLayout,
-  BackViewLayoutWithAuto,
-} from "../../model/props/viewer/BackViewProp";
+import type { BackViewLayout as BackViewLayoutWithAuto } from "../../model/props/viewer/BackViewProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ClassListManager } from "../ClassListManager";
@@ -26,6 +23,7 @@ export class Twisty3DSceneWrapper
   extends ManagedCustomElement
   implements Schedulable
 {
+  // @ts-ignore TypeScript type inference appears to be borked: ts(2322)
   #backViewClassListManager: ClassListManager<BackViewLayoutWithAuto> =
     new ClassListManager(this, "back-view-", [
       "auto",
@@ -54,14 +52,15 @@ export class Twisty3DSceneWrapper
       );
       this.#freshListenerManager.addListener(
         this.model.backView,
-        this.onBackView.bind(this),
+        // @ts-ignore TypeScript type inference appears to be borked: ts(2322)
+        this.setBackView.bind(this),
       );
     }
     this.scheduleRender();
   }
 
   #backViewVantage: Twisty3DVantage | null = null;
-  setBackView(backView: BackViewLayout): void {
+  setBackView(backView: BackViewLayoutWithAuto): void {
     const shouldHaveBackView = ["side-by-side", "top-right"].includes(backView);
     const hasBackView = this.#backViewVantage !== null;
 
@@ -80,10 +79,6 @@ export class Twisty3DSceneWrapper
         this.#backViewVantage = null;
       }
     }
-  }
-
-  onBackView(backView: BackViewLayout): void {
-    this.setBackView(backView);
   }
 
   async onPress(
@@ -126,7 +121,7 @@ export class Twisty3DSceneWrapper
     });
   }
 
-  #cachedScene: Promise<ThreeScene> | null;
+  #cachedScene?: Promise<ThreeScene>;
   async scene(): Promise<ThreeScene> {
     return (this.#cachedScene ??= (async () =>
       new (await bulk3DCode()).ThreeScene())());
@@ -134,7 +129,10 @@ export class Twisty3DSceneWrapper
 
   #vantages: Set<Twisty3DVantage> = new Set();
   addVantage(vantage: Twisty3DVantage) {
-    vantage.addEventListener("press", this.onPress.bind(this));
+    vantage.addEventListener(
+      "press",
+      this.onPress.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
     this.#vantages.add(vantage);
     this.contentWrapper.appendChild(vantage);
   }

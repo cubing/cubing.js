@@ -1,8 +1,8 @@
 console.log("loading…");
 
 import { Alg } from "../../../../../cubing/alg";
-import { default as init, internal_init, invert_alg } from "./cubing_rust_wasm";
 import { solutionAlg } from "../../stress-tests/40x40x40-solve.js";
+import { default as init, internal_init, invert_alg } from "./cubing_rust_wasm";
 
 (async () => {
   console.log("Initializating WASM");
@@ -35,7 +35,7 @@ import { solutionAlg } from "../../stress-tests/40x40x40-solve.js";
         durationElem.textContent = ` (≈${Math.round(duration * 1_000)}µs)`;
         output.classList.remove("error");
       } catch (e) {
-        output.textContent = e;
+        output.textContent = (e as { toString(): string }).toString();
         output.classList.add("error");
       }
     });

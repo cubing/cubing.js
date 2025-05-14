@@ -214,10 +214,10 @@ class StickerDef {
   public twistVal: number = -1;
   public stickerStart: number;
   public stickerEnd: number;
-  public hintStart: number;
-  public hintEnd: number;
-  public foundationStart: number;
-  public foundationEnd: number;
+  public hintStart?: number;
+  public hintEnd?: number;
+  public foundationStart?: number;
+  public foundationEnd?: number;
   private isDup: boolean;
   private faceNum: number;
   constructor(
@@ -312,7 +312,8 @@ class StickerDef {
 
   private setHintStickers(filler: Filler, hintStickers: boolean): void {
     const indv = this.isDup || !hintStickers ? 4 : 2;
-    for (let i = this.hintStart; i < this.hintEnd; i++) {
+    // TODO: refactor to avoid non-null-assertions
+    for (let i = this.hintStart!; i < this.hintEnd!; i++) {
       filler.ind[i] = indv | (filler.ind[i] & 1);
     }
   }
@@ -360,7 +361,8 @@ class StickerDef {
       filler.colors[filler.pos + i + 1] = (c >> 8) & 255;
       filler.colors[filler.pos + i + 2] = c & 255;
     }
-    for (let i = 9 * this.hintStart; i < 9 * this.hintEnd; i += 3) {
+    // TODO: refactor to avoid non-null-assertions
+    for (let i = 9 * this.hintStart!; i < 9 * this.hintEnd!; i += 3) {
       filler.colors[filler.pos + i] = c >> 16;
       filler.colors[filler.pos + i + 1] = (c >> 8) & 255;
       filler.colors[filler.pos + i + 2] = c & 255;
@@ -383,7 +385,8 @@ class StickerDef {
       uvs[2 * i] = uv[0];
       uvs[2 * i + 1] = uv[1];
     }
-    for (let i = 3 * this.hintStart; i < 3 * this.hintEnd; i++) {
+    // TODO: refactor to avoid non-null-assertions
+    for (let i = 3 * this.hintStart!; i < 3 * this.hintEnd!; i++) {
       coords[0] = vert[3 * i];
       coords[1] = vert[3 * i + 1];
       coords[2] = vert[3 * i + 2];
@@ -405,9 +408,9 @@ class StickerDef {
       6 * sd.stickerEnd + sz,
     );
     filler.uvs!.copyWithin(
-      6 * this.hintStart,
-      6 * sd.hintStart + sz,
-      6 * sd.hintEnd + sz,
+      6 * this.hintStart!, // TODO: refactor to avoid non-null-assertion
+      6 * sd.hintStart! + sz, // TODO: refactor to avoid non-null-assertion
+      6 * sd.hintEnd! + sz, // TODO: refactor to avoid non-null-assertion
     );
     return 1;
   }
@@ -423,9 +426,9 @@ class StickerDef {
         9 * sd.stickerEnd + sz,
       );
       filler.colors.copyWithin(
-        9 * this.hintStart,
-        9 * sd.hintStart + sz,
-        9 * sd.hintEnd + sz,
+        9 * this.hintStart!, // TODO: refactor to avoid non-null-assertion
+        9 * sd.hintStart! + sz, // TODO: refactor to avoid non-null-assertion
+        9 * sd.hintEnd! + sz, // TODO: refactor to avoid non-null-assertion
       );
       return 1;
     } else {
@@ -449,7 +452,7 @@ class HitPlaneDef {
     this.geo = new BufferGeometry();
     filler.setAttributes(this.geo);
     const obj = new Mesh(this.geo, invisMaterial);
-    obj.userData.quantumMove = stickerDat.notationMapper.notationToExternal(
+    obj.userData["quantumMove"] = stickerDat.notationMapper.notationToExternal(
       new Move(hitface.name),
     );
     this.cubie.scale.setScalar(0.99);
@@ -514,8 +517,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private filler: Filler;
   private foundationBound: number; // before this: colored; after: black
   private fixedGeo: BufferGeometry;
-  private lastPos: PuzzlePosition;
-  private lastMoveTransformation: KTransformation;
+  private lastPos?: PuzzlePosition;
+  private lastMoveTransformation?: KTransformation;
   private hintMaterial: Material;
   private stickerMaterial: Material;
   private materialArray1: Material[];
@@ -527,8 +530,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private stickerMaterialDisposable: boolean;
 
   #pendingStickeringUpdate: boolean = false;
-
-  public isPG3DForTwisty3DPuzzleWrapper: true;
 
   constructor(
     private scheduleRenderCallback: () => void,
@@ -923,20 +924,32 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
                   for (let j = p2.stickerStart; j < p2.stickerEnd; j++) {
                     ind[j] |= 1;
                   }
-                  for (let j = p2.hintStart; j < p2.hintEnd; j++) {
+                  // TODO: refactor to avoid non-null-assertion
+                  for (let j = p2.hintStart!; j < p2.hintEnd!; j++) {
                     ind[j] |= 1;
                   }
-                  for (let j = p2.foundationStart; j < p2.foundationEnd; j++) {
+                  // TODO: refactor to avoid non-null-assertion
+                  for (
+                    let j = p2.foundationStart!;
+                    j < p2.foundationEnd!;
+                    j++
+                  ) {
                     ind[j] |= 1;
                   }
                 } else {
-                  for (let j = p2.stickerStart; j < p2.stickerEnd; j++) {
+                  for (let j = p2.stickerStart!; j < p2.stickerEnd; j++) {
                     ind[j] &= ~1;
                   }
-                  for (let j = p2.hintStart; j < p2.hintEnd; j++) {
+                  // TODO: refactor to avoid non-null-assertion
+                  for (let j = p2.hintStart!; j < p2.hintEnd!; j++) {
                     ind[j] &= ~1;
                   }
-                  for (let j = p2.foundationStart; j < p2.foundationEnd; j++) {
+                  // TODO: refactor to avoid non-null-assertion
+                  for (
+                    let j = p2.foundationStart!;
+                    j < p2.foundationEnd!;
+                    j++
+                  ) {
                     ind[j] &= ~1;
                   }
                 }

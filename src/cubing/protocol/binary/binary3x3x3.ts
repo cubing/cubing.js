@@ -212,7 +212,7 @@ export function binaryComponentsToReid3x3x3(
     },
   };
   if (!components.moSupport) {
-    patternData.CENTERS.orientationMod = new Array(6).fill(1);
+    patternData["CENTERS"].orientationMod = new Array(6).fill(1);
   }
   const normedPattern = new KPattern(experimental3x3x3KPuzzle, patternData);
 
