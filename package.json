@@ -78,6 +78,7 @@
     "@web/test-runner-playwright": "^0.11.0",
     "barely-a-dev-server": "v0.8.0",
     "chai": "^5.1.1",
+    "compare-versions": "^6.1.1",
     "esbuild": "^0.25.0",
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
@@ -88,7 +89,7 @@
     "typescript": "v5.8.3"
   },
   "engines": {
-    "node": ">=20.16.0",
+    "node": ">=22.3.0",
     "bun": ">=1.2.7"
   },
   "files": [
@@ -145,7 +146,9 @@
     "test-dist-bin-npm-exec": "make test-dist-bin-npm-exec",
     "format": "make format",
     "setup": "make setup",
+    "bun-required": "make bun-required",
     "update-dependencies": "make update-dependencies",
+    "check-engines": "make check-engines",
     "lint": "make lint",
     "lint-ci": "make lint-ci",
     "prepack": "make prepack",

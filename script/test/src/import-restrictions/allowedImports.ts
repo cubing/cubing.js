@@ -34,11 +34,13 @@ export const mainAllowedImports: AllowedImports = {
       "cubing",
 
       "barely-a-dev-server",
+      "printable-shell-command",
+      "cmd-ts-too",
+
       "esbuild",
       "node-fetch",
       "playwright",
-      "cmd-ts-too",
-      "printable-shell-command",
+      "compare-versions",
     ],
     dynamic: ["cubing", "node:repl", "node:process"],
   },
