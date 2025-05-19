@@ -14,7 +14,7 @@
       "devDependencies": {
         "@biomejs/biome": "v1.9.4",
         "@cubing/deploy": "v0.2.1",
-        "@cubing/dev-config": "v0.3.3",
+        "@cubing/dev-config": "v0.3.4",
         "@esm-bundle/chai": "^4.3.4-fix.0",
         "@types/bun": "^1.2.11",
         "@types/chai": "^5.0.0",
@@ -63,7 +63,7 @@
 
     "@cubing/deploy": ["@cubing/deploy@0.2.1", "", { "dependencies": { "printable-shell-command": "0.1.0-pre3", "typescript": "^5.8.3" }, "bin": { "deploy": "dist/lib/@cubing/deploy/main.js" } }, "sha512-sOK/W8B/LeL7nLKnNE6nmczLeeLvmEO+OtNKhL+JDBQ+ggnM33x81zzpziSONVs/Ax1r6LZdH0zVV5NI05w6ow=="],
 
-    "@cubing/dev-config": ["@cubing/dev-config@0.3.3", "", { "dependencies": { "esbuild": "^0.25.3" } }, "sha512-Gwh26EwfQ/kRJ/b6ayfwT5E2pgpaiQn/fOCQV8ODRiY3MNs6ue8Q5hluBVbFYyY7XSbcaxUT6e9wSKfRNpxBxQ=="],
+    "@cubing/dev-config": ["@cubing/dev-config@0.3.4", "", { "dependencies": { "esbuild": "^0.25.3" } }, "sha512-cTYW1PdCfiTF0n2qUmqc8Vcq0luejdmWNvJDELn3i2olELw+gjuFEfXJmmJbNfUol3RrjnijB3iT/vTFTne4Bw=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.2", "", { "os": "aix", "cpu": "ppc64" }, "sha512-wCIboOL2yXZym2cgm6mlA742s9QeJ8DjGVaL39dLN4rRwrOgOyYSnOaFPhKZGLb2ngj4EyfAFjsNJwPXZvseag=="],
 
