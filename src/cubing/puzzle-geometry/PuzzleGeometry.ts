@@ -2768,15 +2768,15 @@ export class PuzzleGeometry {
         // TODO: refactor to avoid non-null-assertion
         continue;
       }
-      const p = [];
+      const p = Array(this.cubieOrbitSizes![i]).fill(-1);
       const o = [];
       for (let j = 0; j < this.cubieOrbitSizes![i]; j++) {
         // TODO: refactor to avoid non-null-assertion
         if (fortwisty) {
-          p.push(j);
+          p[j] = j;
         } else {
           const cubie = this.cubieSetCubies![i][j]; // TODO: refactor to avoid non-null-assertion
-          p.push(this.cubieValueMap![cubie]); // TODO: refactor to avoid non-null-assertion
+          p[this.cubieOrdNums![cubie]] = this.cubieValueMap![cubie]; // TODO: refactor to avoid non-null-assertion
         }
         o.push(0);
       }
