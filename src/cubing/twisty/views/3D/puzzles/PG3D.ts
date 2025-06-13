@@ -754,6 +754,15 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         if (!modified) {
           continue;
         }
+        // Special case: for the FTO, there is a rotation that is defined
+        // as T.  This is a rotation (without the v), and it does not have
+        // a v on the end nor does it correspond to a geometry.  So, if
+        // depth is "none", we'll pick up "T" as a normal move; we
+        // shouldn't.
+        console.log(modified.family);
+        if (modified.family === "T" && transformations.depth === "none") {
+          continue;
+        }
         if (this.#isValidMove(modified)) {
           closestMoveDotProduct = product;
           closestMove = modified;
