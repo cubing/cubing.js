@@ -20,6 +20,7 @@ export interface PuzzleLoader {
   llSVG?: () => Promise<string>;
   llFaceSVG?: () => Promise<string>;
   pg?: () => Promise<PuzzleGeometry>;
+  basepg?: () => Promise<PuzzleGeometry>;
   stickeringMask?: (
     stickering: ExperimentalStickering,
   ) => Promise<StickeringMask>;

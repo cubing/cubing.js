@@ -76,6 +76,17 @@ export class TwizzleExplorerApp {
     return puzzleLoader.pg();
   }
 
+  async basePuzzleGeometry(): Promise<PuzzleGeometry> {
+    const puzzleLoader =
+      await this.twistyPlayer.experimentalModel.puzzleLoader.get();
+
+    if (!puzzleLoader.basepg) {
+      throw new Error("could not get base PG from puzzle loader");
+    }
+    return puzzleLoader.basepg();
+  }
+
+
   setPuzzleName(puzzleName: string): void {
     const descString = getPuzzleDescriptionString(puzzleName);
     this.configUI.descInput.value = descString;
@@ -221,16 +232,16 @@ class SelectUI {
       "";
     switch (action) {
       case "gap": {
-        this.app.showText((await this.app.puzzleGeometry()).writegap());
+        this.app.showText((await this.app.basePuzzleGeometry()).writegap());
         break;
       }
       case "mathematica": {
-        this.app.showText((await this.app.puzzleGeometry()).writemathematica());
+        this.app.showText((await this.app.basePuzzleGeometry()).writemathematica());
         break;
       }
       case "ss": {
         const lines: string[] = [];
-        (await this.app.puzzleGeometry()).writeSchreierSims((line) =>
+        (await this.app.basePuzzleGeometry()).writeSchreierSims((line) =>
           lines.push(line),
         );
         this.app.showText(lines.join("\n"));
@@ -238,13 +249,13 @@ class SelectUI {
       }
       case "canon": {
         const lines: string[] = [];
-        (await this.app.puzzleGeometry()).showcanon((line) => lines.push(line));
+        (await this.app.basePuzzleGeometry()).showcanon((line) => lines.push(line));
         this.app.showText(lines.join("\n"));
         break;
       }
       case "ksolve": {
         this.app.showText(
-          (await this.app.puzzleGeometry()).writeksolve("TwizzlePuzzle"),
+          (await this.app.basePuzzleGeometry()).writeksolve("TwizzlePuzzle"),
         );
         break;
       }
