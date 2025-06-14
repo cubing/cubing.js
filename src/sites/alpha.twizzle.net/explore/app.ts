@@ -86,7 +86,6 @@ export class TwizzleExplorerApp {
     return puzzleLoader.basepg();
   }
 
-
   setPuzzleName(puzzleName: string): void {
     const descString = getPuzzleDescriptionString(puzzleName);
     this.configUI.descInput.value = descString;
@@ -236,7 +235,9 @@ class SelectUI {
         break;
       }
       case "mathematica": {
-        this.app.showText((await this.app.basePuzzleGeometry()).writemathematica());
+        this.app.showText(
+          (await this.app.basePuzzleGeometry()).writemathematica(),
+        );
         break;
       }
       case "ss": {
@@ -249,7 +250,9 @@ class SelectUI {
       }
       case "canon": {
         const lines: string[] = [];
-        (await this.app.basePuzzleGeometry()).showcanon((line) => lines.push(line));
+        (await this.app.basePuzzleGeometry()).showcanon((line) =>
+          lines.push(line),
+        );
         this.app.showText(lines.join("\n"));
         break;
       }

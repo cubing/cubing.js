@@ -115,9 +115,10 @@ export class PGPuzzleLoader implements PuzzleLoader {
 
   #cachedBasePG: Promise<PuzzleGeometry> | undefined;
   basepg(): Promise<PuzzleGeometry> {
-    return (this.#cachedPG ??= asyncGetBasePuzzleGeometry(this.pgId ?? this.id));
+    return (this.#cachedPG ??= asyncGetBasePuzzleGeometry(
+      this.pgId ?? this.id,
+    ));
   }
-
 
   #cachedKPuzzle: Promise<KPuzzle> | undefined;
   kpuzzle(): Promise<KPuzzle> {
