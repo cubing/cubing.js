@@ -80,10 +80,10 @@ export class TwizzleExplorerApp {
     const puzzleLoader =
       await this.twistyPlayer.experimentalModel.puzzleLoader.get();
 
-    if (!puzzleLoader.basepg) {
+    if (!puzzleLoader.basePG) {
       throw new Error("could not get base PG from puzzle loader");
     }
-    return puzzleLoader.basepg();
+    return puzzleLoader.basePG();
   }
 
   setPuzzleName(puzzleName: string): void {

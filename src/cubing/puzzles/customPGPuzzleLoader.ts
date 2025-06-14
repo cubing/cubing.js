@@ -10,13 +10,20 @@ import {
 // TODO: modify this to handle TwistyPlayer options
 export async function descAsyncGetPuzzleGeometry(
   desc: PuzzleDescriptionString,
-  options?: { includeCenterOrbits?: boolean; includeEdgeOrbits?: boolean },
+  options?: {
+    includeCenterOrbits?: boolean;
+    includeEdgeOrbits?: boolean;
+    // TODO: expose the API better.
+    allMoves?: boolean;
+    orientCenters?: boolean;
+    addRotations?: boolean;
+  },
 ): Promise<PuzzleGeometry> {
   const puzzleGeometry = await import("../puzzle-geometry");
   return puzzleGeometry.getPuzzleGeometryByDesc(desc, {
-    allMoves: true,
-    orientCenters: true,
-    addRotations: true,
+    allMoves: options?.allMoves ?? true,
+    orientCenters: options?.orientCenters ?? true,
+    addRotations: options?.addRotations ?? true,
     ...options,
   });
 }
@@ -55,6 +62,13 @@ export function customPGPuzzleLoader(
     },
     pg: async () => {
       return descAsyncGetPuzzleGeometry(desc);
+    },
+    basePG: async () => {
+      return descAsyncGetPuzzleGeometry(desc, {
+        allMoves: false,
+        orientCenters: false,
+        addRotations: false,
+      });
     },
     puzzleSpecificSimplifyOptionsPromise:
       puzzleSpecificSimplifyOptionsPromise(kpuzzlePromiseFn),
