@@ -33,7 +33,7 @@ export async function asyncGetPuzzleGeometry(
 // without slice moves or oriented centers  is what people expect).
 // This function lets those operations behave more in line with
 // what people want.
-async function asyncBaseGetPuzzleGeometry(
+async function asyncGetBasePuzzleGeometry(
   puzzleName: string,
 ): Promise<PuzzleGeometry> {
   const puzzleGeometry = await import("../../puzzle-geometry");
@@ -115,7 +115,7 @@ export class PGPuzzleLoader implements PuzzleLoader {
 
   #cachedBasePG: Promise<PuzzleGeometry> | undefined;
   basepg(): Promise<PuzzleGeometry> {
-    return (this.#cachedPG ??= asyncGetBasePuzzleGeometry(
+    return (this.#cachedBasePG ??= asyncGetBasePuzzleGeometry(
       this.pgId ?? this.id,
     ));
   }
