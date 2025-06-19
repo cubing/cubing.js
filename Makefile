@@ -78,7 +78,7 @@ link: build
 .PHONY: clean
 clean: clean-types
 	rm -rf \
-		dist .temp coverage ./package-lock.json \
+		./dist ./.temp ./coverage ./package-lock.json \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
 
 .PHONY: clean-types
@@ -87,7 +87,7 @@ clean-types:
 
 .PHONY: reset
 reset: clean
-	rm -rf node_modules
+	rm -rf ./node_modules
 	@echo ""
 	@echo "To reinstall dependencies, run:"
 	@echo ""
