@@ -1,6 +1,6 @@
 import { Alg } from "../../../../cubing/alg";
 import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
-import { TwistyPlayer, backViewLayouts } from "../../../../cubing/twisty";
+import { backViewLayouts, TwistyPlayer } from "../../../../cubing/twisty";
 import { hintFaceletStyles } from "../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
 import { dragInputModes } from "../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
 import { setupToLocations } from "../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";

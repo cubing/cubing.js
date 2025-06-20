@@ -1,4 +1,4 @@
-import { type Perm, identity } from "./Perm";
+import { identity, type Perm } from "./Perm";
 
 class FactoredNumber {
   public mult: number[];

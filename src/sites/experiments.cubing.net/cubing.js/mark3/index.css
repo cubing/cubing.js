@@ -67,7 +67,7 @@ table a:hover {
   text-decoration: underline;
 }
 
-td:last-child {
+table td:last-child {
   padding: 0.1em;
   text-align: right;
 }

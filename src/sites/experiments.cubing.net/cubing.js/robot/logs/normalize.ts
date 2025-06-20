@@ -10,8 +10,8 @@ import {
   type Pause,
 } from "../../../../../cubing/alg";
 import {
-  TraversalUp,
   functionFromTraversal,
+  TraversalUp,
 } from "../../../../../cubing/alg/traversal";
 import { cube3x3x3 } from "../../../../../cubing/puzzles";
 

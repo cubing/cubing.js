@@ -1,5 +1,5 @@
 /* Horizontal Layout (default) */
-app {
+twizzle-app {
   grid-template: "puzzle control";
   grid-template-columns: 1fr 1fr;
 }
@@ -10,7 +10,7 @@ control-pane {
 
 /* Vertical Layout */
 @media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
-  app {
+  twizzle-app {
     grid-template: "puzzle" "control";
     grid-template-rows: 1fr 1fr;
   }

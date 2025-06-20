@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { needPath } from "../../../../../lib/needPath.js";
+
 needPath(
   fileURLToPath(
     new URL("../../../../../../dist/lib/cubing/alg", import.meta.url),
@@ -33,7 +34,6 @@ needPath(
     // console.log(`Alg string: ${algString}`);
     console.log(`Parsing a ${numMoves}-move alg: ${parseDur}ms`);
 
-    const applyStart = performance.now();
     kpuzzle.algToTransformation(alg);
     const applyDur = performance.now() - parseStart;
     console.log(`Applying a ${numMoves}-move alg: ${applyDur}ms`);

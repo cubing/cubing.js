@@ -3,13 +3,13 @@ import {
   type AlgNode,
   type Commutator,
   type Conjugate,
+  functionFromTraversal,
   Grouping,
   type LineComment,
   type Move,
   type Newline,
   Pause,
   TraversalDownUp,
-  functionFromTraversal,
 } from "../../alg";
 import {
   ExperimentalIterationDirection,
@@ -20,14 +20,14 @@ import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import type { CurrentMoveInfo } from "../controllers/indexer/AlgIndexer";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
 import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
+import { firstElementWithId } from "./firstElementWithId";
 import { ManagedCustomElement } from "./ManagedCustomElement";
+import {
+  customElementsShim,
+  HTMLElementShim,
+} from "./node-custom-element-shims";
 import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css";
 import { TwistyPlayer } from "./TwistyPlayer";
-import { firstElementWithId } from "./firstElementWithId";
-import {
-  HTMLElementShim,
-  customElementsShim,
-} from "./node-custom-element-shims";
 
 // TODO: dynamically adjust the fraction to take into account moves that rotate a lot (e.g. `R100`).
 const DEFAULT_OFFSET_FRACTION = 0.25;

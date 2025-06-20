@@ -135,7 +135,7 @@ class AlgParser {
       }
     };
 
-    mainLoop: while (this.#idx < this.#input.length) {
+    while (this.#idx < this.#input.length) {
       const savedCharIndex = this.#idx;
       if ((stopBefore as string[]).includes(this.#input[this.#idx])) {
         return addCharIndices(algBuilder.toAlg(), algStartIdx, algEndIdx);
@@ -145,19 +145,12 @@ class AlgParser {
         if (algBuilder.experimentalNumAlgNodes() === 0) {
           algStartIdx = this.#idx;
         }
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-        // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-        continue mainLoop;
       } else if (MOVE_START_REGEX.test(this.#input[this.#idx])) {
         mustNotBeCrowded(savedCharIndex);
         const move = this.parseMoveImpl();
         algBuilder.push(move);
         crowded = true;
         algEndIdx = this.#idx;
-
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-        // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-        continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
         mustNotBeCrowded(savedCharIndex);
         const sq1PairStartMatch = this.tryRegex(SQUARE1_PAIR_START_REGEX);
@@ -185,10 +178,6 @@ class AlgParser {
           );
           crowded = true;
           algEndIdx = this.#idx;
-
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-          // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-          continue mainLoop;
         } else {
           const alg = this.parseAlgWithStopping([")"]);
           this.mustConsumeNext(")");
@@ -202,10 +191,6 @@ class AlgParser {
           );
           crowded = true;
           algEndIdx = this.#idx;
-
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-          // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-          continue mainLoop;
         }
       } else if (this.tryConsumeNext("^")) {
         if (!algDebugGlobals.caretNISSNotationEnabled) {
@@ -276,20 +261,12 @@ class AlgParser {
         }
         crowded = true;
         algEndIdx = this.#idx;
-
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-        // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-        continue mainLoop;
       } else if (this.tryConsumeNext("\n")) {
         algBuilder.push(
           addCharIndices(new Newline(), savedCharIndex, this.#idx),
         );
         crowded = false;
         algEndIdx = this.#idx;
-
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-        // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-        continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
         if (this.tryConsumeNext("/")) {
           mustNotBeCrowded(savedCharIndex);
@@ -299,10 +276,6 @@ class AlgParser {
           );
           crowded = false;
           algEndIdx = this.#idx;
-
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-          // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-          continue mainLoop;
         } else {
           // We allow crowding here to account for csTimer scrambles, which don't have a space between a Square-1 tuple and the following slash.
           algBuilder.push(
@@ -310,20 +283,12 @@ class AlgParser {
           );
           crowded = true;
           algEndIdx = this.#idx;
-
-          // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-          // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-          continue mainLoop;
         }
       } else if (this.tryConsumeNext(".")) {
         mustNotBeCrowded(savedCharIndex);
         algBuilder.push(addCharIndices(new Pause(), savedCharIndex, this.#idx));
         crowded = true;
         algEndIdx = this.#idx;
-
-        // biome-ignore lint/correctness/noUnnecessaryContinue: This line allows for more robust refactoring.
-        // biome-ignore lint/complexity/noUselessLabel: This line allows for more robust refactoring.
-        continue mainLoop;
       } else {
         throw new Error(`Unexpected character: ${this.popNext()}`);
       }

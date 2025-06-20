@@ -1,6 +1,5 @@
 // https://js.cubing.net/cubing/alg/
 
-import type { ExperimentalSerializationOptions } from "./SerializationOptions";
 import { Grouping, Pause } from "./alg-nodes";
 import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
 import { LineComment } from "./alg-nodes/leaves/LineComment";
@@ -8,8 +7,9 @@ import { Move } from "./alg-nodes/leaves/Move";
 import { Newline } from "./alg-nodes/leaves/Newline";
 import { AlgCommon, type Comparable } from "./common";
 import { experimentalIs, experimentalIsAlgNode } from "./is";
-import { IterationDirection, direct, reverse } from "./iteration";
+import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parseAlg";
+import type { ExperimentalSerializationOptions } from "./SerializationOptions";
 import { type SimplifyOptions, simplify } from "./simplify";
 import { warnOnce } from "./warnOnce";
 

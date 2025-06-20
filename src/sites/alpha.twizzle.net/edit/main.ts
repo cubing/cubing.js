@@ -40,6 +40,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   setAlgDebug({ caretNISSNotationEnabled: true });
 
-  const appElement = document.querySelector("app")!;
+  const appElement = document.querySelector("twizzle-app")!;
   (window as any).app = new App(appElement, getConfigFromURL());
 });

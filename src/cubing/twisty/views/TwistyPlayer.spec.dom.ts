@@ -1,6 +1,6 @@
-import { TwistyPlayer } from "..";
 import { expect } from "../../../test/chai-workarounds";
 import { Alg } from "../../alg";
+import { TwistyPlayer } from "..";
 
 const test = it;
 

@@ -1,12 +1,12 @@
 import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
 import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import {
   type ButtonAppearances,
   type ButtonIcon,
   buttonIcons,
 } from "../../model/props/viewer/ButtonAppearanceProp";
 import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";

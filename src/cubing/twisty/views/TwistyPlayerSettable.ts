@@ -3,7 +3,6 @@ import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { StickeringMask } from "../../puzzles/stickerings/mask";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
-import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp";
 import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
 import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
@@ -12,12 +11,13 @@ import type { IndexerStrategyName } from "../model/props/puzzle/state/IndexerCon
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
-import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
+import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { ColorSchemeWithAuto } from "../model/props/viewer/ColorSchemeRequestProp";
 import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
+import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 
 function err(propName: string): Error {

@@ -9,7 +9,7 @@ body {
   margin: 0;
 }
 
-app {
+twizzle-app {
   display: grid;
   width: 100%;
   height: 100%;
@@ -20,7 +20,9 @@ puzzle-pane {
   grid-area: "puzzle";
 
   background-size: 32px 32px;
-  background-position: 0 0, 16px 16px;
+  background-position:
+    0 0,
+    16px 16px;
 
   display: grid;
 

@@ -2,9 +2,9 @@ import type {
   MillisecondTimestamp,
   TimeRange,
 } from "../../../controllers/AnimationTypes";
-import { TwistyPropDerived } from "../TwistyProp";
 import type { AlgWithIssues } from "../puzzle/state/AlgProp";
 import type { SetupToLocation } from "../puzzle/state/SetupAnchorProp";
+import { TwistyPropDerived } from "../TwistyProp";
 import type { TimestampRequest } from "./TimestampRequestProp";
 
 interface DetailedTimelineInfoInputs {

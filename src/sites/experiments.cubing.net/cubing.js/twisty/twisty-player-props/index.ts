@@ -4,9 +4,9 @@
 import { Alg } from "../../../../../cubing/alg";
 import { experimentalStickerings } from "../../../../../cubing/puzzles/cubing-private";
 import {
-  TwistyPlayer,
   backViewLayouts,
   setTwistyDebug,
+  TwistyPlayer,
 } from "../../../../../cubing/twisty";
 import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
 import { dragInputModes } from "../../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";

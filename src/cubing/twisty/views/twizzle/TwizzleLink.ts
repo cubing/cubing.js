@@ -1,17 +1,18 @@
-import { TwistyPlayer } from "../..";
 import { Alg } from "../../../alg";
 import {
   ExperimentalCommonMetric,
   experimentalCountMetricMoves,
 } from "../../../notation";
 import { puzzles } from "../../../puzzles";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import { TwistyPlayer } from "../..";
 import type { ColorSchemeWithAuto } from "../../model/props/viewer/ColorSchemeRequestProp";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
-import { TwistyAlgViewer } from "../TwistyAlgViewer";
 import { customElementsShim } from "../node-custom-element-shims";
+import { TwistyAlgViewer } from "../TwistyAlgViewer";
 import { twizzleLinkCSS, twizzleLinkForumTweaksCSS } from "./TwizzleLink.css";
 import { getConfigFromURL } from "./url-params";
+
 /** @category Other Custom Elements */
 
 // Non-breaking space

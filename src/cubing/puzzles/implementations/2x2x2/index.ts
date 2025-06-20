@@ -1,9 +1,9 @@
 import { KPuzzle } from "../../../kpuzzle";
 import { experimentalIs2x2x2Solved } from "../../../puzzles/cubing-private";
 import type { ExperimentalStickering } from "../../../twisty";
-import type { PuzzleLoader } from "../../PuzzleLoader";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
+import type { PuzzleLoader } from "../../PuzzleLoader";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,

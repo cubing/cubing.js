@@ -6,16 +6,16 @@ import type {
   KPuzzleOrbitDefinition,
   KTransformationOrbitData,
 } from "../kpuzzle/KPuzzleDefinition";
+import { NullMapper } from "./notation-mapping";
+import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
-  Perm,
   factorial,
   iota,
   lcm,
+  Perm,
   zeros,
 } from "./Perm";
-import { NullMapper } from "./notation-mapping";
-import type { NotationMapper } from "./notation-mapping/NotationMapper";
 export class PGOrbitDef {
   constructor(
     public size: number,
@@ -621,7 +621,7 @@ export class PGTransformBase {
   }
 
   public toPerm(): Perm {
-    const perms = new Array<Perm>();
+    const perms: Perm[] = [];
     let n = 0;
     for (const orbit of this.orbits) {
       const p = orbit.toPerm();

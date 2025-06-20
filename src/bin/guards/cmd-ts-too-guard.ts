@@ -2,7 +2,7 @@ import { exit } from "node:process";
 
 try {
   await import("cmd-ts-too");
-} catch (e) {
+} catch {
   // Note that this doesn't fail when installed using `bun install --global`, as `bun` automatically loads deps.
   console.error(
     `Could not import \`cmd-ts-too\`. This is not automatically installed as a regular dependency of \`cubing\`.

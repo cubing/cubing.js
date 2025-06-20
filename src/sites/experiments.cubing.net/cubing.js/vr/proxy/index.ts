@@ -1,7 +1,5 @@
 // TODO: Generalize to WebRTC setup.
 
-import { ExperimentalWebSocketProxySender } from "../../../../../cubing/stream";
-
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import type { GoCube } from "../../../../../cubing/bluetooth";
@@ -10,6 +8,7 @@ import {
   connectSmartPuzzle,
   debugKeyboardConnect,
 } from "../../../../../cubing/bluetooth";
+import { ExperimentalWebSocketProxySender } from "../../../../../cubing/stream";
 import { socketOrigin } from "../config";
 
 class App {

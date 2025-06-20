@@ -1,10 +1,7 @@
-import { Alg, Move, experimentalAppendMove } from "../../alg";
+import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { AppendOptions } from "../../alg/simplify";
 import { getPartialAppendOptionsForPuzzleSpecificSimplifyOptions } from "../../puzzles/cubing-private";
-import { TwistySceneModel } from "./TwistySceneModel";
-import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
-import { NO_VALUE } from "./props/TwistyProp";
 import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 import { URLProp } from "./props/general/URLProp";
 import { AlgProp } from "./props/puzzle/state/AlgProp";
@@ -27,6 +24,7 @@ import { PGPuzzleDescriptionStringProp } from "./props/puzzle/structure/PuzzleDe
 import { PuzzleIDProp } from "./props/puzzle/structure/PuzzleIDProp";
 import { PuzzleIDRequestProp } from "./props/puzzle/structure/PuzzleIDRequestProp";
 import { PuzzleLoaderProp } from "./props/puzzle/structure/PuzzleLoaderProp";
+import { NO_VALUE } from "./props/TwistyProp";
 import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
 import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
 import { PlayingInfoProp } from "./props/timeline/PlayingInfoProp";
@@ -39,6 +37,8 @@ import { TimeRangeProp } from "./props/viewer/TimeRangeProp";
 import { ViewerLinkProp } from "./props/viewer/ViewerLinkProp";
 import { VisualizationFormatProp } from "./props/viewer/VisualizationProp";
 import { VisualizationStrategyProp } from "./props/viewer/VisualizationStrategyProp";
+import { TwistySceneModel } from "./TwistySceneModel";
+import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 
 // From https://stackoverflow.com/a/50918777
 type Without<T, K extends string[]> = Pick<T, Exclude<keyof T, K[number]>>;

@@ -1,9 +1,9 @@
 // Include 3x3x3 in the main bundle for better performance.
 import type { ExperimentalStickering } from "../../../twisty";
-import type { PuzzleLoader } from "../../PuzzleLoader";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
 import { experimental3x3x3KPuzzle } from "../../cubing-private";
+import type { PuzzleLoader } from "../../PuzzleLoader";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,

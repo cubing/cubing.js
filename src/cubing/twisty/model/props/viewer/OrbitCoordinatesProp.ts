@@ -1,6 +1,6 @@
 import { DEGREES_PER_RADIAN } from "../../../views/3D/TAU";
-import { TwistyPropDerived } from "../TwistyProp";
 import type { PuzzleID } from "../puzzle/structure/PuzzleIDRequestProp";
+import { TwistyPropDerived } from "../TwistyProp";
 import {
   type CoordinateDegrees,
   type OrbitCoordinates,

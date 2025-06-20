@@ -9,7 +9,7 @@ import type {
   Newline,
   Pause,
 } from "./alg-nodes";
-import { TraversalUp, functionFromTraversal } from "./traversal";
+import { functionFromTraversal, TraversalUp } from "./traversal";
 
 export class ValidationError extends Error {}
 

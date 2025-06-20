@@ -14,8 +14,8 @@
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, type Move, type Pause } from "../../../alg";
 import {
-  type Parsed,
   endCharIndexKey,
+  type Parsed,
   startCharIndexKey,
 } from "../../../alg/parseAlg";
 import type {
@@ -25,11 +25,11 @@ import type {
 import type { CurrentLeavesSimplified } from "../../model/props/puzzle/state/CurrentLeavesSimplified";
 import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
-import { TwistyPlayer } from "../TwistyPlayer";
 import { customElementsShim } from "../node-custom-element-shims";
-import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";
+import { TwistyPlayer } from "../TwistyPlayer";
 import { type HighlightInfo, TwistyAlgEditorModel } from "./model";
 import { pasteIntoTextArea } from "./paste";
+import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";

@@ -1,13 +1,13 @@
 import {
-  type MoveEvent,
   connectSmartPuzzle,
   debugKeyboardConnect,
+  type MoveEvent,
 } from "../../../cubing/bluetooth";
 import { KTransformation } from "../../../cubing/kpuzzle";
 import {
-  type PuzzleGeometry,
   getPG3DNamedPuzzles,
   getPuzzleDescriptionString,
+  type PuzzleGeometry,
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import type { PuzzleLoader } from "../../../cubing/puzzles";

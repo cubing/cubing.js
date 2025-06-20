@@ -1,7 +1,7 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
-  type BluetoothPuzzle,
   type MoveEvent as algLeafEvent,
+  type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
 } from "../../../../cubing/bluetooth";

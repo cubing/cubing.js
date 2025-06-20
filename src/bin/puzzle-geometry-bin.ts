@@ -5,8 +5,8 @@ import {
   type ExperimentalPuzzleBaseShape,
   type ExperimentalPuzzleCutType,
   type ExperimentalPuzzleGeometryOptions,
-  PuzzleGeometry,
   getPG3DNamedPuzzles,
+  PuzzleGeometry,
   parsePuzzleDescription,
 } from "cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "cubing/puzzle-geometry/PGPuzzles";

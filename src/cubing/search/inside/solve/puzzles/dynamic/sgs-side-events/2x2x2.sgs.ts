@@ -1,5 +1,5 @@
 import { cube2x2x2 } from "../../../../../../puzzles";
-import { type SGSCachedData, parseSGS } from "../../../parseSGS";
+import { parseSGS, type SGSCachedData } from "../../../parseSGS";
 
 let cachedData: Promise<SGSCachedData> | null = null;
 export async function cachedData222() {

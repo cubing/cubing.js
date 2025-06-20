@@ -1,5 +1,5 @@
 import { KPuzzle } from "../../../../../../kpuzzle";
-import { type SGSCachedData, parseSGS } from "../../../parseSGS";
+import { parseSGS, type SGSCachedData } from "../../../parseSGS";
 
 async function skewbKPuzzleWithoutMO(): Promise<KPuzzle> {
   const { getPuzzleGeometryByName, ExperimentalPGNotation } = await import(

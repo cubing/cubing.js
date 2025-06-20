@@ -1,8 +1,8 @@
 import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
 import {
   type Alg,
-  type FlexibleAlgSource,
   experimentalEnsureAlg,
+  type FlexibleAlgSource,
 } from "../../Alg";
 import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";

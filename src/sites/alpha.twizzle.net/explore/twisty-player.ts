@@ -3,9 +3,9 @@ import { getPuzzleDescriptionString } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
 import {
+  setTwistyDebug,
   TwistyPlayer,
   type TwistyPlayerConfig,
-  setTwistyDebug,
 } from "../../../cubing/twisty";
 import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
 import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";

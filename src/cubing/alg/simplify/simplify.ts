@@ -7,7 +7,7 @@ import type { LineComment } from "../alg-nodes/leaves/LineComment";
 import { Move } from "../alg-nodes/leaves/Move";
 import type { Newline } from "../alg-nodes/leaves/Newline";
 import { Pause } from "../alg-nodes/leaves/Pause";
-import { TraversalDownUp, functionFromTraversal } from "../traversal";
+import { functionFromTraversal, TraversalDownUp } from "../traversal";
 import { experimentalAppendNode } from "./append";
 import { AppendOptionsHelper, type SimplifyOptions } from "./options";
 

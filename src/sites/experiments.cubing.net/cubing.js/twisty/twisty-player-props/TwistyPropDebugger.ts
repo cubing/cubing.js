@@ -1,11 +1,11 @@
 import type { Alg } from "../../../../../cubing/alg";
 import { experimentalCountMoves } from "../../../../../cubing/notation";
-import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp";
 import type { AlgIssues } from "../../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp";
 import { ClassListManager } from "../../../../../cubing/twisty/views/ClassListManager";
 import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
-import type { TwistyPlayer } from "../../../../../cubing/twisty/views/TwistyPlayer";
 import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
+import type { TwistyPlayer } from "../../../../../cubing/twisty/views/TwistyPlayer";
 import {
   twistyPlayerDebuggerCSS,
   twistyPropDebuggerCSS,
@@ -68,7 +68,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     function isAlgIssues(v: any): boolean {
       try {
         return v instanceof Object && "alg" in v && "issues" in v;
-      } catch (e) {
+      } catch {
         return false;
       }
     }
@@ -104,7 +104,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
           str = str1.slice(0, 100);
         }
       }
-    } catch (e) {
+    } catch {
       str = "(can't be serialized)";
     }
 

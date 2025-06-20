@@ -119,13 +119,13 @@ export class Perm {
   }
 
   public toGap(): string {
-    const cyc = new Array<string>();
+    const cyc: string[] = [];
     const seen = new Array<boolean>(this.n);
     for (let i = 0; i < this.p.length; i++) {
       if (seen[i] || this.p[i] === i) {
         continue;
       }
-      const incyc = new Array<number>();
+      const incyc: number[] = [];
       for (let j = this.p[i]; !seen[j]; j = this.p[j]) {
         incyc.push(1 + j);
         seen[j] = true;
@@ -136,13 +136,13 @@ export class Perm {
   }
 
   public toMathematica(): string {
-    const cyc = new Array<string>();
+    const cyc: string[] = [];
     const seen = new Array<boolean>(this.n);
     for (let i = 0; i < this.p.length; i++) {
       if (seen[i] || this.p[i] === i) {
         continue;
       }
-      const incyc = new Array<number>();
+      const incyc: number[] = [];
       for (let j = this.p[i]; !seen[j]; j = this.p[j]) {
         incyc.push(1 + j);
         seen[j] = true;

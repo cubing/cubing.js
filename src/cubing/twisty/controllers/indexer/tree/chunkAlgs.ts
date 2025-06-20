@@ -4,13 +4,13 @@ import {
   type AlgNode,
   type Commutator,
   Conjugate,
+  functionFromTraversal,
   Grouping,
   type LineComment,
   type Move,
   type Newline,
   type Pause,
   TraversalUp,
-  functionFromTraversal,
 } from "../../../../alg";
 
 const MIN_CHUNKING_THRESHOLD = 16;

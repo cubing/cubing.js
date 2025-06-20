@@ -1,10 +1,10 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
   type BluetoothPuzzle,
-  type GoCube,
-  type OrientationEvent,
   connectSmartPuzzle,
   debugKeyboardConnect,
+  type GoCube,
+  type OrientationEvent,
 } from "../../../../cubing/bluetooth";
 import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
 import {
@@ -15,12 +15,12 @@ import { setTwistyDebug } from "../../../../cubing/twisty";
 import { type Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
   DEFAULT_PUZZLE_ID,
-  type PuzzleID,
   debugShowRenderStats,
   getPuzzleID,
   getStickering,
   getTempoScale,
   getVisualizationFormat,
+  type PuzzleID,
   receivingSocketOrigin,
   sendingSocketOrigin,
 } from "./url-params";

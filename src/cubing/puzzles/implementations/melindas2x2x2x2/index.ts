@@ -1,6 +1,6 @@
 import { KPuzzle } from "../../../kpuzzle";
-import type { PuzzleLoader } from "../../PuzzleLoader";
 import { getCached } from "../../async/lazy-cached";
+import type { PuzzleLoader } from "../../PuzzleLoader";
 
 export const melindas2x2x2x2: PuzzleLoader = {
   id: "melindas2x2x2x2",

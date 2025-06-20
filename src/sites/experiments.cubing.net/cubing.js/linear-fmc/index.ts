@@ -1,9 +1,9 @@
 import { Alg, type AlgLeaf, Move } from "../../../../cubing/alg";
 import {
-  type MoveEvent,
-  type OrientationEvent,
   connectSmartPuzzle,
   debugKeyboardConnect,
+  type MoveEvent,
+  type OrientationEvent,
 } from "../../../../cubing/bluetooth";
 import { countMetricMoves } from "../../../../cubing/notation/CountMoves";
 import { CommonMetric } from "../../../../cubing/notation/commonMetrics";

@@ -2,15 +2,16 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["./node_modules/@cubing/dev-config/biome/biome.json"],
   "files": {
-    "ignore": [
-      "./.temp",
-      "./dist",
-      "./*/index.d.ts",
-      "./src/cubing/vendor/mit/cs0x7f/**/*",
-      "./src/cubing/vendor/mpl/twsearch/*.js",
-      "./src/cubing/vendor/mpl/xyzzy/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js",
-      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.d.ts"
+    "includes": [
+      "**",
+      "!.temp",
+      "!dist",
+      "!**/*/index.d.ts",
+      "!src/cubing/vendor/mit/cs0x7f/**/*",
+      "!src/cubing/vendor/mpl/twsearch/**/*.js",
+      "!src/cubing/vendor/mpl/xyzzy/**/*.js",
+      "!src/sites/experiments.cubing.net/cubing.js/rust/wasm/**/*.js",
+      "!src/sites/experiments.cubing.net/cubing.js/rust/wasm/**/*.d.ts"
     ]
   },
   "linter": {

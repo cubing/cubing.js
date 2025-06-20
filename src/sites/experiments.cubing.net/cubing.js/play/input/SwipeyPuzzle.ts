@@ -9,7 +9,7 @@ import {
   type TwistyPlayerConfig,
   type VisualizationFormat,
 } from "../../../../../cubing/twisty";
-import { type PuzzleID, getCancel, getSetup } from "../url-params";
+import { getCancel, getSetup, type PuzzleID } from "../url-params";
 import { SwipeGrid, type ThemeType, themes } from "./SwipeGrid";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
@@ -234,7 +234,7 @@ export class SwipeyPuzzle extends HTMLElement {
         puzzleSpecificSimplifyOptions:
           puzzles[this.puzzleName]?.puzzleSpecificSimplifyOptions,
       });
-    } catch (e) {
+    } catch {
       console.warn("Invalid alg leaf");
       // this.twistyPlayer.alg = oldAlg;
     }

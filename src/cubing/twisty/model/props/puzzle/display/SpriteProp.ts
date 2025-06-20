@@ -35,7 +35,7 @@ export class SpriteProp extends TwistyPropDerived<
           onLoadingError,
           onLoadingError,
         );
-      } catch (e) {
+      } catch {
         onLoadingError();
       }
     });

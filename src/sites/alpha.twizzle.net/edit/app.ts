@@ -21,18 +21,19 @@ import {
   constructMoveCountDisplay,
   getStickeringGroup,
 } from "../../../cubing/twisty/cubing-private";
-import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
+import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
 import "../../../cubing/twisty/views/stream/TwistyStreamSource";
-import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
+import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
 import { computeAlgFeatures } from "./alg-features";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
+
 // import { setURLParams } from "./url-params";
 
 // TODO: introduce concepts in `cubing/twisty` for "this is a valid twisty-player value, but not for the current puzzle".
@@ -532,7 +533,7 @@ class ControlPane {
       this.twistyPlayer.experimentalAddMove(move, {
         cancel: true,
       }); // TODO
-    } catch (e) {
+    } catch {
       console.info("Ignoring move:", move.toString());
     }
     // setURLParams({ alg });

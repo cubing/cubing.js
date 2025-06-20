@@ -83,7 +83,7 @@ export function getSetup(): Alg {
   }
   try {
     return Alg.fromString(setup);
-  } catch (e) {
+  } catch {
     return new Alg();
   }
 }

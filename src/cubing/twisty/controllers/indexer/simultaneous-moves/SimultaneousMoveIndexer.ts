@@ -10,8 +10,8 @@ import {
 } from "../../AnimationTypes";
 import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import {
-  type AnimLeafWithRange,
   type AnimatedLeafAlgNode,
+  type AnimLeafWithRange,
   simulMoves,
 } from "./simul-moves";
 

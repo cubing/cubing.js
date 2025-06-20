@@ -1,10 +1,10 @@
 import { EXPERIMENTAL_PROP_NO_VALUE } from "../../../../cubing/twisty";
-import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
-import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp";
 import type {
   AlgProp,
   AlgWithIssues,
 } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp";
+import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
 import {
   type TwistyPlayerAttribute,
   type TwistyPlayerConfig,

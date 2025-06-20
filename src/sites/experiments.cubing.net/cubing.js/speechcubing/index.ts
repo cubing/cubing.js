@@ -36,7 +36,6 @@ const alternativeListElem = document.querySelector("alternative-list")!;
 recognition.onresult = (event) => {
   const latestResult = event.results.item(event.results.length - 1);
   alternativeListElem.textContent =
-    // biome-ignore lint/style/useTemplate: Using a template would make this more confusing.
     "Raw alternatives: " +
     Array.from(latestResult)
       .map((alternative) => alternative.transcript)
@@ -117,7 +116,7 @@ recognition.onresult = (event) => {
       kpuzzle.moveToTransformation(transcript);
       player.experimentalAddMove(transcript);
       break;
-    } catch (e) {
+    } catch {
       // ignore
     }
   }

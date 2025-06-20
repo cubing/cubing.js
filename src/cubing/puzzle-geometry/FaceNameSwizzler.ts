@@ -130,7 +130,7 @@ export class FaceNameSwizzler {
         }
       }
       return true;
-    } catch (e) {
+    } catch {
       return false;
     }
   }

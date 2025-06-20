@@ -10,7 +10,7 @@ const fix = process.argv[2] === "--fix";
 
 let exitCode = 0;
 let needsFix = false;
-const SIMPLE_MAKEFILE_TARGET_MATCH = /^([A-Za-z\-]+):/;
+const SIMPLE_MAKEFILE_TARGET_MATCH = /^([A-Za-z-]+):/;
 
 const makefileText = await readFile(MAKEFILE_PATH, "utf-8");
 let inScriptsSection = true;

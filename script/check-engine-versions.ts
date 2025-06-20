@@ -4,7 +4,7 @@
 // TODO: turn this into a package?
 
 import { exit } from "node:process";
-import { type SystemError, file, spawn } from "bun";
+import { file, type SystemError, spawn } from "bun";
 import { satisfies } from "compare-versions";
 import { PrintableShellCommand } from "printable-shell-command";
 

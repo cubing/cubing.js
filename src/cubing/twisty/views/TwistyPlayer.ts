@@ -1,10 +1,10 @@
 import type { Object3D } from "three/src/Three.js";
-import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { AppendCancelOptions, AppendOptions } from "../../alg/simplify";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { ExperimentalStickeringMask } from "../../puzzles/cubing-private";
+import type { ExperimentalStickering } from "..";
 import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
@@ -14,8 +14,8 @@ import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp";
-import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
+import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type {
   ColorScheme,
   ColorSchemeWithAuto,
@@ -28,17 +28,17 @@ import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkPro
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
+import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import type { Twisty3DVantage } from "./3D/Twisty3DVantage";
-import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
 import { ClassListManager } from "./ClassListManager";
-import { InitialValueTracker } from "./InitialValueTracker";
-import { twistyPlayerCSS } from "./TwistyPlayer.css";
-import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 import { TwistyButtons } from "./control-panel/TwistyButtons";
 import { TwistyScrubber } from "./control-panel/TwistyScrubber";
+import { InitialValueTracker } from "./InitialValueTracker";
 import { customElementsShim } from "./node-custom-element-shims";
 import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
+import { twistyPlayerCSS } from "./TwistyPlayer.css";
+import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 
 const DATA_ATTRIBUTE_PREFIX = "data-";
 

@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { exit } from "node:process";
-import { type ImportKind, type Metafile, type Plugin, build } from "esbuild";
+import { build, type ImportKind, type Metafile, type Plugin } from "esbuild";
 import { packageNames } from "../../../build/common/package-info";
 import {
   type AllowedImports,
@@ -16,7 +16,7 @@ async function checkAllowedImports(
   const plugin = {
     name: "mark-bare-imports-as-external",
     setup(build) {
-      const filter = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/; // Must not start with "/" or "./" or "../"
+      const filter = /^[^./]|^\.[^./]|^\.\.[^/]/; // Must not start with "/" or "./" or "../"
       build.onResolve({ filter }, (args) => ({
         path: args.path,
         external: true,

@@ -24,7 +24,9 @@ body {
       #ddd
     );
   background-size: 32px 32px;
-  background-position: 0 0, 16px 16px;
+  background-position:
+    0 0,
+    16px 16px;
 }
 
 .swipe-wrapper {

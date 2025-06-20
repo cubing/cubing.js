@@ -1,6 +1,7 @@
 import nodeEndpoint from "../node-adapter";
 
 export { wrap } from "comlink";
+
 const useNodeWorkarounds =
   typeof globalThis.Worker === "undefined" &&
   typeof (globalThis as any).WorkerNavigator === "undefined";

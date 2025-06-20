@@ -1,6 +1,19 @@
 import { Move, QuantumMove } from "../alg";
 import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle";
+import { defaultPlatonicColorSchemes } from "./colors";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
+import {
+  FaceRenamingMapper,
+  FTONotationMapper,
+  MegaminxScramblingNotationMapper,
+  type NotationMapper,
+  NullMapper,
+  NxNxNCubeMapper,
+  PyraminxNotationMapper,
+  SkewbNotationMapper,
+  TetraminxNotationMapper,
+} from "./notation-mapping";
+import { remapKPuzzleDefinition } from "./notation-mapping/NotationMapper";
 import {
   type BaseFaceCount,
   type FaceBasedOrientationDescription,
@@ -8,21 +21,21 @@ import {
   PuzzleGeometryFullOptions,
   type PuzzleGeometryOptions,
 } from "./Options";
+import { iota, Perm, zeros } from "./Perm";
+import {
+  externalName,
+  PGOrbit,
+  PGOrbitDef,
+  PGOrbitsDef,
+  PGTransform,
+  showcanon,
+  VisibleState,
+} from "./PermOriSet";
 import {
   PGPuzzles,
   type PuzzleDescriptionString,
   type PuzzleName,
 } from "./PGPuzzles";
-import { Perm, iota, zeros } from "./Perm";
-import {
-  PGOrbit,
-  PGOrbitDef,
-  PGOrbitsDef,
-  PGTransform,
-  VisibleState,
-  externalName,
-  showcanon,
-} from "./PermOriSet";
 import {
   closure,
   cube,
@@ -33,21 +46,8 @@ import {
   tetrahedron,
   uniqueplanes,
 } from "./PlatonicGenerator";
-import { Quat, centermassface } from "./Quat";
+import { centermassface, Quat } from "./Quat";
 import { schreierSims } from "./SchreierSims";
-import { defaultPlatonicColorSchemes } from "./colors";
-import {
-  FTONotationMapper,
-  FaceRenamingMapper,
-  MegaminxScramblingNotationMapper,
-  type NotationMapper,
-  NullMapper,
-  NxNxNCubeMapper,
-  PyraminxNotationMapper,
-  SkewbNotationMapper,
-  TetraminxNotationMapper,
-} from "./notation-mapping";
-import { remapKPuzzleDefinition } from "./notation-mapping/NotationMapper";
 
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];
@@ -1876,8 +1876,8 @@ export class PuzzleGeometry {
       throw Error(`Bad move passed ${mv}`);
     }
     const grip = p[4];
-    let loslice = undefined;
-    let hislice = undefined;
+    let loslice: number | undefined;
+    let hislice: number | undefined;
     if (p[2] !== undefined) {
       if (p[3] === undefined) {
         throw Error("Missing second number in range");

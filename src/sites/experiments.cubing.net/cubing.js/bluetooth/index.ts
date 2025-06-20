@@ -1,9 +1,9 @@
 import { Alg } from "../../../../cubing/alg";
 import {
-  type MoveEvent,
-  type OrientationEvent,
   connectSmartPuzzle,
   debugKeyboardConnect,
+  type MoveEvent,
+  type OrientationEvent,
 } from "../../../../cubing/bluetooth";
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 

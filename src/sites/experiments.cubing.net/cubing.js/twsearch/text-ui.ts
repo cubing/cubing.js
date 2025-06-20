@@ -9,8 +9,8 @@ import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
 import type { SolveTwsearchOptions } from "../../../../cubing/search/outside";
 import {
-  type TwsearchServerClientOptions,
   solveTwsearchServer,
+  type TwsearchServerClientOptions,
 } from "./twsearch-server";
 
 const LOCALSTORAGE_DEF = "twsearch/text-ui/def";

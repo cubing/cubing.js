@@ -1,6 +1,6 @@
 import {
-  type StickerDat,
   getPuzzleGeometryByDesc,
+  type StickerDat,
 } from "../../../cubing/puzzle-geometry";
 import { puzzles } from "../../../cubing/puzzles";
 import type { PuzzleID, VisualizationFormat } from "../../../cubing/twisty";

@@ -49,7 +49,7 @@ control-pane .move-count-header {
   grid-template-columns: auto 1fr;
 }
 
-control-pane .move-count-header .move-count {
+.move-count {
   /* TODO: internationalized layout */
   text-align: right;
 }

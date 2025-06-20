@@ -1,5 +1,5 @@
 import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/PGPuzzles";
-import { type PuzzleLoader, cube3x3x3, puzzles } from "../../../../../puzzles";
+import { cube3x3x3, type PuzzleLoader, puzzles } from "../../../../../puzzles";
 import { experimentalCustomPGPuzzleLoader } from "../../../../../puzzles/cubing-private";
 import {
   NO_VALUE,
@@ -7,6 +7,7 @@ import {
   TwistyPropDerived,
 } from "../../TwistyProp";
 import type { PuzzleID } from "./PuzzleIDRequestProp";
+
 8;
 interface PuzzleLoaderPropInputs {
   puzzleIDRequest: PuzzleID | NoValueType;
