@@ -64,7 +64,7 @@
     "three": "^0.170.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.0",
+    "@biomejs/biome": "v2.0.5",
     "@cubing/deploy": "v0.2.1",
     "@cubing/dev-config": "v0.3.5",
     "@esm-bundle/chai": "^4.3.4-fix.0",
