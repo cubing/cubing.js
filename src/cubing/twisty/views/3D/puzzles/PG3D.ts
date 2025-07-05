@@ -822,10 +822,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const transformation = p.pattern.experimentalToTransformation();
-    if (!transformation) {
-      throw new Error("indistinguishable pieces are not supported by PG3D yet");
-    }
+    const { pattern } = p;
     const noRotation = new Euler();
     this.movingObj.rotation.copy(noRotation);
     let colormods = 0;
@@ -834,18 +831,16 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (
       !this.lastPos ||
       this.#pendingStickeringUpdate ||
-      !this.lastPos.pattern
-        .experimentalToTransformation()!
-        .isIdentical(transformation)
+      !this.lastPos.pattern.isIdentical(pattern)
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
-        const pos2 = transformation.transformationData[orbit];
+        const pos2 = pattern.patternData[orbit];
         const orin = pieces.length;
         if (orin === 1) {
           const pieces2 = pieces[0];
           for (let i = 0; i < pieces2.length; i++) {
-            const ni = pos2.permutation[i];
+            const ni = pos2.pieces[i];
             if (this.textured) {
               colormods += pieces2[i].setTexture(filler, pieces2[ni]);
             } else {
@@ -856,8 +851,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {
-              const nori = (ori + orin - pos2.orientationDelta[i]) % orin;
-              const ni = pos2.permutation[i];
+              const nori = (ori + orin - pos2.orientation[i]) % orin;
+              const ni = pos2.pieces[i];
               if (this.textured) {
                 colormods += pieces2[i].setTexture(filler, pieces[nori][ni]);
               } else {
