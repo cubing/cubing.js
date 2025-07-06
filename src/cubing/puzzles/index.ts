@@ -6,6 +6,7 @@ import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { cube4x4x4 } from "./implementations/4x4x4";
+import { cube5x5x5 } from "./implementations/5x5x5";
 import { baby_fto } from "./implementations/baby_fto";
 import { clock } from "./implementations/clock";
 import { fto } from "./implementations/fto";
@@ -25,7 +26,7 @@ export const puzzles: Record<string, PuzzleLoader> = {
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
   "4x4x4": cube4x4x4,
-  "5x5x5": new CubePGPuzzleLoader({ id: "5x5x5", fullName: "5×5×5 Cube" }),
+  "5x5x5": cube5x5x5,
   "6x6x6": new CubePGPuzzleLoader({ id: "6x6x6", fullName: "6×6×6 Cube" }),
   "7x7x7": new CubePGPuzzleLoader({ id: "7x7x7", fullName: "7×7×7 Cube" }),
   "40x40x40": new CubePGPuzzleLoader({

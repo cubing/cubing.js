@@ -1,4 +1,5 @@
 import { KPuzzle } from "../../kpuzzle";
+import { getCached } from "../async/lazy-cached";
 import { cube3x3x3KPuzzleDefinition as experimentalCube3x3x3KPuzzleDefinition } from "../implementations/dynamic/3x3x3/3x3x3.kpuzzle.json";
 import { experimentalIs3x3x3Solved } from "../implementations/dynamic/3x3x3/puzzle-orientation";
 
@@ -37,3 +38,6 @@ export {
   PieceStickering as ExperimentalPieceStickering,
 } from "../stickerings/mask";
 export { experimentalStickerings } from "../stickerings/puzzle-stickerings";
+export const bigCubePuzzleOrientation = getCached(
+  () => import("../implementations/dynamic/big-cubes/big-puzzle-orientation"),
+);
