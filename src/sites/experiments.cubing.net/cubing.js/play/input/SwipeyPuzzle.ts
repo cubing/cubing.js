@@ -121,7 +121,7 @@ function constructTwistyPlayer(
     puzzle: puzzleName,
     controlPanel: "none",
     background: "none",
-    experimentalStickering: experimentalStickering ?? undefined,
+    experimentalStickering: experimentalStickering ?? null,
     visualization,
     tempoScale,
     experimentalSetupAlg: getSetup(),

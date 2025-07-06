@@ -137,7 +137,7 @@ export interface TwistyPlayerConfig {
   experimentalPuzzleDescription?: PuzzleDescriptionString;
   visualization?: VisualizationFormatWithAuto;
   hintFacelets?: HintFaceletStyleWithAuto;
-  experimentalStickering?: ExperimentalStickering;
+  experimentalStickering?: ExperimentalStickering | null;
   experimentalStickeringMaskOrbits?: ExperimentalStickeringMask | string;
   background?: BackgroundThemeWithAuto;
   colorScheme?: ColorSchemeWithAuto;
