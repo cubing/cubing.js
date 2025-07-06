@@ -76,7 +76,5 @@ export function experimentalIsBigCubeSolved(
   if (options.ignorePuzzleOrientation) {
     pattern = normalizeBigCubeOrientation(pattern);
   }
-  console.log({ pattern });
-  console.log({ p: pattern.kpuzzle.defaultPattern() });
   return pattern.isIdentical(pattern.kpuzzle.defaultPattern());
 }
