@@ -18,8 +18,18 @@ cube4x4x4.kpuzzle = getCached(async () => {
   const kpuzzle = await PGPuzzleLoader.prototype.kpuzzle.call(cube4x4x4);
   // TODO: pass up an option to do this instead.
   kpuzzle.definition.defaultPattern["CENTERS"].pieces = [
-    0, 0, 0, 0, 4, 4, 4, 4, 8, 8, 8, 8, 12, 12, 12, 12, 16, 16, 16, 16, 20, 20,
-    20, 20,
+    // U
+    0, 0, 0, 0,
+    // L
+    4, 4, 4, 4,
+    // F
+    8, 8, 8, 8,
+    // R
+    12, 12, 12, 12,
+    // B
+    16, 16, 16, 16,
+    // D
+    20, 20, 20, 20,
   ];
   return kpuzzle;
 });
