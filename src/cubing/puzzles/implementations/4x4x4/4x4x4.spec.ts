@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test";
-import { cube5x5x5 } from ".";
+import { cube4x4x4 } from ".";
 
-test("`experimentalIsSolved(…)` for 5×5×5", async () => {
-  const kpuzzle = await cube5x5x5.kpuzzle();
+test("`experimentalIsSolved(…)` for 4×4×4", async () => {
+  const kpuzzle = await cube4x4x4.kpuzzle();
 
   expect(
     kpuzzle.defaultPattern().experimentalIsSolved({
@@ -45,7 +45,6 @@ test("`experimentalIsSolved(…)` for 5×5×5", async () => {
       ignoreCenterOrientation: true,
     }),
   ).toBe(true);
-
   expect(
     kpuzzle.defaultPattern().applyAlg("[[m: e], U]").experimentalIsSolved({
       ignorePuzzleOrientation: true,
