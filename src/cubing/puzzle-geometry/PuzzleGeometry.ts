@@ -2375,7 +2375,11 @@ export class PuzzleGeometry {
     const r = [];
     const mvs = [];
     for (let i = 0; i < os.moveops.length; i++) {
-      let movename = `M_${externalName(this.notationMapper, os.movenames[i])}`;
+      let movename = os.movenames[i];
+      if (!os.forcenames[i]) {
+         movename = `M_${externalName(this.notationMapper, movename)}`;
+      }
+      movename = `M_${movename}`;
       let doinv = false;
       if (movename[movename.length - 1] === "'") {
         movename = movename.substring(0, movename.length - 1);
