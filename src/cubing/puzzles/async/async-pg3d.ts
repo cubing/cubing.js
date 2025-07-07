@@ -27,6 +27,19 @@ export async function asyncGetPuzzleGeometry(
   });
 }
 
+// When we need a base puzzle (when a user wants GAP or Mathematica
+// or KSolve output), or if we want to run Schreier-Sims or such,
+// we need a default base puzzle to work with (for instance, 333
+// without slice moves or oriented centers  is what people expect).
+// This function lets those operations behave more in line with
+// what people want.
+async function asyncGetBasePuzzleGeometry(
+  puzzleName: string,
+): Promise<PuzzleGeometry> {
+  const puzzleGeometry = await import("../../puzzle-geometry");
+  return puzzleGeometry.getPuzzleGeometryByName(puzzleName);
+}
+
 // TODO: can we cache the puzzleGeometry to avoid duplicate calls, without
 // wasting memory? Maybe just save the latest one for successive calls about the
 // same puzzle?
@@ -98,6 +111,13 @@ export class PGPuzzleLoader implements PuzzleLoader {
   #cachedPG: Promise<PuzzleGeometry> | undefined;
   pg(): Promise<PuzzleGeometry> {
     return (this.#cachedPG ??= asyncGetPuzzleGeometry(this.pgId ?? this.id));
+  }
+
+  #cachedBasePG: Promise<PuzzleGeometry> | undefined;
+  basePG(): Promise<PuzzleGeometry> {
+    return (this.#cachedBasePG ??= asyncGetBasePuzzleGeometry(
+      this.pgId ?? this.id,
+    ));
   }
 
   #cachedKPuzzle: Promise<KPuzzle> | undefined;
