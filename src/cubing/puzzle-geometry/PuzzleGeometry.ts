@@ -2377,7 +2377,7 @@ export class PuzzleGeometry {
     for (let i = 0; i < os.moveops.length; i++) {
       let movename = os.movenames[i];
       if (!os.forcenames[i]) {
-         movename = `M_${externalName(this.notationMapper, movename)}`;
+        movename = `M_${externalName(this.notationMapper, movename)}`;
       }
       movename = `M_${movename}`;
       let doinv = false;
