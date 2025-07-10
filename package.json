@@ -126,6 +126,7 @@
     "test-spec-bun-fast": "make test-spec-bun-fast",
     "test-spec-bun-with-coverage": "make test-spec-bun-with-coverage",
     "test-spec-dom": "make test-spec-dom",
+    "install-playwright": "make install-playwright",
     "test-spec-dom-with-coverage": "make test-spec-dom-with-coverage",
     "playwright-install": "make playwright-install",
     "test-src-import-restrictions": "make test-src-import-restrictions",

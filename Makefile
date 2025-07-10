@@ -151,12 +151,16 @@ test-spec-bun-fast: update-dependencies
 	env CUBING_JS_SKIP_SLOW_TESTS=true ${BUN} test
 
 .PHONY: test-spec-bun-with-coverage
-test-spec-bun-with-coverage: update-dependencies
+test-spec-bun-with-coverage: update-dependencies install-playwright
 	${BUN} test
 
 .PHONY: test-spec-dom
-test-spec-dom: update-dependencies
+test-spec-dom: update-dependencies install-playwright
 	${WEB_TEST_RUNNER}
+
+.PHONY: install-playwright
+install-playwright: update-dependencies
+	${BUNX} playwright install
 
 .PHONY: test-spec-dom-with-coverage
 test-spec-dom-with-coverage: update-dependencies
