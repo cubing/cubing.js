@@ -37,8 +37,9 @@ build: clean build-lib build-bin build-sites
 build-lib: build-lib-js build-lib-types
 
 .PHONY: build-lib-js
-build-lib-js: update-dependencies
-	${BUN_RUN} ./script/build/lib/build-lib-js.ts
+build-lib-js:
+	${BUN} build --target node --outfile ./.temp/build-lib-js.js 'script/build/lib/build-lib-js.ts'
+	${NODE} ./.temp/build-lib-js.js
 
 .PHONY: build-lib-types
 build-lib-types: update-dependencies

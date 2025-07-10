@@ -1,5 +1,5 @@
-import { mkdir, writeFile } from "node:fs/promises";
 import { type BuildOptions, build } from "esbuild";
+import { mkdir } from "node:fs/promises";
 import { packageEntryPointsWithSearchWorkerEntry } from "../common/package-info";
 
 // In theory we could set `packages: "external"` here and rely on `make
@@ -23,9 +23,12 @@ export const esmOptions: BuildOptions = {
 };
 
 const result = await build(esmOptions);
+console.log("a");
 
 await mkdir("./.temp", { recursive: true });
-await writeFile(
-  "./.temp/esbuild-metafile.json",
-  JSON.stringify(result.metafile),
-);
+console.log("b");
+// await writeFile(
+//   "./.temp/esbuild-metafile.json",
+//   JSON.stringify(result.metafile),
+// );
+console.log("c");
