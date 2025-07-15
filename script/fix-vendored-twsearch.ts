@@ -6,8 +6,16 @@ const DIR = fileURLToPath(
   new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url),
 );
 
-for (const fileName of await readdir(DIR)) {
-  const filePath = join(DIR, fileName);
+for (const dirEnt of await readdir(DIR, {
+  withFileTypes: true,
+  recursive: true,
+})) {
+  const { parentPath, name: fileName } = dirEnt;
+  // Note: we call this on `dirEnt` instead of destructuring `isDirectory` above, because that would produce an incorrect result: https://github.com/oven-sh/bun/issues/21099
+  if (dirEnt.isDirectory()) {
+    continue;
+  }
+  const filePath = join(parentPath, fileName);
   console.log("Fixing:", filePath);
   let contents = await readFile(filePath, "utf-8");
   switch (fileName) {
