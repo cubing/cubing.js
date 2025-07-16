@@ -1,6 +1,5 @@
-// Generated from `twsearch` v0.7.1-2-gb78aadd2
-
-import "./chunk-PPTLWOOB.js";
+// Generated from `twsearch` v0.7.2-4-g48fa9927
+import "./chunks/chunk-O7GLQNON.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -455,7 +454,7 @@ var twsearch_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./twsearch_wasm_bg-NHUYB5UW.js")).default;
+    const wasmUint8Array = (await import("./chunks/twsearch_wasm_bg-WOVCK52S.js")).default;
     await twsearch_wasm_default({ module_or_path: wasmUint8Array.buffer });
   })());
 }
@@ -482,3 +481,4 @@ export {
   wasmRandomScrambleForEvent2 as wasmRandomScrambleForEvent,
   wasmTwsearch2 as wasmTwsearch
 };
+//# sourceMappingURL=index.js.map
