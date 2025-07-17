@@ -4,11 +4,13 @@ import { ganConfig } from "./gan";
 import { giiKERConfig } from "./giiker";
 import { goCubeConfig } from "./gocube";
 import { heykubeConfig } from "./Heykube";
+import { qiyiConfig } from "./qiyi";
 
 const smartPuzzleConfigs = [
   ganConfig,
   goCubeConfig,
   heykubeConfig,
+  qiyiConfig,
   giiKERConfig, // GiiKER must be last, due to Xiaomi naming. TODO: enforce this using tests.
 ];
 
