@@ -201,7 +201,16 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
       async () =>
         instantiateModuleWorker(await searchWorkerURLEsbuildWorkaround()),
       "using the `esbuild` workaround",
-      "will",
+      // TODO: we will hopefully discontinue the `esbuild` workaround at some
+      // point, but `esbuild` has been stuck for 3 years on this issue. Because
+      // `esbuild` and Vite (which uses `esbuild`) are now dominating the
+      // ecosystem, this just causes a warning for a lot of devs/users that they
+      // can't do anything about. As frustrating as the situation is, the
+      // workaround is semantically fine (even if it's convoluted) and is
+      // preserved by `esbuild`-based flows in practice. So we suppress the
+      // warning in the medium-term but maintain long-term hope that we can
+      // remove it (and the other fallbacks as well).
+      null,
     ],
     [
       async () => instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL()),
