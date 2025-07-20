@@ -197,6 +197,12 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
       "using `import.meta.resolve(…)",
       null,
     ],
+    [
+      async () =>
+        instantiateModuleWorker(await searchWorkerURLEsbuildWorkaround()),
+      "using the `esbuild` workaround",
+      "will",
+    ],
     // TODO: This fallback should be lower (because it's less portable), but we need to try it earlier to work around https://github.com/parcel-bundler/parcel/issues/9051
     [
       instantiateModuleWorkerDirectlyForBrowser,
@@ -206,12 +212,6 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
     [
       async () => instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL()),
       "using `new URL(…, import.meta.url)`",
-      "will",
-    ],
-    [
-      async () =>
-        instantiateModuleWorker(await searchWorkerURLEsbuildWorkaround()),
-      "using the `esbuild` workaround",
       "will",
     ],
   ];
