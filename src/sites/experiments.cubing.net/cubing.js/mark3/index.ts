@@ -27,6 +27,9 @@ const numExtraScrambles = (() => {
 const eventSelect = document.querySelector("select")!;
 
 for (const [eventID, eventInfo] of Object.entries(twizzleEvents)) {
+  if (!eventInfo.scramblesImplemented) {
+    continue;
+  }
   const option = eventSelect.appendChild(document.createElement("option"));
   option.value = eventID;
   option.textContent = eventInfo.eventName;
