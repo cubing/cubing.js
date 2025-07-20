@@ -203,16 +203,15 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
       "using the `esbuild` workaround",
       "will",
     ],
-    // TODO: This fallback should be lower (because it's less portable), but we need to try it earlier to work around https://github.com/parcel-bundler/parcel/issues/9051
-    [
-      instantiateModuleWorkerDirectlyForBrowser,
-      "using inline `new URL(…, import.meta.url)`",
-      "may",
-    ],
     [
       async () => instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL()),
       "using `new URL(…, import.meta.url)`",
       "will",
+    ],
+    [
+      instantiateModuleWorkerDirectlyForBrowser,
+      "using inline `new URL(…, import.meta.url)`",
+      "may",
     ],
   ];
 
