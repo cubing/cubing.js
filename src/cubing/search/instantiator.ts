@@ -236,9 +236,9 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
       }
       return worker;
     } catch {
-      if (searchOutsideDebugGlobals.showWorkerInstantiationWarnings) {
-        console.warn(`${failed(description)}, falling back.`);
-      }
+      // if (searchOutsideDebugGlobals.showWorkerInstantiationWarnings) {
+      //   console.warn(`${failed(description)}, falling back.`);
+      // }
     }
   }
 
