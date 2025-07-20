@@ -288,6 +288,11 @@ prepublishOnly: update-dependencies
 .PHONY: postpublish
 postpublish: update-cdn update-create-cubing-app deploy
 
+.PHONY: postpublish-clear-bun-cache
+postpublish-clear-bun-cache:
+	# Ensure that we get the newly published `cubing` version in other `postpublish` steps.
+	bun pm cache rm
+
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
 
@@ -312,18 +317,18 @@ roll-vendored-twsearch:
 	make -C ../twsearch/ print-current-commit-hash >> ./src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
 	${BUN_RUN} script/fix-vendored-twsearch.ts
 
-.PHONY: update-create-cubing-app
-update-create-cubing-app:
-	cd ../create-cubing-app && make auto-publish
-
 .PHONY: update-cdn
-update-cdn:
+update-cdn: postpublish-clear-bun-cache
 	@echo "--------------------------------"
 	@echo "Updating CDN to the latest \`cubing.js\` release, per:"
 	@echo "https://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version"
 	@echo ""
 	test -d ../cdn.cubing.net/ || exit
 	cd ../cdn.cubing.net/ && make roll-cubing
+
+.PHONY: update-create-cubing-app
+update-create-cubing-app: postpublish-clear-bun-cache
+	cd ../create-cubing-app && make auto-publish
 
 ######## Only in `Makefile` ########
 
