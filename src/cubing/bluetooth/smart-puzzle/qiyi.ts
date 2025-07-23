@@ -1,9 +1,110 @@
+/* tslint:disable no-bitwise */
+
+import { type AlgLeaf, Move } from "cubing/alg";
+import { KPattern, type KPatternData, type KPuzzle } from "cubing/kpuzzle";
+import { puzzles } from "cubing/puzzles";
 import {
   importKey,
   unsafeDecryptBlock,
   unsafeEncryptBlock,
 } from "cubing/vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
 import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+
+const UUIDs = {
+  qiyiMainService: 0xfff0,
+  qiyiMainCharacteristic: 0xfff6,
+};
+
+const qiyiMoveToBlockMove: { [i: number]: Move } = {
+  1: new Move("L", -1),
+  2: new Move("L"),
+  3: new Move("R", -1),
+  4: new Move("R"),
+  5: new Move("D", -1),
+  6: new Move("D"),
+  7: new Move("U", -1),
+  8: new Move("U"),
+  9: new Move("F", -1),
+  10: new Move("F"),
+  11: new Move("B", -1),
+  12: new Move("B"),
+};
+
+const faceOrder = "LRDUFB";
+
+const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
+const reidCornerOrder = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
+
+interface PieceInfo {
+  piece: number;
+  orientation: number;
+}
+
+function rotateLeft(s: string, i: number): string {
+  return s.slice(i) + s.slice(0, i);
+}
+
+const pieceMap: { [s: string]: PieceInfo } = {};
+// TODO: Condense the for loops.
+reidEdgeOrder.forEach((edge, idx) => {
+  for (let i = 0; i < 2; i++) {
+    pieceMap[rotateLeft(edge, i)] = { piece: idx, orientation: i };
+  }
+});
+reidCornerOrder.forEach((corner, idx) => {
+  for (let i = 0; i < 3; i++) {
+    pieceMap[rotateLeft(corner, i)] = { piece: idx, orientation: i };
+  }
+});
+
+//           ┌──┬──┬──┐
+//           │00│01│02│
+//           ├──┼──┼──┤
+//           │03│04│05│
+//           ├──┼──┼──┤
+//           │06│07│08│
+//           └──┴──┴──┘
+// ┌──┬──┬──┐┌──┬──┬──┐┌──┬──┬──┐┌──┬──┬──┐
+// │36│37│38││18│19│20││09│10│11││45│46│47│
+// ├──┼──┼──┤├──┼──┼──┤├──┼──┼──┤├──┼──┼──┤
+// │39│40│41││21│22│23││12│13│14││48│49│50│
+// ├──┼──┼──┤├──┼──┼──┤├──┼──┼──┤├──┼──┼──┤
+// │42│43│44││24│25│26││15│16│17││51│52│53│
+// └──┴──┴──┘└──┴──┴──┘└──┴──┴──┘└──┴──┴──┘
+//           ┌──┬──┬──┐
+//           │27│28│29│
+//           ├──┼──┼──┤
+//           │30│31│32│
+//           ├──┼──┼──┤
+//           │33│34│35│
+//           └──┴──┴──┘
+
+const qiyiCornerMappings: number[][] = [
+  [8, 20, 9], // UFR,
+  [2, 11, 45], // URB,
+  [0, 47, 36], // UBL,
+  [6, 38, 18], // ULF,
+  [29, 15, 26], // DRF,
+  [27, 24, 44], // DFL,
+  [33, 42, 53], // DLB,
+  [35, 51, 17], // DBR,
+];
+
+const qiyiEdgeMappings: number[][] = [
+  // UF UR UB UL DF DR DB DL FR FL BR BL
+  [7, 19], // UF,
+  [5, 10], // UR,
+  [1, 46], // UB,
+  [3, 37], // UL,
+  [28, 25], // DF,
+  [32, 16], // DR,
+  [34, 52], // DB,
+  [30, 43], // DL,
+  [23, 12], // FR,
+  [21, 41], // FL,
+  [48, 14], // BR,
+  [50, 39], // BL,
+];
 
 /**
  * Generates the checksum of the data using the CRC-16 MODBUS algorithm
@@ -53,10 +154,83 @@ function generateChecksum(data: number[]) {
   return crc;
 }
 
+/**
+ * Prepares a message to be sent from the app to the cube by adding a checksum,
+ * padding the message, and encrypting it with AES-EBC.
+ * @param message the message to be sent to the cube, without the checksum
+ * @param aesKey AES-EBC encryption key
+ * @returns prepared message (including checksum, padding, and encryption)
+ */
+async function prepareMessage(
+  message: number[],
+  aesKey: CryptoKey,
+): Promise<Uint8Array<ArrayBuffer>> {
+  const checksum = generateChecksum(message);
+  message.push(checksum & 0xff);
+  message.push(checksum >> 8);
+
+  const paddedLength = Math.ceil(message.length / 16) * 16;
+  const paddedArray = new Uint8Array([
+    ...message,
+    ...Array(paddedLength - message.length).fill(0),
+  ]);
+
+  const encryptedMessage = new Uint8Array(paddedLength);
+  for (let i = 0; i < paddedArray.length / 16; i++) {
+    const encryptedBlock = new Uint8Array(
+      await unsafeEncryptBlock(aesKey, paddedArray.slice(i * 16, (i + 1) * 16)),
+    );
+    encryptedMessage.set(encryptedBlock, i * 16);
+  }
+  return encryptedMessage;
+}
+
+/**
+ * Decrypts a message sent by the cube, using AES-EBC
+ * @param encryptedMessage the encryped message sent by the cube
+ * @param aesKey AES-EBC encryption key
+ * @returns decrypted message
+ */
+async function decryptMessage(
+  encryptedMessage: Uint8Array,
+  aesKey: CryptoKey,
+): Promise<Uint8Array<ArrayBuffer>> {
+  const decryptedMessage = new Uint8Array(encryptedMessage.length);
+  for (let i = 0; i < encryptedMessage.length / 16; i++) {
+    const decryptedBlock = new Uint8Array(
+      await unsafeDecryptBlock(
+        aesKey,
+        encryptedMessage.slice(i * 16, (i + 1) * 16),
+      ),
+    );
+    decryptedMessage.set(decryptedBlock, i * 16);
+  }
+  return decryptedMessage;
+}
+
+/**
+ * Maximum amount of timestamps stored, to limit memory usage, while
+ * avoiding performing duplicate moves on the cube. 12 was chosen because
+ * there are 55 bytes for previous moves (each one is five bytes), plus
+ * one move, stored as the latest one.
+ */
+const MAX_TIMESTAMP_COUNT = 12;
+const TIMESTAMP_SCALE = 1.6;
+
+/** @category Smart Puzzles */
 export class QiyiCube extends BluetoothPuzzle {
+  private latestTimestamp: number | undefined;
+  private allTimeStamps: Set<number>; // Without this set, moves are constantly duplicated
+  private allTimeStampsQueue: number[];
+  private pieceState: number[] = [
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4,
+    4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5,
+    5, 5, 5, 5,
+  ];
+  private batteryLevel: number = 100;
+
   public static async connect(
     server: BluetoothRemoteGATTServer,
-    device: BluetoothDevice,
   ): Promise<BluetoothPuzzle> {
     const aesKey = await importKey(
       new Uint8Array([
@@ -64,9 +238,27 @@ export class QiyiCube extends BluetoothPuzzle {
         8,
       ]),
     );
+    return new QiyiCube(await puzzles["3x3x3"].kpuzzle(), aesKey, server);
+  }
 
-    const mainService = await server.getPrimaryService(0xfff0);
-    const mainCharacteristic = await mainService.getCharacteristic(0xfff6);
+  public constructor(
+    private kpuzzle: KPuzzle,
+    private aesKey: CryptoKey,
+    private server: BluetoothRemoteGATTServer,
+  ) {
+    super();
+    this.sendAppHello().then(this.startNotifications.bind(this));
+    this.allTimeStamps = new Set();
+    this.allTimeStampsQueue = [];
+  }
+
+  public async sendAppHello() {
+    const mainService = await this.server.getPrimaryService(
+      UUIDs.qiyiMainService,
+    );
+    const mainCharacteristic = await mainService.getCharacteristic(
+      UUIDs.qiyiMainCharacteristic,
+    );
 
     const appHello = [
       0xfe, // All messages start with 0xfe
@@ -90,59 +282,170 @@ export class QiyiCube extends BluetoothPuzzle {
       0xcc, // MAC address, backwards (hard coded for now)
     ];
 
-    const checksum = generateChecksum(appHello);
-    appHello.push(checksum & 0xff);
-    appHello.push(checksum >> 8);
+    const appHelloMessage = await prepareMessage(appHello, this.aesKey);
+    await mainCharacteristic.writeValue(appHelloMessage);
+  }
 
-    const paddedLength = Math.ceil(appHello.length / 16) * 16;
-    const paddedArray = new Uint8Array([
-      ...appHello,
-      ...Array(paddedLength - appHello.length).fill(0),
-    ]);
+  public async startNotifications() {
+    const mainService = await this.server.getPrimaryService(
+      UUIDs.qiyiMainService,
+    );
+    const mainCharacteristic = await mainService.getCharacteristic(
+      UUIDs.qiyiMainCharacteristic,
+    );
 
-    const encryptedMessage = new Uint8Array(paddedLength);
-    for (let i = 0; i < paddedArray.length / 16; i++) {
-      const encryptedBlock = new Uint8Array(
-        await unsafeEncryptBlock(
-          aesKey,
-          paddedArray.slice(i * 16, (i + 1) * 16),
-        ),
-      );
-      encryptedMessage.set(encryptedBlock, i * 16);
-    }
-
-    await mainCharacteristic.writeValue(encryptedMessage);
-    await mainCharacteristic.startNotifications();
     mainCharacteristic.addEventListener(
       "characteristicvaluechanged",
-      async (event) => {
-        const message = new Uint8Array(event.target.value.buffer);
-        const decryptedMessage = new Uint8Array(message.length);
-        for (let i = 0; i < message.length / 16; i++) {
-          const decryptedBlock = new Uint8Array(
-            await unsafeDecryptBlock(
-              aesKey,
-              message.slice(i * 16, (i + 1) * 16),
-            ),
-          );
-          decryptedMessage.set(decryptedBlock, i * 16);
-        }
-        console.log(decryptedMessage);
-      },
+      this.cubeMessageHandler.bind(this),
     );
-    // console.log(await unsafeDecryptBlock(aesKey, new Uint8Array(cubeHello.slice(0, 16))))
+    await mainCharacteristic.startNotifications();
+  }
 
-    const cube = new QiyiCube();
-    return cube;
+  public async cubeMessageHandler(event: Event) {
+    const characteristic = event.target as BluetoothRemoteGATTCharacteristic;
+    const decryptedMessage = await decryptMessage(
+      new Uint8Array(characteristic.value!.buffer),
+      this.aesKey,
+    );
+
+    const opCode = decryptedMessage[2];
+    let needsAck = false;
+    switch (opCode) {
+      case 0x02: {
+        const initialState = decryptedMessage.slice(7, 34);
+        this.updateState(initialState);
+        this.batteryLevel = decryptedMessage[35];
+        needsAck = true;
+        break;
+      }
+
+      case 0x03: {
+        const state = decryptedMessage.slice(7, 34);
+        this.updateState(state);
+
+        const latestMove = qiyiMoveToBlockMove[decryptedMessage[34]];
+        const latestTimestamp = new DataView(
+          decryptedMessage.slice(3, 7).buffer,
+        ).getInt32(0);
+
+        const moves = [[latestMove, latestTimestamp]];
+
+        const previousMoves = new DataView(
+          decryptedMessage.slice(36, 91).buffer,
+        );
+        for (
+          let i = previousMoves.byteLength - 1;
+          i > 0 && previousMoves.getUint8(i) !== 255;
+          i -= 5
+        ) {
+          const move = qiyiMoveToBlockMove[previousMoves.getUint8(i)];
+          const timestamp = previousMoves.getUint32(i - 4);
+
+          if (
+            this.latestTimestamp === undefined ||
+            timestamp <= this.latestTimestamp
+          ) {
+            continue;
+          }
+
+          moves.push([move, timestamp]);
+        }
+
+        moves.sort((a, b) => (a[1] as number) - (b[1] as number));
+
+        for (const move of moves) {
+          const latestAlgLeaf = move[0] as AlgLeaf;
+          const timeStamp = Math.round((move[1] as number) / TIMESTAMP_SCALE);
+          if (!this.allTimeStamps.has(timeStamp)) {
+            this.dispatchAlgLeaf({
+              latestAlgLeaf,
+              timeStamp,
+            });
+            this.allTimeStamps.add(timeStamp);
+            this.allTimeStampsQueue.push(timeStamp);
+            if (this.allTimeStampsQueue.length > MAX_TIMESTAMP_COUNT) {
+              this.allTimeStamps.delete(this.allTimeStampsQueue.shift()!);
+            }
+          }
+        }
+
+        this.latestTimestamp = latestTimestamp;
+
+        needsAck = decryptedMessage[91] === 1;
+        break;
+      }
+
+      default:
+        console.error(`Opcode not implemented: ${opCode}`);
+        break;
+    }
+
+    if (needsAck) {
+      await characteristic.writeValue(
+        await prepareMessage(
+          [0xfe, 0x09, ...decryptedMessage.slice(2, 7)],
+          this.aesKey,
+        ),
+      );
+    }
+  }
+
+  private updateState(state: Uint8Array) {
+    this.pieceState = Array.from(state).flatMap((twoPieces) => [
+      twoPieces & 0xf,
+      twoPieces >> 4,
+    ]);
   }
 
   public override name(): string | undefined {
-    return "myname";
+    return this.server.device.name;
   }
 
   public override disconnect(): void {
     console.log("Calling the disconnect method.");
     return;
+  }
+
+  public override async getPattern(): Promise<KPattern> {
+    const patternData: KPatternData = {
+      CORNERS: {
+        pieces: [],
+        orientation: [],
+      },
+      EDGES: {
+        pieces: [],
+        orientation: [],
+      },
+      CENTERS: {
+        pieces: [0, 1, 2, 3, 4, 5],
+        orientation: [0, 0, 0, 0, 0, 0],
+        orientationMod: [1, 1, 1, 1, 1, 1],
+      },
+    };
+
+    for (const cornerMapping of qiyiCornerMappings) {
+      const pieceInfo: PieceInfo =
+        pieceMap[
+          cornerMapping.map((i) => faceOrder[this.pieceState[i]]).join("")
+        ];
+      patternData["CORNERS"].pieces.push(pieceInfo.piece);
+      patternData["CORNERS"].orientation.push(pieceInfo.orientation);
+    }
+
+    for (const edgeMapping of qiyiEdgeMappings) {
+      const pieceInfo: PieceInfo =
+        pieceMap[
+          edgeMapping.map((i) => faceOrder[this.pieceState[i]]).join("")
+        ];
+      patternData["EDGES"].pieces.push(pieceInfo.piece);
+      patternData["EDGES"].orientation.push(pieceInfo.orientation);
+    }
+
+    return new KPattern(this.kpuzzle, patternData);
+  }
+
+  public getBattery(): number {
+    return this.batteryLevel;
   }
 }
 
@@ -152,8 +455,7 @@ export const qiyiConfig: BluetoothConfig<BluetoothPuzzle> = {
   filters: [
     {
       namePrefix: "QY-QY",
-      services: [0xfff0, 0x1801, "5833ff01-9b8b-5191-6142-22a4536ef123"],
     },
   ],
-  optionalServices: [],
+  optionalServices: [UUIDs.qiyiMainService],
 };
