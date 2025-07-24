@@ -1,13 +1,13 @@
 /* tslint:disable no-bitwise */
 
-import { type AlgLeaf, Move } from "cubing/alg";
-import { KPattern, type KPatternData, type KPuzzle } from "cubing/kpuzzle";
-import { puzzles } from "cubing/puzzles";
+import { type AlgLeaf, Move } from "../../alg";
+import { KPattern, type KPatternData, type KPuzzle } from "../../kpuzzle";
+import { puzzles } from "../../puzzles";
 import {
   importKey,
   unsafeDecryptBlock,
   unsafeEncryptBlock,
-} from "cubing/vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
+} from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
 import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
 const UUIDs = {
@@ -91,7 +91,6 @@ const qiyiCornerMappings: number[][] = [
 ];
 
 const qiyiEdgeMappings: number[][] = [
-  // UF UR UB UL DF DR DB DL FR FL BR BL
   [7, 19], // UF,
   [5, 10], // UR,
   [1, 46], // UB,
@@ -209,6 +208,28 @@ async function decryptMessage(
 }
 
 /**
+ * Guess the MAC address of the cube, based on its name.
+ *
+ * A QiYi smart cube device with the name 'QY-QYSC-S-A94B' has a MAC address of CC:A3:00:00:A9:4B.
+ * @param device
+ * @returns array of 8-bit integers equal to the MAC address in order
+ */
+function getMacAddress(device: BluetoothDevice): number[] | undefined {
+  if (device.name === undefined) {
+    return;
+  }
+
+  return [
+    0xcc,
+    0xa3,
+    0x00,
+    0x00,
+    parseInt(device.name.slice(10, 12), 16),
+    parseInt(device.name.slice(12, 14), 16),
+  ];
+}
+
+/**
  * Maximum amount of timestamps stored, to limit memory usage, while
  * avoiding performing duplicate moves on the cube. 12 was chosen because
  * there are 55 bytes for previous moves (each one is five bytes), plus
@@ -217,6 +238,8 @@ async function decryptMessage(
 const MAX_TIMESTAMP_COUNT = 12;
 const TIMESTAMP_SCALE = 1.6;
 
+const CUBE_HELLO = 0x02;
+const STATE_CHANGE = 0x03;
 /** @category Smart Puzzles */
 export class QiyiCube extends BluetoothPuzzle {
   private latestTimestamp: number | undefined;
@@ -260,26 +283,23 @@ export class QiyiCube extends BluetoothPuzzle {
       UUIDs.qiyiMainCharacteristic,
     );
 
+    const reverseMac = getMacAddress(this.server.device)!.reverse();
+
     const appHello = [
-      0xfe, // All messages start with 0xfe
-      0x15, // Length (always 21 for APP HELLO)
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x00, // ??
-      0x4b, // MAC address, backwards (hard coded for now)
-      0xa9, // MAC address, backwards (hard coded for now)
-      0x00, // MAC address, backwards (hard coded for now)
-      0x00, // MAC address, backwards (hard coded for now)
-      0xa3, // MAC address, backwards (hard coded for now)
-      0xcc, // MAC address, backwards (hard coded for now)
+      0xfe,
+      0x15,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      ...reverseMac,
     ];
 
     const appHelloMessage = await prepareMessage(appHello, this.aesKey);
@@ -311,7 +331,7 @@ export class QiyiCube extends BluetoothPuzzle {
     const opCode = decryptedMessage[2];
     let needsAck = false;
     switch (opCode) {
-      case 0x02: {
+      case CUBE_HELLO: {
         const initialState = decryptedMessage.slice(7, 34);
         this.updateState(initialState);
         this.batteryLevel = decryptedMessage[35];
@@ -319,7 +339,7 @@ export class QiyiCube extends BluetoothPuzzle {
         break;
       }
 
-      case 0x03: {
+      case STATE_CHANGE: {
         const state = decryptedMessage.slice(7, 34);
         this.updateState(state);
 
@@ -402,8 +422,7 @@ export class QiyiCube extends BluetoothPuzzle {
   }
 
   public override disconnect(): void {
-    console.log("Calling the disconnect method.");
-    return;
+    this.server.disconnect();
   }
 
   public override async getPattern(): Promise<KPattern> {
@@ -451,10 +470,10 @@ export class QiyiCube extends BluetoothPuzzle {
 
 export const qiyiConfig: BluetoothConfig<BluetoothPuzzle> = {
   connect: QiyiCube.connect.bind(QiyiCube),
-  prefixes: ["QY-QY"],
+  prefixes: ["QY-QYSC"],
   filters: [
     {
-      namePrefix: "QY-QY",
+      namePrefix: "QY-QYSC",
     },
   ],
   optionalServices: [UUIDs.qiyiMainService],
