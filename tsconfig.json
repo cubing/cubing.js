@@ -3,7 +3,6 @@
   "compilerOptions": {
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "noEmit": true,
-    "verbatimModuleSyntax": true,
     "rootDir": "./",
     "types": ["web-bluetooth", "dom-speech-recognition"],
     "allowJs": true,
