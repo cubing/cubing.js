@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
 import { type AlgLeaf, Move } from "../../alg";
-import { KPattern, type KPatternData, type KPuzzle } from "../../kpuzzle";
+import { KPattern, type KPuzzle } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import {
   importKey,
@@ -9,6 +9,7 @@ import {
   unsafeEncryptBlock,
 } from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
 import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import { getPatternData } from "./common";
 
 const UUIDs = {
   qiyiMainService: 0xfff0,
@@ -31,31 +32,6 @@ const qiyiMoveToBlockMove: { [i: number]: Move } = {
 };
 
 const faceOrder = "LRDUFB";
-
-const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
-const reidCornerOrder = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
-
-interface PieceInfo {
-  piece: number;
-  orientation: number;
-}
-
-function rotateLeft(s: string, i: number): string {
-  return s.slice(i) + s.slice(0, i);
-}
-
-const pieceMap: { [s: string]: PieceInfo } = {};
-// TODO: Condense the for loops.
-reidEdgeOrder.forEach((edge, idx) => {
-  for (let i = 0; i < 2; i++) {
-    pieceMap[rotateLeft(edge, i)] = { piece: idx, orientation: i };
-  }
-});
-reidCornerOrder.forEach((corner, idx) => {
-  for (let i = 0; i < 3; i++) {
-    pieceMap[rotateLeft(corner, i)] = { piece: idx, orientation: i };
-  }
-});
 
 //           ┌──┬──┬──┐
 //           │00│01│02│
@@ -155,9 +131,9 @@ function generateChecksum(data: number[]) {
 
 /**
  * Prepares a message to be sent from the app to the cube by adding a checksum,
- * padding the message, and encrypting it with AES-EBC.
+ * padding the message, and encrypting it with AES-ECB.
  * @param message the message to be sent to the cube, without the checksum
- * @param aesKey AES-EBC encryption key
+ * @param aesKey AES-ECB encryption key
  * @returns prepared message (including checksum, padding, and encryption)
  */
 async function prepareMessage(
@@ -245,7 +221,7 @@ export class QiyiCube extends BluetoothPuzzle {
   private latestTimestamp: number | undefined;
   private allTimeStamps: Set<number>; // Without this set, moves are constantly duplicated
   private allTimeStampsQueue: number[];
-  private pieceState: number[] = [
+  private stickers: number[] = [
     3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4,
     4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5,
     5, 5, 5, 5,
@@ -411,7 +387,7 @@ export class QiyiCube extends BluetoothPuzzle {
   }
 
   private updateState(state: Uint8Array) {
-    this.pieceState = Array.from(state).flatMap((twoPieces) => [
+    this.stickers = Array.from(state).flatMap((twoPieces) => [
       twoPieces & 0xf,
       twoPieces >> 4,
     ]);
@@ -426,41 +402,15 @@ export class QiyiCube extends BluetoothPuzzle {
   }
 
   public override async getPattern(): Promise<KPattern> {
-    const patternData: KPatternData = {
-      CORNERS: {
-        pieces: [],
-        orientation: [],
-      },
-      EDGES: {
-        pieces: [],
-        orientation: [],
-      },
-      CENTERS: {
-        pieces: [0, 1, 2, 3, 4, 5],
-        orientation: [0, 0, 0, 0, 0, 0],
-        orientationMod: [1, 1, 1, 1, 1, 1],
-      },
-    };
-
-    for (const cornerMapping of qiyiCornerMappings) {
-      const pieceInfo: PieceInfo =
-        pieceMap[
-          cornerMapping.map((i) => faceOrder[this.pieceState[i]]).join("")
-        ];
-      patternData["CORNERS"].pieces.push(pieceInfo.piece);
-      patternData["CORNERS"].orientation.push(pieceInfo.orientation);
-    }
-
-    for (const edgeMapping of qiyiEdgeMappings) {
-      const pieceInfo: PieceInfo =
-        pieceMap[
-          edgeMapping.map((i) => faceOrder[this.pieceState[i]]).join("")
-        ];
-      patternData["EDGES"].pieces.push(pieceInfo.piece);
-      patternData["EDGES"].orientation.push(pieceInfo.orientation);
-    }
-
-    return new KPattern(this.kpuzzle, patternData);
+    return new KPattern(
+      this.kpuzzle,
+      getPatternData(
+        this.stickers,
+        faceOrder,
+        qiyiEdgeMappings,
+        qiyiCornerMappings,
+      ),
+    );
   }
 
   public getBattery(): number {
