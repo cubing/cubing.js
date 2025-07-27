@@ -246,7 +246,8 @@ export class QiyiCube extends BluetoothPuzzle {
     private server: BluetoothRemoteGATTServer,
   ) {
     super();
-    this.sendAppHello().then(this.startNotifications.bind(this));
+    this.sendAppHello();
+    this.startNotifications();
     this.allTimeStamps = new Set();
     this.allTimeStampsQueue = [];
   }
@@ -278,8 +279,11 @@ export class QiyiCube extends BluetoothPuzzle {
       ...reverseMac,
     ];
 
-    const appHelloMessage = await prepareMessage(appHello, this.aesKey);
-    await mainCharacteristic.writeValue(appHelloMessage);
+    for (let i = 0; i < 8; i++) {
+      appHello[16] = i;
+      const appHelloMessage = await prepareMessage(appHello, this.aesKey);
+      await mainCharacteristic.writeValue(appHelloMessage);
+    }
   }
 
   public async startNotifications() {
