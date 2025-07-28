@@ -1,7 +1,7 @@
 // Note: we could use the `unsafe-raw-aes` npm package instead. But:
 //
 // 1. This is a rather small amount of code, thanks to a clever hack of the Web Crypto API.
-// 2. This code is used (and therefore loaded) only for Gan cube decoding, and unlikely to be needed directly by projects using `cubing.js`.
+// 2. This code is used (and therefore loaded) only for smart cube decoding, and unlikely to be needed directly by projects using `cubing.js`.
 // 3. A dependency called `unsafe-raw-aes` would (rightfully) raise some eyebrows.
 //
 // So we just vendor the entire file instead.
