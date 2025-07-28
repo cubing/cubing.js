@@ -262,27 +262,31 @@ export class QiyiCube extends BluetoothPuzzle {
       UUIDs.qiyiMainCharacteristic,
     );
 
-    const reverseMac = getMacAddress(this.server.device)!.reverse();
+    // Values of `0x00` and `0x01` have been observed for the 4th byte of the
+    // MAC in the wild. We send some larger values for future-proofing, as the
+    // QiYi cube doesn't seem to mind.
+    for (let macGuessCounter = 0; macGuessCounter < 8; macGuessCounter++) {
+      const mac = getMacAddress(this.server.device)!;
+      mac[3] = macGuessCounter;
+      const reversedMac = mac.reverse();
 
-    const appHello = [
-      0xfe,
-      0x15,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      ...reverseMac,
-    ];
+      const appHello = [
+        0xfe,
+        0x15,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        ...reversedMac,
+      ];
 
-    for (let i = 0; i < 8; i++) {
-      appHello[15] = i;
       const appHelloMessage = await prepareMessage(appHello, this.aesKey);
       await mainCharacteristic.writeValue(appHelloMessage);
     }
