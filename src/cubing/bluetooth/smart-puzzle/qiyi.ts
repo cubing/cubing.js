@@ -140,14 +140,16 @@ async function prepareMessage(
   message: number[],
   aesKey: CryptoKey,
 ): Promise<Uint8Array<ArrayBuffer>> {
-  const checksum = generateChecksum(message);
-  message.push(checksum & 0xff);
-  message.push(checksum >> 8);
+  // TODO: this directly inside the `ArrayBugger.`
+  const messageCopyForChecksum = structuredClone(message);
+  const checksum = generateChecksum(messageCopyForChecksum);
+  messageCopyForChecksum.push(checksum & 0xff);
+  messageCopyForChecksum.push(checksum >> 8);
 
-  const paddedLength = Math.ceil(message.length / 16) * 16;
+  const paddedLength = Math.ceil(messageCopyForChecksum.length / 16) * 16;
   const paddedArray = new Uint8Array([
-    ...message,
-    ...Array(paddedLength - message.length).fill(0),
+    ...messageCopyForChecksum,
+    ...Array(paddedLength - messageCopyForChecksum.length).fill(0),
   ]);
 
   const encryptedMessage = new Uint8Array(paddedLength);
@@ -280,7 +282,7 @@ export class QiyiCube extends BluetoothPuzzle {
     ];
 
     for (let i = 0; i < 8; i++) {
-      appHello[16] = i;
+      appHello[15] = i;
       const appHelloMessage = await prepareMessage(appHello, this.aesKey);
       await mainCharacteristic.writeValue(appHelloMessage);
     }
