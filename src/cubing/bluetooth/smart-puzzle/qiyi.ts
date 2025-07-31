@@ -248,8 +248,7 @@ export class QiyiCube extends BluetoothPuzzle {
     private server: BluetoothRemoteGATTServer,
   ) {
     super();
-    this.sendAppHello();
-    this.startNotifications();
+    this.startNotifications().then(this.sendAppHello.bind(this));
     this.allTimeStamps = new Set();
     this.allTimeStampsQueue = [];
   }
