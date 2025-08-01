@@ -55,6 +55,11 @@ class Square1TupleFormatter {
 }
 const square1TupleFormatterInstance = new Square1TupleFormatter();
 
+export interface GroupingModifications {
+  alg?: Alg;
+  amount?: number;
+}
+
 /** @category Alg Nodes */
 export class Grouping extends AlgCommon<Grouping> {
   readonly #quantumWithAmount: QuantumWithAmount<Alg>;
@@ -80,6 +85,13 @@ export class Grouping extends AlgCommon<Grouping> {
 
   get amount(): number {
     return this.#quantumWithAmount.amount;
+  }
+
+  modified(modifications: GroupingModifications): Grouping {
+    return new Grouping(
+      modifications.alg ?? this.alg,
+      modifications.amount ?? this.amount,
+    );
   }
 
   /** @deprecated */

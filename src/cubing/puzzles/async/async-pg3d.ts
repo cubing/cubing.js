@@ -7,7 +7,8 @@ import { KPuzzle, type KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import { PLazy } from "../../vendor/mit/p-lazy/p-lazy";
-import type { PuzzleLoader } from "../PuzzleLoader";
+import { cubeMirrorTransforms } from "../implementations/3x3x3";
+import type { AlgTransformData, PuzzleLoader } from "../PuzzleLoader";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,
@@ -146,6 +147,7 @@ export class CubePGPuzzleLoader extends PGPuzzleLoader {
   }
   stickerings = () =>
     cubeLikeStickeringList(this.id as PuzzleID, { use3x3x3Fallbacks: true });
+  algTransformData: AlgTransformData = cubeMirrorTransforms;
 }
 
 export function puzzleSpecificSimplifyOptionsPromise(

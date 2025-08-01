@@ -9,6 +9,7 @@ import {
   cubeLikeStickeringMask,
 } from "../../stickerings/cube-like-stickerings";
 import type { StickeringMask } from "../../stickerings/mask";
+import { cubeMirrorTransforms } from "../3x3x3";
 
 /** @category Specific Puzzles */
 export const cube2x2x2: PuzzleLoader = {
@@ -38,4 +39,5 @@ export const cube2x2x2: PuzzleLoader = {
   ): Promise<StickeringMask> => cubeLikeStickeringMask(cube2x2x2, stickering),
   stickerings: () =>
     cubeLikeStickeringList("2x2x2", { use3x3x3Fallbacks: true }),
+  algTransformData: cubeMirrorTransforms,
 };

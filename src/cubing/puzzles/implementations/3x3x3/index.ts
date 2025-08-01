@@ -3,7 +3,7 @@ import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
 import { experimental3x3x3KPuzzle } from "../../cubing-private";
-import type { PuzzleLoader } from "../../PuzzleLoader";
+import type { AlgTransformData, PuzzleLoader } from "../../PuzzleLoader";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,
@@ -11,6 +11,48 @@ import {
 import type { StickeringMask } from "../../stickerings/mask";
 import { cube3x3x3KeyMapping } from "./cube3x3x3KeyMapping";
 import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
+
+export const cubeMirrorTransforms: AlgTransformData = {
+  "↔ Mirror (M)": {
+    replaceMovesByFamily: {
+      L: "R",
+      R: "L",
+      l: "r",
+      r: "l",
+      Lw: "Rw",
+      Rw: "Lw",
+      Lv: "Rv",
+      Rv: "Lv",
+    },
+    invertExceptByFamily: new Set(["x", "M", "m"]),
+  },
+  "⤢ Mirror (S)": {
+    replaceMovesByFamily: {
+      F: "B",
+      B: "F",
+      f: "b",
+      b: "f",
+      Fw: "Bw",
+      Bw: "Fw",
+      Fv: "Bv",
+      Bv: "Fv",
+    },
+    invertExceptByFamily: new Set(["z", "S", "s"]),
+  },
+  "↕ Mirror (E)": {
+    replaceMovesByFamily: {
+      U: "D",
+      D: "U",
+      u: "d",
+      d: "u",
+      Uw: "Dw",
+      Dw: "Uw",
+      Uv: "Dv",
+      Dv: "Uv",
+    },
+    invertExceptByFamily: new Set(["y", "E", "e"]),
+  },
+};
 
 /** @category Specific Puzzles */
 export const cube3x3x3 = {
@@ -42,4 +84,5 @@ export const cube3x3x3 = {
   stickerings: () => cubeLikeStickeringList("3x3x3"),
   puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,
   keyMapping: async () => cube3x3x3KeyMapping, // TODO: async loading
+  algTransformData: cubeMirrorTransforms,
 } satisfies PuzzleLoader;

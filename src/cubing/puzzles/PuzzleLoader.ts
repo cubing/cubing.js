@@ -7,6 +7,16 @@ import type { StickeringMask } from "./stickerings/mask";
 
 export type KeyMapping = { [keyCode: string]: AlgLeaf };
 
+export type AlgTransformData = Record<
+  string,
+  {
+    replaceMovesByFamily: Record<string, string>;
+    // - `undefined`: do not invert any moves
+    // - not `undefined`: invert any moves not in the set (simultaneous with any family replacement)
+    invertExceptByFamily?: Set<string>;
+  }
+>;
+
 export interface PuzzleLoader {
   id: string;
   // shortName?: string;
@@ -28,6 +38,7 @@ export interface PuzzleLoader {
   puzzleSpecificSimplifyOptions?: PuzzleSpecificSimplifyOptions;
   puzzleSpecificSimplifyOptionsPromise?: Promise<PuzzleSpecificSimplifyOptions>; // TODO
   keyMapping?: () => Promise<KeyMapping>; // TODO: async getter
+  algTransformData?: AlgTransformData;
 }
 
 // TODO: consolidate the `puzzleSpecificSimplifyOptionsPromise` with `puzzleSpecificSimplifyOptions` somehow, so that we don't have to do this.

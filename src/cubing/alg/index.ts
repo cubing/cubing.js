@@ -10,6 +10,7 @@ export { Alg } from "./Alg";
 export { AlgBuilder } from "./AlgBuilder";
 export * from "./alg-nodes";
 export type { AlgBranch, AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
+export type { GroupingModifications } from "./alg-nodes/containers/Grouping";
 export type { MoveModifications } from "./alg-nodes/leaves/Move";
 export { setAlgDebug } from "./debug";
 export { Example } from "./example";

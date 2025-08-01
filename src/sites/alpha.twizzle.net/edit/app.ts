@@ -1,3 +1,4 @@
+import type { AlgTransformData } from "cubing/puzzles/cubing-private";
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
 import { puzzles } from "../../../cubing/puzzles";
@@ -25,6 +26,7 @@ import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/
 import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
 import "../../../cubing/twisty/views/stream/TwistyStreamSource";
+import { transformAlg } from "../../../cubing/puzzles/cubing-private";
 import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
@@ -329,6 +331,7 @@ class ControlPane {
   public hintFaceletCheckbox: HTMLInputElement;
   public show2DCheckbox: HTMLInputElement;
   public toolGrid: ButtonGrid;
+  public transformGrid: ButtonGrid;
   public examplesGrid: ButtonGrid;
   private tempoDisplay: HTMLSpanElement;
   private caretNISSInfo: HTMLElement;
@@ -506,6 +509,21 @@ class ControlPane {
       this.onToolAction.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
     );
 
+    this.transformGrid = findOrCreateChildWithClass(
+      this.element,
+      "transform-grid",
+      "button-grid",
+    );
+    this.transformGrid.addEventListener(
+      "click",
+      this.onTransformAction.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
+    );
+
+    freshListenerManager.addListener(
+      this.twistyPlayer.experimentalModel.puzzleID,
+      (puzzleID) => this.updateTransformGrid(puzzleID),
+    );
+
     this.examplesGrid = findOrCreateChildWithClass(
       this.element,
       "examples-grid",
@@ -614,6 +632,32 @@ class ControlPane {
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
     }
+  }
+
+  private async onTransformAction(e: Event) {
+    const elem = e.target as HTMLElement | null;
+    if (!elem) {
+      return;
+    }
+    const puzzleID = elem.getAttribute("data-puzzle-id");
+    if (!puzzleID) {
+      return;
+    }
+    const transformName = elem.getAttribute("data-transform-name");
+    if (!transformName) {
+      return;
+    }
+    const data: AlgTransformData[string] | undefined =
+      puzzles[puzzleID].algTransformData?.[transformName];
+    if (!data) {
+      return;
+    }
+    this.twistyPlayer.experimentalModel.alg.set(
+      (async () => {
+        const alg = (await this.twistyPlayer.experimentalModel.alg.get()).alg;
+        return transformAlg(alg, data);
+      })(),
+    );
   }
 
   private screenshot(): void {
@@ -741,6 +785,22 @@ class ControlPane {
       "change",
       this.stickeringChanged.bind(this),
     );
+  }
+
+  private async updateTransformGrid(puzzleID: PuzzleID) {
+    this.transformGrid.textContent = "";
+    const { algTransformData } = puzzles[puzzleID];
+    if (!algTransformData) {
+      return;
+    }
+    for (const name of Object.keys(algTransformData)) {
+      const button = this.transformGrid.appendChild(
+        document.createElement("button"),
+      );
+      button.textContent = name;
+      button.setAttribute("data-puzzle-id", puzzleID); // TODO: avoid this?
+      button.setAttribute("data-transform-name", name); // TODO: bind in JS instead?
+    }
   }
 
   private stickeringChanged(): void {
