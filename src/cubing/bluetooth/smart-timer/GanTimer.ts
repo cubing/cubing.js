@@ -1,5 +1,8 @@
 import type { MillisecondTimestamp } from "../../twisty/controllers/AnimationTypes";
-import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
+import type {
+  BluetoothConfig,
+  ConnectionArguments,
+} from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Short IDs
 const UUIDs = {
@@ -37,10 +40,7 @@ export class GanTimer extends EventTarget {
   }
 
   // We have to perform async operations before we call the constructor.
-  static async connect(
-    server: BluetoothRemoteGATTServer,
-    device: BluetoothDevice,
-  ) {
+  static async connect({ server, device }: ConnectionArguments) {
     const ganTimerService = await server.getPrimaryService(
       UUIDs.ganTimerService,
     );

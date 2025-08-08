@@ -9,7 +9,11 @@ import {
 } from "../../protocol";
 import { puzzles } from "../../puzzles";
 import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import {
+  type BluetoothConfig,
+  BluetoothPuzzle,
+  type ConnectionArguments,
+} from "./bluetooth-puzzle";
 import { flipBitOrder } from "./endianness";
 
 // TODO: Short IDs
@@ -22,10 +26,10 @@ const UUIDs = {
 /** @category Smart Puzzles */
 export class HeykubeCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
-  public static async connect(
-    server: BluetoothRemoteGATTServer,
-    device: BluetoothDevice,
-  ): Promise<HeykubeCube> {
+  public static async connect({
+    server,
+    device,
+  }: ConnectionArguments): Promise<HeykubeCube> {
     const service = await server.getPrimaryService(UUIDs.heykubeService);
     debugLog("Service:", service);
 

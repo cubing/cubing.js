@@ -30,8 +30,12 @@ function requestOptions<T>(
 
 /******** connect() ********/
 
+/** Type representing a custom MAC address provider for smart cubes */
+export type MacAddressProvider = () => Promise<string>;
+
 export interface BluetoothConnectOptions {
   acceptAllDevices?: boolean;
+  macAddressProvider?: MacAddressProvider;
 }
 
 // We globally track the number of connection failures,
@@ -83,10 +87,44 @@ export async function bluetoothConnect<T>(
   for (const config of configs) {
     for (const prefix of config.prefixes) {
       if (name?.startsWith(prefix)) {
-        return config.connect(server, device);
+        return config.connect({
+          server,
+          device,
+          macAddressProvider: addMacAddressValidation(
+            options.macAddressProvider || defaultMacAddressProvider,
+          ),
+        });
       }
     }
   }
 
-  throw Error("Unknown Bluetooth devive.");
+  throw Error("Unknown Bluetooth device.");
+}
+
+const MAC_ADDRESS_REGEX = /^[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5}$/;
+async function defaultMacAddressProvider(): Promise<string> {
+  while (true) {
+    const address = prompt("Enter your cube's MAC address:")?.trim();
+    if (!address) {
+      continue;
+    }
+    const isValidMacAddress = MAC_ADDRESS_REGEX.test(address);
+    if (isValidMacAddress) {
+      return address;
+    }
+  }
+}
+
+function addMacAddressValidation(
+  macAddressProvider: MacAddressProvider,
+): MacAddressProvider {
+  return async () => {
+    const providedMacAddress = await macAddressProvider();
+    const isValidMacAddress = MAC_ADDRESS_REGEX.test(providedMacAddress);
+    if (isValidMacAddress) {
+      return providedMacAddress;
+    } else {
+      throw Error(`Invalid MAC address: ${providedMacAddress}`);
+    }
+  };
 }
