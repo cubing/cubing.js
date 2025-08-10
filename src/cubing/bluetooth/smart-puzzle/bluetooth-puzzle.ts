@@ -1,6 +1,6 @@
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { KPattern } from "../../kpuzzle/KPattern";
-import type { MacAddressProvider } from "../connect";
+import type { MacAddressProvider } from "../mac";
 import {
   BasicRotationTransformer,
   type StreamTransformer,
@@ -32,7 +32,6 @@ export interface OrientationEvent {
   debug?: Record<string, unknown>;
 }
 
-/** Type representing the arguments passed to smart cube connection functions. */
 export type ConnectionArguments = {
   server: BluetoothRemoteGATTServer;
   device: BluetoothDevice;
