@@ -58,6 +58,7 @@ export const experimentalStickerings: Record<
       "6x6x6": "Reduction",
     },
   },
+  OBL: { groups: { "2x2x2": "General" } },
   PBL: {
     groups: {
       "2x2x2": "Ortega",

@@ -422,6 +422,13 @@ export async function cubeLikePuzzleStickering(
       );
       break;
     }
+    case "OBL": {
+      puzzleStickering.set(
+        m.or(m.moves(["U", "D"])),
+        PieceStickering.IgnoreNonPrimary,
+      );
+      break;
+    }
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
