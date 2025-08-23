@@ -83,7 +83,7 @@
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
     "playwright": "^1.47.2",
-    "printable-shell-command": "v1.0.0",
+    "printable-shell-command": "^1.1.3",
     "tsup": "^8.3.0",
     "typedoc": "v0.28.2",
     "typescript": "v5.8.3"
