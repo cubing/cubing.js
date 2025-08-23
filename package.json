@@ -67,6 +67,7 @@
     "@biomejs/biome": "v2.0.6",
     "@cubing/deploy": "v0.2.1",
     "@cubing/dev-config": "v0.3.5",
+    "@cubing/types-workarounds": "0.1.0",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/bun": "^1.2.20",
     "@types/chai": "^5.0.0",
