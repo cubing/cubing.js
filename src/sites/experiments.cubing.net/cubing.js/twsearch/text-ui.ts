@@ -216,7 +216,7 @@ function validateAndSaveInput(
       const kpattern = new KPattern(kpuzzle, JSON.parse(searchElem.value));
       const options: TwsearchServerClientOptions = {
         searchArgs: {
-          minDepth: parseInt(minDepthElem.value),
+          minDepth: parseInt(minDepthElem.value, 10),
           generatorMoves: getGeneratorMoves(),
         },
       };

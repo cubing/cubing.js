@@ -163,6 +163,7 @@ twisty-alg-editor {
 }
 
 panel-tabs *[hidden] {
+  /* biome-ignore lint/complexity/noImportantStyles: TODO */
   display: none !important;
 }
 

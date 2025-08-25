@@ -30,5 +30,5 @@ export const searchWorkerEsbuildWorkaroundEntry: IterableElement<
 };
 
 export const packageEntryPointsWithSearchWorkerEntry: BuildOptions["entryPoints"] =
-  // @ts-ignore: TypeScript can't seem to reconcile the types, no matter how much we annotate.
+  // @ts-expect-error: TypeScript can't seem to reconcile the types, no matter how much we annotate.
   packageEntryPoints.concat([searchWorkerEsbuildWorkaroundEntry]);

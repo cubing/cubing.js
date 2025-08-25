@@ -6,8 +6,9 @@ const currentEventID =
   new URL(location.href).searchParams.get("event") ?? "333";
 const numScrambles = (() => {
   try {
-    return Number.parseInt(
+    return parseInt(
       new URL(location.href).searchParams.get("amount") ?? "5",
+      10,
     );
   } catch {
     console.error("Could not parse amount, defaulting to 5");
@@ -16,8 +17,9 @@ const numScrambles = (() => {
 })();
 const numExtraScrambles = (() => {
   try {
-    return Number.parseInt(
+    return parseInt(
       new URL(location.href).searchParams.get("extra-amount") ?? "2",
+      10,
     );
   } catch {
     console.error("Could not parse extra amount, defaulting to 2");

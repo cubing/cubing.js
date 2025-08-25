@@ -192,12 +192,14 @@ window.addEventListener("DOMContentLoaded", () => {
         if (width) {
           twistyAnimCube.twistyPlayer!.style.width = `${parseInt(
             width,
+            10,
           ).toString()}px`;
         }
         const height = applet.getAttribute("height");
         if (height) {
           twistyAnimCube.twistyPlayer!.style.height = `${parseInt(
             height,
+            10,
           ).toString()}px`;
         }
       });

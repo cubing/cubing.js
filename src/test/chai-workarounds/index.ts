@@ -7,7 +7,6 @@
  * So we work around both issues here.
  */
 
-// biome-ignore lint/correctness/noUnusedImports: This is a workaround.
 import type {} from "mocha";
 import "./Alg.chai";
 

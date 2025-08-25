@@ -117,7 +117,7 @@ export class TwistyScrubber extends ManagedCustomElement {
     const inputElem = await this.inputElem();
     await this.slowDown(e, inputElem); // TODO
 
-    const value = parseInt(inputElem.value);
+    const value = parseInt(inputElem.value, 10);
     // console.log("on input", value);
     this.model?.playingInfo.set({ playing: false });
     this.model?.timestampRequest.set(value);
@@ -159,7 +159,7 @@ export class TwistyScrubber extends ManagedCustomElement {
       if (yDist > 64) {
         scale = Math.max(2 ** (-(yDist - 64) / 64), 1 / 32);
       }
-      const preVal = parseInt(inputElem.value);
+      const preVal = parseInt(inputElem.value, 10);
       console.log("cl", currentClickNum, clickNum, preVal);
       if (currentClickNum === clickNum) {
         const delta = (preVal - lastPreval) * scale;

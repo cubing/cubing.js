@@ -244,7 +244,7 @@ export class GanRobot extends EventTarget {
         }
         // await this.writeNibbles([0xf, 0xf]);
         while (this.moveQueue.experimentalNumChildAlgNodes() > 0) {
-          // @ts-ignore: Is TypeScript just straight-up false positiving here?
+          // @ts-expect-error: Is TypeScript just straight-up false positiving here?
           let algNodes: AlgNode[] = Array.from(this.moveQueue.childAlgNodes());
           if (
             this.experimentalOptions.singleMoveFixHack &&

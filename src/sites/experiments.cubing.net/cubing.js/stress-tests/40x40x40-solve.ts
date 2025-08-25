@@ -13,7 +13,7 @@ function layer(n: number): number {
   return n < 0 ? n + width + 1 : n;
 }
 
-const nums = icsMoves.split(",").map((s: string) => parseInt(s));
+const nums = icsMoves.split(",").map((s: string) => parseInt(s, 10));
 const algBuilder = new AlgBuilder();
 for (let i = 0; i < nums.length; i += 5) {
   const amount: number = [0, 1, 2, -1][nums[i]];

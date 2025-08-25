@@ -298,6 +298,7 @@ swipe-grid div.self-retarget {
 swipe-grid.theme-grid div.source,
 swipe-grid.theme-grid div.tentative-target,
 swipe-grid.theme-grid div.source.tentative-target {
+  /* biome-ignore lint/complexity/noImportantStyles: TODO */
   border: none !important;
 }
 

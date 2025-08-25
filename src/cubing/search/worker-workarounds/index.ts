@@ -7,7 +7,6 @@ export async function searchWorkerURLImportMetaResolve(): Promise<string> {
   // - We inline the value (instead of using a constant), to maximize compatibility for hardcoded syntax detection in bundlers.
   // - `import.meta.resolve(…)` returns a sync result in every environment except `bun`: https://loadeverything.net/#compatibility-dashboard
   //   - We assume that it's `async`, just in case.
-  // @ts-ignore
   return import.meta.resolve("./search-worker-entry.js");
 }
 

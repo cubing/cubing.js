@@ -13,7 +13,7 @@ import { algDebugGlobals } from "./debug";
 type StoppingChar = "," | ":" | "]" | ")";
 
 function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
-  return n ? parseInt(n) : emptyFallback;
+  return n ? parseInt(n, 10) : emptyFallback;
 }
 
 const AMOUNT_REGEX = /^(\d+)?('?)/;
@@ -159,12 +159,15 @@ class AlgParser {
           const savedCharIndexD = this.#idx;
           const sq1PairEndMatch = this.parseRegex(SQUARE1_PAIR_END_REGEX);
           const uMove = addCharIndices(
-            new Move(new QuantumMove("U_SQ_"), parseInt(topAmountString)),
+            new Move(new QuantumMove("U_SQ_"), parseInt(topAmountString, 10)),
             savedCharIndex + 1,
             savedCharIndex + 1 + topAmountString.length,
           );
           const dMove = addCharIndices(
-            new Move(new QuantumMove("D_SQ_"), parseInt(sq1PairEndMatch[1])),
+            new Move(
+              new QuantumMove("D_SQ_"),
+              parseInt(sq1PairEndMatch[1], 10),
+            ),
             savedCharIndexD,
             this.#idx - 1,
           );

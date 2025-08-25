@@ -1,6 +1,9 @@
 import { randomScrambleForEvent } from "../../../../cubing/search/outside";
 
-const num = parseInt(new URL(location.href).searchParams.get("num") ?? "1000");
+const num = parseInt(
+  new URL(location.href).searchParams.get("num") ?? "1000",
+  10,
+);
 
 const elem = document.querySelector("#results") as HTMLDivElement;
 const latest = document.querySelector("#latest") as HTMLSpanElement;

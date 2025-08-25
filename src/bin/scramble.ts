@@ -117,7 +117,7 @@ const app = command({
           console.log(scrambleLink(scramble));
           break;
         }
-        // @ts-ignore This is a code guard for future refactoring.
+        // @ts-expect-error This is a code guard for future refactoring.
         case "json-text": {
           throw new Error(
             "Encountered `json` format in code that is not expected to handle it.",
@@ -137,7 +137,6 @@ const app = command({
       const jsonListPrinter: JSONListPrinter<string> | undefined =
         format === "json-text" ? new JSONListPrinter() : undefined;
       for (let i = 0; i < amount; i++) {
-        // @ts-ignore: Top-level await is okay because this is not part of the main library.
         const scramble = await randomScrambleForEvent(eventID);
         switch (format) {
           case "text": {

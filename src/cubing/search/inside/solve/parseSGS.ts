@@ -33,7 +33,7 @@ export function parseSGS(kpuzzle: KPuzzle, sgs: string): SGSCachedData {
       });
     } else if (line.startsWith("SubgroupSizes ")) {
       for (let j = 1; j < lineTokens.length; j++) {
-        subgroupSizes.push(parseInt(lineTokens[j]));
+        subgroupSizes.push(parseInt(lineTokens[j], 10));
       }
     }
   }
