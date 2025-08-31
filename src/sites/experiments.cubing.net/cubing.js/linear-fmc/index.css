@@ -1,3 +1,4 @@
+@import url("https://cdn.cubing.net/v0/css/@fontsource/ubuntu");
 * {
   box-sizing: border-box;
 }
@@ -33,7 +34,7 @@ body {
 
 body {
   display: grid;
-  grid-template-areas: "player controls";
+  grid-template-areas: "controls player";
   grid-template-columns: 50% 50%;
   gap: 1em;
   margin: 0;
@@ -72,13 +73,27 @@ twisty-player {
   background: black;
 }
 
-.time-display {
+.time-display,
+.scrambling-display {
   font-family: "digital-7-mono", monospace;
   font-size: 6em;
   width: 100%;
   color: rgb(255, 0, 0);
   padding: 0.5em 0 0.4em;
   text-align: center;
+}
+
+.scrambling-display {
+  padding: 0.4em 0 0.5em;
+}
+
+.time-display-wrapper {
+  &.scrambling .moves-display {
+    display: none;
+  }
+  &:not(.scrambling) .scrambling-display {
+    display: none;
+  }
 }
 
 twisty-alg-viewer {

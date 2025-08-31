@@ -13,7 +13,10 @@ type TimeParts = {
 
 // biome-ignore lint/complexity/noStaticOnlyClass: This is an old code pattern.
 export class Stats {
-  static timeParts(time: Milliseconds): TimeParts {
+  static timeParts(
+    time: Milliseconds,
+    options: { alwaysIncludeMinute?: boolean },
+  ): TimeParts {
     // Each entry is [minimum number of digits if not first, separator before, value]
     const hours = Math.floor(time / (60 * 60 * 1000));
     const minutes = Math.floor(time / (60 * 1000)) % 60;
@@ -31,7 +34,7 @@ export class Stats {
     let secRestString: string;
     if (hours > 0) {
       secRestString = `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`;
-    } else if (minutes > 0) {
+    } else if (minutes > 0 || options.alwaysIncludeMinute) {
       secRestString = `${minutes}:${pad(seconds, 2)}`;
     } else {
       secRestString = `${seconds}`;
@@ -52,13 +55,15 @@ export class Stats {
 
   static formatTime(
     time: Milliseconds | null,
-    options?: { partial: boolean },
+    options?: { partial?: boolean; alwaysIncludeMinute?: boolean },
   ): string {
     if (time === null) {
       return "—";
     }
 
-    const parts = Stats.timeParts(time);
+    const parts = Stats.timeParts(time, {
+      alwaysIncludeMinute: options?.alwaysIncludeMinute,
+    });
     let result = `${parts.secFirst + parts.secRest}`;
     if (options?.partial) {
       result = `(${result})`;

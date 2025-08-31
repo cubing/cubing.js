@@ -63,13 +63,16 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
   const updateTimeCallback = (t: Milliseconds) => {
     const remaining = timeLimit - t; // Emulate a countdown.
     timeDisplay.textContent =
-      remaining < 0 ? "DNF" : Stats.formatTime(remaining + +999);
+      remaining < 0
+        ? "DNF"
+        : Stats.formatTime(remaining + +999, { alwaysIncludeMinute: true });
   };
   const timer = new Timer(updateTimeCallback);
   updateTimeCallback(0);
 
   const twistyPlayer = new TwistyPlayer({
     alg: new Alg(),
+    backView: "side-by-side",
   });
   document.querySelector("#player")!.appendChild(twistyPlayer);
   // document
@@ -139,7 +142,9 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
       countingAlg = newAlg;
       countingMovesElem.textContent = countingAlg.toString();
       const numMoves = countingAlgNumMoves();
-      document.querySelector("#obtm")!.textContent = numMoves.toString();
+      for (const elem of document.querySelectorAll(".obtm")) {
+        elem.textContent = numMoves.toString();
+      }
       (document.querySelector("#moves-plural") as HTMLElement).hidden =
         numMoves === 1;
     }
@@ -169,6 +174,7 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
     ) as HTMLButtonElement;
     const scrambleSection =
       document.querySelector<HTMLElement>("#scramble-section")!;
+    const timeDisplayWrapper = document.querySelector(".time-display-wrapper")!;
 
     const resetButton = document.querySelector(
       "#player-pattern-reset",
@@ -180,6 +186,8 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
       scrambleSection.hidden = true;
       scrambleTextElem.textContent = "";
       moveAlgToScrambleButton.disabled = false;
+      timeDisplayWrapper?.classList.add("scrambling");
+
       updateCountingAlg(new Alg());
       recordResultButton.disabled = true;
       resetButton.disabled = true;
@@ -199,6 +207,7 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
       scrambleDisplaySection.hidden = true;
       recordResultButton.disabled = false;
       moveAlgToScrambleButton.disabled = true;
+      timeDisplayWrapper?.classList.remove("scrambling");
       startTimerButton.disabled = false;
       startTimerButton.focus();
     });
@@ -229,6 +238,7 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
       resetButton.disabled = false;
     });
     recordResultButton.disabled = true;
+    console.log(recordResultButton);
 
     startTimerButton.addEventListener("click", () => {
       timer.start();
@@ -278,4 +288,26 @@ globalThis.addEventListener("DOMContentLoaded", async () => {
 
     moveAlgToScrambleButton.focus();
   });
+
+  const copyResultsButton = document.querySelector(
+    "#copy-results",
+  ) as HTMLButtonElement;
+  copyResultsButton.addEventListener("click", () => {
+    console.log("foo");
+    const key = `linear-fmc-results:${competitor.name}`;
+    const results = JSON.parse(localStorage[key] ?? "[]");
+    console.log(results);
+    let CSV = "";
+    for (const result of results) {
+      CSV += `${[
+        result.competitor,
+        result.attemptNumber,
+        result.numMoves,
+        result.scramble,
+        result.solution,
+      ].join("\t")}\t`;
+    }
+    navigator.clipboard.writeText(CSV);
+  });
+  console.log(copyResultsButton);
 });
