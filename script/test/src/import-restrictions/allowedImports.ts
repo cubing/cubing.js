@@ -40,7 +40,6 @@ export const mainAllowedImports: AllowedImports = {
       "esbuild",
       "node-fetch",
       "playwright",
-      "compare-versions",
     ],
     dynamic: ["cubing", "node:repl", "node:process"],
   },

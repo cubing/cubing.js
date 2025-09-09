@@ -4,8 +4,7 @@
 // TODO: turn this into a package?
 
 import { exit } from "node:process";
-import { file, type SystemError, spawn } from "bun";
-import { satisfies } from "compare-versions";
+import { file, type SystemError, semver, spawn } from "bun";
 import { PrintableShellCommand } from "printable-shell-command";
 
 const { engines } = await file("./package.json").json();
@@ -34,7 +33,7 @@ async function checkEngine(
     }
 
     const engineVersion = (await new Response(command.stdout).text()).trim();
-    if (!satisfies(engineVersion, engineRequirement)) {
+    if (!semver.satisfies(engineVersion, engineRequirement)) {
       console.error(
         `Current version of \`${engineID}\` is out of date: ${engineVersion}`,
       );
