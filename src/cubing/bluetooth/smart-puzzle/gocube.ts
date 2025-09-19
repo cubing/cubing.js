@@ -1,7 +1,11 @@
 import { Quaternion } from "three/src/math/Quaternion.js";
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import {
+  type BluetoothConfig,
+  BluetoothPuzzle,
+  type ConnectionArguments,
+} from "./bluetooth-puzzle";
 
 const UUIDs = {
   goCubeService: "6e400001-b5a3-f393-e0a9-e50e24dcca9e",
@@ -45,9 +49,9 @@ const moveMap: Move[] = [
 /** @category Smart Puzzles */
 export class GoCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
-  public static async connect(
-    server: BluetoothRemoteGATTServer,
-  ): Promise<GoCube> {
+  public static async connect({
+    server,
+  }: ConnectionArguments): Promise<GoCube> {
     const service = await server.getPrimaryService(UUIDs.goCubeService);
     debugLog({ service });
     const goCubeStateCharacteristic = await service.getCharacteristic(

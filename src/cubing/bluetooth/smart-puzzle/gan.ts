@@ -9,7 +9,11 @@ import {
   unsafeDecryptBlock,
 } from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
 import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import {
+  type BluetoothConfig,
+  BluetoothPuzzle,
+  type ConnectionArguments,
+} from "./bluetooth-puzzle";
 import { getPatternData } from "./common";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
@@ -238,9 +242,9 @@ async function getKey(
 /** @category Smart Puzzles */
 export class GanCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
-  public static async connect(
-    server: BluetoothRemoteGATTServer,
-  ): Promise<GanCube> {
+  public static async connect({
+    server,
+  }: ConnectionArguments): Promise<GanCube> {
     const ganCubeService = await server.getPrimaryService(UUIDs.ganCubeService);
     debugLog("Service:", ganCubeService);
 
