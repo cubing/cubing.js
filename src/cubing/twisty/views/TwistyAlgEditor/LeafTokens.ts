@@ -1,3 +1,7 @@
+import type {
+  LeafCount,
+  LeafIndex,
+} from "cubing/twisty/controllers/indexer/AlgIndexer";
 import {
   type Alg,
   type Commutator,
@@ -15,17 +19,17 @@ import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous
 
 export type AnimatedLeafAlgNodeInfo = {
   leaf: Parsed<AnimatedLeafAlgNode>;
-  idx: number;
+  idx: LeafIndex;
 };
 export type OrderedLeafTokens = AnimatedLeafAlgNodeInfo[];
 
 interface DataUp {
   tokens: OrderedLeafTokens;
-  numLeavesInside: number;
+  numLeavesInside: LeafCount;
 }
 
 interface DataDown {
-  numMovesSofar: number;
+  numMovesSoFar: LeafCount;
 }
 
 class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
@@ -34,14 +38,14 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
     let numMovesInside = 0;
     for (const algNode of alg.childAlgNodes()) {
       const dataUp = this.traverseAlgNode(algNode, {
-        numMovesSofar: dataDown.numMovesSofar + numMovesInside,
+        numMovesSoFar: (dataDown.numMovesSoFar + numMovesInside) as LeafCount,
       });
       algNodeArrays.push(dataUp.tokens);
       numMovesInside += dataUp.numLeavesInside;
     }
     return {
       tokens: Array.prototype.concat(...algNodeArrays),
-      numLeavesInside: numMovesInside,
+      numLeavesInside: numMovesInside as LeafCount,
     };
   }
 
@@ -49,14 +53,19 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
     const dataUp = this.traverseAlg(grouping.alg, dataDown);
     return {
       tokens: dataUp.tokens,
-      numLeavesInside: dataUp.numLeavesInside * grouping.amount,
+      numLeavesInside: (dataUp.numLeavesInside * grouping.amount) as LeafCount,
     };
   }
 
   public traverseMove(move: Move, dataDown: DataDown): DataUp {
     return {
-      tokens: [{ leaf: move as Parsed<Move>, idx: dataDown.numMovesSofar }],
-      numLeavesInside: 1,
+      tokens: [
+        {
+          leaf: move as Parsed<Move>,
+          idx: dataDown.numMovesSoFar as number as LeafIndex,
+        },
+      ],
+      numLeavesInside: 1 as LeafCount,
     }; // TODO: What if not parsed?
   }
 
@@ -66,37 +75,45 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
   ): DataUp {
     const dataUpA = this.traverseAlg(commutator.A, dataDown);
     const dataUpB = this.traverseAlg(commutator.B, {
-      numMovesSofar: dataDown.numMovesSofar + dataUpA.numLeavesInside,
+      numMovesSoFar: (dataDown.numMovesSoFar +
+        dataUpA.numLeavesInside) as LeafCount,
     });
     return {
       tokens: dataUpA.tokens.concat(dataUpB.tokens),
-      numLeavesInside: dataUpA.numLeavesInside * 2 + dataUpB.numLeavesInside,
+      numLeavesInside: (dataUpA.numLeavesInside * 2 +
+        dataUpB.numLeavesInside) as LeafCount,
     };
   }
 
   public traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp {
     const dataUpA = this.traverseAlg(conjugate.A, dataDown);
     const dataUpB = this.traverseAlg(conjugate.B, {
-      numMovesSofar: dataDown.numMovesSofar + dataUpA.numLeavesInside,
+      numMovesSoFar: (dataDown.numMovesSoFar +
+        dataUpA.numLeavesInside) as LeafCount,
     });
     return {
       tokens: dataUpA.tokens.concat(dataUpB.tokens),
-      numLeavesInside:
-        dataUpA.numLeavesInside * 2 + dataUpB.numLeavesInside * 2,
+      numLeavesInside: (dataUpA.numLeavesInside * 2 +
+        dataUpB.numLeavesInside * 2) as LeafCount,
     };
   }
 
   public traversePause(pause: Pause, dataDown: DataDown): DataUp {
     return {
-      tokens: [{ leaf: pause as Parsed<Pause>, idx: dataDown.numMovesSofar }],
-      numLeavesInside: 1,
+      tokens: [
+        {
+          leaf: pause as Parsed<Pause>,
+          idx: dataDown.numMovesSoFar as number as LeafIndex,
+        },
+      ],
+      numLeavesInside: 1 as LeafCount,
     }; // TODO: What if not parsed?
   }
 
   public traverseNewline(_newline: Newline, _dataDown: DataDown): DataUp {
     return {
       tokens: [],
-      numLeavesInside: 0,
+      numLeavesInside: 0 as LeafCount,
     };
   }
 
@@ -106,7 +123,7 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
   ): DataUp {
     return {
       tokens: [],
-      numLeavesInside: 0,
+      numLeavesInside: 0 as LeafCount,
     };
   }
 }

@@ -1,8 +1,10 @@
+import type { MillisecondTimestamp } from "./AnimationTypes";
+
 // Debounces `requestAnimationFrame()`.
 export class RenderScheduler {
   private animFrameID: number | null = null;
   private animFrame = this.animFrameWrapper.bind(this);
-  constructor(private callback: (timestamp: DOMHighResTimeStamp) => void) {}
+  constructor(private callback: (timestamp: MillisecondTimestamp) => void) {}
 
   requestIsPending(): boolean {
     return !!this.animFrameID;
@@ -23,7 +25,7 @@ export class RenderScheduler {
 
   private animFrameWrapper(timestamp: DOMHighResTimeStamp): void {
     this.animFrameID = 0;
-    this.callback(timestamp);
+    this.callback(timestamp as MillisecondTimestamp);
   }
 }
 

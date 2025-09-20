@@ -674,7 +674,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     setTimeout(() => {
       const hintStartTime = performance.now();
       let lastTranslation = 0;
-      const translationDuration: MillisecondTimestamp = 1000;
+      const translationDuration = 1000 as MillisecondTimestamp;
       function ease(x: number) {
         return x * (2 - x);
       }

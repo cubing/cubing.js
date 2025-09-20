@@ -1,13 +1,16 @@
+import type { Tagged } from "type-fest";
 import type { Move } from "../../alg";
 import type { KPattern } from "../../kpuzzle/KPattern";
 
-export type MillisecondTimestamp = number;
+export type MillisecondTimestamp = Tagged<
+  DOMHighResTimeStamp,
+  "MillisecondTimestamp"
+>;
 
 // TODO: unify duration/timstamp types
-export type Duration = MillisecondTimestamp; // Duration in milliseconds
+export type MillisecondDuration = Tagged<number, "MillisecondDuration">; // Duration in milliseconds
 // TODO: Extend `number`, introduce MoveSequenceTimestamp vs. EpochTimestamp,
 // force Duration to be a difference.
-export type Timestamp = MillisecondTimestamp; // Duration since a particular epoch.
 
 export type Fraction = number; // Value from 0 to 1.
 
@@ -18,7 +21,7 @@ export enum Direction {
   Backwards = -1,
 }
 
-export function directionScalar(direction: Direction): MillisecondTimestamp {
+export function directionScalar(direction: Direction): number {
   return direction;
 }
 

@@ -17,7 +17,10 @@ import {
 } from "../../alg/cubing-private";
 import { type Parsed, startCharIndexKey } from "../../alg/parseAlg";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
-import type { CurrentMoveInfo } from "../controllers/indexer/AlgIndexer";
+import type {
+  CurrentMoveInfo,
+  LeafIndex,
+} from "../controllers/indexer/AlgIndexer";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
 import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
 import { firstElementWithId } from "./firstElementWithId";
@@ -33,7 +36,7 @@ import { TwistyPlayer } from "./TwistyPlayer";
 const DEFAULT_OFFSET_FRACTION = 0.25;
 
 interface DataDown {
-  earliestMoveIndex: number;
+  earliestMoveIndex: LeafIndex;
   twistyAlgViewer: TwistyAlgViewer;
   direction: ExperimentalIterationDirection;
 }
@@ -173,7 +176,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       if (!algNode.as(Grouping)?.experimentalNISSPlaceholder) {
         moveCount += element.addElem(
           this.traverseAlgNode(algNode, {
-            earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+            earliestMoveIndex: (dataDown.earliestMoveIndex +
+              moveCount) as LeafIndex,
             twistyAlgViewer: dataDown.twistyAlgViewer,
             direction: dataDown.direction,
           }),
@@ -231,7 +235,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     } else {
       moveCount += element.addElem(
         this.traverseAlg(grouping.alg, {
-          earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+          earliestMoveIndex: (dataDown.earliestMoveIndex +
+            moveCount) as LeafIndex,
           twistyAlgViewer: dataDown.twistyAlgViewer,
           direction,
         }),
@@ -282,7 +287,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     );
     moveCount += element.addElem(
       this.traverseAlg(first, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestMoveIndex: (dataDown.earliestMoveIndex +
+          moveCount) as LeafIndex,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction: dataDown.direction,
       }),
@@ -290,7 +296,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString(", ");
     moveCount += element.addElem(
       this.traverseAlg(second, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestMoveIndex: (dataDown.earliestMoveIndex +
+          moveCount) as LeafIndex,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction: dataDown.direction,
       }),
@@ -310,7 +317,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("[");
     const aLen = element.addElem(
       this.traverseAlg(conjugate.A, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestMoveIndex: (dataDown.earliestMoveIndex +
+          moveCount) as LeafIndex,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction: dataDown.direction,
       }),
@@ -319,7 +327,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString(": ");
     moveCount += element.addElem(
       this.traverseAlg(conjugate.B, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestMoveIndex: (dataDown.earliestMoveIndex +
+          moveCount) as LeafIndex,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction: dataDown.direction,
       }),
@@ -420,7 +429,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
 
   private setAlg(alg: Alg): void {
     this.#domTree = algToDOMTree(alg, {
-      earliestMoveIndex: 0,
+      earliestMoveIndex: 0 as LeafIndex,
       twistyAlgViewer: this,
       direction: ExperimentalIterationDirection.Forwards,
     }).element;
@@ -484,7 +493,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
     );
   }
 
-  async jumpToIndex(index: number, offsetIntoMove: boolean): Promise<void> {
+  async jumpToIndex(index: LeafIndex, offsetIntoMove: boolean): Promise<void> {
     // TODO: Fix async issues.
     const twistyPlayer = this.#twistyPlayer;
     if (twistyPlayer) {
@@ -494,11 +503,9 @@ export class TwistyAlgViewer extends HTMLElementShim {
         const offset = offsetIntoMove
           ? indexer.moveDuration(index) * DEFAULT_OFFSET_FRACTION
           : 0;
-        return (
-          indexer.indexToMoveStartTimestamp(index) +
+        return (indexer.indexToMoveStartTimestamp(index) +
           indexer.moveDuration(index) -
-          offset
-        );
+          offset) as MillisecondTimestamp;
       })();
       twistyPlayer.experimentalModel.timestampRequest.set(
         await timestampPromise, // TODO

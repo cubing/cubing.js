@@ -1,22 +1,26 @@
-import type { AnimationTimelineLeaves } from "cubing/twisty/model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
+import type {
+  AnimationTimelineLeaf,
+  AnimationTimelineLeaves,
+} from "cubing/twisty/model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import { type Alg, Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
 import {
   Direction,
-  type Duration,
+  type MillisecondDuration,
+  type MillisecondTimestamp,
   type PuzzlePosition,
-  type Timestamp,
 } from "../../AnimationTypes";
-import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
-import {
-  type AnimatedLeafAlgNode,
-  type AnimLeafWithRange,
-  simulMoves,
-} from "./simul-moves";
+import type {
+  CurrentMove,
+  CurrentMoveInfo,
+  LeafCount,
+  LeafIndex,
+} from "../AlgIndexer";
+import { type AnimatedLeafAlgNode, simulMoves } from "./simul-moves";
 
 export class SimultaneousMoveIndexer {
-  private animLeaves: AnimLeafWithRange[];
+  private animLeaves: AnimationTimelineLeaf[];
   // TODO: Allow custom `durationFn`.
 
   constructor(
@@ -35,31 +39,31 @@ export class SimultaneousMoveIndexer {
     );
   }
 
-  private getAnimLeafWithRange(index: number): AnimLeafWithRange {
+  private getAnimationTimelineLeaf(index: number): AnimationTimelineLeaf {
     return this.animLeaves[Math.min(index, this.animLeaves.length - 1)];
   }
 
-  public indexToMoveStartTimestamp(index: number): Timestamp {
+  public indexToMoveStartTimestamp(index: number): MillisecondTimestamp {
     let start = 0;
     if (this.animLeaves.length > 0) {
       start =
         this.animLeaves[Math.min(index, this.animLeaves.length - 1)].start;
     }
-    return start;
+    return start as MillisecondTimestamp;
   }
 
-  public timestampToIndex(timestamp: Timestamp): number {
+  public timestampToIndex(timestamp: MillisecondTimestamp): LeafIndex {
     let i = 0;
     for (i = 0; i < this.animLeaves.length; i++) {
       if (this.animLeaves[i].start >= timestamp) {
-        return Math.max(0, i - 1);
+        return Math.max(0, i - 1) as LeafIndex;
       }
     }
-    return Math.max(0, i - 1);
+    return Math.max(0, i - 1) as LeafIndex;
   }
 
   public timestampToPosition(
-    timestamp: Timestamp,
+    timestamp: MillisecondTimestamp,
     startPattern?: KPattern,
   ): PuzzlePosition {
     const currentMoveInfo = this.currentMoveInfo(timestamp);
@@ -83,7 +87,7 @@ export class SimultaneousMoveIndexer {
   }
 
   // TODO: Caching
-  public currentMoveInfo(timestamp: Timestamp): CurrentMoveInfo {
+  public currentMoveInfo(timestamp: MillisecondTimestamp): CurrentMoveInfo {
     // The starting timestamp of the earliest active move.
     let windowEarliestTimestamp = Infinity;
     for (const leafWithRange of this.animLeaves) {
@@ -192,21 +196,21 @@ export class SimultaneousMoveIndexer {
     return transformation;
   }
 
-  public algDuration(): Duration {
+  public algDuration(): MillisecondDuration {
     let max = 0;
     for (const leafWithRange of this.animLeaves) {
       max = Math.max(max, leafWithRange.end);
     }
-    return max;
+    return max as MillisecondDuration;
   }
 
-  public numAnimatedLeaves(): number {
+  public numAnimatedLeaves(): LeafCount {
     // TODO: Cache internally once performance matters.
-    return this.animLeaves.length;
+    return this.animLeaves.length as LeafCount;
   }
 
-  public moveDuration(index: number): number {
-    const move = this.getAnimLeafWithRange(index);
-    return move.end - move.start;
+  public moveDuration(index: LeafIndex): MillisecondDuration {
+    const move = this.getAnimationTimelineLeaf(index);
+    return (move.end - move.start) as MillisecondDuration;
   }
 }
