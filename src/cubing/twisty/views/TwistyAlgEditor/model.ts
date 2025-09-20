@@ -1,5 +1,6 @@
 // TODO: Move this?
 
+import type { LeafCount } from "cubing/twisty/controllers/indexer/AlgIndexer";
 import type { Alg } from "../../../alg";
 import {
   endCharIndexKey,
@@ -100,7 +101,7 @@ class LeafTokensProp extends TwistyPropDerived<
 > {
   derive(inputs: LeafTokensPropInputs): OrderedLeafTokens {
     return leafTokens(inputs.algWithIssues.alg as Parsed<Alg>, {
-      numMovesSofar: 0,
+      numMovesSoFar: 0 as LeafCount,
     }).tokens;
   }
 }

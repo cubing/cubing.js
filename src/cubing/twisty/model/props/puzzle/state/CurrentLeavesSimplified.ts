@@ -1,5 +1,8 @@
 import type { Move } from "../../../../../alg";
-import type { CurrentMoveInfo } from "../../../../controllers/indexer/AlgIndexer";
+import type {
+  CurrentMoveInfo,
+  LeafIndex,
+} from "../../../../controllers/indexer/AlgIndexer";
 import { arrayEqualsCompare } from "../../../helpers";
 import { TwistyPropDerived } from "../../TwistyProp";
 
@@ -8,7 +11,7 @@ interface CurrentLeavesSimplifiedPropInputs {
 }
 
 export interface CurrentLeavesSimplified {
-  patternIndex: number;
+  patternIndex: LeafIndex;
   movesFinishing: Move[];
   movesFinished: Move[];
 }
@@ -22,7 +25,7 @@ export class CurrentLeavesSimplifiedProp extends TwistyPropDerived<
     inputs: CurrentLeavesSimplifiedPropInputs,
   ): CurrentLeavesSimplified {
     return {
-      patternIndex: inputs.currentMoveInfo.patternIndex,
+      patternIndex: inputs.currentMoveInfo.patternIndex as LeafIndex,
       movesFinishing: inputs.currentMoveInfo.movesFinishing.map(
         (currentMoveInfo) => currentMoveInfo.move,
       ),

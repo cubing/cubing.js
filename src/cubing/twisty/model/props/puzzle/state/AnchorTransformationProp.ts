@@ -1,5 +1,8 @@
 import type { KTransformation } from "../../../../../kpuzzle";
-import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
+import type {
+  AlgIndexer,
+  LeafIndex,
+} from "../../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { SetupToLocation } from "./SetupAnchorProp";
 
@@ -23,7 +26,7 @@ export class AnchorTransformationProp extends TwistyPropDerived<
         return inputs.setupAlgTransformation;
       case "end": {
         const algTransformation = inputs.indexer.transformationAtIndex(
-          inputs.indexer.numAnimatedLeaves(),
+          inputs.indexer.numAnimatedLeaves() as number as LeafIndex,
         );
         const inverseAlgTransformation = algTransformation.invert();
         return inputs.setupAlgTransformation.applyTransformation(

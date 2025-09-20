@@ -1,13 +1,13 @@
+import type { Tagged } from "type-fest";
 import type { Move } from "../../../alg/alg-nodes";
 import type { KTransformation } from "../../../kpuzzle";
 import type { KPattern } from "../../../kpuzzle/KPattern";
 import { arrayEqualsCompare } from "../../model/helpers";
 import type {
   Direction,
-  Duration,
+  MillisecondDuration,
   MillisecondTimestamp,
   PuzzlePosition,
-  Timestamp,
 } from "../AnimationTypes";
 import type { AnimatedLeafAlgNode } from "./simultaneous-moves/simul-moves";
 
@@ -68,18 +68,21 @@ export function currentMoveInfoEquals(
   return eq;
 }
 
+export type LeafIndex = Tagged<number, "LeafIndex">;
+export type LeafCount = Tagged<number, "LeafCount">;
+
 export interface AlgIndexer {
-  getAnimLeaf(index: number): AnimatedLeafAlgNode | null;
-  indexToMoveStartTimestamp(index: number): Timestamp;
-  patternAtIndex(index: number, startPattern?: KPattern): KPattern;
-  transformationAtIndex(index: number): KTransformation;
-  numAnimatedLeaves(): number;
-  timestampToIndex(timestamp: Timestamp): number;
-  algDuration(): Duration;
-  moveDuration(index: number): number;
+  getAnimLeaf(index: LeafIndex): AnimatedLeafAlgNode | null;
+  indexToMoveStartTimestamp(index: LeafIndex): MillisecondTimestamp;
+  patternAtIndex(index: LeafIndex, startPattern?: KPattern): KPattern;
+  transformationAtIndex(index: LeafIndex): KTransformation;
+  numAnimatedLeaves(): LeafCount;
+  timestampToIndex(timestamp: MillisecondTimestamp): LeafIndex;
+  algDuration(): MillisecondDuration;
+  moveDuration(index: LeafIndex): MillisecondDuration;
   timestampToPosition?: (
-    timestamp: Timestamp,
+    timestamp: MillisecondTimestamp,
     startPattern?: KPattern,
   ) => PuzzlePosition;
-  currentMoveInfo?: (timestamp: Timestamp) => CurrentMoveInfo;
+  currentMoveInfo?: (timestamp: MillisecondTimestamp) => CurrentMoveInfo;
 }

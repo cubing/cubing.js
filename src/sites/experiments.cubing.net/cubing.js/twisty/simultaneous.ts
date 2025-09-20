@@ -1,3 +1,4 @@
+import type { MillisecondTimestamp } from "cubing/twisty/controllers/AnimationTypes";
 import { Alg, Move } from "../../../../cubing/alg";
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 
@@ -6,6 +7,10 @@ const supercubeSprite = new URL(
   import.meta.url,
 ).toString();
 
+function t(n: number): MillisecondTimestamp {
+  return n as MillisecondTimestamp;
+}
+
 {
   const player = new TwistyPlayer({
     alg: Alg.fromString(
@@ -13,29 +18,29 @@ const supercubeSprite = new URL(
     ),
   });
   player.experimentalModel.animationTimelineLeavesRequest.set([
-    { animLeaf: new Move("y", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("y", -1), start: 1000, end: 2000 },
-    { animLeaf: new Move("U", -1), start: 1000, end: 1600 },
-    { animLeaf: new Move("E", 1), start: 1200, end: 1800 },
-    { animLeaf: new Move("D"), start: 1400, end: 2000 },
-    { animLeaf: new Move("R", 2), start: 2000, end: 3500 },
-    { animLeaf: new Move("r", 2), start: 2000, end: 3500 },
-    { animLeaf: new Move("F", 2), start: 3500, end: 4200 },
-    { animLeaf: new Move("B", 2), start: 3800, end: 4500 },
-    { animLeaf: new Move("U", 1), start: 4500, end: 5500 },
-    { animLeaf: new Move("E", 1), start: 4500, end: 5500 },
-    { animLeaf: new Move("D", -1), start: 4500, end: 5500 },
-    { animLeaf: new Move("R", 2), start: 5500, end: 6500 },
-    { animLeaf: new Move("L", -2), start: 5500, end: 6500 },
-    { animLeaf: new Move("z", 2), start: 5500, end: 6500 },
-    { animLeaf: new Move("S", 2), start: 6500, end: 7500 },
-    { animLeaf: new Move("U"), start: 7500, end: 8000 },
-    { animLeaf: new Move("D"), start: 7750, end: 8250 },
-    { animLeaf: new Move("U"), start: 8000, end: 8500 },
-    { animLeaf: new Move("D"), start: 8250, end: 8750 },
-    { animLeaf: new Move("S", 2), start: 8750, end: 9250 },
-    { animLeaf: new Move("F", -2), start: 8750, end: 10000 },
-    { animLeaf: new Move("B", 2), start: 8750, end: 10000 },
+    { animLeaf: new Move("y", -1), start: t(0), end: t(1000) },
+    { animLeaf: new Move("y", -1), start: t(1000), end: t(2000) },
+    { animLeaf: new Move("U", -1), start: t(1000), end: t(1600) },
+    { animLeaf: new Move("E", 1), start: t(1200), end: t(1800) },
+    { animLeaf: new Move("D"), start: t(1400), end: t(2000) },
+    { animLeaf: new Move("R", 2), start: t(2000), end: t(3500) },
+    { animLeaf: new Move("r", 2), start: t(2000), end: t(3500) },
+    { animLeaf: new Move("F", 2), start: t(3500), end: t(4200) },
+    { animLeaf: new Move("B", 2), start: t(3800), end: t(4500) },
+    { animLeaf: new Move("U", 1), start: t(4500), end: t(5500) },
+    { animLeaf: new Move("E", 1), start: t(4500), end: t(5500) },
+    { animLeaf: new Move("D", -1), start: t(4500), end: t(5500) },
+    { animLeaf: new Move("R", 2), start: t(5500), end: t(6500) },
+    { animLeaf: new Move("L", -2), start: t(5500), end: t(6500) },
+    { animLeaf: new Move("z", 2), start: t(5500), end: t(6500) },
+    { animLeaf: new Move("S", 2), start: t(6500), end: t(7500) },
+    { animLeaf: new Move("U"), start: t(7500), end: t(8000) },
+    { animLeaf: new Move("D"), start: t(7750), end: t(8250) },
+    { animLeaf: new Move("U"), start: t(8000), end: t(8500) },
+    { animLeaf: new Move("D"), start: t(8250), end: t(8750) },
+    { animLeaf: new Move("S", 2), start: t(8750), end: t(9250) },
+    { animLeaf: new Move("F", -2), start: t(8750), end: t(10000) },
+    { animLeaf: new Move("B", 2), start: t(8750), end: t(10000) },
   ]);
   document.querySelector(".demo1")!.appendChild(player);
   player.style.height = "400px";
@@ -47,12 +52,12 @@ const supercubeSprite = new URL(
     experimentalSetupAnchor: "end",
   });
   player.experimentalModel.animationTimelineLeavesRequest.set([
-    { animLeaf: new Move("M", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("R", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("U", -1), start: 1000, end: 2000 },
-    { animLeaf: new Move("D", -1), start: 1000, end: 2000 },
-    { animLeaf: new Move("M"), start: 2000, end: 3000 },
-    { animLeaf: new Move("R"), start: 2000, end: 3000 },
+    { animLeaf: new Move("M", -1), start: t(0), end: t(1000) },
+    { animLeaf: new Move("R", -1), start: t(0), end: t(1000) },
+    { animLeaf: new Move("U", -1), start: t(1000), end: t(2000) },
+    { animLeaf: new Move("D", -1), start: t(1000), end: t(2000) },
+    { animLeaf: new Move("M"), start: t(2000), end: t(3000) },
+    { animLeaf: new Move("R"), start: t(2000), end: t(3000) },
   ]);
   // player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo2")!.appendChild(player);
@@ -75,15 +80,15 @@ const supercubeSprite = new URL(
   });
   const algNodes = Array.from(alg.childAlgNodes());
   player.experimentalModel.animationTimelineLeavesRequest.set([
-    { animLeaf: algNodes[0], start: 0, end: 1000 },
-    { animLeaf: algNodes[1], start: 0, end: 1000 },
-    { animLeaf: algNodes[2], start: 1000, end: 2500 },
-    { animLeaf: algNodes[3], start: 2500, end: 3500 },
-    { animLeaf: algNodes[4], start: 3500, end: 5000 },
-    { animLeaf: algNodes[5], start: 5000, end: 6000 },
-    { animLeaf: algNodes[6], start: 6000, end: 7000 },
-    { animLeaf: algNodes[7], start: 7000, end: 8000 },
-    { animLeaf: algNodes[8], start: 7000, end: 8000 },
+    { animLeaf: algNodes[0], start: t(0), end: t(1000) },
+    { animLeaf: algNodes[1], start: t(0), end: t(1000) },
+    { animLeaf: algNodes[2], start: t(1000), end: t(2500) },
+    { animLeaf: algNodes[3], start: t(2500), end: t(3500) },
+    { animLeaf: algNodes[4], start: t(3500), end: t(5000) },
+    { animLeaf: algNodes[5], start: t(5000), end: t(6000) },
+    { animLeaf: algNodes[6], start: t(6000), end: t(7000) },
+    { animLeaf: algNodes[7], start: t(7000), end: t(8000) },
+    { animLeaf: algNodes[8], start: t(7000), end: t(8000) },
   ]);
   document.querySelector(".demo4")!.appendChild(player);
   document
@@ -108,13 +113,13 @@ const supercubeSprite = new URL(
   });
   const algNodes = Array.from(alg.childAlgNodes());
   player.experimentalModel.animationTimelineLeavesRequest.set([
-    { animLeaf: algNodes[0], start: 0, end: 120 },
-    { animLeaf: algNodes[1], start: 150, end: 235 },
-    { animLeaf: algNodes[2], start: 240, end: 270 },
-    { animLeaf: algNodes[3], start: 270, end: 310 },
-    { animLeaf: algNodes[4], start: 335, end: 380 },
-    { animLeaf: algNodes[5], start: 380, end: 470 },
-    { animLeaf: algNodes[6], start: 470, end: 535 },
+    { animLeaf: algNodes[0], start: t(0), end: t(120) },
+    { animLeaf: algNodes[1], start: t(150), end: t(235) },
+    { animLeaf: algNodes[2], start: t(240), end: t(270) },
+    { animLeaf: algNodes[3], start: t(270), end: t(310) },
+    { animLeaf: algNodes[4], start: t(335), end: t(380) },
+    { animLeaf: algNodes[5], start: t(380), end: t(470) },
+    { animLeaf: algNodes[6], start: t(470), end: t(535) },
   ]);
   document.querySelector(".demo6")!.appendChild(player);
   document

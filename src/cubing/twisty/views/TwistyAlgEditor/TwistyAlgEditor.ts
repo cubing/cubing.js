@@ -11,6 +11,7 @@
  * proper rewrite with a better model would be very welcome.
  */
 
+import type { MillisecondTimestamp } from "cubing/twisty/controllers/AnimationTypes";
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, type Move, type Pause } from "../../../alg";
 import {
@@ -310,7 +311,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
           );
           const duration = indexer.moveDuration(highlightInfo.leafInfo.idx);
 
-          let newTimestamp: number;
+          let newTimestamp: MillisecondTimestamp;
           switch (highlightInfo.where) {
             case "before": {
               newTimestamp = moveStartTimestamp;
@@ -318,12 +319,14 @@ export class TwistyAlgEditor extends ManagedCustomElement {
             }
             case "start":
             case "inside": {
-              newTimestamp = moveStartTimestamp + duration / 4;
+              newTimestamp = (moveStartTimestamp +
+                duration / 4) as MillisecondTimestamp;
               break;
             }
             case "end":
             case "after": {
-              newTimestamp = moveStartTimestamp + duration;
+              newTimestamp = (moveStartTimestamp +
+                duration) as MillisecondTimestamp;
               break;
             }
             default:

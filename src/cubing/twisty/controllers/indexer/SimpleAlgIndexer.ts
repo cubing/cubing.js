@@ -2,14 +2,17 @@ import { Alg, type Move, type TraversalUp } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
 import type { KPattern } from "../../../kpuzzle/KPattern";
 import { experimentalCountAnimatedLeaves } from "../../../notation";
-import type { Duration, Timestamp } from "../AnimationTypes";
+import type {
+  MillisecondDuration,
+  MillisecondTimestamp,
+} from "../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
-import type { AlgIndexer } from "./AlgIndexer";
+import type { AlgIndexer, LeafCount, LeafIndex } from "./AlgIndexer";
 
 export class SimpleAlgIndexer implements AlgIndexer {
   private moves: Alg;
   // TODO: Allow custom `durationFn`.
-  private durationFn: TraversalUp<Duration> = new AlgDuration(
+  private durationFn: TraversalUp<MillisecondDuration> = new AlgDuration(
     defaultDurationForAmount,
   );
 
@@ -25,21 +28,21 @@ export class SimpleAlgIndexer implements AlgIndexer {
     return Array.from(this.moves.childAlgNodes())[index] as Move; // TODO: perf
   }
 
-  public indexToMoveStartTimestamp(index: number): Timestamp {
+  public indexToMoveStartTimestamp(index: number): MillisecondTimestamp {
     const alg = new Alg(Array.from(this.moves.childAlgNodes()).slice(0, index)); // TODO
-    return this.durationFn.traverseAlg(alg);
+    return this.durationFn.traverseAlg(alg) as number as MillisecondTimestamp;
   }
 
-  public timestampToIndex(timestamp: Timestamp): number {
+  public timestampToIndex(timestamp: MillisecondTimestamp): LeafIndex {
     let cumulativeTime = 0;
     let i: number;
     for (i = 0; i < this.numAnimatedLeaves(); i++) {
       cumulativeTime += this.durationFn.traverseMove(this.getAnimLeaf(i));
       if (cumulativeTime >= timestamp) {
-        return i;
+        return i as LeafIndex;
       }
     }
-    return i;
+    return i as LeafIndex;
   }
 
   public patternAtIndex(index: number): KPattern {
@@ -57,16 +60,16 @@ export class SimpleAlgIndexer implements AlgIndexer {
     return pattern;
   }
 
-  public algDuration(): Duration {
+  public algDuration(): MillisecondDuration {
     return this.durationFn.traverseAlg(this.moves);
   }
 
-  public numAnimatedLeaves(): number {
+  public numAnimatedLeaves(): LeafCount {
     // TODO: Cache internally once performance matters.
-    return experimentalCountAnimatedLeaves(this.moves);
+    return experimentalCountAnimatedLeaves(this.moves) as LeafCount;
   }
 
-  public moveDuration(index: number): number {
+  public moveDuration(index: LeafIndex): MillisecondDuration {
     return this.durationFn.traverseMove(this.getAnimLeaf(index));
   }
 }

@@ -1,3 +1,4 @@
+import type { AnimationTimelineLeaf } from "cubing/twisty/model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import {
   type Alg,
   type Commutator,
@@ -10,20 +11,17 @@ import {
   type Pause,
   TraversalUp,
 } from "../../../../alg";
-import type { MillisecondTimestamp } from "../../AnimationTypes";
+import type {
+  MillisecondDuration,
+  MillisecondTimestamp,
+} from "../../AnimationTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
 export type AnimatedLeafAlgNode = Move | Pause;
 export interface LocalAnimLeavesWithRange {
   animLeafAlgNode: AnimatedLeafAlgNode;
-  msUntilNext: MillisecondTimestamp;
-  duration: MillisecondTimestamp;
-}
-
-export interface AnimLeafWithRange {
-  animLeaf: AnimatedLeafAlgNode;
-  start: MillisecondTimestamp;
-  end: MillisecondTimestamp;
+  msUntilNext: MillisecondDuration;
+  duration: MillisecondDuration;
 }
 
 const axisLookup: Record<string, "x" | "y" | "z"> = {
@@ -88,20 +86,20 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
       maxSimulDur = Math.max(
         maxSimulDur,
         defaultDurationForAmount(moves[i].amount),
-      );
+      ) as MillisecondDuration;
     }
 
     const localMovesWithRange: LocalAnimLeavesWithRange[] = moves.map(
       (blockMove): LocalAnimLeavesWithRange => {
         return {
           animLeafAlgNode: blockMove,
-          msUntilNext: 0,
-          duration: maxSimulDur,
+          msUntilNext: 0 as MillisecondDuration,
+          duration: maxSimulDur as MillisecondDuration,
         };
       },
     );
     localMovesWithRange[localMovesWithRange.length - 1].msUntilNext =
-      maxSimulDur;
+      maxSimulDur as MillisecondDuration;
     return localMovesWithRange;
   }
 
@@ -183,14 +181,14 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
 
 const localSimulMoves = functionFromTraversal(LocalSimulMoves);
 
-export function simulMoves(a: Alg): AnimLeafWithRange[] {
+export function simulMoves(a: Alg): AnimationTimelineLeaf[] {
   let timestamp = 0;
   const l = localSimulMoves(a).map(
-    (localSimulMove: LocalAnimLeavesWithRange): AnimLeafWithRange => {
+    (localSimulMove: LocalAnimLeavesWithRange): AnimationTimelineLeaf => {
       const leafWithRange = {
         animLeaf: localSimulMove.animLeafAlgNode,
-        start: timestamp,
-        end: timestamp + localSimulMove.duration,
+        start: timestamp as MillisecondTimestamp,
+        end: (timestamp + localSimulMove.duration) as MillisecondTimestamp,
       };
       timestamp += localSimulMove.msUntilNext;
       return leafWithRange;

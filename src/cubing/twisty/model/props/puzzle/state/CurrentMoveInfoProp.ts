@@ -1,7 +1,11 @@
 import { Move } from "../../../../../alg";
-import { Direction } from "../../../../controllers/AnimationTypes";
+import {
+  Direction,
+  type MillisecondTimestamp,
+} from "../../../../controllers/AnimationTypes";
 import type {
   AlgIndexer,
+  CurrentMove,
   CurrentMoveInfo,
 } from "../../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
@@ -29,8 +33,8 @@ export class CurrentMoveInfoProp extends TwistyPropDerived<
           move: inputs.catchUpMove.move,
           direction: Direction.Backwards,
           fraction: 1 - inputs.catchUpMove.amount,
-          startTimestamp: -1, // TODO
-          endTimestamp: -1, // TODO
+          startTimestamp: -1 as MillisecondTimestamp, // TODO
+          endTimestamp: -1 as MillisecondTimestamp, // TODO
         });
       }
       return currentMoveInfo;
@@ -65,8 +69,8 @@ export class CurrentMoveInfoProp extends TwistyPropDerived<
         const fraction = duration
           ? (inputs.detailedTimelineInfo.timestamp - start) / duration
           : 0;
-        const end = start + duration;
-        const currentMove = {
+        const end = (start + duration) as MillisecondTimestamp;
+        const currentMove: CurrentMove = {
           move,
           direction: Direction.Forwards,
           fraction,

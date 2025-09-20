@@ -1,10 +1,11 @@
 import type { AlgLeaf } from "cubing/alg";
+import type { MillisecondTimestamp } from "cubing/twisty/controllers/AnimationTypes";
 import { SimpleTwistyPropSource } from "../../TwistyProp";
 
 export interface AnimationTimelineLeaf {
   animLeaf: AlgLeaf;
-  start: number;
-  end: number;
+  start: MillisecondTimestamp;
+  end: MillisecondTimestamp;
 }
 
 export type AnimationTimelineLeaves = AnimationTimelineLeaf[];

@@ -16,13 +16,14 @@ import {
   experimentalDirectedGenerator,
 } from "../../../../alg/cubing-private";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
-import type { Duration } from "../../AnimationTypes";
+import type { MillisecondDuration } from "../../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
+import type { LeafIndex as LeafCount } from "../AlgIndexer";
 
 export class AlgWalkerDecoration {
   constructor(
-    public moveCount: number,
-    public duration: number,
+    public moveCount: LeafCount,
+    public duration: MillisecondDuration,
     public forward: KTransformation,
     public backward: KTransformation,
     public children: AlgWalkerDecoration[] = [],
@@ -31,7 +32,7 @@ export class AlgWalkerDecoration {
 export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
   private identity: KTransformation;
   private dummyLeaf: AlgWalkerDecoration;
-  private durationFn: TraversalUp<Duration> = new AlgDuration(
+  private durationFn: TraversalUp<MillisecondDuration> = new AlgDuration(
     defaultDurationForAmount,
   );
 
@@ -41,8 +42,8 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
     super();
     this.identity = kpuzzle.identityTransformation();
     this.dummyLeaf = new AlgWalkerDecoration(
-      0,
-      0,
+      0 as LeafCount,
+      0 as MillisecondDuration,
       this.identity,
       this.identity,
       [],
@@ -50,13 +51,15 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
   }
 
   public traverseAlg(alg: Alg): AlgWalkerDecoration {
-    let moveCount = 0;
-    let duration = 0;
+    let moveCount = 0 as LeafCount;
+    let duration = 0 as MillisecondDuration;
     let transformation = this.identity;
     const child: AlgWalkerDecoration[] = [];
     for (const algNode of alg.childAlgNodes()) {
       const apd = this.traverseAlgNode(algNode);
+      /** @ts-expect-error: ts(2322) Rewriting this would required duplicating `moveCount`. */
       moveCount += apd.moveCount;
+      /** @ts-expect-error: ts(2322) Rewriting this would required duplicating `duration`. */
       duration += apd.duration;
       if (transformation === this.identity) {
         transformation = apd.forward;
@@ -87,7 +90,7 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
     }
     const transformation = this.kpuzzle.moveToTransformation(move);
     r = new AlgWalkerDecoration(
-      1,
+      1 as LeafCount,
       this.durationFn.traverseAlgNode(move),
       transformation,
       transformation.invert(),
@@ -103,8 +106,8 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
     const ApBp = decA.backward.applyTransformation(decB.backward);
     const ABApBp = AB.applyTransformation(ApBp);
     const dec = new AlgWalkerDecoration(
-      2 * (decA.moveCount + decB.moveCount),
-      2 * (decA.duration + decB.duration),
+      (2 * (decA.moveCount + decB.moveCount)) as LeafCount,
+      (2 * (decA.duration + decB.duration)) as MillisecondDuration,
       ABApBp,
       ABApBp.invert(),
       [decA, decB],
@@ -118,8 +121,8 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
     const AB = decA.forward.applyTransformation(decB.forward);
     const ABAp = AB.applyTransformation(decA.backward);
     const dec = new AlgWalkerDecoration(
-      2 * decA.moveCount + decB.moveCount,
-      2 * decA.duration + decB.duration,
+      (2 * decA.moveCount + decB.moveCount) as LeafCount,
+      (2 * decA.duration + decB.duration) as MillisecondDuration,
       ABAp,
       ABAp.invert(),
       [decA, decB],
@@ -132,7 +135,7 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
       return this.dummyLeaf;
     }
     return new AlgWalkerDecoration(
-      1,
+      1 as LeafCount,
       this.durationFn.traverseAlgNode(pause),
       this.identity,
       this.identity,
@@ -155,8 +158,8 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
     const absn = Math.abs(n);
     const st = apd.forward.selfMultiply(n);
     return new AlgWalkerDecoration(
-      apd.moveCount * absn,
-      apd.duration * absn,
+      (apd.moveCount * absn) as LeafCount,
+      (apd.duration * absn) as MillisecondDuration,
       st,
       st.invert(),
       child,
@@ -173,39 +176,39 @@ class WalkerDown {
 }
 export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
   public move?: AlgNode;
-  public moveDuration: number;
+  public moveDuration: MillisecondDuration;
   public back: boolean;
   public st: KTransformation;
   public root: WalkerDown;
-  public i: number;
-  public dur: number;
-  private goali: number;
-  private goaldur: number;
+  public i: LeafCount;
+  public dur: MillisecondDuration;
+  private goalIndex: LeafCount;
+  private goalDuration: MillisecondDuration;
   constructor(
     public kpuzzle: KPuzzle,
     public algOrAlgNode: Alg | AlgNode, // TODO: can we keep these separate?
     public apd: AlgWalkerDecoration,
   ) {
     super();
-    this.i = -1;
-    this.dur = -1;
-    this.goali = -1;
-    this.goaldur = -1;
+    this.i = -1 as LeafCount;
+    this.dur = -1 as MillisecondDuration;
+    this.goalIndex = -1 as LeafCount;
+    this.goalDuration = -1 as MillisecondDuration;
     this.move = undefined;
     this.back = false;
-    this.moveDuration = 0;
+    this.moveDuration = 0 as MillisecondDuration;
     this.st = this.kpuzzle.identityTransformation();
     this.root = new WalkerDown(this.apd, false);
   }
 
-  public moveByIndex(loc: number): boolean {
+  public moveByIndex(loc: LeafCount): boolean {
     if (this.i >= 0 && this.i === loc) {
       return this.move !== undefined;
     }
-    return this.dosearch(loc, Infinity);
+    return this.dosearch(loc, Infinity as MillisecondDuration);
   }
 
-  public moveByDuration(dur: number): boolean {
+  public moveByDuration(dur: MillisecondDuration): boolean {
     if (
       this.dur >= 0 &&
       this.dur < dur &&
@@ -213,16 +216,16 @@ export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
     ) {
       return this.move !== undefined;
     }
-    return this.dosearch(Infinity, dur);
+    return this.dosearch(Infinity as LeafCount, dur);
   }
 
-  public dosearch(loc: number, dur: number): boolean {
-    this.goali = loc;
-    this.goaldur = dur;
-    this.i = 0;
-    this.dur = 0;
+  public dosearch(loc: LeafCount, dur: MillisecondDuration): boolean {
+    this.goalIndex = loc;
+    this.goalDuration = dur;
+    this.i = 0 as LeafCount;
+    this.dur = 0 as MillisecondDuration;
     this.move = undefined;
-    this.moveDuration = 0;
+    this.moveDuration = 0 as MillisecondDuration;
     this.back = false;
     this.st = this.kpuzzle.identityTransformation();
     const r = this.algOrAlgNode.is(Alg)
@@ -374,8 +377,8 @@ export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
 
   private firstcheck(wd: WalkerDown): boolean {
     if (
-      wd.apd.moveCount + this.i <= this.goali &&
-      wd.apd.duration + this.dur < this.goaldur
+      wd.apd.moveCount + this.i <= this.goalIndex &&
+      wd.apd.duration + this.dur < this.goalDuration
     ) {
       return this.keepgoing(wd);
     }
@@ -394,8 +397,8 @@ export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
     }
     const base = wd.apd.children[0];
     const full = Math.min(
-      Math.floor((this.goali - this.i) / base.moveCount),
-      Math.ceil((this.goaldur - this.dur) / base.duration - 1),
+      Math.floor((this.goalIndex - this.i) / base.moveCount),
+      Math.ceil((this.goalDuration - this.dur) / base.duration - 1),
     );
     if (full > 0) {
       this.keepgoing(new WalkerDown(base, back), full);
@@ -404,8 +407,10 @@ export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
   }
 
   private keepgoing(wd: WalkerDown, mul: number = 1): boolean {
-    this.i += mul * wd.apd.moveCount;
-    this.dur += mul * wd.apd.duration;
+    /** @ts-expect-error: ts(2322) Rewriting this would required duplicating `this.i`. */
+    this.i += (mul * wd.apd.moveCount) as LeafCount;
+    /** @ts-expect-error: ts(2322) Rewriting this would required duplicating `this.dur`. */
+    this.dur += (mul * wd.apd.duration) as MillisecondDuration;
     if (mul !== 1) {
       if (wd.back) {
         this.st = this.st.applyTransformation(

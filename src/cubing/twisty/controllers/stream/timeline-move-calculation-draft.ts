@@ -1,15 +1,18 @@
 import { Move, QuantumMove } from "../../../alg";
-import type { Duration, Timestamp } from "../AnimationTypes";
+import type {
+  MillisecondDuration,
+  MillisecondTimestamp,
+} from "../AnimationTypes";
 
 interface Event {
-  timeStamp: Timestamp;
+  timeStamp: MillisecondTimestamp;
   move: Move;
 }
 
 export interface TimelineEntry {
   event: Event;
-  start: Timestamp;
-  end: Timestamp;
+  start: MillisecondTimestamp;
+  end: MillisecondTimestamp;
 }
 
 type Timeline = TimelineEntry[];
@@ -36,7 +39,7 @@ function isSameAxis(move1: Move, move2: Move): boolean {
 
 export function toAxes(
   events: Event[],
-  diameterMs: Duration,
+  diameterMs: MillisecondDuration,
 ): TimelineEntry[][] {
   const axes: TimelineEntry[][] = [];
   const axisMoveTracker = new Map();
@@ -45,8 +48,8 @@ export function toAxes(
     if (!lastEntry) {
       lastEntry = {
         event,
-        start: event.timeStamp - diameterMs / 2,
-        end: event.timeStamp + diameterMs / 2,
+        start: (event.timeStamp - diameterMs / 2) as MillisecondTimestamp,
+        end: (event.timeStamp + diameterMs / 2) as MillisecondTimestamp,
       };
       axes.push([lastEntry]);
       axisMoveTracker.set(lastEntry.event.move.quantum.toString(), lastEntry);
@@ -54,8 +57,8 @@ export function toAxes(
     }
     const newEntry: TimelineEntry = {
       event,
-      start: event.timeStamp - diameterMs / 2,
-      end: event.timeStamp + diameterMs / 2,
+      start: (event.timeStamp - diameterMs / 2) as MillisecondTimestamp,
+      end: (event.timeStamp + diameterMs / 2) as MillisecondTimestamp,
     };
     if (isSameAxis(lastEntry.event.move, event.move)) {
       const quarterName = newEntry.event.move.quantum.toString();
@@ -87,8 +90,8 @@ export function toAxes(
       axisMoveTracker.set(newEntry.event.move.quantum.toString(), newEntry);
       if (newEntry.start < lastEntry.end) {
         const midpoint = (newEntry.start + lastEntry.end) / 2;
-        newEntry.start = midpoint;
-        lastEntry.end = midpoint;
+        newEntry.start = midpoint as MillisecondTimestamp;
+        lastEntry.end = midpoint as MillisecondTimestamp;
       }
     }
     lastEntry = newEntry;
@@ -97,11 +100,11 @@ export function toAxes(
 }
 
 // TODO: turn into an optional param
-const defaultDiameterMs: Duration = 200;
+const defaultDiameterMs: MillisecondDuration = 200 as MillisecondDuration;
 
 export function toTimeline(
   events: Event[],
-  diameterMs: number = defaultDiameterMs,
+  diameterMs: MillisecondDuration = defaultDiameterMs,
 ): Timeline {
   const axes: TimelineEntry[][] = toAxes(events, diameterMs);
   // console.log(axes);

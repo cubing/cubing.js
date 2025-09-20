@@ -1,4 +1,8 @@
-import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
+import {
+  BoundaryType,
+  Direction,
+  type MillisecondTimestamp,
+} from "../../controllers/AnimationTypes";
 import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
 import type { DetailedTimelineInfo } from "../../model/props/timeline/DetailedTimelineInfoProp";
 import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
@@ -117,7 +121,7 @@ export class TwistyScrubber extends ManagedCustomElement {
     const inputElem = await this.inputElem();
     await this.slowDown(e, inputElem); // TODO
 
-    const value = parseInt(inputElem.value, 10);
+    const value = parseInt(inputElem.value, 10) as MillisecondTimestamp;
     // console.log("on input", value);
     this.model?.playingInfo.set({ playing: false });
     this.model?.timestampRequest.set(value);

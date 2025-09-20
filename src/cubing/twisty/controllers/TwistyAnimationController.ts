@@ -98,7 +98,7 @@ export class TwistyAnimationController {
 
   private model: TwistyPlayerModel;
 
-  private lastDatestamp: MillisecondTimestamp = 0;
+  private lastDatestamp: MillisecondTimestamp = 0 as MillisecondTimestamp;
   private lastTimestampPromise: Promise<MillisecondTimestamp>;
 
   private scheduler: RenderScheduler = new RenderScheduler(
@@ -199,7 +199,7 @@ export class TwistyAnimationController {
     });
 
     this.playing = true;
-    this.lastDatestamp = performance.now(); // TODO: Take from event.
+    this.lastDatestamp = performance.now() as MillisecondTimestamp; // TODO: Take from event.
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
     // TODO: Save timestamp from model?
@@ -279,7 +279,7 @@ export class TwistyAnimationController {
       tempoScale;
     delta = Math.max(delta, 1); // TODO: This guards against the timestamp going in the wrong direction by accident. Can we avoid it?
     delta *= playingInfo.direction;
-    let newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
+    let newTimestamp = (lastTimestamp + delta) as MillisecondTimestamp; // TODO: Pre-emptively clamp.
     let newSmartTimestampRequest: Exclude<TimestampRequest, number> | null =
       null;
 
@@ -289,12 +289,12 @@ export class TwistyAnimationController {
           newTimestamp,
           timeRange.start,
           timeRange.end,
-        );
+        ) as MillisecondTimestamp;
       } else {
         if (newTimestamp === timeRange.end) {
           newSmartTimestampRequest = "end";
         } else {
-          newTimestamp = end;
+          newTimestamp = end as MillisecondTimestamp;
         }
         this.playing = false;
         this.model.playingInfo.set({
@@ -307,12 +307,12 @@ export class TwistyAnimationController {
           newTimestamp,
           timeRange.start,
           timeRange.end,
-        );
+        ) as MillisecondTimestamp;
       } else {
         if (newTimestamp === timeRange.start) {
           newSmartTimestampRequest = "start";
         } else {
-          newTimestamp = start;
+          newTimestamp = start as MillisecondTimestamp;
         }
         this.playing = false;
         this.model.playingInfo.set({
@@ -321,7 +321,9 @@ export class TwistyAnimationController {
       }
     }
     this.lastDatestamp = frameDatestamp;
-    this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
+    this.lastTimestampPromise = Promise.resolve(
+      newTimestamp as MillisecondTimestamp,
+    ); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
     this.model.timestampRequest.set(newSmartTimestampRequest ?? newTimestamp);
   }
 }

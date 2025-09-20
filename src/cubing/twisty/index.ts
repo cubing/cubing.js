@@ -6,11 +6,18 @@
  * @packageDocumentation
  */
 
-export type { MillisecondTimestamp as ExperimentalMillisecondTimestamp } from "./controllers/AnimationTypes";
+export type {
+  MillisecondDuration as ExperimentalMillisecondDuration,
+  MillisecondTimestamp as ExperimentalMillisecondTimestamp,
+} from "./controllers/AnimationTypes";
 // Older
 // export { Cube3D } from "./views/3D/puzzles/Cube3D";
 // export { PG3D } from "./views/3D/puzzles/PG3D";
-export type { AlgIndexer } from "./controllers/indexer/AlgIndexer";
+export type {
+  AlgIndexer,
+  LeafCount as ExperimentalLeafCount,
+  LeafIndex as ExperimentalLeafIndex,
+} from "./controllers/indexer/AlgIndexer";
 export { SimpleAlgIndexer } from "./controllers/indexer/SimpleAlgIndexer";
 export { TreeAlgIndexer } from "./controllers/indexer/tree/TreeAlgIndexer";
 export { setTwistyDebug } from "./debug";

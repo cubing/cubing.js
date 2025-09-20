@@ -1,8 +1,11 @@
 import type { Alg, Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
-import type { Duration, Timestamp } from "../../AnimationTypes";
-import type { AlgIndexer } from "../AlgIndexer";
+import type {
+  MillisecondDuration,
+  MillisecondTimestamp,
+} from "../../AnimationTypes";
+import type { AlgIndexer, LeafCount, LeafIndex } from "../AlgIndexer";
 import {
   AlgWalker,
   type AlgWalkerDecoration,
@@ -25,7 +28,7 @@ export class TreeAlgIndexer implements AlgIndexer {
     this.walker = new AlgWalker(this.kpuzzle, chunkedAlg, this.decoration);
   }
 
-  public getAnimLeaf(index: number): Move | null {
+  public getAnimLeaf(index: LeafIndex): Move | null {
     // FIXME need to support Pause
     if (this.walker.moveByIndex(index)) {
       if (!this.walker.move) {
@@ -41,21 +44,21 @@ export class TreeAlgIndexer implements AlgIndexer {
     return null;
   }
 
-  public indexToMoveStartTimestamp(index: number): Timestamp {
+  public indexToMoveStartTimestamp(index: LeafIndex): MillisecondTimestamp {
     if (this.walker.moveByIndex(index) || this.walker.i === index) {
-      return this.walker.dur;
+      return this.walker.dur as number as MillisecondTimestamp; // TODO
     }
     throw new Error(`Out of algorithm: index ${index}`);
   }
 
-  public indexToMovesInProgress(index: number): Timestamp {
+  public indexToMovesInProgress(index: LeafIndex): MillisecondTimestamp {
     if (this.walker.moveByIndex(index) || this.walker.i === index) {
-      return this.walker.dur;
+      return this.walker.dur as number as MillisecondTimestamp; // TODO
     }
     throw new Error(`Out of algorithm: index ${index}`);
   }
 
-  public patternAtIndex(index: number, startPattern?: KPattern): KPattern {
+  public patternAtIndex(index: LeafIndex, startPattern?: KPattern): KPattern {
     this.walker.moveByIndex(index);
     return (startPattern ?? this.kpuzzle.defaultPattern()).applyTransformation(
       this.walker.st,
@@ -65,25 +68,25 @@ export class TreeAlgIndexer implements AlgIndexer {
   // TransformAtIndex does not reflect the start pattern; it only reflects
   // the change from the start pattern to the current move index.  If you
   // want the actual pattern, use patternAtIndex.
-  public transformationAtIndex(index: number): KTransformation {
+  public transformationAtIndex(index: LeafIndex): KTransformation {
     this.walker.moveByIndex(index);
     return this.walker.st;
   }
 
-  public numAnimatedLeaves(): number {
-    return this.decoration.moveCount;
+  public numAnimatedLeaves(): LeafCount {
+    return this.decoration.moveCount as number as LeafCount; // TODO: This should not need any casting?
   }
 
-  public timestampToIndex(timestamp: Timestamp): number {
-    this.walker.moveByDuration(timestamp);
+  public timestampToIndex(timestamp: MillisecondTimestamp): LeafIndex {
+    this.walker.moveByDuration(timestamp as number as MillisecondDuration); // TODO
     return this.walker.i;
   }
 
-  public algDuration(): Duration {
+  public algDuration(): MillisecondDuration {
     return this.decoration.duration;
   }
 
-  public moveDuration(index: number): number {
+  public moveDuration(index: LeafIndex): MillisecondDuration {
     this.walker.moveByIndex(index);
     return this.walker.moveDuration;
   }
