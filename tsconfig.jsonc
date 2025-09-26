@@ -5,12 +5,7 @@
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "noEmit": true,
     "rootDir": "./",
-    "types": [
-      "web-bluetooth",
-      "dom-speech-recognition",
-      // Temporary workaround for https://github.com/oven-sh/bun/issues/22069
-      "@cubing/types-workarounds"
-    ],
+    "types": ["web-bluetooth", "dom-speech-recognition"],
     "allowJs": true,
     "paths": {
       // Workaround for the `bin` build: https://github.com/cubing/cubing.js/issues/292
