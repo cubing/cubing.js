@@ -262,7 +262,7 @@ bun-required:
 
 .PHONY: update-dependencies
 update-dependencies:
-	${BUN} install --frozen-lockfile --linker isolated
+	${BUN} install --frozen-lockfile
 
 .PHONY: check-engines
 check-engines: update-dependencies
