@@ -298,7 +298,7 @@ deploy-twizzle: build-site-twizzle
 
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
-	bun x @cubing/deploy
+	bun x --package @cubing/deploy deploy
 
 .PHONY: roll-vendored-twsearch
 roll-vendored-twsearch:
