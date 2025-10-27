@@ -192,8 +192,7 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
     warnOnSuccess: null | string,
   ][] = [
     [
-      async () =>
-        instantiateModuleWorker(await searchWorkerURLImportMetaResolve()),
+      async () => instantiateModuleWorker(searchWorkerURLImportMetaResolve()),
       "using `import.meta.resolve(…)",
       null,
     ],
