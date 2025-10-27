@@ -118,7 +118,6 @@
         <li>Only use <code>cubing.js</code> to generate scrambles for unofficial software/competitions/events. Official
           WCA competitions must use the current version of <a
             href="https://www.worldcubeassociation.org/regulations/scrambles/">the official scramble program</a>.</li>
-        </li>
       </ul>
       </p>
     </section>
@@ -189,6 +188,7 @@
       <h1><a href="#with-twisty-player">With <code>&lt;twisty-player&gt;</code></a></h1>
       <p>You can assign a scramble or a scramble <code>Promise</code> to <code>&lt;twisty-player&gt;</code>. Here is a
         simple way to display a scramble alg with an associated player:
+      </p>
       <div class="code-demo">
         <div>
           <code class="sample">
@@ -206,18 +206,6 @@
           <code class="boilerplate">&lt;/script&gt;</code></span>
           </code>
         </div>
-        <code class="sample output">
-<twisty-alg-viewer for="main-player"></twisty-alg-viewer>
-<twisty-player id="main-player" style="height: 256px;"></twisty-player>
-
-<script type="module">
-  import "https://cdn.cubing.net/v0/js/cubing/twisty";
-  import { randomScrambleForEvent } from "https://cdn.cubing.net/v0/js/cubing/scramble";
-
-  const scramblePromise = randomScrambleForEvent("333");
-  document.querySelector("#main-player").alg = scramblePromise;
-</script>
-        </code>
       </div>
       <p>
         <a href="https://codepen.io/cubing/pen/abyRpPE?editors=1010">Try it</a>.

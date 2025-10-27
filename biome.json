@@ -16,30 +16,16 @@
   },
   "linter": {
     "rules": {
-      "nursery": {},
       "complexity": {
         "useLiteralKeys": "off"
       },
       "style": {
-        "noNegationElse": "off",
-        "noShoutyConstants": "off",
-        "noInferrableTypes": "off",
         "noNonNullAssertion": "off",
-        "noParameterAssign": "off",
-        "useEnumInitializers": "off",
-        "noUselessElse": "off",
-        "useNumberNamespace": "off",
-        "useBlockStatements": "error"
+        "noUselessElse": "off"
       },
       "suspicious": {
         "noAssignInExpressions": "off",
         "noExplicitAny": "off"
-      },
-      "performance": {
-        "noDelete": "off"
-      },
-      "correctness": {
-        "noUnusedImports": "error"
       }
     }
   }
