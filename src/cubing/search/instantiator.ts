@@ -14,6 +14,7 @@ import {
 export interface WorkerOutsideAPI {
   terminate: () => void; // `node` can return a `Promise` with an exit code, but we match the web worker API.
 }
+
 export interface InsideOutsideAPI {
   insideAPI: WorkerInsideAPI;
   outsideAPI: WorkerOutsideAPI;
