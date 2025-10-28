@@ -174,6 +174,12 @@ export async function mapToAllWorkers(
   );
 }
 
+type FallbackStrategyInfo = [
+  fn: () => Promise<InsideOutsideAPI>,
+  description: string,
+  warnOnSuccess: null | string,
+];
+
 async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
   if (globalThis.location?.protocol === "file:") {
     console.warn(
@@ -187,42 +193,51 @@ async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
     } failed`;
   }
 
-  const fallbackOrder: [
-    fn: () => Promise<InsideOutsideAPI>,
-    description: string,
-    warnOnSuccess: null | string,
-  ][] = [
-    [
-      async () => instantiateModuleWorker(searchWorkerURLImportMetaResolve()),
-      "using `import.meta.resolve(…)",
-      null,
-    ],
-    [
-      async () =>
-        instantiateModuleWorker(await searchWorkerURLEsbuildWorkaround()),
-      "using the `esbuild` workaround",
-      // TODO: we will hopefully discontinue the `esbuild` workaround at some
-      // point, but `esbuild` has been stuck for 3 years on this issue. Because
-      // `esbuild` and Vite (which uses `esbuild`) are now dominating the
-      // ecosystem, this just causes a warning for a lot of devs/users that they
-      // can't do anything about. As frustrating as the situation is, the
-      // workaround is semantically fine (even if it's convoluted) and is
-      // preserved by `esbuild`-based flows in practice. So we suppress the
-      // warning in the medium-term but maintain long-term hope that we can
-      // remove it (and the other fallbacks as well).
-      null,
-    ],
-    [
-      async () => instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL()),
-      "using `new URL(…, import.meta.url)`",
-      "will",
-    ],
-    [
-      instantiateModuleWorkerDirectlyForBrowser,
-      "using inline `new URL(…, import.meta.url)`",
-      "may",
-    ],
+  const importMetaResolveStrategy: FallbackStrategyInfo = [
+    async () => instantiateModuleWorker(searchWorkerURLImportMetaResolve()),
+    "using `import.meta.resolve(…)",
+    null,
   ];
+  const esbuildWorkaroundStrategy: FallbackStrategyInfo = [
+    async () =>
+      instantiateModuleWorker(await searchWorkerURLEsbuildWorkaround()),
+    "using the `esbuild` workaround",
+    // TODO: we will hopefully discontinue the `esbuild` workaround at some
+    // point, but `esbuild` has been stuck for 3 years on this issue. Because
+    // `esbuild` and Vite (which uses `esbuild`) are now dominating the
+    // ecosystem, this just causes a warning for a lot of devs/users that they
+    // can't do anything about. As frustrating as the situation is, the
+    // workaround is semantically fine (even if it's convoluted) and is
+    // preserved by `esbuild`-based flows in practice. So we suppress the
+    // warning in the medium-term but maintain long-term hope that we can
+    // remove it (and the other fallbacks as well).
+    null,
+  ];
+  const newURLStrategy: FallbackStrategyInfo = [
+    async () => instantiateModuleWorker(searchWorkerURLNewURLImportMetaURL()),
+    "using `new URL(…, import.meta.url)`",
+    "will",
+  ];
+  const inlineNewURLStrategy: FallbackStrategyInfo = [
+    instantiateModuleWorkerDirectlyForBrowser,
+    "using inline `new URL(…, import.meta.url)`",
+    "may",
+  ];
+
+  const fallbackOrder: FallbackStrategyInfo[] =
+    searchOutsideDebugGlobals.prioritizeEsbuildWorkaroundForWorkerInstantiation
+      ? [
+          esbuildWorkaroundStrategy,
+          importMetaResolveStrategy,
+          newURLStrategy,
+          inlineNewURLStrategy,
+        ]
+      : [
+          importMetaResolveStrategy,
+          esbuildWorkaroundStrategy,
+          newURLStrategy,
+          inlineNewURLStrategy,
+        ];
 
   for (const [fn, description, warnOnSuccess] of fallbackOrder) {
     try {

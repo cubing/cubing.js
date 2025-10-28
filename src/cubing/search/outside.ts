@@ -157,13 +157,17 @@ interface SearchOutsideDebugGlobals {
   disableStringWorker: boolean;
   forceNewWorkerForEveryScramble: boolean;
   showWorkerInstantiationWarnings: boolean;
+  // This can prevent a request to `search-worker-entry.js` when it doesn't exist, if the library semantics have been mangled by `esbuild`.
+  prioritizeEsbuildWorkaroundForWorkerInstantiation: boolean;
 }
+
 export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   logPerf: true,
   scramblePrefetchLevel: "auto",
   disableStringWorker: false,
   forceNewWorkerForEveryScramble: false,
   showWorkerInstantiationWarnings: true,
+  prioritizeEsbuildWorkaroundForWorkerInstantiation: false,
 };
 
 export function setSearchDebug(
@@ -184,7 +188,8 @@ export function setSearchDebug(
   }
   if ("disableStringWorker" in options) {
     searchOutsideDebugGlobals.disableStringWorker =
-      !!options.disableStringWorker;
+      options.disableStringWorker ??
+      searchOutsideDebugGlobals.disableStringWorker;
   }
   if ("forceNewWorkerForEveryScramble" in options) {
     searchOutsideDebugGlobals.forceNewWorkerForEveryScramble =
@@ -193,5 +198,9 @@ export function setSearchDebug(
   if ("showWorkerInstantiationWarnings" in options) {
     searchOutsideDebugGlobals.showWorkerInstantiationWarnings =
       !!options.showWorkerInstantiationWarnings;
+  }
+  if ("prioritizeEsbuildWorkaroundForWorkerInstantiation" in options) {
+    searchOutsideDebugGlobals.prioritizeEsbuildWorkaroundForWorkerInstantiation =
+      !!options.prioritizeEsbuildWorkaroundForWorkerInstantiation;
   }
 }
