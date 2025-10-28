@@ -1,16 +1,13 @@
 import { exec } from "node:child_process";
-import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { barelyServe } from "barely-a-dev-server";
 import { $ } from "bun";
 import type { Plugin } from "esbuild";
+import { Path } from "path-class";
 import { needPath } from "../../lib/needPath";
 
 needPath(
-  fileURLToPath(
-    new URL("../../../node_modules/barely-a-dev-server", import.meta.url),
-  ),
+  Path.resolve("../../../node_modules/barely-a-dev-server", import.meta.url),
   "make setup",
 );
 
@@ -54,7 +51,7 @@ export interface VersionJSON {
   commitGitHubURL: string;
 }
 
-async function writeVersionJSON(siteFolder: string) {
+async function writeVersionJSON(siteFolder: Path) {
   // https://git-scm.com/docs/git-describe
   const gitDescribeVersion = (
     await $`git describe --tags || echo v0.0.0`.text()
@@ -64,27 +61,20 @@ async function writeVersionJSON(siteFolder: string) {
   const commitHash = (await $`git rev-parse HEAD`.text()).trim();
   const commitGitHubURL = `https://github.com/cubing/cubing.js/commit/${commitHash}`;
 
-  await writeFile(
-    join(siteFolder, "version.json"),
-    JSON.stringify(
-      {
-        gitDescribeVersion,
-        gitBranch,
-        date,
-        commitHash,
-        commitGitHubURL,
-      } satisfies VersionJSON,
-      null,
-      "  ",
-    ),
-  );
+  await siteFolder.join("version.json").writeJSON({
+    gitDescribeVersion,
+    gitBranch,
+    date,
+    commitHash,
+    commitGitHubURL,
+  } satisfies VersionJSON);
 }
 
 export async function barelyServeSite(srcFolder: string, dev: boolean) {
-  const outDir = dev ? join(".temp/dev", srcFolder) : join("dist", srcFolder);
+  const outDir = new Path(dev ? ".temp/dev" : "dist").join(srcFolder);
   await barelyServe({
     entryRoot: join("src", srcFolder),
-    outDir,
+    outDir: outDir.path, // TODO: accept `Path` arg in the `barelyServe(…)` signature?
     dev,
     devDomain: "cubing.localhost",
     port: 3333,
@@ -96,6 +86,6 @@ export async function barelyServeSite(srcFolder: string, dev: boolean) {
   });
   if (!dev) {
     // TODO: Include this in the custom build process.
-    await writeVersionJSON("dist/sites/alpha.twizzle.net");
+    await writeVersionJSON(new Path("dist/sites/alpha.twizzle.net"));
   }
 }

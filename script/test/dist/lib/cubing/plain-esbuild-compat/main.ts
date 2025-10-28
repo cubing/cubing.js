@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 import { packageNames } from "../../../../../build/common/package-info.js";
 import { needPath } from "../../../../../lib/needPath.js";
@@ -8,7 +8,7 @@ import { needPath } from "../../../../../lib/needPath.js";
 const OUT_DIR = "./.temp/plain-esbuild-compat";
 
 needPath(
-  fileURLToPath(new URL("../../../../../../dist/lib/cubing", import.meta.url)),
+  Path.resolve("../../../../../../dist/lib/cubing", import.meta.url),
   "make build-lib-js",
 );
 

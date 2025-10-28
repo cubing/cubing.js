@@ -5,7 +5,8 @@ if (exposeAPI.expose) {
   (async () => {
     await import("../inside");
 
-    // Workaround for `node`
+    // Workaround for `node`'
+    // @ts-expect-error(TS2774): `globalThis.postMessage` does not exist in `node`, but the types do not reflect that.
     const messagePort = globalThis.postMessage
       ? globalThis
       : await nodeEndpointPort();

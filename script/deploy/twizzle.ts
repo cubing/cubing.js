@@ -1,6 +1,6 @@
 import * as assert from "node:assert";
-import { readFile } from "node:fs/promises";
 import { $ } from "bun";
+import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 import type { VersionJSON } from "../build/sites/barelyServeSite";
 import { rsync } from "./rsync";
@@ -37,9 +37,9 @@ await new PrintableShellCommand("ssh", [
 const response = await fetch("https://alpha.twizzle.net/version.json");
 const responseJSON = (await response.json()) as VersionJSON;
 
-const distVersionJSON = JSON.parse(
-  await readFile("./dist/sites/alpha.twizzle.net/version.json", "utf-8"),
-);
+const distVersionJSON = await new Path(
+  "./dist/sites/alpha.twizzle.net/version.json",
+).readJSON<VersionJSON>();
 assert.equal(
   distVersionJSON.gitDescribeVersion,
   responseJSON.gitDescribeVersion,

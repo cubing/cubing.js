@@ -36,6 +36,7 @@ export const mainAllowedImports: AllowedImports = {
       "barely-a-dev-server",
       "printable-shell-command",
       "cmd-ts-too",
+      "path-class",
 
       "esbuild",
       "node-fetch",

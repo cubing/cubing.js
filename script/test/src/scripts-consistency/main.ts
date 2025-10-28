@@ -1,9 +1,12 @@
-import { readFile, writeFile } from "node:fs/promises";
 import { exit } from "node:process";
 import { fileURLToPath } from "node:url";
+import { Path } from "path-class";
 
-const MAKEFILE_PATH = new URL("../../../../Makefile", import.meta.url);
-const PACKAGE_JSON_PATH = new URL("../../../../package.json", import.meta.url);
+const MAKEFILE_PATH = Path.resolve("../../../../Makefile", import.meta.url);
+const PACKAGE_JSON_PATH = Path.resolve(
+  "../../../../package.json",
+  import.meta.url,
+);
 const EXPECTED_NON_PHONY_TARGETS = new Set(["node_modules"]);
 
 const fix = process.argv[2] === "--fix";
@@ -12,7 +15,7 @@ let exitCode = 0;
 let needsFix = false;
 const SIMPLE_MAKEFILE_TARGET_MATCH = /^([A-Za-z-]+):/;
 
-const makefileText = await readFile(MAKEFILE_PATH, "utf-8");
+const makefileText = await MAKEFILE_PATH.readText();
 let inScriptsSection = true;
 const makefileScriptTargets: string[] = [];
 let previousLine = "";
@@ -54,7 +57,9 @@ This must be fixed by hand. Please do one of the following:
   previousLine = line;
 }
 
-const packageJSON = JSON.parse(await readFile(PACKAGE_JSON_PATH, "utf-8"));
+const packageJSON = await PACKAGE_JSON_PATH.readJSON<{
+  scripts: Record<string, string>;
+}>();
 const packageJSONScripts = [];
 for (const [scriptName, shell] of Object.entries(packageJSON.scripts)) {
   if (shell !== `make ${scriptName}`) {
@@ -104,5 +109,5 @@ if (fix && needsFix) {
   packageJSON.scripts = Object.fromEntries(
     makefileScriptTargets.map((target) => [target, `make ${target}`]),
   );
-  writeFile(PACKAGE_JSON_PATH, `${JSON.stringify(packageJSON, null, "  ")}\n`);
+  await PACKAGE_JSON_PATH.write(`${JSON.stringify(packageJSON, null, "  ")}\n`);
 }

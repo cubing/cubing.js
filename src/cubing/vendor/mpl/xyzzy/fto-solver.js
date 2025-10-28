@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /* ftosolver.js - An FTO solver
 version 0.5.1 (2021-04-20)
 

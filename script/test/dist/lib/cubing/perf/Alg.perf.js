@@ -1,10 +1,8 @@
-import { fileURLToPath } from "node:url";
+import { Path } from "path-class";
 import { needPath } from "../../../../../lib/needPath.js";
 
 needPath(
-  fileURLToPath(
-    new URL("../../../../../../dist/lib/cubing/alg", import.meta.url),
-  ),
+  Path.resolve("../../../../../../dist/lib/cubing/alg", import.meta.url),
   "make build-lib-js",
 );
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // From https://gist.github.com/cs0x7f/1579492aa43c794d529057386c489702
 
 "use strict";

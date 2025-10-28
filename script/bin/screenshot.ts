@@ -28,7 +28,7 @@ import type {
   TwistyPlayerConfig,
   VisualizationFormat,
 } from "../../src/cubing/twisty/index.js";
-import { startServer } from "../lib/experiments-server/index.js";
+import { startServer } from "../lib/experiments-server";
 
 const DEBUG = false;
 const PAGE_URL =

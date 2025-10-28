@@ -1,24 +1,25 @@
-import { readdir, readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { Path } from "path-class";
 
-const DIR = fileURLToPath(
-  new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url),
-);
+const DIR = Path.resolve("../src/cubing/vendor/mpl/twsearch", import.meta.url);
 
-for (const dirEnt of await readdir(DIR, {
+const NO_CHECK_PREFIX = `// @ts-nocheck
+
+`;
+
+for (const dirEnt of await DIR.readDir({
   withFileTypes: true,
   recursive: true,
 })) {
-  const { parentPath, name: fileName } = dirEnt;
+  const parentPath = new Path(dirEnt.parentPath);
+  const name = new Path(dirEnt.name);
   // Note: we call this on `dirEnt` instead of destructuring `isDirectory` above, because that would produce an incorrect result: https://github.com/oven-sh/bun/issues/21099
   if (dirEnt.isDirectory()) {
     continue;
   }
-  const filePath = join(parentPath, fileName);
-  console.log("Fixing:", filePath);
-  let contents = await readFile(filePath, "utf-8");
-  switch (fileName) {
+  const filePath = parentPath.join(name);
+  console.log(`Fixing: ${filePath}`);
+  let contents = await filePath.readText();
+  switch (name.path) {
     case ".DS_Store": {
       // *shakes fist at Apple*
       break;
@@ -36,5 +37,8 @@ for (const dirEnt of await readdir(DIR, {
       break;
     }
   }
-  await writeFile(filePath, contents);
+  if (name.extension === ".js" && !contents.startsWith(NO_CHECK_PREFIX)) {
+    contents = NO_CHECK_PREFIX + contents;
+  }
+  await filePath.write(contents);
 }

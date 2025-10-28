@@ -1,6 +1,6 @@
-import { mkdir, writeFile } from "node:fs/promises";
 import { type BuildOptions, build } from "esbuild";
 import { packageEntryPointsWithSearchWorkerEntry } from "../common/package-info";
+import { tempPath } from "../common/paths";
 
 // In theory we could set `packages: "external"` here and rely on `make
 // test-src-import-restrictions`, but this is safer.
@@ -24,8 +24,4 @@ export const esmOptions: BuildOptions = {
 
 const result = await build(esmOptions);
 
-await mkdir("./.temp", { recursive: true });
-await writeFile(
-  "./.temp/esbuild-metafile.json",
-  JSON.stringify(result.metafile),
-);
+await tempPath.join("esbuild-metafile.json").writeJSON(result.metafile);

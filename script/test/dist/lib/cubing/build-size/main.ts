@@ -1,62 +1,78 @@
-import { mkdtemp, readFile, stat } from "node:fs/promises";
-import { join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { stat } from "node:fs/promises";
 import { promisify } from "node:util";
 import { gzip } from "node:zlib";
 import { build } from "esbuild";
+import { Path } from "path-class";
 import { default as packageJSON } from "../../../../../../package.json" with {
   type: "json",
 };
 import { needPath } from "../../../../../lib/needPath.js";
 
-const { exports } = packageJSON;
+const { exports: packageJSONExports } = packageJSON;
 
-const rootFilePath = new URL("../../../../../../", import.meta.url);
+const rootFilePath = Path.resolve("../../../../../../", import.meta.url);
 
-needPath(
-  join(fileURLToPath(rootFilePath), "dist/lib/cubing"),
-  "make build-lib-js",
-);
+needPath(rootFilePath.join("dist/lib/cubing"), "make build-lib-js");
 
-function subpackageEntry(subpackageName) {
-  return fileURLToPath(
-    new URL(exports[`./${subpackageName}`].import, rootFilePath),
+function subpackageEntry(subpackageName: string): Path {
+  return Path.resolve(
+    (packageJSONExports as unknown as any)[`./${subpackageName}`].import,
+    rootFilePath,
   );
 }
 
-async function bundleSize(entryFile, threeExternal = false) {
-  const tempDir = await mkdtemp("/tmp/build-size-");
-  const outfile = join(tempDir, "bundle.js");
+async function bundleSize(entryFile: Path, threeExternal = false) {
+  const tempDir = await Path.makeTempDir("build-size-");
+  const outfile = tempDir.join("bundle.js");
   await build({
-    entryPoints: [entryFile],
+    entryPoints: [entryFile.path],
     bundle: true,
     minify: true,
     format: "esm",
     target: "es2022",
-    outfile,
+    outfile: outfile.path,
     external: threeExternal ? ["three/src/*"] : [],
   });
-  const { size } = await stat(outfile);
-  const bundleContents = await readFile(outfile);
+  const { size } = await stat(outfile.path); // TODO: add `.state
+  const bundleContents = await outfile.read();
   const gzippedSize = (await promisify(gzip)(bundleContents)).length;
   return { size, gzippedSize };
 }
 
-function humanSize(numBytes) {
+function humanSize(numBytes: number | string): string {
   return typeof numBytes === "number"
     ? `     ${Math.round(numBytes / 1000)}kB`.slice(-6)
     : numBytes;
 }
 
-function mapValues(s) {
+interface Sizes {
+  size: number;
+  sizeNoTHREE: number | "";
+  gzippedSize: number;
+  gzippedSizeNoTHREE: number | "";
+}
+
+interface HumanReadableSizes {
+  size: string;
+  sizeNoTHREE: string | "";
+  gzippedSize: string;
+  gzippedSizeNoTHREE: string | "";
+}
+
+function mapValues(s: Sizes): HumanReadableSizes {
+  // @ts-expect-error(ts2322): Limitation of Typescript
   return Object.fromEntries(
     Object.entries(s).map(([k, v]) => [k, humanSize(v)]),
   );
 }
 
-const CONSOLE_PATH = fileURLToPath(new URL("./src/total.js", import.meta.url));
+const CONSOLE_PATH = Path.resolve("./src/total.js", import.meta.url);
 
-async function bundleSizeSummary(s) {
+async function bundleSizeSummary(s: string): Promise<{
+  name: string;
+  sizes: Sizes;
+  humanSizes: HumanReadableSizes;
+}> {
   const path = s === "(total)" ? CONSOLE_PATH : subpackageEntry(s);
   const [bundleSizeWithThree, bundleSizeNoTHREE] = await Promise.all([
     bundleSize(path),
@@ -73,10 +89,10 @@ async function bundleSizeSummary(s) {
       bundleSizeWithThree.gzippedSize === bundleSizeNoTHREE.gzippedSize
         ? ""
         : bundleSizeNoTHREE.gzippedSize,
-  };
+  } satisfies Sizes;
   return {
     name: s,
-    sizes: sizes,
+    sizes,
     humanSizes: mapValues(sizes),
   };
 }
@@ -130,10 +146,14 @@ function check(description: string, value: number, maxKilobytes: number) {
 check("Gzipped `cubing/twisty`", valueResults["twisty"].gzippedSize, 275);
 check(
   "Gzipped no-THREE `cubing/twisty`",
-  valueResults["twisty"].gzippedSizeNoTHREE,
+  valueResults["twisty"].gzippedSizeNoTHREE as number,
   125,
 );
 check("Gzipped `cubing/puzzles`", valueResults["puzzles"].size, 400);
 check("`cubing/search` (uncompressed)", valueResults["search"].size, 1500);
 check("Total (uncompressed)", valueResults["(total)"].size, 2000);
-check("Total (gzipped)", valueResults["(total)"].gzippedSizeNoTHREE, 500);
+check(
+  "Total (gzipped)",
+  valueResults["(total)"].gzippedSizeNoTHREE as number,
+  500,
+);

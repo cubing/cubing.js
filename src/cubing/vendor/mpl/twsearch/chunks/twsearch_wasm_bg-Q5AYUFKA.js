@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // Generated from `twsearch` v0.7.3
 import {
   __toBinary

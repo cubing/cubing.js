@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /*
 
 scramble_sq1.js

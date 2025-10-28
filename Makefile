@@ -229,7 +229,7 @@ test-dist-lib-build-size: build-lib-js
 
 .PHONY: test-dist-sites-twizzle
 test-dist-sites-twizzle: playwright-install build-sites
-	${NODE} ./script/test/dist/sites/alpha.twizzle.net/main.js
+	${BUN_RUN} ./script/test/dist/sites/alpha.twizzle.net/main.ts
 
 .PHONY: test-dist-bin
 test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec

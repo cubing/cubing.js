@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 var $intern_3 = { 3: 1 };
 var $intern_9 = 4194303;
 var $intern_10 = 1048575;

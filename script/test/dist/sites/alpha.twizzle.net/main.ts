@@ -1,6 +1,8 @@
 import { env } from "node:process";
-import { chromium } from "playwright";
-import { startServer } from "../../../../lib/experiments-server/index.js";
+import { chromium, type Page } from "playwright";
+import type { TwistyPlayer } from "../../../../../src/cubing/twisty";
+import type { TwizzleExplorerApp } from "../../../../../src/sites/alpha.twizzle.net/explore/app";
+import { startServer } from "../../../../lib/experiments-server";
 
 const OPEN_REPL = env["OPEN_REPL_FOR_BROWSER_TESTS"] === "true"; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL; // TODO: doesn't work?
@@ -14,7 +16,7 @@ if (!OPEN_REPL) {
 }
 
 let exitCode = 0;
-function assert(description, expected, observed) {
+function assert<T>(description: string, expected: T, observed: T) {
   if (expected === observed) {
     console.log(`✅ ${description}`);
   } else {
@@ -44,7 +46,9 @@ async function runTest() {
   // });
 
   await page.evaluate(() => {
-    globalThis.app.setPuzzleName("2x2x2");
+    (
+      globalThis as typeof globalThis & { app: TwizzleExplorerApp }
+    ).app.setPuzzleName("2x2x2");
   });
 
   const puzzle = new URL(page.url()).searchParams.get("puzzle");
@@ -65,7 +69,7 @@ async function runTest() {
     return page.evaluate(async () => {
       return (
         await document
-          .querySelector("twisty-player")
+          .querySelector<TwistyPlayer>("twisty-player")!
           .experimentalCurrentCanvases()
       ).length;
     });
@@ -77,7 +81,7 @@ async function runTest() {
   assert("canvas loaded after switching to 3×3×3", 1, await numCanvases());
 
   if (OPEN_REPL) {
-    globalThis.page = page;
+    (globalThis as typeof globalThis & { page: Page }).page = page;
     (await import("node:repl")).start();
   } else {
     await browser.close();
