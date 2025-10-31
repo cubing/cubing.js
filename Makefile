@@ -310,7 +310,7 @@ roll-vendored-twsearch:
 	cp -R ../twsearch/dist/wasm/* ./src/cubing/vendor/mpl/twsearch/
 	# TODO: why does using normal `echo -n` ignore the `-n` here?
 	printf "https://github.com/cubing/twsearch/tree/" > ./src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
-	make -C ../twsearch/ print-current-commit-hash >> ./src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
+	cd ../twsearch/ && ${BUNX} @lgarron-bin/repo version describe >> ../cubing.js/src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
 	${BUN_RUN} script/fix-vendored-twsearch.ts
 
 .PHONY: update-cdn
