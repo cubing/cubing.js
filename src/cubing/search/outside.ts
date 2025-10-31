@@ -3,7 +3,6 @@ import type { KPuzzle } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KPattern } from "../kpuzzle/KPattern";
 import type { PrefetchLevel } from "./inside/api";
-import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import type { TwsearchOptions } from "./inside/solve/twsearch";
 import {
   type InsideOutsideAPI,
@@ -48,34 +47,31 @@ export function _preInitializationHintForEvent(
 }
 
 export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
-  switch (eventID) {
-    case "clock":
-      return Alg.fromString(await randomClockScrambleString());
-  }
-  const prom = _randomScrambleStringForEvent(eventID);
-  const wat = await prom;
-  return Alg.fromString(wat);
+  const worker = searchOutsideDebugGlobals.forceNewWorkerForEveryScramble
+    ? await instantiateWorker()
+    : await getCachedWorkerInstance();
+  const scrambleString =
+    await worker.insideAPI.randomScrambleStringForEvent(eventID);
+  return Alg.fromString(scrambleString);
 }
 
-export async function _randomScrambleStringForEvent(
+export async function deriveScrambleForEvent(
+  derivationSeedHex: string,
+  derivationSaltHierarchy: string[],
   eventID: string,
-): Promise<string> {
-  if (searchOutsideDebugGlobals.forceNewWorkerForEveryScramble) {
+): Promise<Alg> {
+  if (!searchOutsideDebugGlobals.allowDerivedScrambles) {
+    throw new Error("Derived scrambles are not allowed.");
   }
   const worker = searchOutsideDebugGlobals.forceNewWorkerForEveryScramble
     ? await instantiateWorker()
     : await getCachedWorkerInstance();
-  return worker.insideAPI.randomScrambleStringForEvent(eventID);
-}
-
-export async function randomScrambleStringForEvent(
-  eventID: string,
-): Promise<string> {
-  switch (eventID) {
-    case "clock":
-      return randomClockScrambleString();
-  }
-  return await _randomScrambleStringForEvent(eventID);
+  const scrambleString = await worker.insideAPI.deriveScrambleStringForEvent(
+    derivationSeedHex,
+    derivationSaltHierarchy,
+    eventID,
+  );
+  return Alg.fromString(scrambleString);
 }
 
 export async function experimentalSolve3x3x3IgnoringCenters(
@@ -159,6 +155,7 @@ interface SearchOutsideDebugGlobals {
   showWorkerInstantiationWarnings: boolean;
   // This can prevent a request to `search-worker-entry.js` when it doesn't exist, if the library semantics have been mangled by `esbuild`.
   prioritizeEsbuildWorkaroundForWorkerInstantiation: boolean;
+  allowDerivedScrambles: boolean;
 }
 
 export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
@@ -168,6 +165,7 @@ export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   forceNewWorkerForEveryScramble: false,
   showWorkerInstantiationWarnings: true,
   prioritizeEsbuildWorkaroundForWorkerInstantiation: false,
+  allowDerivedScrambles: false,
 };
 
 export function setSearchDebug(
@@ -186,21 +184,16 @@ export function setSearchDebug(
       ),
     );
   }
-  if ("disableStringWorker" in options) {
-    searchOutsideDebugGlobals.disableStringWorker =
-      options.disableStringWorker ??
-      searchOutsideDebugGlobals.disableStringWorker;
-  }
-  if ("forceNewWorkerForEveryScramble" in options) {
-    searchOutsideDebugGlobals.forceNewWorkerForEveryScramble =
-      !!options.forceNewWorkerForEveryScramble;
-  }
-  if ("showWorkerInstantiationWarnings" in options) {
-    searchOutsideDebugGlobals.showWorkerInstantiationWarnings =
-      !!options.showWorkerInstantiationWarnings;
-  }
-  if ("prioritizeEsbuildWorkaroundForWorkerInstantiation" in options) {
-    searchOutsideDebugGlobals.prioritizeEsbuildWorkaroundForWorkerInstantiation =
-      !!options.prioritizeEsbuildWorkaroundForWorkerInstantiation;
+  for (const booleanField of [
+    "disableStringWorker",
+    "forceNewWorkerForEveryScramble",
+    "showWorkerInstantiationWarnings",
+    "prioritizeEsbuildWorkaroundForWorkerInstantiation",
+    "allowDerivedScrambles",
+  ] as const) {
+    if (booleanField in options) {
+      searchOutsideDebugGlobals[booleanField] =
+        options[booleanField] ?? searchOutsideDebugGlobals[booleanField];
+    }
   }
 }

@@ -33,3 +33,16 @@ export async function wasmRandomScrambleForEvent(
   const { wasmRandomScrambleForEvent } = await twsearchPromise;
   return wasmRandomScrambleForEvent(eventID);
 }
+
+export async function wasmDeriveScrambleForEvent(
+  derivationSeedHex: string,
+  derivationSaltHierarchy: string[],
+  eventID: string,
+): Promise<Alg> {
+  const { wasmDeriveScrambleForEvent } = await twsearchPromise;
+  return wasmDeriveScrambleForEvent(
+    derivationSeedHex,
+    derivationSaltHierarchy,
+    eventID,
+  );
+}

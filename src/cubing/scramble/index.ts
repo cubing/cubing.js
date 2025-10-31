@@ -6,4 +6,7 @@
  * @packageDocumentation
  */
 
-export { randomScrambleForEvent } from "../search/cubing-private";
+export {
+  deriveScrambleForEvent as experimentalDeriveScrambleForEvent,
+  randomScrambleForEvent,
+} from "../search/cubing-private";

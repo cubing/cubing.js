@@ -28,6 +28,7 @@ import { randomRediCubeScramble } from "./solve/puzzles/redi_cube";
 import { solveSkewb } from "./solve/puzzles/skewb";
 import {
   type TwsearchOptions,
+  wasmDeriveScrambleForEvent,
   wasmRandomScrambleForEvent,
   wasmTwsearch,
 } from "./solve/twsearch";
@@ -108,7 +109,7 @@ async function randomScrambleForEvent(
       // case "333bf":
       case "333fm":
       // case "333oh":
-      // case "clock":
+      case "clock":
       case "minx":
       case "pyram":
       case "skewb":
@@ -229,6 +230,23 @@ export const insideAPI = {
 
   randomScrambleStringForEvent: async (eventID: string): Promise<string> => {
     return (await insideAPI.randomScrambleForEvent(eventID)).toString();
+  },
+
+  deriveScrambleStringForEvent: async (
+    derivationSeedHex: string,
+    derivationSaltHierarchy: string[],
+    eventID: string,
+  ): Promise<string> => {
+    const scramble = await measurePerf(
+      `deriveScrambleForEvent(…, ${JSON.stringify(eventID)})`,
+      () =>
+        wasmDeriveScrambleForEvent(
+          derivationSeedHex,
+          derivationSaltHierarchy,
+          eventID,
+        ),
+    );
+    return scramble.toString();
   },
 
   solve333ToString: async (patternData: KPatternData): Promise<string> => {
