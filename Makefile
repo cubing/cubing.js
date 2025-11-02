@@ -111,9 +111,9 @@ test-info:
 	@echo "    make test-all  (≈27s, runs all of the above)"
 	@echo "    make test-fast (≈2s, runs a subset of the above)"
 	@echo ""
+
 # The following deps are in a custom order so that the more "useful" tests are first.
 # In case of failure, this is likely to be more helpful.
-
 .PHONY: test-fast
 test-fast: update-dependencies \
 	build-lib-js test-spec-bun-fast build-bin build-sites \
