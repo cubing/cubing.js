@@ -82,6 +82,10 @@ async function runTest() {
 
   if (OPEN_REPL) {
     (globalThis as typeof globalThis & { page: Page }).page = page;
+    // TODO: not implemented in `bun`: https://bun.com/reference/node/repl
+    // Maintaining JS (rather than TS) versions of this script and its
+    // dependencies is a pain, but maybe we can bundle a one-off transpilation
+    // of this script for `node` when needed.
     (await import("node:repl")).start();
   } else {
     await browser.close();
