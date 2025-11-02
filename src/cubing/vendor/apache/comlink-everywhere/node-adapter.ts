@@ -1,4 +1,7 @@
-import type { Worker as NodeWorker } from "node:worker_threads";
+import type {
+  MessagePort as NodeMessagePort,
+  Worker as NodeWorker,
+} from "node:worker_threads";
 
 /**
  * Copyright 2019 Google Inc. All Rights Reserved.
@@ -15,12 +18,13 @@ import type { Worker as NodeWorker } from "node:worker_threads";
 
 type EventHandler = EventListenerObject | ((event: any) => void);
 
-function nodeEndpoint(nep: NodeWorker): Worker & {
-  nodeWorker?: import("worker_threads").Worker;
+function nodeEndpoint(parentPort: NodeMessagePort | NodeWorker): Worker & {
+  nodeWorker?: import("node:worker_threads").Worker;
 } {
   const listeners = new WeakMap();
-  return {
-    postMessage: nep.postMessage.bind(nep),
+  const parentPortAsNodeWorker = parentPort as NodeWorker;
+  const constructedWorker = {
+    postMessage: parentPort.postMessage.bind(parentPort),
     addEventListener: (_: string, eh: EventHandler) => {
       const l = (data: Event) => {
         if ("handleEvent" in eh) {
@@ -29,7 +33,7 @@ function nodeEndpoint(nep: NodeWorker): Worker & {
           eh({ data });
         }
       };
-      nep.on("message", l);
+      parentPort.on("message", l);
       listeners.set(eh, l);
     },
     removeEventListener: (_: string, eh: EventHandler) => {
@@ -37,17 +41,26 @@ function nodeEndpoint(nep: NodeWorker): Worker & {
       if (!l) {
         return;
       }
-      nep.off("message", l);
+      parentPort.off("message", l);
       listeners.delete(eh);
     },
-    nodeWorker: nep,
+    nodeWorker: parentPortAsNodeWorker,
     terminate: () => {
-      nep.terminate();
+      parentPortAsNodeWorker.terminate();
     },
     // start: nep.start && nep.start.bind(nep),
   } as Worker & {
     nodeWorker?: import("worker_threads").Worker;
   };
+
+  /**  Unref the parent port to prevent `node` from hanging:
+   *
+   * - https://github.com/cubing/cubing.js/issues/358
+   * - https://github.com/nodejs/node/issues/53036#issuecomment-2118106710
+   */
+  parentPort.unref();
+
+  return constructedWorker;
 }
 
 export default nodeEndpoint;

@@ -13,9 +13,7 @@ export async function nodeEndpointPort(): Promise<
   const { parentPort } = globalThis.process.getBuiltinModule(
     "node:worker_threads",
   );
-  return nodeEndpoint(
-    parentPort as unknown as import("node:worker_threads").Worker,
-  );
+  return nodeEndpoint(parentPort!);
 }
 
 export function expose(api: any) {

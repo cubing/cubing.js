@@ -7,7 +7,9 @@ import {
 } from "cubing/scramble";
 import { experimentalSolveTwsearch, setSearchDebug } from "cubing/search";
 
-await (async () => {
+setSearchDebug({ disableStringWorker: true });
+
+{
   (await randomScrambleForEvent("222")).log();
   (await randomScrambleForEvent("333")).log();
 
@@ -33,36 +35,31 @@ await (async () => {
   }
 
   console.log("Success!");
-})();
+}
 
-await (async () => {
-  {
-    console.log("----------------");
-    console.log("Deriving scrambles.");
-    setSearchDebug({ allowDerivedScrambles: true });
-    const scramble1 = await experimentalDeriveScrambleForEvent(
-      "67002dfc95e6d4288f418fbaa9150aa65b239fd5581f2d067d0293b9321a8b67",
-      ["222", "222-r4", "set1", "attempt3-extra2", "scramble1"],
-      "222",
-    );
-    console.log(scramble1.toString());
-    const scramble2 = await experimentalDeriveScrambleForEvent(
-      "67002dfc95e6d4288f418fbaa9150aa65b239fd5581f2d067d0293b9321a8b67",
-      ["222", "222-r4", "set1", "attempt3-extra2", "scramble1"],
-      "222",
-    );
-    console.log(scramble2.toString());
-    const scramble3 = await experimentalDeriveScrambleForEvent(
-      "6700abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef",
-      ["222", "222-r4", "set1", "attempt3-extra2", "scramble1"],
-      "222",
-    );
-    console.log(scramble3.toString());
+{
+  console.log("----------------");
+  console.log("Deriving scrambles.");
+  setSearchDebug({ allowDerivedScrambles: true });
+  const scramble1 = await experimentalDeriveScrambleForEvent(
+    "67002dfc95e6d4288f418fbaa9150aa65b239fd5581f2d067d0293b9321a8b67",
+    ["222", "222-r4", "set1", "attempt3-extra2", "scramble1"],
+    "222",
+  );
+  console.log(scramble1.toString());
+  const scramble2 = await experimentalDeriveScrambleForEvent(
+    "67002dfc95e6d4288f418fbaa9150aa65b239fd5581f2d067d0293b9321a8b67",
+    ["222", "222-r4", "set1", "attempt3-extra2", "scramble1"],
+    "222",
+  );
+  console.log(scramble2.toString());
+  const scramble3 = await experimentalDeriveScrambleForEvent(
+    "6700abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef",
+    ["222", "222-r4", "set1", "attempt3-extra2", "scramble1"],
+    "222",
+  );
+  console.log(scramble3.toString());
 
-    assert(scramble1.isIdentical(scramble2));
-    assert(!scramble1.isIdentical(scramble3));
-  }
-})();
-
-// TODO(https://github.com/cubing/cubing.js/issues/358): this shouldn't be needed.
-(await import("node:process")).exit(0);
+  assert(scramble1.isIdentical(scramble2));
+  assert(!scramble1.isIdentical(scramble3));
+}

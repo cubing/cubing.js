@@ -168,10 +168,16 @@ ${scrambleText(scramble)}
       }
       jsonListPrinter?.finish();
     }
-
-    // TODO(https://github.com/cubing/cubing.js/issues/358): this shouldn't be needed.
-    (await import("node:process")).exit(0);
   },
 });
 
-await run(binary(app), process.argv);
+// Possibly: https://github.com/nodejs/node/issues/55468 Technically we could
+// just remove `await` from the called function, but this is semantically
+// unsound. This function encapsulates the unsoundness.
+function nodeForgetTopLevelAwaitWorkaround(
+  _promise: Promise<any>,
+): Promise<void> {
+  return Promise.resolve();
+}
+
+await nodeForgetTopLevelAwaitWorkaround(run(binary(app), process.argv));
