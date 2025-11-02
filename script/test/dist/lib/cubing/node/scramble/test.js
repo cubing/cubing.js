@@ -7,8 +7,6 @@ import {
 } from "cubing/scramble";
 import { experimentalSolveTwsearch, setSearchDebug } from "cubing/search";
 
-setSearchDebug({ disableStringWorker: true });
-
 await (async () => {
   (await randomScrambleForEvent("222")).log();
   (await randomScrambleForEvent("333")).log();

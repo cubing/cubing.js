@@ -150,7 +150,6 @@ export async function solveTwsearch(
 interface SearchOutsideDebugGlobals {
   logPerf: boolean;
   scramblePrefetchLevel: `${PrefetchLevel}`;
-  disableStringWorker: boolean;
   forceNewWorkerForEveryScramble: boolean;
   showWorkerInstantiationWarnings: boolean;
   // This can prevent a request to `search-worker-entry.js` when it doesn't exist, if the library semantics have been mangled by `esbuild`.
@@ -161,7 +160,6 @@ interface SearchOutsideDebugGlobals {
 export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   logPerf: true,
   scramblePrefetchLevel: "auto",
-  disableStringWorker: false,
   forceNewWorkerForEveryScramble: false,
   showWorkerInstantiationWarnings: true,
   prioritizeEsbuildWorkaroundForWorkerInstantiation: false,
@@ -185,7 +183,6 @@ export function setSearchDebug(
     );
   }
   for (const booleanField of [
-    "disableStringWorker",
     "forceNewWorkerForEveryScramble",
     "showWorkerInstantiationWarnings",
     "prioritizeEsbuildWorkaroundForWorkerInstantiation",
