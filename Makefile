@@ -174,7 +174,8 @@ test-src-import-restrictions: update-dependencies
 
 .PHONY: test-src-tsc
 test-src-tsc: update-dependencies
-	${BUNX} tsc --project ./tsconfig.json
+	@# The config itself has `"noEmit": true`, but including it here ensures consistency with other projects (e.g. in case someone copies the command from here).
+	${BUNX} tsc --noEmit --project ./tsconfig.json
 
 .PHONY: test-src-scripts-consistency
 test-src-scripts-consistency: update-dependencies
