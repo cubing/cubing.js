@@ -1,4 +1,3 @@
-import { setAlgDebug } from "../../../cubing/alg";
 import "../../../cubing/twisty";
 import { setTwistyDebug } from "../../../cubing/twisty";
 import {
@@ -37,8 +36,6 @@ window.addEventListener("DOMContentLoaded", () => {
   if (getRawBooleanURLParam("debug-show-render-stats", false)) {
     setTwistyDebug({ showRenderStats: true });
   }
-
-  setAlgDebug({ caretNISSNotationEnabled: true });
 
   const appElement = document.querySelector("twizzle-app")!;
   (window as any).app = new App(appElement, getConfigFromURL());
