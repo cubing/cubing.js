@@ -1,5 +1,10 @@
+import type { MillisecondTimestamp } from "cubing/twisty/controllers/AnimationTypes";
 import { Alg, Move } from "../../../../cubing/alg";
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
+
+function t(n: number): MillisecondTimestamp {
+  return n as MillisecondTimestamp;
+}
 
 {
   const alg = Alg.fromString("R U R' U R U2' R'");
@@ -8,13 +13,13 @@ import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
   });
   const algNodes = Array.from(alg.childAlgNodes());
   player.experimentalModel.animationTimelineLeavesRequest.set([
-    { animLeaf: algNodes[0], start: 0, end: 120 },
-    { animLeaf: algNodes[1], start: 150, end: 235 },
-    { animLeaf: algNodes[2], start: 240, end: 270 },
-    { animLeaf: algNodes[3], start: 270, end: 310 },
-    { animLeaf: algNodes[4], start: 335, end: 380 },
-    { animLeaf: algNodes[5], start: 380, end: 470 },
-    { animLeaf: algNodes[6], start: 470, end: 535 },
+    { animLeaf: algNodes[0], start: t(0), end: t(120) },
+    { animLeaf: algNodes[1], start: t(150), end: t(235) },
+    { animLeaf: algNodes[2], start: t(240), end: t(270) },
+    { animLeaf: algNodes[3], start: t(270), end: t(310) },
+    { animLeaf: algNodes[4], start: t(335), end: t(380) },
+    { animLeaf: algNodes[5], start: t(380), end: t(470) },
+    { animLeaf: algNodes[6], start: t(470), end: t(535) },
   ]);
   document.querySelector(".demo1")!.appendChild(player);
   document
@@ -51,13 +56,14 @@ U U // PLL (0.240s)`;
   const animationTimelineLeaves = moves.map((move, i) => {
     return {
       animLeaf: move,
-      start:
-        ((solutionMoveTimestamps[i] ?? 0) + solutionMoveTimestamps[i - 1]) / 2,
+      start: (((solutionMoveTimestamps[i] ?? 0) +
+        solutionMoveTimestamps[i - 1]) /
+        2) as MillisecondTimestamp,
       end:
         // Note: this assumes that it's reasonable for each move to bump up against the start of the next one. If there's a gap over, say, 1 second, it would be worth putting a limit.
-        (solutionMoveTimestamps[i] +
+        ((solutionMoveTimestamps[i] +
           (solutionMoveTimestamps[i + 1] ?? duration)) /
-        2,
+          2) as MillisecondTimestamp,
     };
   });
 

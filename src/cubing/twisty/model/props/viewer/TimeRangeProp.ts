@@ -1,4 +1,7 @@
-import type { TimeRange } from "../../../controllers/AnimationTypes";
+import type {
+  MillisecondTimestamp,
+  TimeRange,
+} from "../../../controllers/AnimationTypes";
 import type { AlgIndexer } from "../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../TwistyProp";
 
@@ -8,8 +11,8 @@ export class TimeRangeProp extends TwistyPropDerived<
 > {
   derive(inputs: { indexer: AlgIndexer }): TimeRange {
     return {
-      start: 0,
-      end: inputs.indexer.algDuration(),
+      start: 0 as MillisecondTimestamp,
+      end: inputs.indexer.algDuration() as number as MillisecondTimestamp,
     };
   }
 }

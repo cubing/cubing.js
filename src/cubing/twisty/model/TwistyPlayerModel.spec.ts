@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
 import { Alg, Move, Pause } from "../../alg";
+import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import { TwistyPlayerModel } from "./TwistyPlayerModel";
 
 test("generates Twizzle links", async () => {
@@ -54,9 +55,11 @@ test("can handle async timestamp setting", async () => {
   twistyPlayerModel.alg.set("R U R'");
   expect(
     (await twistyPlayerModel.detailedTimelineInfo.get()).timestamp,
-  ).toStrictEqual(3000);
-  twistyPlayerModel.timestampRequest.set((async () => 500)());
+  ).toStrictEqual(3000 as MillisecondTimestamp);
+  twistyPlayerModel.timestampRequest.set(
+    (async () => 500 as MillisecondTimestamp)(),
+  );
   expect(
     (await twistyPlayerModel.detailedTimelineInfo.get()).timestamp,
-  ).toStrictEqual(500);
+  ).toStrictEqual(500 as MillisecondTimestamp);
 });

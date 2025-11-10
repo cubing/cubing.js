@@ -1,3 +1,4 @@
+import type { Tagged } from "type-fest";
 import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 import { StaleDropper } from "../PromiseFreshener";
 import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
@@ -12,10 +13,12 @@ type InputPromises<T extends InputRecord> = {
   [s in keyof T]: Promise<T[s]>;
 };
 
+type Generation = Tagged<number, "Generation">;
+
 interface SourceEventDetail<OutputType> {
   sourceProp: TwistyPropSource<OutputType, any>;
   value: Promise<OutputType>; // TODO: remove?
-  generation: number;
+  generation: Generation;
 }
 
 type SourceEvent<T> = CustomEvent<SourceEventDetail<T>>;
@@ -23,7 +26,7 @@ type SourceEvent<T> = CustomEvent<SourceEventDetail<T>>;
 export type PromiseOrValue<T> = T | Promise<T>;
 
 // Values of T must be immutable.
-let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.
+let globalSourceGeneration: Generation = 0 as Generation; // This is incremented before being used, so 1 will be the first active value.
 export abstract class TwistyPropParent<T> {
   public abstract get(): Promise<T>;
 
@@ -153,7 +156,7 @@ export abstract class TwistyPropSource<
     const sourceEventDetail: SourceEventDetail<OutputType> = {
       sourceProp: this,
       value: this.#value,
-      generation: ++globalSourceGeneration,
+      generation: ++globalSourceGeneration as Generation,
     };
     this.markStale(
       new CustomEvent<SourceEventDetail<OutputType>>("stale", {

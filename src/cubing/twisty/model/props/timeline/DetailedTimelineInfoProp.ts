@@ -35,11 +35,17 @@ export class DetailedTimelineInfoProp extends TwistyPropDerived<
     let atEnd: boolean = false;
     if (timestamp >= inputs.timeRange.end) {
       atEnd = true;
-      timestamp = Math.min(inputs.timeRange.end, timestamp);
+      timestamp = Math.min(
+        inputs.timeRange.end,
+        timestamp,
+      ) as MillisecondTimestamp;
     }
     if (timestamp <= inputs.timeRange.start) {
       atStart = true;
-      timestamp = Math.max(inputs.timeRange.start, timestamp);
+      timestamp = Math.max(
+        inputs.timeRange.start,
+        timestamp,
+      ) as MillisecondTimestamp;
     }
     return {
       timestamp,
