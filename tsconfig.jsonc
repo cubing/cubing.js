@@ -7,8 +7,6 @@
     "noEmit": true,
     "rootDir": "./",
     "types": ["web-bluetooth", "dom-speech-recognition"],
-    "allowJs": true,
-    "checkJs": true,
     "resolveJsonModule": true,
     "paths": {
       // Workaround for the `bin` build: https://github.com/cubing/cubing.js/issues/292
