@@ -176,9 +176,10 @@
     "rubik's"
   ],
   "@cubing/deploy": {
-    "$schema": "./node_modules/@cubing/deploy/config-schema.json",
     "https://experiments.cubing.net/cubing.js/": {
+      "username": "cubing_deploy",
       "fromLocalDir": "./dist/sites/experiments.cubing.net/cubing.js/"
     }
-  }
+  },
+  "$schema": "./node_modules/@cubing/deploy/config-schema.package.json"
 }
