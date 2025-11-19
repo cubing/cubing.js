@@ -15,5 +15,5 @@ export async function rsync(
     ...deleteArgs,
     localFolder,
     remoteFolder,
-  ]).shellOutBun();
+  ]).shellOut();
 }

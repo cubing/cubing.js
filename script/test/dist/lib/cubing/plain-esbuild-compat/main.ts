@@ -26,5 +26,5 @@ await new PrintableShellCommand("npx", [
   "--format=esm",
   "--minify",
   ...dist_entries,
-]).shellOutBun();
+]).shellOut();
 console.log(" ✅ Success!");

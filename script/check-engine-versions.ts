@@ -4,10 +4,14 @@
 // TODO: turn this into a package?
 
 import { exit } from "node:process";
-import { file, type SystemError, semver, spawn } from "bun";
+import type { JSONSchemaForNPMPackageJsonFiles } from "@schemastore/package";
+import { type SystemError, semver } from "bun";
+import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 
-const { engines } = await file("./package.json").json();
+const { engines } = await new Path(
+  "./package.json",
+).readJSON<JSONSchemaForNPMPackageJsonFiles>();
 
 let exitCode = 0;
 
@@ -15,14 +19,12 @@ async function checkEngine(
   engineID: string,
   versionCommand: PrintableShellCommand,
 ) {
-  const engineRequirement = engines[engineID];
+  const engineRequirement = engines![engineID]!;
   try {
-    const command = spawn(versionCommand.forBun(), {
-      stdout: "pipe",
-      stderr: "ignore",
-    });
-
-    if ((await command.exited) !== 0) {
+    let engineVersion: string;
+    try {
+      engineVersion = await versionCommand.stdout().text();
+    } catch {
       console.error(
         `Command failed while getting version:
 
@@ -32,7 +34,6 @@ async function checkEngine(
       return;
     }
 
-    const engineVersion = (await new Response(command.stdout).text()).trim();
     if (!semver.satisfies(engineVersion, engineRequirement)) {
       console.error(
         `Current version of \`${engineID}\` is out of date: ${engineVersion}`,

@@ -20,7 +20,7 @@ await new PrintableShellCommand("ssh", [
   twizzleSSHServer,
   // TODO: implement escaping in `PrintableShellCommand`.
   `mkdir -p ${twizzleSFTPUploadPath} && [ ! -d ${twizzleSFTPPath} ] || { cp -R ${twizzleSFTPPath}/* ${twizzleSFTPUploadPath} && rm -f ${twizzleSFTPUploadPath}/deploy-versions }`,
-]).shellOutBun();
+]).shellOut();
 
 await rsync(
   "./dist/sites/alpha.twizzle.net/",
@@ -32,7 +32,7 @@ await new PrintableShellCommand("ssh", [
   twizzleSSHServer,
   // TODO: implement escaping in `PrintableShellCommand`.
   `mkdir -p ${twizzleSFTPVersionsPath} && mv ${twizzleSFTPUploadPath} ${twizzleSFTPVersionPath} && ln -s ${twizzleSFTPVersionsPath} ${twizzleSFTPVersionPath}/deploy-versions && rm ${twizzleSFTPPath} && ln -s ${twizzleSFTPVersionPath} ${twizzleSFTPPath}`,
-]).shellOutBun();
+]).shellOut();
 
 const response = await fetch("https://alpha.twizzle.net/version.json");
 const responseJSON = (await response.json()) as VersionJSON;

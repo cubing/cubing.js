@@ -69,6 +69,7 @@
     "@cubing/deploy": ">=0.4.6",
     "@cubing/dev-config": "^0.5.0",
     "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@schemastore/package": "^0.0.10",
     "@types/bun": "^1.2.23",
     "@types/chai": "^5.0.0",
     "@types/dom-speech-recognition": "^0.0.4",

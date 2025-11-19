@@ -20,7 +20,7 @@ await new PrintableShellCommand("bun", [
   "--dts-only",
   ["--format", "esm"],
   ["--out-dir", "dist/lib/cubing"],
-]).shellOutBun();
+]).shellOut();
 
 // TODO: remove this once TypeScript resolves types from the `package.json` exports out of the box (by default).
 for (const packageName of packageNames) {
