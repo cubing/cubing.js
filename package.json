@@ -82,7 +82,7 @@
     "esbuild": "^0.25.0",
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
-    "path-class": "^0.6.0",
+    "path-class": ">=0.8.1",
     "playwright": "^1.47.2",
     "printable-shell-command": "^2.7.0",
     "tsup": "^8.3.0",
