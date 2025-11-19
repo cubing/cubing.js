@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "cubing",
@@ -14,7 +15,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "^2.3.1",
-        "@cubing/deploy": "v0.2.1",
+        "@cubing/deploy": ">=0.4.5",
         "@cubing/dev-config": "^0.5.0",
         "@esm-bundle/chai": "^4.3.4-fix.0",
         "@types/bun": "^1.2.23",
@@ -62,7 +63,7 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.3.1", "", { "os": "win32", "cpu": "x64" }, "sha512-izl30JJ5Dp10mi90Eko47zhxE6pYyWPcnX1NQxKpL/yMhXxf95oLTzfpu4q+MDBh/gemNqyJEwjBpe0MT5iWPA=="],
 
-    "@cubing/deploy": ["@cubing/deploy@0.2.1", "", { "dependencies": { "printable-shell-command": "0.1.0-pre3", "typescript": "^5.8.3" }, "bin": { "deploy": "dist/lib/@cubing/deploy/main.js" } }, "sha512-sOK/W8B/LeL7nLKnNE6nmczLeeLvmEO+OtNKhL+JDBQ+ggnM33x81zzpziSONVs/Ax1r6LZdH0zVV5NI05w6ow=="],
+    "@cubing/deploy": ["@cubing/deploy@0.4.5", "", { "dependencies": { "path-class": "^0.7.2", "printable-shell-command": "^2.6.3" }, "bin": { "deploy": "dist/cli/main.js" } }, "sha512-O1lsn2TUwr8LaBxC+548KdMvwEkNFqiHx9Ww23/AlTYmF/MUoTi8w22Ibh+LUEmwbfjLh3Ri6pUaDvqVew+4Fg=="],
 
     "@cubing/dev-config": ["@cubing/dev-config@0.5.0", "", { "dependencies": { "esbuild": ">=0.25.3 && <1.0.0" } }, "sha512-KFVL5jqzhwTeyfEHV7JvNtZoMyQSCmEYC9+KdEDvq1dj9mJ+zH1qo08QluDVaKKZfjUzD4EqjlrVnOWXWX/aWA=="],
 
@@ -1086,7 +1087,9 @@
 
     "zod": ["zod@3.23.8", "", {}, "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="],
 
-    "@cubing/deploy/printable-shell-command": ["printable-shell-command@0.1.0-pre3", "", { "optionalDependencies": { "@types/bun": "^1.2.11", "@types/node": "^22.15.3" } }, "sha512-8/fSZ3piSi3o5gjJjbb7lK1hIz0lxMkWKpKl4nus3AUzS0bzosL48xTEtshy9TCMofw5GhT1dfCQNbY0bRwrng=="],
+    "@cubing/deploy/path-class": ["path-class@0.7.2", "", { "dependencies": { "@types/node": "^24.7.1", "xdg-basedir": "^5.1.0" } }, "sha512-vXj1HNmjXZTSPNLaFStTCAIFlMVls9TW44lpI+CFeFbP7vZu7hvQ76ObHABm88NcWrizYQcqqOWeHRnc1TRZtA=="],
+
+    "@cubing/deploy/printable-shell-command": ["printable-shell-command@2.6.3", "", { "dependencies": { "path-class": ">=0.6.1", "type-fest": ">=5.1.0" }, "optionalDependencies": { "@types/bun": "^1.2.20", "@types/node": "^24.2.0" } }, "sha512-u49zQsdil1clG2RKs+PQvoU64FfRXziMi8cTjrL7Cv92q1eYwyNnHM9PAux0qIme2ucWxn3gIYshkXhyS54y5A=="],
 
     "@esm-bundle/chai/@types/chai": ["@types/chai@4.3.20", "", {}, "sha512-/pC9HAB5I/xMlc5FP77qjCnI16ChlJfW0tGa0IUcFn38VJrTV6DeZ60NU5KZBtaOZqjdpwTWohz5HU1RrhiYxQ=="],
 
@@ -1174,7 +1177,9 @@
 
     "wrap-ansi-cjs/strip-ansi": ["strip-ansi@6.0.1", "", { "dependencies": { "ansi-regex": "^5.0.1" } }, "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A=="],
 
-    "@cubing/deploy/printable-shell-command/@types/node": ["@types/node@22.18.8", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-pAZSHMiagDR7cARo/cch1f3rXy0AEXwsVsVH09FcyeJVAzCnGgmYis7P3JidtTUjyadhTeSo8TgRPswstghDaw=="],
+    "@cubing/deploy/path-class/@types/node": ["@types/node@24.9.1", "", { "dependencies": { "undici-types": "~7.16.0" } }, "sha512-QoiaXANRkSXK6p0Duvt56W208du4P9Uye9hWLWgGMDTEoKPhuenzNcC4vGUmrNkiOKTlIrBoyNQYNpSwfEZXSg=="],
+
+    "@cubing/deploy/printable-shell-command/@types/node": ["@types/node@24.9.1", "", { "dependencies": { "undici-types": "~7.16.0" } }, "sha512-QoiaXANRkSXK6p0Duvt56W208du4P9Uye9hWLWgGMDTEoKPhuenzNcC4vGUmrNkiOKTlIrBoyNQYNpSwfEZXSg=="],
 
     "@isaacs/cliui/string-width/emoji-regex": ["emoji-regex@9.2.2", "", {}, "sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg=="],
 
@@ -1222,7 +1227,9 @@
 
     "wrap-ansi/strip-ansi/ansi-regex": ["ansi-regex@5.0.1", "", {}, "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ=="],
 
-    "@cubing/deploy/printable-shell-command/@types/node/undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
+    "@cubing/deploy/path-class/@types/node/undici-types": ["undici-types@7.16.0", "", {}, "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="],
+
+    "@cubing/deploy/printable-shell-command/@types/node/undici-types": ["undici-types@7.16.0", "", {}, "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="],
 
     "@puppeteer/browsers/yargs/cliui/strip-ansi": ["strip-ansi@6.0.1", "", { "dependencies": { "ansi-regex": "^5.0.1" } }, "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A=="],
 
