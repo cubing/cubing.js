@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-// Generated from `twsearch` v0.9.0
+// Generated from `twips` v0.9.99
 var __toBinary = /* @__PURE__ */ (() => {
   var table = new Uint8Array(128);
   for (var i = 0; i < 64; i++) table[i < 26 ? i + 65 : i < 52 ? i + 71 : i < 62 ? i - 4 : i * 4 - 205] = i;
@@ -20,4 +20,4 @@ var __toBinary = /* @__PURE__ */ (() => {
 export {
   __toBinary
 };
-//# sourceMappingURL=chunk-SGKLIGZK.js.map
+//# sourceMappingURL=chunk-44VDESDN.js.map

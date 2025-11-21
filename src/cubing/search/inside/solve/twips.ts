@@ -6,11 +6,10 @@ import type {
 } from "../../../kpuzzle";
 import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 
-export const twsearchPromise: Promise<
-  typeof import("../../../vendor/mpl/twsearch")
-> = from(async () => import("../../../vendor/mpl/twsearch"));
+export const twipsPromise: Promise<typeof import("../../../vendor/mpl/twips")> =
+  from(async () => import("../../../vendor/mpl/twips"));
 
-export interface TwsearchOptions {
+export interface TwipsOptions {
   // TODO: start prune depth?
   generatorMoves?: string[];
   targetPattern?: KPatternData;
@@ -18,19 +17,19 @@ export interface TwsearchOptions {
   maxDepth?: number;
 }
 
-export async function wasmTwsearch(
+export async function wasmTwips(
   def: KPuzzleDefinition,
   pattern: KPattern,
-  options?: TwsearchOptions,
+  options?: TwipsOptions,
 ): Promise<Alg> {
-  const { wasmTwsearch } = await twsearchPromise;
-  return wasmTwsearch(def, pattern, options);
+  const { wasmTwips } = await twipsPromise;
+  return wasmTwips(def, pattern, options);
 }
 
 export async function wasmRandomScrambleForEvent(
   eventID: string,
 ): Promise<Alg> {
-  const { wasmRandomScrambleForEvent } = await twsearchPromise;
+  const { wasmRandomScrambleForEvent } = await twipsPromise;
   return wasmRandomScrambleForEvent(eventID);
 }
 
@@ -39,7 +38,7 @@ export async function wasmDeriveScrambleForEvent(
   derivationSaltHierarchy: string[],
   eventID: string,
 ): Promise<Alg> {
-  const { wasmDeriveScrambleForEvent } = await twsearchPromise;
+  const { wasmDeriveScrambleForEvent } = await twipsPromise;
   return wasmDeriveScrambleForEvent(
     derivationSeedHex,
     derivationSaltHierarchy,

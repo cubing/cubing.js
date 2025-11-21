@@ -27,11 +27,11 @@ import { solvePyraminx } from "./solve/puzzles/pyraminx";
 import { randomRediCubeScramble } from "./solve/puzzles/redi_cube";
 import { solveSkewb } from "./solve/puzzles/skewb";
 import {
-  type TwsearchOptions,
+  type TwipsOptions,
   wasmDeriveScrambleForEvent,
   wasmRandomScrambleForEvent,
-  wasmTwsearch,
-} from "./solve/twsearch";
+  wasmTwips,
+} from "./solve/twips";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
 
@@ -284,14 +284,14 @@ export const insideAPI = {
     setDebugMeasurePerf(measure);
   },
 
-  solveTwsearchToString: async (
+  solveTwipsToString: async (
     def: KPuzzleDefinition,
     patternData: KPatternData,
-    options?: TwsearchOptions,
+    options?: TwipsOptions,
   ): Promise<string> => {
     const kpuzzle = new KPuzzle(def);
     const pattern = new KPattern(kpuzzle, patternData);
-    return (await wasmTwsearch(def, pattern, options)).toString();
+    return (await wasmTwips(def, pattern, options)).toString();
   },
 };
 

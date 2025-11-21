@@ -3,9 +3,9 @@ import { KPattern } from "../kpuzzle";
 import { experimentalCountMetricMoves } from "../notation";
 import { CommonMetric } from "../notation/commonMetrics";
 import { cube3x3x3 } from "../puzzles";
-import { solveTwsearch } from "./outside";
+import { solveTwips } from "./outside";
 
-test("`solveTwsearch(…)` can use `targetPattern`", async () => {
+test("`solveTwips(…)` can use `targetPattern`", async () => {
   const kpuzzle = await cube3x3x3.kpuzzle();
   const maskOLL = new KPattern(kpuzzle, {
     EDGES: {
@@ -23,7 +23,7 @@ test("`solveTwsearch(…)` can use `targetPattern`", async () => {
     },
   });
   const scramble = maskOLL.applyAlg("R' U' R' F R F' U R");
-  const sol = await solveTwsearch(kpuzzle, scramble, {
+  const sol = await solveTwips(kpuzzle, scramble, {
     targetPattern: maskOLL,
     generatorMoves: ["U", "L", "F", "R"],
   });
@@ -36,10 +36,10 @@ test("`solveTwsearch(…)` can use `targetPattern`", async () => {
   ).toEqual(6);
 });
 
-test("`solveTwsearch(…)` can use `maxDepth`", async () => {
+test("`solveTwips(…)` can use `maxDepth`", async () => {
   const kpuzzle = await cube3x3x3.kpuzzle();
   const scramble = kpuzzle.defaultPattern().applyAlg("R U R' F' U2 L'");
-  const sol = await solveTwsearch(kpuzzle, scramble, {
+  const sol = await solveTwips(kpuzzle, scramble, {
     generatorMoves: ["U", "L", "F", "R"],
   });
   expect(
@@ -50,7 +50,7 @@ test("`solveTwsearch(…)` can use `maxDepth`", async () => {
     ),
   ).toEqual(4);
   expect(() =>
-    solveTwsearch(kpuzzle, scramble, {
+    solveTwips(kpuzzle, scramble, {
       generatorMoves: ["U", "L", "F", "R"],
       maxDepth: 3,
     }),

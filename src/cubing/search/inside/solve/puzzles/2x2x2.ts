@@ -6,7 +6,7 @@ import { cube2x2x2, puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
-import { wasmTwsearch } from "../twsearch";
+import { wasmTwips } from "../twips";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
@@ -33,7 +33,7 @@ export async function preInitialize222(): Promise<void> {
 // TODO: fix def consistency.
 export async function solve222(pattern: KPattern): Promise<Alg> {
   mustBeInsideWorker();
-  return wasmTwsearch((await cube2x2x2.kpuzzle()).definition, pattern, {
+  return wasmTwips((await cube2x2x2.kpuzzle()).definition, pattern, {
     generatorMoves: "UFLR".split(""),
   });
 }

@@ -303,18 +303,18 @@ deploy-twizzle: build-site-twizzle
 deploy-experiments: build-site-experiments
 	bun x --package @cubing/deploy deploy
 
-.PHONY: roll-vendored-twsearch
-roll-vendored-twsearch:
-	test -d ../twsearch/ || exit
-	rm -rf ../twsearch/dist/wasm/
-	cd ../twsearch/ && make build-rust-wasm
-	mkdir -p ./src/cubing/vendor/mpl/twsearch
-	rm -rf ./src/cubing/vendor/mpl/twsearch/*
-	cp -R ../twsearch/dist/wasm/* ./src/cubing/vendor/mpl/twsearch/
+.PHONY: roll-vendored-twips
+roll-vendored-twips:
+	test -d ../twips/ || exit
+	rm -rf ../twips/dist/wasm/
+	cd ../twips/ && make build-rust-wasm
+	mkdir -p ./src/cubing/vendor/mpl/twips
+	rm -rf ./src/cubing/vendor/mpl/twips/*
+	cp -R ../twips/dist/wasm/* ./src/cubing/vendor/mpl/twips/
 	# TODO: why does using normal `echo -n` ignore the `-n` here?
-	printf "https://github.com/cubing/twsearch/tree/" > ./src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
-	cd ../twsearch/ && ${BUNX} @lgarron-bin/repo version describe >> ../cubing.js/src/cubing/vendor/mpl/twsearch/vendored-twsearch-git-version.txt
-	${BUN_RUN} script/fix-vendored-twsearch.ts
+	printf "https://github.com/cubing/twips/tree/" > ./src/cubing/vendor/mpl/twips/vendored-twips-git-version.txt
+	cd ../twips/ && ${BUNX} @lgarron-bin/repo version describe >> ../cubing.js/src/cubing/vendor/mpl/twips/vendored-twips-git-version.txt
+	${BUN_RUN} script/fix-vendored-twips.ts
 
 .PHONY: update-cdn
 update-cdn: postpublish-clear-bun-cache

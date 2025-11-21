@@ -8,7 +8,7 @@ const postJSONInit: RequestInit = {
   },
 };
 
-export interface TwsearchServerClientOptions {
+export interface TwipsServerClientOptions {
   startPattern?: KPattern;
   searchArgs?: {
     checkBeforeSolve?: "always" | "never" | "auto";
@@ -22,10 +22,10 @@ export interface TwsearchServerClientOptions {
 }
 
 // TODO: dedup options with `cubing/search`
-export async function solveTwsearchServer(
+export async function solveTwipsServer(
   kpuzzle: KPuzzle,
   kpattern: KPattern,
-  options: TwsearchServerClientOptions,
+  options: TwipsServerClientOptions,
 ): Promise<Alg> {
   if (options.searchArgs) {
     options.searchArgs.randomStart ??= true;

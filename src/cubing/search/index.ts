@@ -7,5 +7,5 @@ export {
   solveMegaminx,
   solvePyraminx,
   solveSkewb,
-  solveTwsearch as experimentalSolveTwsearch,
+  solveTwips as experimentalSolveTwips,
 } from "./outside";

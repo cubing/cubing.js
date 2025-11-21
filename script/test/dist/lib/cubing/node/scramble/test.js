@@ -5,7 +5,7 @@ import {
   experimentalDeriveScrambleForEvent,
   randomScrambleForEvent,
 } from "cubing/scramble";
-import { experimentalSolveTwsearch, setSearchDebug } from "cubing/search";
+import { experimentalSolveTwips, setSearchDebug } from "cubing/search";
 
 setSearchDebug({ disableStringWorker: true });
 
@@ -16,7 +16,7 @@ setSearchDebug({ disableStringWorker: true });
   const scramble222 = new Alg("R' F2 R F2 R F' U2 R' F' L2 F'");
   const kpuzzle = await cube2x2x2.kpuzzle();
   const scramble222Transformation = kpuzzle.algToTransformation(scramble222);
-  const scramble222Solution = await experimentalSolveTwsearch(
+  const scramble222Solution = await experimentalSolveTwips(
     kpuzzle,
     scramble222Transformation.toKPattern(),
     { generatorMoves: "ULFR".split(""), minDepth: 11 },

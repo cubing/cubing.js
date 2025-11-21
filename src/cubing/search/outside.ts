@@ -3,7 +3,7 @@ import type { KPuzzle } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KPattern } from "../kpuzzle/KPattern";
 import type { PrefetchLevel } from "./inside/api";
-import type { TwsearchOptions } from "./inside/solve/twsearch";
+import type { TwipsOptions } from "./inside/solve/twips";
 import {
   type InsideOutsideAPI,
   instantiateWorker,
@@ -111,20 +111,20 @@ export async function solveMegaminx(pattern: KPattern): Promise<Alg> {
   );
 }
 
-export interface SolveTwsearchOptions {
+export interface SolveTwipsOptions {
   generatorMoves?: string[];
   targetPattern?: KPattern;
   minDepth?: number;
   maxDepth?: number;
 }
 
-export async function solveTwsearch(
+export async function solveTwips(
   kpuzzle: KPuzzle,
   pattern: KPattern,
-  options?: SolveTwsearchOptions,
+  options?: SolveTwipsOptions,
 ): Promise<Alg> {
   const { targetPattern, ...otherOptions } = options ?? {};
-  const apiOptions: TwsearchOptions = otherOptions;
+  const apiOptions: TwipsOptions = otherOptions;
   if (targetPattern) {
     apiOptions.targetPattern = targetPattern.patternData;
   }
@@ -134,14 +134,14 @@ export async function solveTwsearch(
   const dedicatedWorker = await instantiateWorker();
   try {
     return Alg.fromString(
-      await dedicatedWorker.insideAPI.solveTwsearchToString(
+      await dedicatedWorker.insideAPI.solveTwipsToString(
         def,
         pattern.patternData,
         apiOptions,
       ),
     );
   } finally {
-    console.log("Search ended, terminating dedicated `twsearch` worker.");
+    console.log("Search ended, terminating dedicated `twips` worker.");
     // TODO: support re-using the same worker for multiple searches..
     await dedicatedWorker.outsideAPI.terminate();
   }

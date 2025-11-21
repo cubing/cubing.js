@@ -6,16 +6,16 @@ import {
   type KPuzzleDefinition,
 } from "../../../../cubing/kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
-import { experimentalSolveTwsearch } from "../../../../cubing/search";
-import type { SolveTwsearchOptions } from "../../../../cubing/search/outside";
+import { experimentalSolveTwips } from "../../../../cubing/search";
+import type { SolveTwipsOptions } from "../../../../cubing/search/outside";
 import {
-  solveTwsearchServer,
-  type TwsearchServerClientOptions,
-} from "./twsearch-server";
+  solveTwipsServer,
+  type TwipsServerClientOptions,
+} from "./twips-server";
 
-const LOCALSTORAGE_DEF = "twsearch/text-ui/def";
-const LOCALSTORAGE_SEARCH = "twsearch/text-ui/search";
-const LOCALSTORAGE_CHECKED_MOVES = "twsearch/text-ui/checked-moves";
+const LOCALSTORAGE_DEF = "twips/text-ui/def";
+const LOCALSTORAGE_SEARCH = "twips/text-ui/search";
+const LOCALSTORAGE_CHECKED_MOVES = "twips/text-ui/checked-moves";
 
 function neatStringify(s: any): string {
   return JSON.stringify(s, null, "  ")
@@ -214,7 +214,7 @@ function validateAndSaveInput(
     try {
       const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
       const kpattern = new KPattern(kpuzzle, JSON.parse(searchElem.value));
-      const options: TwsearchServerClientOptions = {
+      const options: TwipsServerClientOptions = {
         searchArgs: {
           minDepth: parseInt(minDepthElem.value, 10),
           generatorMoves: getGeneratorMoves(),
@@ -222,15 +222,15 @@ function validateAndSaveInput(
       };
       if ((document.querySelector("#use-server") as HTMLInputElement).checked) {
         results.value = (
-          await solveTwsearchServer(kpuzzle, kpattern, options)
+          await solveTwipsServer(kpuzzle, kpattern, options)
         ).toString();
       } else {
-        const twsearchOptions: SolveTwsearchOptions = {
+        const twipsOptions: SolveTwipsOptions = {
           generatorMoves: options.searchArgs?.generatorMoves,
           minDepth: options.searchArgs?.minDepth,
         };
         results.value = (
-          await experimentalSolveTwsearch(kpuzzle, kpattern, twsearchOptions)
+          await experimentalSolveTwips(kpuzzle, kpattern, twipsOptions)
         ).toString();
       }
     } catch (e) {

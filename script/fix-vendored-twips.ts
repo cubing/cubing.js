@@ -1,6 +1,6 @@
 import { Path } from "path-class";
 
-const DIR = Path.resolve("../src/cubing/vendor/mpl/twsearch", import.meta.url);
+const DIR = Path.resolve("../src/cubing/vendor/mpl/twips", import.meta.url);
 
 const NO_CHECK_PREFIX = `// @ts-nocheck
 
@@ -27,7 +27,7 @@ for (const dirEnt of await DIR.readDir({
     case "index.js": {
       contents = contents.replace(`"cubing/alg"`, `"../../../alg"`);
       contents = contents.replace(
-        `module_or_path = new URL("twsearch_wasm_bg.wasm", import.meta.url);`,
+        `module_or_path = new URL("twips_wasm_bg.wasm", import.meta.url);`,
         // TODO: change this once the ecosystem is in a better place.
         `throw new Error("Only base 64 WASM loading is supported at the moment.")`,
       );

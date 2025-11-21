@@ -161,7 +161,7 @@
     "deploy": "make deploy",
     "deploy-twizzle": "make deploy-twizzle",
     "deploy-experiments": "make deploy-experiments",
-    "roll-vendored-twsearch": "make roll-vendored-twsearch",
+    "roll-vendored-twips": "make roll-vendored-twips",
     "update-cdn": "make update-cdn",
     "update-create-cubing-app": "make update-create-cubing-app"
   },
