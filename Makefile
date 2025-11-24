@@ -26,6 +26,9 @@ default:
 
 ######## Shared with `package.json` ########
 
+.PHONY: check
+check: lint test-all build
+
 # By convention, we'd normally place `build-bin` first, but `build-lib` is the main target and
 # it can be less confusing to build first (especially if the build aborts with
 # an error).

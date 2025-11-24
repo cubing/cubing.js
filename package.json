@@ -103,6 +103,7 @@
   ],
   "scripts": {
     "default": "make default",
+    "check": "make check",
     "build": "make build",
     "build-lib": "make build-lib",
     "build-lib-js": "make build-lib-js",
