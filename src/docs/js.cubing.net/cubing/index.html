@@ -104,6 +104,29 @@
       </p>
     </section>
 
+    <section id="bluetooth">
+      <h1><code><a href="./bluetooth/" class="separate-page">cubing/bluetooth</a></code></h1>
+
+      <p>
+        <code>cubing/bluetooth</code> supports connecting to a variety of Bluetooth devices, particularly smart cubes.
+      </p>
+
+      <p>Connect to a smart puzzle and listen like this:
+      </p>
+      <code class="sample">
+import { connectSmartPuzzle } from &quot;<code class="boilerplate"
+            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/bluetooth&quot;;<br>
+      <br>
+      const puzzle = await connectSmartPuzzle();<br>
+      puzzle.addAlgLeafListener((e) => {<br>
+      &nbsp;console.log(e.latestAlgLeaf);<br>
+      });
+      </code>
+      <p>
+        See the <a href="./bluetooth/"><code>cubing/bluetooth</code> docs</a> for more information.
+      </p>
+    </section>
+
     <section id="javascript">
       <h1><a href="#javascript"><code>npm</code> package</a></h1>
       <p>
@@ -131,7 +154,8 @@ import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
       <section id="create-cubing-app" class="inline no-header">
         <h3>Create a project using <code>create-cubing-app</code></h3>
         <p>If you have <code>npm</code> installed, you may find it easy to start a project using <a
-            href="https://github.com/cubing/create-cubing-app#getting-started">using <code>create-cubing-app</code></a>:
+            href="https://github.com/cubing/create-cubing-app#getting-started">using
+            <code>create-cubing-app</code></a>:
         </p>
         <code class="sample">
           <span>npm create --yes cubing-app@latest my-cubing-project<br>
@@ -142,14 +166,17 @@ import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
       </section>
       <h2>Compatibility</h2>
       <p>
-        The <code>npm</code> package should work with any modern bundlers and tools. If you are having trouble, <b>make
+        The <code>npm</code> package should work with any modern bundlers and tools. If you are having trouble,
+        <b>make
           sure your tool is compatible with ES2022 syntax</b>. We recommend using <a
-          href="https://esbuild.github.io/"><code>esbuild</code></a> or tools based on <code>esbuild</code>, and you may
+          href="https://esbuild.github.io/"><code>esbuild</code></a> or tools based on <code>esbuild</code>, and you
+        may
         find <a href="https://github.com/cubing/cubing-app-template">this project template</a> a helpful start.
       </p>
       <p>
         If you are having issues using <code>cubing.js</code> with a bundler, please refer to <a
-          href="https://github.com/cubing/cubing.js/issues/323">this issue</a> with the latest compatibility details.
+          href="https://github.com/cubing/cubing.js/issues/323">this issue</a> with the latest compatibility
+        details.
       </p>
     </section>
 

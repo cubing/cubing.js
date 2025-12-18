@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8">
+  <title>Bluetooth | cubing.js</title>
+  <meta name="theme-color" content="#4285f4">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../main.css">
+</head>
+
+<body>
+  <content>
+    <div id="heading">
+      <code><a href="../">cubing</a>/bluetooth</code>
+    </div>
+    <section class="no-header">
+      <p>
+        <code>cubing/bluetooth</code> supports connecting to a variety of Bluetooth devices, particularly smart cubes. A
+        few other devices (<a href="../api/functions/bluetooth.connectSmartTimer.html">smart timers</a>, <a
+          href="../api/functions/bluetooth.connectSmartRobot.html">cube robots</a>) are also supported.
+      </p>
+    </section>
+
+    <section id="connect">
+      <h1><a href="#connect">Connect to a smart puzzle</a></h1>
+      <p>Connect to a smart puzzle and listen like this:
+      </p>
+      <code class="sample">
+import { connectSmartPuzzle } from &quot;<code class="boilerplate"
+            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/bluetooth&quot;;<br>
+      <br>
+      const puzzle = await connectSmartPuzzle();<br>
+      puzzle.addAlgLeafListener((e) => {<br>
+      &nbsp;console.log(e.latestAlgLeaf);<br>
+      });
+      </code>
+
+      <p>You may find it useful to start with the following example:</p>
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+&lt;twisty-player id="player"&gt;&lt;/twisty-player&gt;<br>
+&lt;button id="connect"&gt;Connect&lt;/button&gt;<br>
+&lt;twisty-alg-viewer for="player"&gt;&lt;/twisty-alg-viewer&gt;<br>
+<br>
+<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+          import &quot;<code class="boilerplate"
+            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/twisty&quot;;<br>
+          import { connectSmartPuzzle, debugKeyboardConnect } from &quot;<code class="boilerplate"
+            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/bluetooth&quot;;<br>
+          <br>
+          const debug = new URL(location.href).searchParams.get("debug-keyboard") === "true";<br>
+          const button = document.querySelector("button#connect");<br>
+          <br>
+          async function connect() {<br>
+          &nbsp;&nbsp;const puzzle =<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;debug<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? await debugKeyboardConnect()<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: await connectSmartPuzzle();<br>
+          <br>
+          &nbsp;&nbsp;button.textContent = "↔️ Connected!";<br>
+          &nbsp;&nbsp;button.disabled = true;<br>
+          <br>
+          &nbsp;&nbsp;const twistyPlayer = document.querySelector("twisty-player");<br>
+          &nbsp;&nbsp;puzzle.addAlgLeafListener((e) =&gt; {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;twistyPlayer.experimentalAddAlgLeaf(e.latestAlgLeaf, {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cancel: true,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+          &nbsp;&nbsp;});<br>
+          }<br>
+          <br>
+          if (debug) {<br>
+          &nbsp;&nbsp;button.textContent += " (keyboard)";<br>
+          }<br>
+          button.addEventListener("click", connect);<br>
+          <code class="boilerplate">&lt;/script&gt;</code><br>
+          </code>
+        </div>
+        <div style="display: grid; grid-template-rows: 1fr 2em auto;">
+          <twisty-player id="player"></twisty-player>
+          <button id="connect">Connect</button>
+          <twisty-alg-viewer for="player"></twisty-alg-viewer>
+
+          <script type="module">
+            import "https://cdn.cubing.net/v0/js/cubing/twisty";
+            import { connectSmartPuzzle, debugKeyboardConnect } from "https://cdn.cubing.net/v0/js/cubing/bluetooth";
+
+            const debug = new URL(location.href).searchParams.get("debug-keyboard") === "true";
+            const button = document.querySelector("button#connect");
+            async function connect() {
+              const puzzle =
+                debug
+                  ? await debugKeyboardConnect()
+                  : await connectSmartPuzzle();
+
+              button.textContent = "↔️ Connected!";
+              button.disabled = true;
+
+              const twistyPlayer = document.querySelector("twisty-player");
+              puzzle.addAlgLeafListener((e) => {
+                twistyPlayer.experimentalAddAlgLeaf(e.latestAlgLeaf, {
+                  cancel: true,
+                });
+              });
+            }
+
+            if (debug) {
+              button.textContent += " (keyboard)"
+            }
+            button.addEventListener("click", connect);
+          </script>
+        </div>
+      </div>
+      <p>
+        <a href="https://codepen.io/cubing/pen/azNebRr?editors=1010">Try it</a>.
+      </p>
+    </section>
+    <section id="advanced-example">
+      <h1>Advanced example</h1>
+      <p>See <a href="https://bluetooth.cubing.net/"><code>https://bluetooth.cubing.net/</code></a> for an example solve
+        reconstruction tool for Bluetooth cubes.</p>
+    </section>
+    <section id="fallback">
+      <h1>Fallback</h1>
+      <p>
+        If you try and fail to connect to a smart puzzle two times,
+        <code>cubing.js</code> will open up scanning to all Bluetooth devices on
+        the third time automatically.
+      </p>
+    </section>
+    <section id="compatibility">
+      <h1>Compatibility</h1>
+
+      <p>
+        Note that smart puzzle manufaturers use proprietary protocols that they
+        purposely obfuscate and change without warning. This means that it often
+        takes time-consuming reverse engineering to support a new smart puzzle.
+        <code>cubing.js</code> is able to connect to at least one version of
+        each of the following:
+      </p>
+      <style>
+        #smart-cubes {
+          border-collapse: collapse;
+        }
+
+        #smart-cubes td {
+          padding: 0.25em 0.5em;
+          ;
+          border: 1px solid currentColor;
+
+          &.na {
+            opacity: 0.25;
+            ;
+          }
+        }
+      </style>
+      <table id="smart-cubes">
+        <thead>
+          <tr>
+            <td>Manufacturer</td>
+            <td>Move stream</td>
+            <td>Orientation<br>(depending on the model)</td>
+            <td>Known to have incompatible versions</td>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>GiiKER</td>
+            <td rowspan="2">✅ Yes</td>
+            <td rowspan="2" class="na">N/A</td>
+            <td rowspan="2">☑️ No</td>
+          </tr>
+
+          <tr>
+            <td>Xiaomi Mi</td>
+          </tr>
+
+          <tr>
+            <td>GoCube</td>
+            <td rowspan="2">✅ Yes</td>
+            <td>✅ Yes</td>
+            <td rowspan="2">☑️ No</td>
+          </tr>
+
+          <tr>
+            <td>Rubik's Connected</td>
+            <td class="na">N/A</td>
+          </tr>
+
+          <tr>
+            <td>Gan</td>
+            <td>✅ Yes</td>
+            <td>✅ Yes</td>
+            <td>❌ Yes</td>
+          </tr>
+
+          <tr>
+            <td>HEYKUBE</td>
+            <td>✅ Yes</td>
+            <td class="na">N/A</td>
+            <td>☑️ No</td>
+          </tr>
+
+          <tr>
+            <td>QiYi</td>
+            <td>✅ Yes</td>
+            <td class="na">N/A</td>
+            <td>☑️ No</td>
+          </tr>
+
+          <tr>
+            <td>Moyu</td>
+            <td>❌ No</td>
+            <td class="na">N/A</td>
+            <td class="na">N/A</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Please let us know <a href="https://github.com/cubing/cubing.js/issues/new?template=cubing_js_issue.yml">by
+          filing an issue</a> if you find more incompatibilities.</p>
+
+      <p>
+        If you work with a smart cube manufacturer and would like to talk about supporting an open protocol, please
+        feel
+        welcome to contact us as well!
+      </p>
+    </section>
+  </content>
+</body>
+
+</html>
