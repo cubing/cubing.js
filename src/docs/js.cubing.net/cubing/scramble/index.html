@@ -206,6 +206,17 @@
           <code class="boilerplate">&lt;/script&gt;</code></span>
           </code>
         </div>
+        <div><twisty-alg-viewer for="main-player"></twisty-alg-viewer>
+          <twisty-player id="main-player"></twisty-player>
+
+          <script type="module">
+            import "https://cdn.cubing.net/v0/js/cubing/twisty";
+            import { randomScrambleForEvent } from "https://cdn.cubing.net/v0/js/cubing/scramble";
+
+            const scramblePromise = randomScrambleForEvent("333");
+            document.querySelector("#main-player").alg = scramblePromise;
+          </script>
+        </div>
       </div>
       <p>
         <a href="https://codepen.io/cubing/pen/abyRpPE?editors=1010">Try it</a>.
