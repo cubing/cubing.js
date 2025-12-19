@@ -8,6 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/cubing/cubing.js.git"
   },
+  "engines-comment": "`node` 22.3.0 and `bun` 1.2.7 are needed for `globalThis.process.getBuiltinModule(…)`, which helps bundlers avoid thinking our `node` shims require packages from a package manager.",
   "engines": {
     "node": ">=22.3.0",
     "bun": ">=1.3.0"
@@ -97,7 +98,6 @@
     "typedoc": "^0.28.10",
     "typescript": "^5.9.3"
   },
-  "engines-comment": "`node` 22.3.0 and `bun` 1.2.7 are needed for `globalThis.process.getBuiltinModule(…)`, which helps bundlers avoid thinking our `node` shims require packages from a package manager.",
   "files": [
     "./dist/bin/",
     "./dist/lib/",
