@@ -35,11 +35,11 @@
       "import": "./dist/lib/cubing/protocol/index.js"
     },
     "./puzzle-geometry": {
-      "types": "./dist/lib/cubing/types/puzzle-geometry/index.d.ts",
+      "types": "./dist/lib/cubing/puzzle-geometry/index.d.ts",
       "import": "./dist/lib/cubing/puzzle-geometry/index.js"
     },
     "./puzzles": {
-      "types": "./dist/lib/cubing/types-geometry/index.d.ts",
+      "types": "./dist/lib/cubing/puzzles/index.d.ts",
       "import": "./dist/lib/cubing/puzzles/index.js"
     },
     "./scramble": {
