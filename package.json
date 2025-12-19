@@ -3,57 +3,64 @@
   "version": "0.61.1-dev",
   "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
-  "type": "module",
   "license": "MPL-2.0 OR GPL-3.0-or-later",
-  "repository": "github:cubing/cubing.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cubing/cubing.js.git"
+  },
+  "engines": {
+    "node": ">=22.3.0",
+    "bun": ">=1.3.0"
+  },
+  "type": "module",
   "exports": {
     "./alg": {
-      "import": "./dist/lib/cubing/alg/index.js",
-      "types": "./dist/lib/cubing/alg/index.d.ts"
+      "types": "./dist/lib/cubing/alg/index.d.ts",
+      "import": "./dist/lib/cubing/alg/index.js"
     },
     "./bluetooth": {
-      "import": "./dist/lib/cubing/bluetooth/index.js",
-      "types": "./dist/lib/cubing/bluetooth/index.d.ts"
+      "types": "./dist/lib/cubing/bluetooth/index.d.ts",
+      "import": "./dist/lib/cubing/bluetooth/index.js"
     },
     "./kpuzzle": {
-      "import": "./dist/lib/cubing/kpuzzle/index.js",
-      "types": "./dist/lib/cubing/kpuzzle/index.d.ts"
+      "types": "./dist/lib/cubing/kpuzzle/index.d.ts",
+      "import": "./dist/lib/cubing/kpuzzle/index.js"
     },
     "./notation": {
-      "import": "./dist/lib/cubing/notation/index.js",
-      "types": "./dist/lib/cubing/notation/index.d.ts"
+      "types": "./dist/lib/cubing/notation/index.d.ts",
+      "import": "./dist/lib/cubing/notation/index.js"
     },
     "./protocol": {
-      "import": "./dist/lib/cubing/protocol/index.js",
-      "types": "./dist/lib/cubing/protocol/index.d.ts"
+      "types": "./dist/lib/cubing/protocol/index.d.ts",
+      "import": "./dist/lib/cubing/protocol/index.js"
     },
     "./puzzle-geometry": {
-      "import": "./dist/lib/cubing/puzzle-geometry/index.js",
-      "types": "./dist/lib/cubing/types/puzzle-geometry/index.d.ts"
+      "types": "./dist/lib/cubing/types/puzzle-geometry/index.d.ts",
+      "import": "./dist/lib/cubing/puzzle-geometry/index.js"
     },
     "./puzzles": {
-      "import": "./dist/lib/cubing/puzzles/index.js",
-      "types": "./dist/lib/cubing/types-geometry/index.d.ts"
+      "types": "./dist/lib/cubing/types-geometry/index.d.ts",
+      "import": "./dist/lib/cubing/puzzles/index.js"
     },
     "./scramble": {
-      "import": "./dist/lib/cubing/scramble/index.js",
-      "types": "./dist/lib/cubing/scramble/index.d.ts"
+      "types": "./dist/lib/cubing/scramble/index.d.ts",
+      "import": "./dist/lib/cubing/scramble/index.js"
     },
     "./search": {
-      "import": "./dist/lib/cubing/search/index.js",
-      "types": "./dist/lib/cubing/search/index.d.ts"
+      "types": "./dist/lib/cubing/search/index.d.ts",
+      "import": "./dist/lib/cubing/search/index.js"
     },
     "./stream": {
-      "import": "./dist/lib/cubing/stream/index.js",
-      "types": "./dist/lib/cubing/stream/index.d.ts"
+      "types": "./dist/lib/cubing/stream/index.d.ts",
+      "import": "./dist/lib/cubing/stream/index.js"
     },
     "./twisty": {
-      "import": "./dist/lib/cubing/twisty/index.js",
-      "types": "./dist/lib/cubing/twisty/index.d.ts"
+      "types": "./dist/lib/cubing/twisty/index.d.ts",
+      "import": "./dist/lib/cubing/twisty/index.js"
     }
   },
   "bin": {
-    "scramble": "./dist/bin/scramble.js"
+    "scramble": "dist/bin/scramble.js"
   },
   "dependencies": {
     "@types/three": "^0.169.0",
@@ -91,10 +98,6 @@
     "typescript": "^5.9.3"
   },
   "engines-comment": "`node` 22.3.0 and `bun` 1.2.7 are needed for `globalThis.process.getBuiltinModule(…)`, which helps bundlers avoid thinking our `node` shims require packages from a package manager.",
-  "engines": {
-    "node": ">=22.3.0",
-    "bun": ">=1.3.0"
-  },
   "files": [
     "./dist/bin/",
     "./dist/lib/",
