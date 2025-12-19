@@ -87,6 +87,7 @@ jobs:
       - run: make test-dist-bin
       - run: make build-sites
       - run: make test-dist-sites-twizzle
+      - run: make check-package.json
       - run: make clean
 
   test-make-test-fast:
