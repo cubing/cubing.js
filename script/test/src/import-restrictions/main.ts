@@ -1,6 +1,5 @@
 import { checkAllowedImports } from "@cubing/dev-config/check-allowed-imports";
-import { packageNames } from "../../../build/common/packageNames";
-import { SRC_CUBING, TYPESCRIPT_INDEX } from "../../../build/common/paths";
+import { packageEntryPoints } from "../../../build/common/package-info";
 import {
   specAllowedImports as allowedImportsIncludingForSpecFiles,
   mainAllowedImports,
@@ -23,10 +22,7 @@ await checkAllowedImports(
         "script/**/*.js",
         "src/bin/**/*.ts",
         "src/bin/**/*.js",
-        // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
-        ...packageNames.map(
-          (packageName) => SRC_CUBING.join(packageName, TYPESCRIPT_INDEX).path,
-        ),
+        ...packageEntryPoints,
         "src/sites/**/*.ts",
         "src/sites/**/*.js",
       ],

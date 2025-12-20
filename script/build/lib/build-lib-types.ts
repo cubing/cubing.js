@@ -1,12 +1,8 @@
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
+import { packageEntryPoints } from "../common/package-info";
 import { packageNames } from "../common/packageNames";
-import {
-  DIST_LIB_CUBING,
-  SRC_CUBING,
-  TYPESCRIPT_DECLARATION_INDEX,
-  TYPESCRIPT_INDEX,
-} from "../common/paths";
+import { DIST_LIB_CUBING, TYPESCRIPT_DECLARATION_INDEX } from "../common/paths";
 
 console.warn(`
 ⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳
@@ -15,9 +11,7 @@ Note: The \`types\` target is slow. Expect several seconds.
 `);
 await new PrintableShellCommand("bun", [
   ["x", "tsup"],
-  ...packageNames.map(
-    (packageName) => SRC_CUBING.join(packageName, TYPESCRIPT_INDEX).path,
-  ),
+  ...packageEntryPoints,
   "--dts-only",
   ["--format", "esm"],
   ["--out-dir", DIST_LIB_CUBING.path],
