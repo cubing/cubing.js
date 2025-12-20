@@ -7,7 +7,7 @@ import {
 
 await checkAllowedImports(
   {
-    "From `./src/cubing/` and `./src/test/`": {
+    "From `./src/cubing/` and `./src/test/` (including test entry points)": {
       entryPoints: [
         "src/cubing/**/*.ts",
         "src/cubing/**/*.js",
@@ -16,7 +16,7 @@ await checkAllowedImports(
       ],
       allowedImports: allowedImportsIncludingForSpecFiles,
     },
-    "From other entry points in the repo.": {
+    "From library entry points and other non-test entry points in the repo": {
       entryPoints: [
         "script/**/*.ts",
         "script/**/*.js",
