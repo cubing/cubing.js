@@ -83,7 +83,7 @@
     "@types/chai": "^5.0.0",
     "@types/dom-speech-recognition": "^0.0.4",
     "@types/mocha": "^10.0.8",
-    "@types/node": "^24.6.2",
+    "@types/node": "^25.0.3",
     "@web/dev-server-esbuild": "^1.0.2",
     "@web/test-runner": "^0.19.0",
     "@web/test-runner-playwright": "^0.11.0",
