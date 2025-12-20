@@ -1,7 +1,4 @@
-export {
-  type PuzzleGeometryOptions as ExperimentalPuzzleGeometryOptions,
-  parseOptions,
-} from "./Options";
+export type { PuzzleGeometryOptions as ExperimentalPuzzleGeometryOptions } from "./Options";
 export type {
   StickerDat,
   StickerDatAxis,

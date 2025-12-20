@@ -1,3 +1,4 @@
+import type { Move } from "cubing/alg";
 import {
   type PuzzleDescription,
   parsePuzzleDescription,
@@ -75,7 +76,7 @@ export class PuzzleGeometryFullOptions {
   outerBlockMoves: boolean = false; // generate outer block moves
   vertexMoves: boolean = false; // generate vertex moves
   addRotations: boolean = false; // add symmetry information to ksolve output
-  moveList: string[] | null = null; // move list to generate
+  moveList: (string | Move)[] | null = null; // move list to generate
 
   fixedOrientation: boolean = false; // eliminate any orientations
   fixedPieceType: null | "e" | "v" | "f" = null; // fix a piece?
@@ -99,7 +100,12 @@ export class PuzzleGeometryFullOptions {
   scrambleAmount: number = 0; // scramble?
 
   constructor(options: PuzzleGeometryOptions = {}) {
-    Object.assign(this, options);
+    const optionsWithoutUndefined = Object.fromEntries(
+      Object.entries(options).filter(
+        ([_, value]) => typeof value !== "undefined",
+      ),
+    );
+    Object.assign(this, optionsWithoutUndefined);
   }
 }
 

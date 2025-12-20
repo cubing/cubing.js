@@ -1866,6 +1866,7 @@ export class PuzzleGeometry {
     return newmv.modified({ family: this.swizzler.unswizzle(newmv.family) });
   }
 
+  // TODO: remove this in favor of `Move.fromString(…)`
   // We use an extremely permissive parse here; any character but
   // digits are allowed in a family name.
   private stringToBlockMove(mv: string): Move {
@@ -1994,8 +1995,11 @@ export class PuzzleGeometry {
   }
 
   private parsemove(
-    mv: string,
+    mv: string | Move,
   ): [string | undefined, number, number, number, boolean, number] {
+    if (mv instanceof Move) {
+      mv = mv.toString();
+    }
     const r = this.parseMove(this.stringToBlockMove(mv));
     r[0] = mv;
     return r;

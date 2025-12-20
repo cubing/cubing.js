@@ -1,289 +1,425 @@
-// To run this file directly:
-// bun run src/bin/puzzle-geometry-bin.ts -- <program args>
+/**
 
+To run this file directly:
+
+```shell
+bun run ./src/bin/puzzle-geometry-bin.ts -- <program args>
+```
+
+To test completions:
+
+```shell
+# fish (from repo root)
+set PATH (pwd)/src/test/bin-path $PATH
+puzzle-geometry --completions fish | source
+```
+
+```shell
+# zsh (from repo root)
+autoload -Uz compinit
+compinit
+export PATH=$(pwd)/src/test/bin-path:$PATH
+source <(puzzle-geometry --completions zsh)
+```
+
+*/
+
+import { argv } from "node:process";
 import {
-  type ExperimentalPuzzleBaseShape,
-  type ExperimentalPuzzleCutType,
+  argument,
+  constant,
+  flag,
+  integer,
+  type Message,
+  map,
+  merge,
+  message,
+  type OptionName,
+  object,
+  option,
+  optional,
+  or,
+  string,
+} from "@optique/core";
+import { run } from "@optique/run";
+import { Move } from "cubing/alg";
+import {
   type ExperimentalPuzzleGeometryOptions,
   getPG3DNamedPuzzles,
   PuzzleGeometry,
   parsePuzzleDescription,
 } from "cubing/puzzle-geometry";
-import type { PuzzleDescriptionString } from "cubing/puzzle-geometry/PGPuzzles";
-import type {
-  PuzzleCutDescription,
-  PuzzleDescription,
-} from "cubing/puzzle-geometry/PuzzleGeometry";
+import { Path } from "path-class";
+import { PrintableShellCommand } from "printable-shell-command";
+import { packageVersion } from "./common/packageVersion";
 
-export function asstructured(v: any): any {
-  if (typeof v === "string") {
-    return JSON.parse(v);
-  }
-  return v;
-}
-export function asboolean(v: any): boolean {
-  if (typeof v === "string") {
-    return v !== "false";
-  } else {
-    return !!v;
-  }
-}
-export function parsePGOptionList(
-  optionlist?: any[],
-): ExperimentalPuzzleGeometryOptions {
-  const options: ExperimentalPuzzleGeometryOptions = {};
-  if (optionlist !== undefined) {
-    if (optionlist.length % 2 !== 0) {
-      throw new Error("Odd length in option list?");
-    }
-    for (let i = 0; i < optionlist.length; i += 2) {
-      if (optionlist[i] === "verbose") {
-        options.verbosity = (options.verbosity ?? 0) + 1;
-      } else if (optionlist[i] === "quiet") {
-        options.verbosity = 0;
-      } else if (optionlist[i] === "allmoves") {
-        options.allMoves = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "outerblockmoves") {
-        options.outerBlockMoves = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "vertexmoves") {
-        options.vertexMoves = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "rotations") {
-        options.addRotations = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "cornersets") {
-        options.includeCornerOrbits = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "centersets") {
-        options.includeCenterOrbits = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "edgesets") {
-        options.includeEdgeOrbits = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "omit") {
-        options.excludeOrbits = optionlist[i + 1];
-      } else if (optionlist[i] === "graycorners") {
-        options.grayCorners = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "graycenters") {
-        options.grayCenters = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "grayedges") {
-        options.grayEdges = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "movelist") {
-        options.moveList = asstructured(optionlist[i + 1]);
-      } else if (optionlist[i] === "killorientation") {
-        options.fixedOrientation = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "optimize") {
-        options.optimizeOrbits = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "scramble") {
-        options.scrambleAmount = optionlist[i + 1];
-      } else if (optionlist[i] === "fix") {
-        options.fixedPieceType = optionlist[i + 1];
-      } else if (optionlist[i] === "orientcenters") {
-        options.orientCenters = asboolean(optionlist[i + 1]);
-      } else if (optionlist[i] === "puzzleorientation") {
-        options.puzzleOrientation = asstructured(optionlist[i + 1]);
-      } else if (optionlist[i] === "puzzleorientations") {
-        options.puzzleOrientations = asstructured(optionlist[i + 1]);
-      } else {
-        throw new Error(
-          `Bad option while processing option list ${optionlist[i]}`,
-        );
-      }
-    }
-  }
-  return options;
-}
+const puzzleList = getPG3DNamedPuzzles();
 
-let dosvg = false;
-let doss = false;
-let doksolve = false;
-let dogap = false;
-let domathematica = false;
-let docanon = false;
-let do3d = false;
-if (globalThis.process && process.argv && process.argv.length <= 2) {
-  console.log(
-    `Usage:  puzzle-geometry [options] [puzzle]
-
-Options:
---ksolve: write ksolve (tws) file
---svg: write SVG (default is flat; --3d makes it 3D)
---gap: write gap
---mathematica: write mathematica
---ss: execute Schrier-Sims calculation
---3d: use 3D format for SVG file
---canon: write canonical string analysis
---rotations: include full-puzzle rotations as moves
---allmoves: includes all moves (i.e., slice moves for 3x3x3)
---outerblockmoves: use outer block moves rather than slice moves
---vertexmoves: for tetrahedral puzzles, prefer vertex moves to face moves
---nocorners: ignore all corners
---noedges: ignore all edges
---nocenters: ignore all centers
---noorientation: ignore orientations
---orientcenters: give centers an orientation
---puzzleorientation:  for 3D formats, give puzzle orientation
---moves movenames: restrict moves to this list (e.g, U2,F,r)
---optimize: optimize tws/ksolve/gap output
---scramble: scramble solved position
---fixcorner: choose moves to keep one corner fixed
---fixedge: choose moves to keep one edge fixed
---fixcenter: choose moves to keep one center fixed
---verbose (-v): make verbose
-
-The puzzle can be given as a geometric description or by name.
-The geometric description starts with c (cube), t (tetrahedron),
-d (dodecahedron), i (icosahedron), or o (octahedron), then a
-space, then a series of cuts.  Each cut begins with f (for a
-cut parallel to faces), v (for a cut perpendicular to a ray
-from the center through a corner), or e (for a cut perpendicular
-to a ray from the center through an edge) followed by a decimal
-number giving a distance, where 1 is the distance between the
-center of the puzzle and the center of a face.
-
-The puzzle names recognized are 2x2x2 through 13x13x13, 20x20x20,
-master skewb, professor skewb, compy cube, helicopter, dino,
-little chop, pyramorphix, mastermorphix, pyraminx, Jing pyraminx,
-master paramorphix, megaminx, gigaminx, pentultimate, starminx,
-starminx 2, pyraminx crystal, chopasaurus, big chop, skewb diamond,
-FTO, Christopher's jewel, octastar, Trajber's octahedron, radio chop,
-icosamate, Regular Astrominx, Regular Astrominx + Big Chop,
-Redicosahedron, Redicosahedron with centers,Icosaminx, and Eitan's star.
-
-Examples:
-   puzzlegeometry --ss 2x2x2
-   puzzlegeometry --ss --fixcorner 2x2x2
-   puzzlegeometry --ss --moves U,F2,r 4x4x4
-   puzzlegeometry --ksolve --optimize --moves U,F,R megaminx
-   puzzlegeometry --gap --noedges megaminx
-`,
+// TODO: make this a `ValueParser`?
+function antiBool(optionName: OptionName, description: Message) {
+  return optional(
+    map(
+      flag(optionName, {
+        description,
+      }),
+      (v) => !v,
+    ),
   );
 }
-if (globalThis.process && process.argv && process.argv.length >= 3) {
-  let desc: PuzzleDescriptionString | undefined;
-  const puzzleList = getPG3DNamedPuzzles();
-  let argp = 2;
-  const optionlist = [];
-  let showargs = true;
-  let pascalcomment = false;
-  while (argp < process.argv.length && process.argv[argp][0] === "-") {
-    const option = process.argv[argp++];
-    if (option === "--verbose" || option === "-v") {
-      optionlist.push("verbose", true);
-    } else if (option === "--quiet" || option === "-q") {
-      optionlist.push("quiet", true);
-      showargs = false;
-    } else if (option === "--ksolve") {
-      doksolve = true;
-    } else if (option === "--svg") {
-      showargs = false;
-      optionlist.push("quiet", true);
-      dosvg = true;
-    } else if (option === "--gap") {
-      dogap = true;
-    } else if (option === "--mathematica") {
-      domathematica = true;
-      pascalcomment = true;
-    } else if (option === "--ss") {
-      doss = true;
-    } else if (option === "--3d") {
-      do3d = true;
-    } else if (option === "--canon") {
-      docanon = true;
-    } else if (option === "--rotations") {
-      optionlist.push("rotations", true);
-    } else if (option === "--allmoves") {
-      optionlist.push("allmoves", true);
-    } else if (option === "--outerblockmoves") {
-      optionlist.push("outerblockmoves", true);
-    } else if (option === "--vertexmoves") {
-      optionlist.push("vertexmoves", true);
-    } else if (option === "--nocorners") {
-      optionlist.push("cornersets", false);
-    } else if (option === "--noedges") {
-      optionlist.push("edgesets", false);
-    } else if (option === "--noorientation") {
-      optionlist.push("killorientation", true);
-    } else if (option === "--nocenters") {
-      optionlist.push("centersets", false);
-    } else if (option === "--omit") {
-      optionlist.push("omit", process.argv[argp].split(","));
-      argp++;
-    } else if (option === "--moves") {
-      optionlist.push("movelist", process.argv[argp].split(","));
-      argp++;
-    } else if (option === "--optimize") {
-      optionlist.push("optimize", true);
-    } else if (option === "--scramble") {
-      optionlist.push("scramble", 100);
-    } else if (option === "--fixcorner") {
-      optionlist.push("fix", "v");
-    } else if (option === "--fixedge") {
-      optionlist.push("fix", "e");
-    } else if (option === "--fixcenter") {
-      optionlist.push("fix", "f");
-    } else if (option === "--orientcenters") {
-      optionlist.push("orientcenters", true);
-    } else if (option === "--puzzleorientation") {
-      optionlist.push("puzzleorientation", process.argv[argp]);
-      argp++;
-    } else {
-      throw new Error(`Bad option: ${option}`);
-    }
-  }
-  for (const [name, curDesc] of Object.entries(puzzleList)) {
-    if (name === process.argv[argp]) {
-      desc = curDesc;
+
+// Include using `...subcommandDefaults` at the *beginning* of a subcommand `object({ … })`.
+const subcommandDefaults = {
+  commentStyle: constant("hash"),
+  forceQuiet: constant(undefined),
+} as const;
+
+const args = run(
+  merge(
+    object({
+      // TODO: make these exclusive. https://github.com/dahlia/optique/issues/57
+      verbose: optional(map(flag("--verbose", "-v"), () => 1)),
+      quiet: optional(map(flag("--quiet", "-q"), () => 0)),
+    }),
+    or(
+      object({
+        ...subcommandDefaults,
+        subcommand: constant("KSolve"),
+        subcommandFlag: flag("--ksolve", {
+          description: message`Print KSolve (\`.tws\`). Forces \`--quiet\`.`,
+        }),
+      }),
+      object({
+        ...subcommandDefaults,
+        subcommand: constant("SVG"),
+        subcommandFlag: flag("--svg", {
+          description: message`Print SVG.`,
+        }),
+        commentStyle: constant("none"),
+        svg3D: optional(
+          option("--3d", {
+            description: message`Use 3D format for SVG file.`,
+          }),
+        ),
+        // This is here to avoid making the usage output more complicated.
+        forceQuiet: constant(0),
+      }),
+      object({
+        ...subcommandDefaults,
+        subcommand: constant("GAP"),
+        subcommandFlag: flag("--gap", {
+          description: message`Print GAP output.`,
+        }),
+      }),
+      object({
+        ...subcommandDefaults,
+        subcommand: constant("Mathematica"),
+        subcommandFlag: flag("--mathematica", {
+          description: message`Print Mathematica output.`,
+        }),
+        commentStyle: constant("Pascal"),
+      }),
+      object({
+        ...subcommandDefaults,
+        subcommand: constant("Schreier-Sims"),
+        subcommandFlag: flag("--ss", {
+          description: message`Perform Schrier-Sims calculation.`,
+        }),
+      }),
+      object({
+        ...subcommandDefaults,
+        subcommand: constant("Canonical string analysis"),
+        subcommandFlag: flag("--canon", {
+          description: message`Print canonical string analysis.`,
+        }),
+      }),
+      object({
+        ...subcommandDefaults,
+        subcommand: constant("3D"),
+        subcommandFlag: flag("--3d", {
+          description: message`Print 3D information.`,
+        }),
+      }),
+    ),
+    object({
+      // This doesn't apply to SVG, but we place it here so that it doesn't print once for each non-SVG subcommand in the help string.
+      optimizeOrbits: option("--optimize", {
+        description: message`Optimize output (when possible).`,
+      }),
+      addRotations: option("--rotations", {
+        description: message`Include full-puzzle rotations as moves.`,
+      }),
+      allMoves: option("--allmoves", {
+        description: message`Includes all moves (i.e., slice moves for 3x3x3).`,
+      }),
+      outerBlockMoves: option("--outerblockmoves", {
+        description: message`Use outer block moves rather than slice moves.`,
+      }),
+      vertexMoves: option("--vertexmoves", {
+        description: message`For tetrahedral puzzles, prefer vertex moves to face moves.`,
+      }),
+      includeCornerOrbits: antiBool(
+        "--nocorners",
+        message`Ignore all corners.`,
+      ),
+      excludeOrbits: optional(
+        map(
+          option("--omit", string({ metavar: "COMMA_SEPARATED_ORBITS" }), {
+            description: message`Omit orbits.`,
+          }),
+          (s) => s.split(","),
+        ),
+      ),
+      includeEdgeOrbits: antiBool("--noedges", message`Ignore all edges.`),
+      includeCenterOrbits: antiBool(
+        "--nocenters",
+        message`Ignore all centers.`,
+      ),
+      grayCorners: option("--graycorners", {
+        description: message`Gray corners.`,
+      }),
+      grayEdges: option("--grayedges", { description: message`Gray edges.` }),
+      grayCenters: option("--graycenters", {
+        description: message`Gray centers.`,
+      }),
+    }),
+    object({
+      // TODO: make these appropriately exclusive. https://github.com/dahlia/optique/issues/57
+      fixedOrientation: option("--noorientation", {
+        description: message`Ignore orientations.`,
+      }),
+      orientCenters: option("--orientcenters", {
+        description: message`Give centers an orientation.`,
+      }),
+      puzzleOrientation: optional(
+        map(
+          option("--puzzleorientation", string({ metavar: "JSON_STRING" }), {
+            description: message`For 3D formats, give puzzle orientation.`,
+          }),
+          (s) => JSON.parse(s),
+        ),
+      ),
+      puzzleOrientations: optional(
+        map(
+          option("--puzzleorientations", string({ metavar: "JSON_STRING" }), {
+            description: message`For 3D formats, give puzzle orientations.`,
+          }),
+          (s) => JSON.parse(s),
+        ),
+      ),
+    }),
+    object({
+      // TODO: make these exclusive. https://github.com/dahlia/optique/issues/57
+      fixCorner: optional(
+        map(
+          flag("--fixcorner", {
+            description: message`Auto-select a subset of moves to keep a corner fixed in place.`,
+          }),
+          () => "v" as const,
+        ),
+      ),
+      fixEdge: optional(
+        map(
+          flag("--fixedge", {
+            description: message`Auto-select a subset of moves to keep an edge fixed in place.`,
+          }),
+          () => "e" as const,
+        ),
+      ),
+      fixCenter: optional(
+        map(
+          flag("--fixcenter", {
+            description: message`Auto-select a subset of moves to keep a center fixed in place.`,
+          }),
+          () => "f" as const,
+        ),
+      ),
+    }),
+    object({
+      // TODO: this doesn't make sense for all subcommands?
+      scrambleAmount: optional(
+        option("--scramble", integer({ min: 0 }), {
+          description: message`Scramble solved position.`,
+        }),
+      ),
+      moveList: optional(
+        map(
+          option("--moves", string({ metavar: "COMMA_SEPARATED_MOVES" }), {
+            description: message`Restrict moves to this list. Example: \"U2,F,r\").`,
+          }),
+          (s) => s.split(",").map((m) => Move.fromString(m)),
+        ),
+      ),
+      puzzle: map(
+        argument(string({ metavar: "PUZZLE" }), {
+          description: message`The puzzle can be given as a geometric description or by name.
+The geometric description starts with one of:
+
+- \`c\` (cube),\n
+- \`t\` (tetrahedron),\n
+- \`d\` (dodecahedron),\n
+- \`i\` (icosahedron),\n
+- \`o\` (octahedron),\n
+
+then a space, then a series of cuts. Each cut begins with one of:
+
+- \`f\` (for a cut parallel to faces),\n
+- \`v\` (for a cut perpendicular to a ray from the center through a corner),\n
+- \`e\` (for a cut perpendicular to a ray from the center through an edge),\n
+
+followed by a decimal number giving a distance, where 1 is the distance
+between the center of the puzzle and the center of a face.
+
+Example description: \`c f 0 v 0.577350269189626 e 0\`. Corresponds to: https://alpha.twizzle.net/explore/?puzzle=2x2x2+%2B+dino+%2B+little+chop
+
+The recognized puzzle names are: ${Object.keys(puzzleList)
+            .map((p) => JSON.stringify(p))
+            .join(", ")}`,
+        }),
+        (s) => {
+          const parsed = parsePuzzleDescription(puzzleList[s] ?? s);
+          if (parsed === null) {
+            throw new Error("Could not parse puzzle description!");
+          }
+          return parsed;
+        },
+      ),
+    }),
+  ),
+  {
+    programName: new Path(argv[1]).basename.path,
+    description: message`
+Examples:
+
+    puzzle-geometry --ss 2x2x2\n
+    puzzle-geometry --ss --fixcorner 2x2x2\n
+    puzzle-geometry --ss --moves U,F2,r 4x4x4\n
+    puzzle-geometry --ksolve --optimize --moves U,F,R megaminx\n
+    puzzle-geometry --gap --noedges megaminx
+`,
+    help: "option",
+    completion: {
+      mode: "option",
+      name: "plural",
+    },
+    version: {
+      mode: "option",
+      value: packageVersion,
+    },
+  },
+);
+
+const verbosity: number | undefined =
+  args.forceQuiet ?? args.verbose ?? args.quiet;
+
+if (verbosity !== 0) {
+  const cmd = () => {
+    const [command, ...args] = argv;
+    return new PrintableShellCommand(command, args).getPrintableCommand({
+      argumentLineWrapping: "inline",
+    });
+  };
+
+  switch (args.commentStyle) {
+    case "hash": {
+      console.log(`# ${cmd()}`);
       break;
     }
-  }
-  let puzzleDescription: PuzzleDescription;
-  if (showargs) {
-    if (pascalcomment) {
-      console.log(`(* ${process.argv.join(" ")} *)`);
-    } else {
-      console.log(`# ${process.argv.join(" ")}`);
+    case "none": {
+      break;
     }
-  }
-  if (desc !== undefined) {
-    const parsed = parsePuzzleDescription(desc);
-    if (parsed === null) {
-      throw new Error("Could not parse puzzle description!");
+    case "Pascal": {
+      console.log(`(* ${cmd()} *)`);
+      break;
     }
-    puzzleDescription = parsed;
-    argp++;
-  } else {
-    const cuts: PuzzleCutDescription[] = [];
-    const cutarg = argp++;
-    while (argp + 1 < process.argv.length && process.argv[argp].length === 1) {
-      // TODO: validate cut type
-      cuts.push({
-        cutType: process.argv[argp] as ExperimentalPuzzleCutType,
-        distance: parseFloat(process.argv[argp + 1]),
-      });
-      argp += 2;
-    }
-    // TODO: validate shape
-    puzzleDescription = {
-      shape: process.argv[cutarg] as ExperimentalPuzzleBaseShape,
-      cuts,
-    };
+    default:
+      throw new Error("Invalid comment style.") as never;
   }
-  const options = parsePGOptionList(optionlist);
-  const pg = new PuzzleGeometry(puzzleDescription, options);
-  pg.allstickers();
-  pg.genperms();
-  if (argp < process.argv.length) {
-    throw new Error("Unprocessed content at end of command line");
+}
+
+function buildPuzzleGeometry(): PuzzleGeometry {
+  const fixedPieceType = args.fixCorner ?? args.fixEdge ?? args.fixCenter;
+  const {
+    optimizeOrbits,
+    addRotations,
+    allMoves,
+    outerBlockMoves,
+    vertexMoves,
+    includeCornerOrbits,
+    includeCenterOrbits,
+    includeEdgeOrbits,
+    excludeOrbits,
+    grayCorners,
+    grayEdges,
+    grayCenters,
+    fixedOrientation,
+    orientCenters,
+    scrambleAmount,
+    moveList,
+  } = args;
+  const options: ExperimentalPuzzleGeometryOptions = {
+    verbosity,
+    optimizeOrbits,
+    addRotations,
+    allMoves,
+    outerBlockMoves,
+    vertexMoves,
+    includeCornerOrbits,
+    includeCenterOrbits,
+    includeEdgeOrbits,
+    excludeOrbits,
+    grayCorners,
+    grayEdges,
+    grayCenters,
+    fixedOrientation,
+    orientCenters,
+    scrambleAmount,
+    moveList,
+    fixedPieceType,
+  };
+
+  const puzzleGeometry = new PuzzleGeometry(args.puzzle, options);
+  // TODO: why are these calls needed?
+  puzzleGeometry.allstickers();
+  puzzleGeometry.genperms();
+  return puzzleGeometry;
+}
+
+switch (args.subcommand) {
+  case "KSolve": {
+    console.log(buildPuzzleGeometry().writeksolve());
+    break;
   }
-  if (dogap) {
-    console.log(pg.writegap());
-  } else if (domathematica) {
-    console.log(pg.writemathematica());
-  } else if (doksolve) {
-    console.log(pg.writeksolve()); // TODO: Update arguments
-  } else if (dosvg) {
-    console.log(pg.generatesvg(undefined, undefined, undefined, do3d));
-  } else if (do3d) {
-    console.log(JSON.stringify(pg.get3d()));
-  } else if (doss) {
-    pg.writeSchreierSims(console.log);
-  } else if (docanon) {
-    pg.showcanon((_) => console.log(_));
+  case "SVG": {
+    console.log(
+      buildPuzzleGeometry().generatesvg(
+        undefined,
+        undefined,
+        undefined,
+        args.svg3D,
+      ),
+    );
+    break;
   }
+  case "GAP": {
+    console.log(buildPuzzleGeometry().writegap());
+    break;
+  }
+  case "Mathematica": {
+    console.log(buildPuzzleGeometry().writemathematica());
+    break;
+  }
+  case "Schreier-Sims": {
+    buildPuzzleGeometry().writeSchreierSims(console.log);
+    break;
+  }
+  case "Canonical string analysis": {
+    buildPuzzleGeometry().showcanon(console.log);
+    break;
+  }
+  case "3D": {
+    console.log(JSON.stringify(buildPuzzleGeometry().get3d(), null, "  "));
+    break;
+  }
+  default:
+    throw new Error("Invalid subcommand.") as never;
 }
