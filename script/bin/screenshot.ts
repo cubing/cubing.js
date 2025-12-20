@@ -5,24 +5,29 @@
  *
  *  */
 
+import { argv, exit } from "node:process";
 import {
-  binary,
-  number as cmdNumber,
-  string as cmdString,
-  command,
+  argument,
+  choice,
   flag,
-  oneOf,
+  integer,
+  map,
+  message,
+  object,
   option,
   optional,
-  positional,
-  run,
-  type Type,
-} from "cmd-ts-too";
+  string,
+  withDefault,
+} from "@optique/core";
+import { run } from "@optique/run";
+import { path } from "@optique/run/valueparser";
 import { Alg } from "cubing/alg";
-
+import { experimentalStickerings } from "cubing/puzzles/cubing-private";
 // We would use named imports, but that doesn't seem to be an option.
 import { visualizationFormats } from "cubing/twisty/model/props/viewer/VisualizationProp.js";
+import { Path } from "path-class";
 import { chromium } from "playwright";
+import { version as VERSION } from "../../package.json" with { type: "json" };
 import type {
   PuzzleID,
   TwistyPlayerConfig,
@@ -34,142 +39,114 @@ const DEBUG = false;
 const PAGE_URL =
   "http://localhost:4443/experiments.cubing.net/cubing.js/screenshot/";
 
-// TODO: dedup with `order` implementation.
-const ReadAlg: Type<string, Alg> = {
-  async from(str) {
-    return Alg.fromString(str);
-  },
-};
-
 const anchorValues = ["start", "end"] as const;
 const hintFaceletOptions = ["none", "floating"] as const;
 
-const app = command({
-  name: "screenshot",
-  description: "Screenshot an alg. (You can specify an empty alg string.)",
-  args: {
-    alg: positional({
-      type: ReadAlg,
-      displayName: "Puzzle geometry ID",
-    }),
-    puzzle: option({
-      type: optional(cmdString),
-      long: "puzzle",
-    }),
-    stickering: option({
-      type: optional(cmdString),
-      long: "stickering",
-    }),
-    anchor: option({
-      type: optional(oneOf(anchorValues)),
-      long: "anchor",
-    }),
-    hintFacelets: option({
-      type: optional(oneOf(hintFaceletOptions)),
-      long: "hint-facelets",
-    }),
-    visualization: option({
-      type: optional(oneOf(Object.keys(visualizationFormats))),
-      long: "visualization",
-    }),
-    debug: flag({
-      long: "debug",
-    }),
-    outFile: option({
-      // TODO: implement a file path that does *not* exist: https://cmd-ts-too.vercel.app/batteries_file_system.html
-      type: optional(cmdString),
-      long: "out-file",
-    }),
-    width: option({
-      type: cmdNumber,
-      long: "width",
-      defaultValue: () => 2048,
-      defaultValueIsSerializable: true,
-    }),
-    height: option({
-      description: "Defaults to width",
-      type: optional(cmdNumber),
-      long: "height",
-    }),
-    cameraLatitude: option({
-      type: optional(cmdNumber),
-      long: "camera-latitude",
-    }),
-    cameraLongitude: option({
-      type: optional(cmdNumber),
-      long: "camera-longitude",
-    }),
+const args = run(
+  object({
+    alg: map(argument(string()), Alg.fromString),
+    puzzle: withDefault(option("--puzzle", string()), "3x3x3"),
+    stickering: optional(
+      option("--stickering", choice(Object.keys(experimentalStickerings))),
+    ),
+    anchor: optional(option("--anchor", choice(anchorValues))),
+    hintFacelets: optional(
+      option("--hint-facelets", choice(hintFaceletOptions)),
+    ),
+    visualization: optional(
+      option("--visualization", choice(Object.keys(visualizationFormats))),
+    ),
+    debug: optional(flag("--debug")),
+    // TODO: must not exist: https://github.com/dahlia/optique/issues/56
+    outFile: optional(map(option("--out-file", path()), Path.fromString)),
+    width: withDefault(option("--width", integer()), 2048),
+    height: optional(
+      option("--height", integer(), {
+        description: message`Defaults to width.`,
+      }),
+    ),
+    cameraLatitude: optional(
+      option("--camera-latitude", integer({ min: -90, max: 90 }), {}),
+    ),
+    // TODO: add bounds? Wrapping can be useful.
+    cameraLongitude: optional(option("--camera-longitude", integer(), {})),
+  }),
+  {
+    programName: new Path(argv[1]).basename.path,
+    help: "option",
+    description: message`Screenshot an alg. (You can specify an empty alg string.)`,
+    completion: {
+      mode: "option",
+      name: "plural",
+    },
+    version: {
+      mode: "option",
+      value: VERSION,
+    },
   },
-  handler: async (args) => {
-    startServer();
+);
 
-    // The `alg` field needs to be a string to be serializable.
-    // Note that `TwistyPlayerConfig & Record<string, string | number>` does not work here.
-    // TODO: Introduce a `SerializableTwistyPlayerConfig` type?
-    const options: TwistyPlayerConfig & { alg: string } = {
-      alg: args.alg.toString(),
-      puzzle: args.puzzle as PuzzleID, // TODO
-      experimentalStickering: args.stickering,
-      experimentalSetupAnchor: args.anchor,
-      hintFacelets: args.hintFacelets,
-      visualization: args.visualization as VisualizationFormat,
-      cameraLatitudeLimit: 90,
-    };
+startServer();
 
-    // TODO: can we inline these above?
-    if ("cameraLatitude" in args) {
-      options.cameraLatitude = args.cameraLatitude;
-    }
-    if ("cameraLongitude" in args) {
-      options.cameraLongitude = args.cameraLongitude;
-    }
+// The `alg` field needs to be a string to be serializable.
+// Note that `TwistyPlayerConfig & Record<string, string | number>` does not work here.
+// TODO: Introduce a `SerializableTwistyPlayerConfig` type?
+const options: TwistyPlayerConfig & { alg: string } = {
+  alg: args.alg.toString(),
+  puzzle: args.puzzle as PuzzleID, // TODO
+  experimentalStickering: args.stickering,
+  experimentalSetupAnchor: args.anchor,
+  hintFacelets: args.hintFacelets,
+  visualization: args.visualization as VisualizationFormat,
+  cameraLatitudeLimit: 90,
+};
 
-    for (const key in options) {
-      if (typeof (options as any)[key] === "undefined") {
-        delete (options as any)[key];
-      }
-    }
+// TODO: can we inline these above?
+if ("cameraLatitude" in args) {
+  options.cameraLatitude = args.cameraLatitude;
+}
+if ("cameraLongitude" in args) {
+  options.cameraLongitude = args.cameraLongitude;
+}
 
-    console.log(options);
+for (const key in options) {
+  if (typeof (options as any)[key] === "undefined") {
+    delete (options as any)[key];
+  }
+}
 
-    options.background = "none";
-    options.controlPanel = "none";
+console.log(options);
 
-    await (async () => {
-      const browser = await chromium.launch({ headless: !DEBUG });
-      const context = await browser.newContext();
-      const page = await context.newPage();
-      const height = args.height ?? args.width;
-      page.setViewportSize({
-        width: args.width,
-        height,
-      });
+options.background = "none";
+options.controlPanel = "none";
 
-      const url = new URL(PAGE_URL);
-      url.searchParams.set("options", JSON.stringify(options));
-
-      if (args.debug) {
-        console.log(url.toString());
-      }
-
-      await page.goto(url.toString());
-      const path = args.outFile ?? `${args.alg ?? "puzzle"}.png`;
-      console.log("Output file:", path);
-
-      await page.waitForSelector("#screenshot");
-
-      await page.screenshot({
-        path,
-        omitBackground: true,
-        fullPage: true,
-      });
-
-      if (!DEBUG) {
-        await browser.close();
-        process.exit(0);
-      }
-    })();
-  },
+const browser = await chromium.launch({ headless: !DEBUG });
+const context = await browser.newContext();
+const page = await context.newPage();
+const height = args.height ?? args.width;
+page.setViewportSize({
+  width: args.width,
+  height,
 });
 
-await run(binary(app), process.argv);
+const url = new URL(PAGE_URL);
+url.searchParams.set("options", JSON.stringify(options));
+
+if (args.debug) {
+  console.log(url.toString());
+}
+
+await page.goto(url.toString());
+const outPath = args.outFile?.path ?? `${args.alg ?? "puzzle"}.png`;
+console.log("Output file:", outPath);
+
+await page.waitForSelector("#screenshot");
+
+await page.screenshot({
+  path: outPath,
+  omitBackground: true,
+  fullPage: true,
+});
+
+await browser.close();
+exit(0); // TODO: avoid the need for this.

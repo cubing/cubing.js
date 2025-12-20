@@ -29,7 +29,9 @@ export function startServer(port?: number): void {
     // Normalize to avoid path traversal beyond the site root folder.
     const normalizedPath = new URL(request.url, "http://test/").pathname;
 
-    let filePath = DIST_SITES_ROOT_EXPANDED.join(normalizedPath);
+    let filePath = DIST_SITES_ROOT_EXPANDED.join(
+      new Path(normalizedPath).asRelative(),
+    );
 
     if (filePath.hasTrailingSlash()) {
       filePath = filePath.join("index.html");
