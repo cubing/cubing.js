@@ -1,16 +1,9 @@
-export type AllowedImports = Record<
-  string,
-  { static?: string[]; dynamic?: string[] }
->;
+import type { AllowedImports } from "@cubing/dev-config/check-allowed-imports";
 
 /**
  * These definitions help to guard heavy code imports from light entry points.
  * It's okay to add entries, but be careful that this doesn't greatly increase
  * the dependency code of any important public API.
- *
- * Note:
- * - Only the allowed imports for the most specific (longest) scope key applies to a source file.
- * - Files in a given scope key are allowed to import any other within the same scope.
  */
 export const mainAllowedImports: AllowedImports = {
   // script
@@ -37,6 +30,9 @@ export const mainAllowedImports: AllowedImports = {
       "playwright",
     ],
     dynamic: ["cubing"],
+  },
+  "script/test/src/import-restrictions": {
+    static: ["@cubing/dev-config"],
   },
   "script/test/dist/lib/cubing/build-size/main.ts": {
     static: ["node:util", "node:zlib"],
