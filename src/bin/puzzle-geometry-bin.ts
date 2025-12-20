@@ -51,7 +51,7 @@ import {
 } from "cubing/puzzle-geometry";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
-import { packageVersion } from "./common/packageVersion";
+import { packageVersion } from "../metadata/packageVersion";
 
 const puzzleList = getPG3DNamedPuzzles();
 

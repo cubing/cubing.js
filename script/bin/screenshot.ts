@@ -27,12 +27,12 @@ import { experimentalStickerings } from "cubing/puzzles/cubing-private";
 import { visualizationFormats } from "cubing/twisty/model/props/viewer/VisualizationProp.js";
 import { Path } from "path-class";
 import { chromium } from "playwright";
-import { version as VERSION } from "../../package.json" with { type: "json" };
 import type {
   PuzzleID,
   TwistyPlayerConfig,
   VisualizationFormat,
 } from "../../src/cubing/twisty/index.js";
+import { packageVersion } from "../../src/metadata/packageVersion.js";
 import { startServer } from "../lib/experiments-server";
 
 const DEBUG = false;
@@ -81,7 +81,7 @@ const args = run(
     },
     version: {
       mode: "option",
-      value: VERSION,
+      value: packageVersion,
     },
   },
 );

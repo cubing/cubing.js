@@ -32,11 +32,13 @@ export const mainAllowedImports: AllowedImports = {
 
       "package.json",
       "cubing",
+      "src/metadata",
 
+      "@optique/core",
+      "@optique/run",
       "barely-a-dev-server",
-      "printable-shell-command",
-      "cmd-ts-too",
       "path-class",
+      "printable-shell-command",
 
       "esbuild",
       "node-fetch",
@@ -46,14 +48,24 @@ export const mainAllowedImports: AllowedImports = {
   },
   // src/bin
   "src/bin": {
-    static: ["cubing"],
-    dynamic: ["cmd-ts-too", "node:process"],
+    static: [
+      "node:process",
+
+      "@optique/core",
+      "@optique/run",
+      "path-class",
+      "printable-shell-command",
+
+      "cubing",
+      "src/metadata",
+    ],
+    dynamic: ["node:process"],
   },
-  "src/bin/guards/cmd-ts-too-guard.ts": {
-    static: ["node:process"],
-    dynamic: ["cmd-ts-too"],
+  // src/metadata
+  "src/metadata": {
+    static: ["@optique/core", "@optique/run", "path-class"],
   },
-  // src/lib
+  // src/cubing
   "src/cubing/alg": {},
   "src/cubing/bluetooth": {
     static: [

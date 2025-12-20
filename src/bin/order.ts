@@ -32,7 +32,7 @@ import { KPuzzle } from "cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "cubing/puzzle-geometry";
 import { puzzles } from "cubing/puzzles";
 import { Path } from "path-class";
-import { packageVersion } from "./common/packageVersion";
+import { packageVersion } from "../metadata/packageVersion";
 
 const args = run(
   object({

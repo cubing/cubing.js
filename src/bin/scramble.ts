@@ -42,7 +42,7 @@ import { eventInfo, twizzleEvents } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
 import { Path } from "path-class";
-import { packageVersion } from "./common/packageVersion";
+import { packageVersion } from "../metadata/packageVersion";
 
 const outputFormats = ["auto", "text", "link", "json-text"] as const;
 const notationTypes = ["auto", "LGN"] as const;
@@ -148,66 +148,79 @@ class JSONListPrinter<T> {
   }
 }
 
-if (format !== "json-text" && amount === 1) {
-  const scramble = await randomScrambleForEvent(eventID);
+// Possibly: https://github.com/nodejs/node/issues/55468 Technically we could
+// just remove `await` from the called function, but this is semantically
+// unsound. This function encapsulates the unsoundness.
+function nodeForgetTopLevelAwaitWorkaround(
+  _promise: Promise<void>,
+): Promise<void> {
+  return Promise.resolve();
+}
 
-  switch (format) {
-    case "auto": {
-      console.log(`${scrambleText(scramble)}
+await nodeForgetTopLevelAwaitWorkaround(
+  (async () => {
+    if (format !== "json-text" && amount === 1) {
+      const scramble = await randomScrambleForEvent(eventID);
+
+      switch (format) {
+        case "auto": {
+          console.log(`${scrambleText(scramble)}
 
 🔗 ${scrambleLink(scramble)}`);
-      break;
-    }
-    case "text": {
-      console.log(scrambleText(scramble));
-      break;
-    }
-    case "link": {
-      console.log(scrambleLink(scramble));
-      break;
-    }
-    // @ts-expect-error This is a code guard for future refactoring.
-    case "json-text": {
-      throw new Error(
-        "Encountered `json` format in code that is not expected to handle it.",
-      );
-    }
-    default: {
-      throw new Error("Invalid format!") as never;
-    }
-  }
-} else {
-  const jsonListPrinter: JSONListPrinter<string> | undefined =
-    format === "json-text" ? new JSONListPrinter() : undefined;
-  for (let i = 0; i < amount; i++) {
-    const scramble = await randomScrambleForEvent(eventID);
-    switch (format) {
-      case "auto": {
-        console.log(`// Scramble #${i + 1}
+          break;
+        }
+        case "text": {
+          console.log(scrambleText(scramble));
+          break;
+        }
+        case "link": {
+          console.log(scrambleLink(scramble));
+          break;
+        }
+        // @ts-expect-error This is a code guard for future refactoring.
+        case "json-text": {
+          throw new Error(
+            "Encountered `json` format in code that is not expected to handle it.",
+          );
+        }
+        default: {
+          throw new Error("Invalid format!") as never;
+        }
+      }
+    } else {
+      const jsonListPrinter: JSONListPrinter<string> | undefined =
+        format === "json-text" ? new JSONListPrinter() : undefined;
+      for (let i = 0; i < amount; i++) {
+        const scramble = await randomScrambleForEvent(eventID);
+        switch (format) {
+          case "auto": {
+            console.log(`// Scramble #${i + 1}
 ${scrambleText(scramble)}
 
 🔗 ${scrambleLink(scramble)}
 `);
-        break;
+            break;
+          }
+          case "text": {
+            console.log(`// Scramble #${i + 1}`);
+            console.log(`${scrambleText(scramble)}\n`);
+            break;
+          }
+          case "link": {
+            console.log(`// Scramble #${i + 1}`);
+            console.log(`${scrambleLink(scramble)}\n`);
+            break;
+          }
+          case "json-text": {
+            jsonListPrinter?.push(scramble.toString());
+            break;
+          }
+          default: {
+            throw new Error("Invalid format!") as never;
+          }
+        }
       }
-      case "text": {
-        console.log(`// Scramble #${i + 1}`);
-        console.log(`${scrambleText(scramble)}\n`);
-        break;
-      }
-      case "link": {
-        console.log(`// Scramble #${i + 1}`);
-        console.log(`${scrambleLink(scramble)}\n`);
-        break;
-      }
-      case "json-text": {
-        jsonListPrinter?.push(scramble.toString());
-        break;
-      }
-      default: {
-        throw new Error("Invalid format!") as never;
-      }
+      jsonListPrinter?.finish();
     }
-  }
-  jsonListPrinter?.finish();
-}
+  })(),
+);
