@@ -41,7 +41,7 @@ export const mainAllowedImports: AllowedImports = {
   "script/test/dist/lib/cubing/build-size/main.ts": {
     static: ["node:util", "node:zlib"],
   },
-  "script/build/lib/clean-types.ts": {
+  "script/cleanup": {
     static: ["node:fs", "node:fs/promises", "node:path"],
   },
   // src/bin

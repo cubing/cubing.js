@@ -120,7 +120,6 @@
     "dev": "make dev",
     "link": "make link",
     "clean": "make clean",
-    "clean-types": "make clean-types",
     "reset": "make reset",
     "test": "make test",
     "test-info": "make test-info",

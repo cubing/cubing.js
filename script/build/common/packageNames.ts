@@ -1,4 +1,4 @@
-// NOTE: this file is used by `make clean-types`, so it cannot import any
+// NOTE: this file must be usable after `make reset`, so it cannot import any
 // packages. (Built-in modules and intra-repo imports are fine, as long as they
 // don't transitively import any packages.)
 

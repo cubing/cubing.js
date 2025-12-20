@@ -1,7 +1,7 @@
 BUN=bun
-BUNX=${BUN} x
-BUN_RUN=${BUN} run
-BIOME=${BUN} x @biomejs/biome
+BUNX=${BUN} x --
+BUN_RUN=${BUN} run --
+BIOME=${BUNX} @biomejs/biome
 NODE=node
 NPM=npm
 WEB_TEST_RUNNER=${BUNX} web-test-runner # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
@@ -79,18 +79,12 @@ link: build
 	${BUN} link
 
 .PHONY: clean
-clean: clean-types
-	rm -rf \
-		./dist ./.temp ./coverage ./package-lock.json \
-		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
-
-.PHONY: clean-types
-clean-types:
-	${BUN_RUN} script/build/lib/clean-types.ts
+clean:
+	${BUN_RUN} ./script/cleanup/clean.ts
 
 .PHONY: reset
 reset: clean
-	rm -rf ./node_modules
+	${BUN_RUN} ./script/cleanup/reset.ts
 	@echo ""
 	@echo "To reinstall dependencies, run:"
 	@echo ""
