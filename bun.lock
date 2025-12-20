@@ -17,7 +17,7 @@
       "devDependencies": {
         "@biomejs/biome": "^2.3.1",
         "@cubing/deploy": ">=0.4.10",
-        "@cubing/dev-config": ">=0.7.2",
+        "@cubing/dev-config": ">=0.8.1",
         "@esm-bundle/chai": "^4.3.4-fix.0",
         "@schemastore/package": "^0.0.10",
         "@types/bun": "^1.2.23",
@@ -67,7 +67,7 @@
 
     "@cubing/deploy": ["@cubing/deploy@0.4.10", "", { "dependencies": { "path-class": ">=0.10.3", "printable-shell-command": ">=2.6.3" }, "bin": { "deploy": "dist/cli/main.js" } }, "sha512-IQ13vLUpMvIU/cZxw0wDnwoUpwEpiZDNDTlaaUV/mfUnOxzbyZi/TrIucar400oPTq/rC1/9qWrKCIxxTbXIAg=="],
 
-    "@cubing/dev-config": ["@cubing/dev-config@0.7.2", "", { "dependencies": { "esbuild": ">=0.25.3 && <1.0.0", "path-class": ">=0.10.8", "printable-shell-command": "^3.0.2" }, "bin": { "package.json": "bin/package.json/index.js" } }, "sha512-nPZbgHweYnyv23qRwm5ujye4Q7jNCMwttbEt4oNN/o3XYT+9dP254Anv4U8tRBFSIDu6wCKUm4z2MnW5dayjvg=="],
+    "@cubing/dev-config": ["@cubing/dev-config@0.8.1", "", { "dependencies": { "esbuild": ">=0.25.3 && <1.0.0", "path-class": ">=0.10.8", "printable-shell-command": ">=4.0.3" }, "bin": { "package.json": "bin/package.json/index.js" } }, "sha512-945QY7O/ISCFwFLmKw4FHlR29iQGvP/5roUcP2S5pc7ndwqrwN0BX9FRzKyKY8TjycfU/TANO0oSW5aiSwCZ+A=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.12", "", { "os": "aix", "cpu": "ppc64" }, "sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA=="],
 
@@ -1064,8 +1064,6 @@
     "@cubing/deploy/printable-shell-command": ["printable-shell-command@3.0.3", "", { "dependencies": { "path-class": ">=0.10.3", "type-fest": ">=5.1.0" }, "peerDependencies": { "@types/bun": "^1.2.20", "@types/node": ">=24.2.0" } }, "sha512-YPHNc4rEopjtVQzUyOZ4n9y6s+MQ6HjwmlrrEotRBgGSs92WtTxfPYHNiuPP9uzHnXbZxAfSWTsNOmxFECs40g=="],
 
     "@cubing/dev-config/esbuild": ["esbuild@0.27.2", "", { "optionalDependencies": { "@esbuild/aix-ppc64": "0.27.2", "@esbuild/android-arm": "0.27.2", "@esbuild/android-arm64": "0.27.2", "@esbuild/android-x64": "0.27.2", "@esbuild/darwin-arm64": "0.27.2", "@esbuild/darwin-x64": "0.27.2", "@esbuild/freebsd-arm64": "0.27.2", "@esbuild/freebsd-x64": "0.27.2", "@esbuild/linux-arm": "0.27.2", "@esbuild/linux-arm64": "0.27.2", "@esbuild/linux-ia32": "0.27.2", "@esbuild/linux-loong64": "0.27.2", "@esbuild/linux-mips64el": "0.27.2", "@esbuild/linux-ppc64": "0.27.2", "@esbuild/linux-riscv64": "0.27.2", "@esbuild/linux-s390x": "0.27.2", "@esbuild/linux-x64": "0.27.2", "@esbuild/netbsd-arm64": "0.27.2", "@esbuild/netbsd-x64": "0.27.2", "@esbuild/openbsd-arm64": "0.27.2", "@esbuild/openbsd-x64": "0.27.2", "@esbuild/openharmony-arm64": "0.27.2", "@esbuild/sunos-x64": "0.27.2", "@esbuild/win32-arm64": "0.27.2", "@esbuild/win32-ia32": "0.27.2", "@esbuild/win32-x64": "0.27.2" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-HyNQImnsOC7X9PMNaCIeAm4ISCQXs5a5YasTXVliKv4uuBo1dKrG0A+uQS8M5eXjVMnLg3WgXaKvprHlFJQffw=="],
-
-    "@cubing/dev-config/printable-shell-command": ["printable-shell-command@3.0.3", "", { "dependencies": { "path-class": ">=0.10.3", "type-fest": ">=5.1.0" }, "peerDependencies": { "@types/bun": "^1.2.20", "@types/node": ">=24.2.0" } }, "sha512-YPHNc4rEopjtVQzUyOZ4n9y6s+MQ6HjwmlrrEotRBgGSs92WtTxfPYHNiuPP9uzHnXbZxAfSWTsNOmxFECs40g=="],
 
     "@esm-bundle/chai/@types/chai": ["@types/chai@4.3.20", "", {}, "sha512-/pC9HAB5I/xMlc5FP77qjCnI16ChlJfW0tGa0IUcFn38VJrTV6DeZ60NU5KZBtaOZqjdpwTWohz5HU1RrhiYxQ=="],
 

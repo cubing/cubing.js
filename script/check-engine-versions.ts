@@ -46,9 +46,8 @@ async function checkEngine(
     }
   } catch (e) {
     if ((e as any as SystemError).code === "ENOENT") {
-      const [binary, ..._] = versionCommand.forBun();
       console.error(
-        `Binary is missing for engine version check: \`${binary}\``,
+        `Binary is missing for engine version check: \`${versionCommand.commandName}\``,
       );
     } else {
       console.error(`Unexpected error while trying to run version check: ${e}`);
