@@ -18,7 +18,7 @@
 /.rpt2_cache
 
 # Legacy type re-export.
-# TODO: rid of this once TypeScripts is able to use the `"exports"` field in `package.json` out of the box.
+# TODO: rid of this once TypeScript is able to use the `"exports"` field in `package.json` out of the box.
 /alg/index.d.ts
 /bluetooth/index.d.ts
 /kpuzzle/index.d.ts
