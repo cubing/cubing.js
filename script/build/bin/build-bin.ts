@@ -1,5 +1,9 @@
 import { build } from "esbuild";
 
+import { version as PACKAGE_VERSION } from "../../../package.json" with {
+  type: "json",
+};
+
 await build({
   entryPoints: ["src/bin/*.ts"],
   outdir: "dist/bin/",
@@ -15,6 +19,7 @@ await build({
   supported: {
     "top-level-await": true,
   },
+  define: { "globalThis.PACKAGE_VERSION": JSON.stringify(PACKAGE_VERSION) },
   banner: {
     js: "#!/usr/bin/env node",
   },

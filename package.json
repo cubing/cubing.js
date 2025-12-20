@@ -64,6 +64,8 @@
     "scramble": "dist/bin/scramble.js"
   },
   "dependencies": {
+    "@optique/core": "^0.8.1",
+    "@optique/run": "^0.8.1",
     "@types/three": "^0.169.0",
     "@types/web-bluetooth": "^0.0.20",
     "comlink": "^4.4.1",
@@ -76,8 +78,6 @@
     "@cubing/deploy": ">=0.4.6",
     "@cubing/dev-config": ">=0.6.5",
     "@esm-bundle/chai": "^4.3.4-fix.0",
-    "@optique/core": "^0.8.1",
-    "@optique/run": "^0.8.1",
     "@schemastore/package": "^0.0.10",
     "@types/bun": "^1.2.23",
     "@types/chai": "^5.0.0",
