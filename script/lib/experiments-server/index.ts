@@ -76,5 +76,3 @@ export function startServer(port?: number): void {
   }).listen(port);
   console.log(`Server running at http://127.0.0.1:${port}/`);
 }
-
-startServer(1234);
