@@ -1,10 +1,10 @@
 BUN=bun
-BUNX=${BUN} x --
+BUN_DX=${BUN} x -- bun-dx
 BUN_RUN=${BUN} run --
-BIOME=${BUNX} @biomejs/biome
+BIOME=${BUN_DX} --package @biomejs/biome biome --
 NODE=node
 NPM=npm
-WEB_TEST_RUNNER=${BUNX} web-test-runner # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
+WEB_TEST_RUNNER=${BUN_DX} --package @web/test-runner web-test-runner -- # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
 
 .PHONY: default
 default:
@@ -66,7 +66,7 @@ build-site-experiments: update-dependencies
 .PHONY: build-site-docs
 build-site-docs: update-dependencies
 	rm -rf ./dist/sites/js.cubing.net/
-	${BUNX} typedoc src/cubing/*/index.ts
+	${BUN_DX} --package typedoc typedoc -- src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
 
@@ -155,15 +155,11 @@ test-spec-dom: update-dependencies install-playwright
 
 .PHONY: install-playwright
 install-playwright: update-dependencies
-	${BUNX} playwright install
+	${BUN_DX} --package playwright playwright -- install
 
 .PHONY: test-spec-dom-with-coverage
 test-spec-dom-with-coverage: update-dependencies
 	${WEB_TEST_RUNNER} --coverage
-
-.PHONY: playwright-install
-playwright-install:
-	${BUNX} playwright install
 
 .PHONY: test-src-import-restrictions
 test-src-import-restrictions: update-dependencies
@@ -172,7 +168,7 @@ test-src-import-restrictions: update-dependencies
 .PHONY: test-src-tsc
 test-src-tsc: update-dependencies
 	@# The config itself has `"noEmit": true`, but including it here ensures consistency with other projects (e.g. in case someone copies the command from here).
-	${BUNX} tsc --noEmit --project ./tsconfig.json
+	${BUN_DX} --package typescript tsc -- --noEmit --project ./tsconfig.json
 
 .PHONY: test-src-scripts-consistency
 test-src-scripts-consistency: update-dependencies
@@ -228,7 +224,7 @@ test-dist-lib-build-size: build-lib-js
 	${BUN_RUN} ./script/test/dist/lib/cubing/build-size/main.ts
 
 .PHONY: test-dist-sites-twizzle
-test-dist-sites-twizzle: playwright-install build-sites
+test-dist-sites-twizzle: install-playwright build-sites
 	${BUN_RUN} ./script/test/dist/sites/alpha.twizzle.net/main.ts
 
 .PHONY: test-dist-bin
@@ -274,7 +270,7 @@ lint-ci: update-dependencies
 
 .PHONY: check-package.json
 check-package.json: build-lib-js build-lib-types build-bin
-	${BUNX} --package @cubing/dev-config package.json check
+	${BUN_DX} --package @cubing/dev-config package.json -- check
 
 .PHONY: prepack
 prepack: clean build test-dist-lib-node-import test-dist-lib-node-scramble test-dist-lib-plain-esbuild-compat
@@ -302,7 +298,7 @@ deploy-twizzle: build-site-twizzle
 
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
-	bun x --package @cubing/deploy deploy
+	${BUN_DX} --package @cubing/deploy deploy --
 
 .PHONY: roll-vendored-twips
 roll-vendored-twips:
@@ -314,7 +310,7 @@ roll-vendored-twips:
 	cp -R ../twips/dist/wasm/* ./src/cubing/vendor/mpl/twips/
 	# TODO: why does using normal `echo -n` ignore the `-n` here?
 	printf "https://github.com/cubing/twips/tree/" > ./src/cubing/vendor/mpl/twips/vendored-twips-git-version.txt
-	cd ../twips/ && ${BUNX} @lgarron-bin/repo version describe >> ../cubing.js/src/cubing/vendor/mpl/twips/vendored-twips-git-version.txt
+	cd ../twips/ && ${BUN_DX} --package @lgarron-bin/repo repo -- version describe >> ../cubing.js/src/cubing/vendor/mpl/twips/vendored-twips-git-version.txt
 	${BUN_RUN} script/fix-vendored-twips.ts
 
 .PHONY: update-cdn
