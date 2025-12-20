@@ -58,7 +58,7 @@ function nodeEndpoint(parentPort: NodeMessagePort | NodeWorker): Worker & {
    * - https://github.com/cubing/cubing.js/issues/358
    * - https://github.com/nodejs/node/issues/53036#issuecomment-2118106710
    */
-  parentPort.unref();
+  parentPortAsNodeWorker.unref();
 
   return constructedWorker;
 }
