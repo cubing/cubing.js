@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.1",
-    "@cubing/deploy": ">=0.4.6",
+    "@cubing/deploy": ">=0.4.10",
     "@cubing/dev-config": ">=0.6.5",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@schemastore/package": "^0.0.10",
@@ -92,9 +92,9 @@
     "esbuild": "^0.25.0",
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
-    "path-class": ">=0.10.11",
+    "path-class": ">=0.10.13",
     "playwright": "^1.47.2",
-    "printable-shell-command": "^2.7.0",
+    "printable-shell-command": "^3.0.3",
     "tsup": "^8.3.0",
     "typedoc": "^0.28.10",
     "typescript": "^5.9.3"

@@ -1,9 +1,8 @@
-import { exec } from "node:child_process";
-import { join } from "node:path";
 import { barelyServe } from "barely-a-dev-server";
 import { $ } from "bun";
 import type { Plugin } from "esbuild";
 import { Path } from "path-class";
+import { PrintableShellCommand } from "printable-shell-command";
 import { needPath } from "../../lib/needPath";
 
 needPath(
@@ -25,17 +24,21 @@ function plugins(dev: boolean): Plugin[] {
       name: "refresh",
       setup(build) {
         build.onEnd(() => {
-          exec(
-            `osascript -e 'tell application "Google Chrome"
-              set theURL to get URL of the active tab of its first window
-              if theURL starts with "http://localhost" then
-                tell the active tab of its first window to reload
-              end if
-              if theURL starts with "http://cubing.localhost" then
-                tell the active tab of its first window to reload
-              end if
-            end tell'`,
-          );
+          new PrintableShellCommand("osascript", [
+            [
+              "-e",
+              `
+tell application "Google Chrome"
+  set theURL to get URL of the active tab of its first window
+  if theURL starts with "http://localhost" then
+    tell the active tab of its first window to reload
+  end if
+  if theURL starts with "http://cubing.localhost" then
+    tell the active tab of its first window to reload
+  end if
+end tell`,
+            ],
+          ]);
         });
       },
     } satisfies Plugin);
@@ -73,7 +76,7 @@ async function writeVersionJSON(siteFolder: Path) {
 export async function barelyServeSite(srcFolder: string, dev: boolean) {
   const outDir = new Path(dev ? ".temp/dev" : "dist").join(srcFolder);
   await barelyServe({
-    entryRoot: join("src", srcFolder),
+    entryRoot: new Path("src").join(srcFolder).path,
     outDir: outDir.path, // TODO: accept `Path` arg in the `barelyServe(…)` signature?
     dev,
     devDomain: "cubing.localhost",

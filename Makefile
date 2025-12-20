@@ -27,7 +27,7 @@ default:
 ######## Shared with `package.json` ########
 
 .PHONY: check
-check: lint test-all build check-package.json
+check: clean lint test-all build check-package.json
 
 # By convention, we'd normally place `build-bin` first, but `build-lib` is the main target and
 # it can be less confusing to build first (especially if the build aborts with
@@ -289,7 +289,7 @@ prepack: clean build test-dist-lib-node-import test-dist-lib-node-scramble test-
 prepublishOnly: update-dependencies
 	# Lucas is usually the one publishing, and `mak` is over twice as fast. So we use it when available.
 	# https://github.com/lgarron/mak
-	mak check || make check
+	mak check build || make check build
 
 .PHONY: postpublish
 postpublish: update-cdn update-create-cubing-app deploy

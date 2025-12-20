@@ -1,7 +1,7 @@
 import { Path } from "path-class";
 import { needPath } from "../../../../../../lib/needPath.js";
 
-needPath(
+await needPath(
   Path.resolve(
     "../../../../../../../dist/lib/cubing/scramble",
     import.meta.url,

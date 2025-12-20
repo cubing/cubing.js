@@ -86,7 +86,8 @@ async function runTest() {
     // Maintaining JS (rather than TS) versions of this script and its
     // dependencies is a pain, but maybe we can bundle a one-off transpilation
     // of this script for `node` when needed.
-    (await import("node:repl")).start();
+    // (await import("node:repl")).start();
+    throw new Error("`OPEN_REPL` functionality is unavailable.");
   } else {
     await browser.close();
     process.exit(exitCode);

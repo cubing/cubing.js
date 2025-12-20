@@ -1,5 +1,4 @@
 import { exit } from "node:process";
-import { fileURLToPath } from "node:url";
 import { Path } from "path-class";
 
 const MAKEFILE_PATH = Path.resolve("../../../../Makefile", import.meta.url);
@@ -44,7 +43,7 @@ This must be fixed by hand. Please do one of the following:
 
 .PHONY: ${target}
 
-2. Add "${target}" to \`EXPECTED_NON_PHONY_TARGETS\` in \`${fileURLToPath(
+2. Add "${target}" to \`EXPECTED_NON_PHONY_TARGETS\` in \`${new Path(
             new URL(import.meta.url),
           )}\`
 `,

@@ -17,16 +17,8 @@ export const mainAllowedImports: AllowedImports = {
   script: {
     static: [
       "node:assert",
-      "node:child_process",
-      "node:fetch",
-      "node:fs", // TODO: `existsSync(…)`
-      "node:fs/promises",
       "node:http",
-      "node:path",
       "node:process",
-      "node:util",
-      "node:url",
-      "node:zlib",
 
       "bun",
 
@@ -44,7 +36,13 @@ export const mainAllowedImports: AllowedImports = {
       "node-fetch",
       "playwright",
     ],
-    dynamic: ["cubing", "node:repl", "node:process"],
+    dynamic: ["cubing"],
+  },
+  "script/test/dist/lib/cubing/build-size/main.ts": {
+    static: ["node:util", "node:zlib"],
+  },
+  "script/build/lib/clean-types.ts": {
+    static: ["node:fs", "node:fs/promises", "node:path"],
   },
   // src/bin
   "src/bin": {

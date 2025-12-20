@@ -1,15 +1,17 @@
+// NOTE: this file is used by `make clean-types`, so it cannot import any
+// packages. (Built-in modules and intra-repo imports are fine, as long as they
+// don't transitively import any packages.)
+
 import { existsSync } from "node:fs";
-import { rmdir } from "node:fs/promises";
-import { Path } from "path-class";
-import { packageNames } from "../common/package-info";
+import { rm, rmdir } from "node:fs/promises";
+import { join } from "node:path";
+import { packageNames } from "../common/packageNames";
 
 export const TYPESCRIPT_DECLARATION_INDEX = "index.d.ts";
 
 for (const packageName of packageNames) {
-  const indexFileName = new Path(packageName).join(
-    TYPESCRIPT_DECLARATION_INDEX,
-  );
-  await indexFileName.rm({ force: true });
+  const indexFileName = join(packageName, TYPESCRIPT_DECLARATION_INDEX);
+  await rm(indexFileName, { force: true });
   if (existsSync(packageName)) {
     await rmdir(packageName);
   }

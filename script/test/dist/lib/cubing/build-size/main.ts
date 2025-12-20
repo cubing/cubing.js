@@ -1,4 +1,3 @@
-import { stat } from "node:fs/promises";
 import { promisify } from "node:util";
 import { gzip } from "node:zlib";
 import { build } from "esbuild";
@@ -6,13 +5,14 @@ import { Path } from "path-class";
 import { default as packageJSON } from "../../../../../../package.json" with {
   type: "json",
 };
+import { DIST_LIB_CUBING } from "../../../../../build/common/paths";
 import { needPath } from "../../../../../lib/needPath.js";
 
 const { exports: packageJSONExports } = packageJSON;
 
 const rootFilePath = Path.resolve("../../../../../../", import.meta.url);
 
-needPath(rootFilePath.join("dist/lib/cubing"), "make build-lib-js");
+await needPath(rootFilePath.join(DIST_LIB_CUBING), "make build-lib-js");
 
 function subpackageEntry(subpackageName: string): Path {
   return Path.resolve(
@@ -33,7 +33,7 @@ async function bundleSize(entryFile: Path, threeExternal = false) {
     outfile: outfile.path,
     external: threeExternal ? ["three/src/*"] : [],
   });
-  const { size } = await stat(outfile.path); // TODO: add `.state
+  const { size } = await outfile.stat(); // TODO: add `.state
   const bundleContents = await outfile.read();
   const gzippedSize = (await promisify(gzip)(bundleContents)).length;
   return { size, gzippedSize };

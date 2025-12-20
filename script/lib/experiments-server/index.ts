@@ -1,7 +1,6 @@
 // https://developer.mozilla.org/en-US/docs/Learn/Server-side/Node_server_without_framework
 
 import assert from "node:assert";
-import { readFile } from "node:fs";
 import { createServer } from "node:http";
 import { Path } from "path-class";
 import { needPath } from "../needPath.js";
@@ -9,11 +8,11 @@ import { needPath } from "../needPath.js";
 const DIST_SITES_ROOT = "../../../dist/sites/";
 
 const DIST_SITES_ROOT_EXPANDED = Path.resolve(DIST_SITES_ROOT, import.meta.url);
-needPath(
+await needPath(
   DIST_SITES_ROOT_EXPANDED.join("alpha.twizzle.net"),
   "make build-sites",
 );
-needPath(
+await needPath(
   DIST_SITES_ROOT_EXPANDED.join("experiments.cubing.net/cubing.js"),
   "make build-sites",
 );
@@ -64,10 +63,8 @@ export function startServer(port?: number): void {
       response.end(content, "utf-8");
     } catch (error: any) {
       if (["ENOENT", "EISDIR"].includes(error.code ?? "NO_ERROR_CODE")) {
-        readFile("./404.html", (_error, content) => {
-          response.writeHead(404, { "Content-Type": "text/html" });
-          response.end(content, "utf-8");
-        });
+        response.writeHead(404, { "Content-Type": "text/plain" });
+        response.end("Not found", "utf-8");
       } else {
         response.writeHead(500);
         response.end(

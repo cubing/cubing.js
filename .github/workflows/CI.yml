@@ -30,6 +30,8 @@ jobs:
       - run: make test-src-scripts-consistency
       - run: make format # note: not in `test-src` in `package.json`, only in CI
       - run: make clean
+      - run: make reset # Should work the first time.
+      - run: make reset # Should work the second time (after deps are removed).
 
   test-build:
     runs-on: ubuntu-latest

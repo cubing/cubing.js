@@ -1,23 +1,11 @@
-import { join } from "node:path";
 import type { BuildOptions } from "esbuild";
+import { Path } from "path-class";
 import type { IterableElement } from "../../lib/vendor/type-fest";
+import { packageNames } from "./packageNames";
+import { TYPESCRIPT_INDEX } from "./paths";
 
-export const packageNames = [
-  "alg",
-  "bluetooth",
-  "kpuzzle",
-  "notation",
-  "protocol",
-  "puzzle-geometry",
-  "puzzles",
-  "scramble",
-  "stream",
-  "search",
-  "twisty",
-];
-
-export const packageEntryPoints: string[] = packageNames.map((p) =>
-  join("src/cubing/", p, "/index.ts"),
+export const packageEntryPoints: string[] = packageNames.map(
+  (p) => new Path("src/cubing/").join(p, TYPESCRIPT_INDEX).path,
 );
 
 export const searchWorkerEsbuildWorkaroundEntry: IterableElement<

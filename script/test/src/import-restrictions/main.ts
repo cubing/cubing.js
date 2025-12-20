@@ -1,7 +1,8 @@
-import { join } from "node:path";
 import { exit } from "node:process";
 import { build, type ImportKind, type Metafile, type Plugin } from "esbuild";
-import { packageNames } from "../../../build/common/package-info";
+import { Path } from "path-class";
+import { packageNames } from "../../../build/common/packageNames";
+import { TYPESCRIPT_INDEX } from "../../../build/common/paths";
 import {
   type AllowedImports,
   specAllowedImports as allowedImportsIncludingForSpecFiles,
@@ -140,8 +141,9 @@ await checkAllowedImports(
     "script/**/*.js",
     "src/bin/**/*.ts",
     // TODO: does `esbuild` not support `src/cubing/*/index.ts`?
-    ...packageNames.map((packageName) =>
-      join("src/cubing", packageName, "index.ts"),
+    ...packageNames.map(
+      (packageName) =>
+        new Path("src/cubing").join(packageName, TYPESCRIPT_INDEX).path,
     ),
     "src/sites/**/*.js",
     "src/sites/**/*.ts",

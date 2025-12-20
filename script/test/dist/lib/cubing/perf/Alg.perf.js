@@ -1,7 +1,7 @@
 import { Path } from "path-class";
 import { needPath } from "../../../../../lib/needPath.js";
 
-needPath(
+await needPath(
   Path.resolve("../../../../../../dist/lib/cubing/alg", import.meta.url),
   "make build-lib-js",
 );
