@@ -23,9 +23,6 @@ default:
 	@echo "    make test-info"
 	@echo ""
 
-
-######## Shared with `package.json` ########
-
 .PHONY: check
 check: clean lint test-all build check-package.json
 
@@ -118,7 +115,6 @@ test-fast: update-dependencies \
 	build-lib-js test-spec-bun-fast build-bin build-sites \
 	lint \
 	test-src-import-restrictions \
-	test-src-scripts-consistency \
 	test-dist-lib-node-import \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
@@ -131,8 +127,7 @@ test-src: update-dependencies \
 	test-spec \
 	lint-ci \
 	test-src-tsc \
-	test-src-import-restrictions \
-	test-src-scripts-consistency # keep CI.yml in sync with this
+	test-src-import-restrictions
 
 .PHONY: test-spec
 test-spec: test-spec-bun test-spec-dom
@@ -169,14 +164,6 @@ test-src-import-restrictions: update-dependencies
 test-src-tsc: update-dependencies
 	@# The config itself has `"noEmit": true`, but including it here ensures consistency with other projects (e.g. in case someone copies the command from here).
 	${BUN_DX} --package typescript tsc -- --noEmit --project ./tsconfig.json
-
-.PHONY: test-src-scripts-consistency
-test-src-scripts-consistency: update-dependencies
-	${BUN_RUN} ./script/test/src/scripts-consistency/main.ts
-
-.PHONY: fix-src-scripts-consistency
-fix-src-scripts-consistency: update-dependencies
-	${BUN_RUN} ./script/test/src/scripts-consistency/main.ts --fix
 
 .PHONY: test-build
 test-build: \
@@ -325,8 +312,6 @@ update-cdn: postpublish-clear-bun-cache
 .PHONY: update-create-cubing-app
 update-create-cubing-app: postpublish-clear-bun-cache
 	cd ../create-cubing-app && make auto-publish
-
-######## Only in `Makefile` ########
 
 .PHONY: publish
 
