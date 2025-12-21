@@ -162,8 +162,7 @@ test-src-import-restrictions: update-dependencies
 
 .PHONY: test-src-tsc
 test-src-tsc: update-dependencies
-	@# The config itself has `"noEmit": true`, but including it here ensures consistency with other projects (e.g. in case someone copies the command from here).
-	${BUN_DX} --package typescript tsc -- --noEmit --project ./tsconfig.json
+	${BUN_DX} --package typescript tsc -- --project ./tsconfig.json
 
 .PHONY: test-build
 test-build: \
