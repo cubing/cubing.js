@@ -184,15 +184,15 @@ const args = run(
       grayCenters: option("--graycenters", {
         description: message`Gray centers.`,
       }),
-    }),
-    object({
-      // TODO: make these appropriately exclusive. https://github.com/dahlia/optique/issues/57
       fixedOrientation: option("--noorientation", {
         description: message`Ignore orientations.`,
       }),
       orientCenters: option("--orientcenters", {
         description: message`Give centers an orientation.`,
       }),
+    }),
+    object({
+      // TODO: make these exclusive. https://github.com/dahlia/optique/issues/57#issuecomment-3678636097
       puzzleOrientation: optional(
         map(
           option("--puzzleorientation", string({ metavar: "JSON_STRING" }), {
@@ -348,6 +348,8 @@ function buildPuzzleGeometry(): PuzzleGeometry {
     grayCenters,
     fixedOrientation,
     orientCenters,
+    puzzleOrientation,
+    puzzleOrientations,
     fixedPieceType,
     scrambleAmount,
     moveList,
@@ -368,6 +370,8 @@ function buildPuzzleGeometry(): PuzzleGeometry {
     grayCenters,
     fixedOrientation,
     orientCenters,
+    puzzleOrientation,
+    puzzleOrientations,
     fixedPieceType,
     scrambleAmount,
     moveList,
