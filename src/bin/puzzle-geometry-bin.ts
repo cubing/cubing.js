@@ -211,33 +211,28 @@ const args = run(
       ),
     }),
     object({
-      // TODO: make these exclusive. https://github.com/dahlia/optique/issues/57
-      fixCorner: optional(
-        map(
-          flag("--fixcorner", {
-            description: message`Auto-select a subset of moves to keep a corner fixed in place.`,
-          }),
-          () => "v" as const,
+      fixedPieceType: optional(
+        or(
+          map(
+            flag("--fixcorner", {
+              description: message`Auto-select a subset of moves to keep a corner fixed in place.`,
+            }),
+            () => "v" as const,
+          ),
+          map(
+            flag("--fixedge", {
+              description: message`Auto-select a subset of moves to keep an edge fixed in place.`,
+            }),
+            () => "e" as const,
+          ),
+          map(
+            flag("--fixcenter", {
+              description: message`Auto-select a subset of moves to keep a center fixed in place.`,
+            }),
+            () => "f" as const,
+          ),
         ),
       ),
-      fixEdge: optional(
-        map(
-          flag("--fixedge", {
-            description: message`Auto-select a subset of moves to keep an edge fixed in place.`,
-          }),
-          () => "e" as const,
-        ),
-      ),
-      fixCenter: optional(
-        map(
-          flag("--fixcenter", {
-            description: message`Auto-select a subset of moves to keep a center fixed in place.`,
-          }),
-          () => "f" as const,
-        ),
-      ),
-    }),
-    object({
       // TODO: this doesn't make sense for all subcommands?
       scrambleAmount: optional(
         option("--scramble", integer({ min: 0 }), {
@@ -337,7 +332,6 @@ if (args.verbosity !== 0) {
 }
 
 function buildPuzzleGeometry(): PuzzleGeometry {
-  const fixedPieceType = args.fixCorner ?? args.fixEdge ?? args.fixCenter;
   const {
     verbosity,
     optimizeOrbits,
@@ -354,6 +348,7 @@ function buildPuzzleGeometry(): PuzzleGeometry {
     grayCenters,
     fixedOrientation,
     orientCenters,
+    fixedPieceType,
     scrambleAmount,
     moveList,
   } = args;
@@ -373,9 +368,9 @@ function buildPuzzleGeometry(): PuzzleGeometry {
     grayCenters,
     fixedOrientation,
     orientCenters,
+    fixedPieceType,
     scrambleAmount,
     moveList,
-    fixedPieceType,
   };
 
   const puzzleGeometry = new PuzzleGeometry(args.puzzle, options);
