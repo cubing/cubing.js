@@ -59,17 +59,13 @@ const args = run(
         }),
         1,
       ),
-      // TODO: why don't the choices show up in `--help`?
-      // TODO: https://github.com/dahlia/optique/issues/58
-      notation: withDefault<(typeof notationTypes)[number], unknown>(
+      notation: withDefault(
         option("--notation", choice(notationTypes, { metavar: "NOTATION" })),
         "auto",
       ),
     }),
     object({
-      // TODO: why don't the choices show up in `--help`?
-      // TODO: https://github.com/dahlia/optique/issues/58
-      format: withDefault<(typeof outputFormats)[number], unknown>(
+      format: withDefault(
         option("--format", "-f", choice(outputFormats, { metavar: "FORMAT" })),
         "auto",
       ),
