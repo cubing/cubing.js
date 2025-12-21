@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@optique/core": ">=0.8.2",
-    "@optique/run": "^0.8.1",
+    "@optique/run": ">=0.8.2",
     "@types/three": "^0.169.0",
     "@types/web-bluetooth": "^0.0.20",
     "comlink": "^4.4.1",
