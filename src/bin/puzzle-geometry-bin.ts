@@ -34,6 +34,7 @@ import {
   map,
   merge,
   message,
+  multiple,
   type OptionName,
   object,
   option,
@@ -76,9 +77,12 @@ const subcommandDefaults = {
 const args = run(
   merge(
     object({
-      // TODO: make these exclusive. https://github.com/dahlia/optique/issues/57
-      verbose: optional(map(flag("--verbose", "-v"), () => 1)),
-      quiet: optional(map(flag("--quiet", "-q"), () => 0)),
+      verbosity: optional(
+        or(
+          map(multiple(flag("--verbose", "-v")), (v) => v.length),
+          map(flag("--quiet", "-q"), () => 0),
+        ),
+      ),
     }),
     or(
       object({
@@ -100,8 +104,7 @@ const args = run(
             description: message`Use 3D format for SVG file.`,
           }),
         ),
-        // This is here to avoid making the usage output more complicated.
-        forceQuiet: constant(0),
+        verbosity: constant(0),
       }),
       object({
         ...subcommandDefaults,
@@ -308,10 +311,7 @@ Examples:
   },
 );
 
-const verbosity: number | undefined =
-  args.forceQuiet ?? args.verbose ?? args.quiet;
-
-if (verbosity !== 0) {
+if (args.verbosity !== 0) {
   const cmd = () => {
     const [command, ...args] = argv;
     return new PrintableShellCommand(command, args).getPrintableCommand({
@@ -339,6 +339,7 @@ if (verbosity !== 0) {
 function buildPuzzleGeometry(): PuzzleGeometry {
   const fixedPieceType = args.fixCorner ?? args.fixEdge ?? args.fixCenter;
   const {
+    verbosity,
     optimizeOrbits,
     addRotations,
     allMoves,
