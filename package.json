@@ -104,7 +104,7 @@
     "./dist/bin/",
     "./dist/lib/",
     "./experimental-json-schema",
-    "*/index.d.ts"
+    "./*/index.d.ts"
   ],
   "scripts": {
     "build": "make build",
