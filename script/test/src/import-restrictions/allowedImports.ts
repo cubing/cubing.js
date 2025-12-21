@@ -171,7 +171,7 @@ export const mainAllowedImports: AllowedImports = {
   },
 };
 
-// This is a separate definition because the `spec` files are interleaved with source files, and it's easier to run a separate check for them.
+// This is a separate definition because the `*.test.ts`/`*.test.dom.ts` files are interleaved with source files, and it's easier to run a separate check for them.
 export const specAllowedImports: AllowedImports = {
   "src/cubing": {
     static: [

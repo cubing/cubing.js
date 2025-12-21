@@ -96,9 +96,9 @@ test-info:
 	@echo "Run one of the following."
 	@echo "(Time estimates are based on a fast computer.)"
 	@echo ""
-	@echo "    make test-spec (≈2s, unit tests only)"
+	@echo "    make test-ts (≈2s, unit tests only)"
 	@echo ""
-	@echo "    make test-src   (≈5s, includes \`make test-spec\`)"
+	@echo "    make test-src   (≈5s, includes \`make test-ts\`)"
 	@echo "    make test-build (≈13s)"
 	@echo "    make test-dist  (≈10s)"
 	@echo ""
@@ -112,7 +112,7 @@ test-info:
 # In case of failure, this is likely to be more helpful.
 .PHONY: test-fast
 test-fast: update-dependencies \
-	build-lib-js test-spec-bun-fast build-bin build-sites \
+	build-lib-js test-ts-bun-fast build-bin build-sites \
 	lint \
 	test-src-import-restrictions \
 	test-dist-lib-node-import \
@@ -124,36 +124,36 @@ test-all: test-src test-build test-dist
 
 .PHONY: test-src
 test-src: update-dependencies \
-	test-spec \
+	test-ts \
 	lint-ci \
 	test-src-tsc \
 	test-src-import-restrictions
 
-.PHONY: test-spec
-test-spec: test-spec-bun test-spec-dom
+.PHONY: test-ts
+test-ts: test-ts-bun test-ts-dom
 
-.PHONY: test-spec-bun
-test-spec-bun: update-dependencies
+.PHONY: test-ts-bun
+test-ts-bun: update-dependencies
 	${BUN} test
 
-.PHONY: test-spec-bun-fast
-test-spec-bun-fast: update-dependencies
+.PHONY: test-ts-bun-fast
+test-ts-bun-fast: update-dependencies
 	env CUBING_JS_SKIP_SLOW_TESTS=true ${BUN} test
 
-.PHONY: test-spec-bun-with-coverage
-test-spec-bun-with-coverage: update-dependencies install-playwright
+.PHONY: test-ts-bun-with-coverage
+test-ts-bun-with-coverage: update-dependencies install-playwright
 	${BUN} test
 
-.PHONY: test-spec-dom
-test-spec-dom: update-dependencies install-playwright
+.PHONY: test-ts-dom
+test-ts-dom: update-dependencies
 	${WEB_TEST_RUNNER}
 
 .PHONY: install-playwright
 install-playwright: update-dependencies
 	${BUN_DX} --package playwright playwright -- install
 
-.PHONY: test-spec-dom-with-coverage
-test-spec-dom-with-coverage: update-dependencies
+.PHONY: test-ts-dom-with-coverage
+test-ts-dom-with-coverage: update-dependencies
 	${WEB_TEST_RUNNER} --coverage
 
 .PHONY: test-src-import-restrictions

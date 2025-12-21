@@ -2,10 +2,6 @@ import { Path } from "path-class";
 
 const DIR = Path.resolve("../src/cubing/vendor/mpl/twips", import.meta.url);
 
-const NO_CHECK_PREFIX = `// @ts-nocheck
-
-`;
-
 for (const dirEnt of await DIR.readDir({
   withFileTypes: true,
   recursive: true,
@@ -36,9 +32,6 @@ for (const dirEnt of await DIR.readDir({
     default: {
       break;
     }
-  }
-  if (name.extension === ".js" && !contents.startsWith(NO_CHECK_PREFIX)) {
-    contents = NO_CHECK_PREFIX + contents;
   }
   await filePath.write(contents);
 }
