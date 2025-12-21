@@ -22,6 +22,5 @@ for (const packageName of packageNames) {
 await Promise.all([
   rm("./dist", GET_IT_DONE),
   rm("./.temp", GET_IT_DONE),
-  rm("./coverage", GET_IT_DONE),
   rm("./package-lock.json", GET_IT_DONE),
 ]);
