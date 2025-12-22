@@ -1,7 +1,7 @@
 import { Vector3 } from "three/src/math/Vector3.js";
 import { getPuzzleDescriptionString } from "../../../cubing/puzzle-geometry";
-import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles.temp";
 import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
+import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/pgPuzzles";
 import {
   setTwistyDebug,
   TwistyPlayer,

@@ -1,5 +1,5 @@
 import type { Alg, AppendCancelOptions } from "../../alg";
-import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles.temp";
+import type { PuzzleDescriptionString } from "../../puzzle-geometry/pgPuzzles";
 import type { StickeringMask } from "../../puzzles/stickerings/mask";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";

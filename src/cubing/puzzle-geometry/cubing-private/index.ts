@@ -1,1 +1,1 @@
-export { legacyPuzzleNameMapping } from "../PGPuzzles.temp";
+export { legacyPuzzleNameMapping } from "../pgPuzzles";

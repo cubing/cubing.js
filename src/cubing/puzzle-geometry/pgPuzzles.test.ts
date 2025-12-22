@@ -2,8 +2,8 @@ import { expect, test } from "bun:test";
 import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS";
 import { Alg, type Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
-import { pgPuzzle } from "./PGPuzzles.temp";
 import { getPuzzleGeometryByDesc, PGNotation } from "./PuzzleGeometry";
+import { pgPuzzle } from "./pgPuzzles";
 
 function slow(s: string): string | null {
   return SKIP_SLOW_TESTS ? null : s;

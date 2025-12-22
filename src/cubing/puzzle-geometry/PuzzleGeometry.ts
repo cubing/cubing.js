@@ -32,11 +32,6 @@ import {
   VisibleState,
 } from "./PermOriSet";
 import {
-  type PuzzleDescriptionString,
-  type PuzzleName,
-  pgPuzzle,
-} from "./PGPuzzles.temp";
-import {
   closure,
   cube,
   dodecahedron,
@@ -46,6 +41,11 @@ import {
   tetrahedron,
   uniqueplanes,
 } from "./PlatonicGenerator";
+import {
+  type PuzzleDescriptionString,
+  type PuzzleName,
+  pgPuzzle,
+} from "./pgPuzzles";
 import { centermassface, Quat } from "./Quat";
 import { schreierSims } from "./SchreierSims";
 

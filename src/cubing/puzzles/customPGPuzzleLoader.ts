@@ -1,6 +1,6 @@
 import type { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
-import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles.temp";
+import type { PuzzleDescriptionString } from "../puzzle-geometry/pgPuzzles";
 import {
   asyncGetKPuzzle,
   puzzleSpecificSimplifyOptionsPromise,

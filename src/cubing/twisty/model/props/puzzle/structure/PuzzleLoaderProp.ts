@@ -1,4 +1,4 @@
-import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/PGPuzzles.temp";
+import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/pgPuzzles";
 import { cube3x3x3, type PuzzleLoader, puzzles } from "../../../../../puzzles";
 import { experimentalCustomPGPuzzleLoader } from "../../../../../puzzles/cubing-private";
 import {
