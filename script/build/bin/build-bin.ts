@@ -18,7 +18,7 @@ await build({
   },
   define: { "globalThis.PACKAGE_VERSION": JSON.stringify(packageVersion) },
   banner: {
-    js: "#!/usr/bin/env node -S --",
+    js: "#!/usr/bin/env -S node --",
   },
 });
 
