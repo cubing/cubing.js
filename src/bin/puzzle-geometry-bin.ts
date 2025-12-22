@@ -89,14 +89,14 @@ const args = run(
         ...subcommandDefaults,
         subcommand: constant("KSolve"),
         subcommandFlag: flag("--ksolve", {
-          description: message`Print KSolve (\`.tws\`). Forces \`--quiet\`.`,
+          description: message`Print KSolve (\`.tws\`).`,
         }),
       }),
       object({
         ...subcommandDefaults,
         subcommand: constant("SVG"),
         subcommandFlag: flag("--svg", {
-          description: message`Print SVG.`,
+          description: message`Print SVG. Forces \`--quiet\`.`,
         }),
         commentStyle: constant("none"),
         svg3D: optional(
