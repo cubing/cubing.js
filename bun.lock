@@ -17,7 +17,7 @@
       "devDependencies": {
         "@biomejs/biome": "^2.3.1",
         "@cubing/deploy": ">=0.4.10",
-        "@cubing/dev-config": ">=0.8.1",
+        "@cubing/dev-config": ">=0.8.3",
         "@esm-bundle/chai": "^4.3.4-fix.0",
         "@schemastore/package": "^0.0.10",
         "@types/bun": "^1.2.23",
@@ -74,7 +74,7 @@
 
     "@cubing/deploy": ["@cubing/deploy@0.4.10", "", { "dependencies": { "path-class": ">=0.10.3", "printable-shell-command": ">=2.6.3" }, "bin": { "deploy": "dist/cli/main.js" } }, "sha512-IQ13vLUpMvIU/cZxw0wDnwoUpwEpiZDNDTlaaUV/mfUnOxzbyZi/TrIucar400oPTq/rC1/9qWrKCIxxTbXIAg=="],
 
-    "@cubing/dev-config": ["@cubing/dev-config@0.8.1", "", { "dependencies": { "esbuild": ">=0.25.3 && <1.0.0", "path-class": ">=0.10.8", "printable-shell-command": ">=4.0.3" }, "bin": { "package.json": "bin/package.json/index.js" } }, "sha512-945QY7O/ISCFwFLmKw4FHlR29iQGvP/5roUcP2S5pc7ndwqrwN0BX9FRzKyKY8TjycfU/TANO0oSW5aiSwCZ+A=="],
+    "@cubing/dev-config": ["@cubing/dev-config@0.8.3", "", { "dependencies": { "esbuild": ">=0.25.3 && <1.0.0", "path-class": ">=0.10.8", "printable-shell-command": ">=4.0.3" }, "bin": { "package.json": "bin/package.json/index.js" } }, "sha512-V7TtGXS9++4e8W1mVsif/LDHyGn6w7xcWfyULBnNoGDDpVOVJjOm7mIprfP9gkhp0mb35SZn+d/yp+cJ0jOEcQ=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.12", "", { "os": "aix", "cpu": "ppc64" }, "sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA=="],
 
