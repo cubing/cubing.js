@@ -25,6 +25,7 @@ jobs:
       - run: make test-ts-bun-with-coverage
       - run: make test-ts-dom-with-coverage
       - run: make lint-ci
+      - run: make check-schemas
       - run: make test-src-tsc
       - run: make test-src-import-restrictions
       - run: make format # note: not in `test-src` in `package.json`, only in CI

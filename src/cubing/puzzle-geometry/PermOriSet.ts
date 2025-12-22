@@ -1,11 +1,12 @@
 import { Move } from "../alg";
-import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle"; // TODO
 import type {
   KPatternData,
   KPatternOrbitData,
+  KPuzzleDefinition,
   KPuzzleOrbitDefinition,
+  KTransformationData,
   KTransformationOrbitData,
-} from "../kpuzzle/KPuzzleDefinition";
+} from "../kpuzzle";
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */

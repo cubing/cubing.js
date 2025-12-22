@@ -12,14 +12,14 @@ import {
 } from "../alg";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
+import type { KPuzzleDefinition } from "./KPuzzleDefinition";
 import type {
   KPatternData,
   KPatternOrbitData,
-  KPuzzleDefinition,
   KPuzzleOrbitDefinition,
   KTransformationData,
   KTransformationOrbitData,
-} from "./KPuzzleDefinition";
+} from "./KPuzzleDefinitionJSON";
 import { KTransformation } from "./KTransformation";
 
 export function isOrbitTransformationDataIdentityUncached(

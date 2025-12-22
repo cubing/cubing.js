@@ -1,11 +1,11 @@
 import type { Move } from "../alg";
 import { repeatTransformationUncached } from "./calculate";
 import type { KPuzzle } from "./KPuzzle";
+import type { KPuzzleDefinition } from "./KPuzzleDefinition";
 import type {
-  KPuzzleDefinition,
   KTransformationData,
   KTransformationOrbitData,
-} from "./KPuzzleDefinition";
+} from "./KPuzzleDefinitionJSON";
 
 const FREEZE: boolean = false;
 

@@ -247,8 +247,16 @@ check-engines: update-dependencies
 	@${BUN_RUN} "./script/check-engine-versions.ts"
 
 .PHONY: lint
-lint: update-dependencies
+lint: update-dependencies check-schemas
 	${BIOME} check
+
+.PHONY: check-schemas
+check-schemas: update-dependencies
+	${BUN_RUN} "./script/schema/check.ts"
+
+.PHONY: update-schemas
+update-schemas: update-dependencies
+	${BUN_RUN} "./script/schema/update.ts"
 
 .PHONY: lint-ci
 lint-ci: update-dependencies

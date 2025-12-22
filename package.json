@@ -98,7 +98,8 @@
     "printable-shell-command": "^4.0.3",
     "tsup": "^8.3.0",
     "typedoc": "^0.28.10",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-json-schema": "^0.67.1"
   },
   "files": [
     "./dist/bin/",

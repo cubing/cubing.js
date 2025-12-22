@@ -1,42 +1,34 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": {
+    "$ref": "#/definitions/KPatternOrbitData"
+  },
   "definitions": {
-    "numbers": {
-      "type": "array",
-      "items": {
-        "type": "number"
-      }
-    },
-    "AlgString": {
-      "type": "string"
-    },
     "KPatternOrbitData": {
-      "type": "object",
-      "required": ["pieces", "orientation"],
-      "additionalProperties": false,
       "properties": {
-        "pieces": {
-          "$ref": "#/definitions/numbers"
-        },
         "orientation": {
-          "$ref": "#/definitions/numbers"
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
         },
         "orientationMod": {
-          "$ref": "#/definitions/numbers"
+          "description": "Each piece may have an \"orientation mod\" that means \"the orientation of\nthis piece is known mod [value]\".\n\nSuppose `.numOrientations` for this orbit has a value of N. This is\nconsidered the default value for the orientation mod of each piece in the\norbit.\n\n- Each entry must be one of the following:\n - A proper divisor of N.\n   - For example: if N is 12, then one of: 1, 2, 3, 6\n - The special value 0, indicating the default value (N).\n   - This indicates that the orientation of a piece is fully known, i.e.\n      that its \"orientation mod\" is the default value (N). However, such a\n      value is recorded as 0 instead of N, in order to make it simpler to\n      implement and debug pattern logic involving the default value.\n- If `.orientationMod[i]` is a proper divisor of N (i.e. not 0), then\n `.orientation[i]` must be less than `.orientationMod[i]`. That is, the\n orientation values must be individually \"normalized\" for each piece.\n- If the `orientationMod` field is not present, then every piece is\n considered to have the default value for its \"orientation mod\".\n\nFor a \"real-world\" example of this concept, consider a traditional analog\n12-hour clock dial, like one that might hang on the wall in a school room.\nAlthough there are 24 hours in a day, A.M. and P.M. times are not\ndistinguishable on such a clock. Since 3:00 (AM) and 15:00 are not\ndistinguishable, we would read either of those times as 3:00 with an\nimplicit \"orientation mod\" of 12.\n\nFor most puzzles, however, we care about \"visual\" indistinguishability\nrather than \"temporal\" indistinguishability. To adapt the previous example,\nimagine a 24-hour clock with 24 hour marks around the dial, but where the\nhour hand is symmetric and points equally at the current hour as well as\nits diametic opposite (like a compass needle but painted all in one color).\nThis has the same set of \"valid patterns\" as a normal 12-hour clock. Such a\nclock also has an \"orientation mod\" of 12, but where the multiples of the\nmodulus have been \"unfolded\" to show their full symmetry instead of being\nimplicit.\n\nFor a non-trivial puzzle example, consider Eitan's FisherTwist, a shape mod\nof the 3x3x3 cube:\nhttps://www.hknowstore.com/locale/en-US/item.aspx?corpname=nowstore&itemid=97eb4e89-367e-4d02-b7f0-34e5e7f3cd12\n\n- The 4 equatorial centers have C₂ symmetry — it is possible to rotate any\n of these centers 180° without a visible change to the state. This means\n that the possible orientations \"loop\" after incrementing the orientation\n by 2 (two turns clockwise), and therefore the \"orientation mod\" of a\n given piece is only 2.\n - If we apply a counter-clockwise rotation to one of these centers, the\n   transformation applies an orientation of 3. But the net orientation is\n   recorded as a normalized value of 1 instead, because 3 (mod 2) ≡ 1 (mod\n   2).\n- The 2 polar centers (U and D) have no distinguishable rotations. This\n means that their orientation is \"known mod 1\" — any transformation of one\n of these centers is indistinguishable from another transformation of the\n same center, and all of them are mapped to a value of 0 (the only\n possible value that exists mod 1).\n\nFor 3x3x3:\n\n- When solving a normal 3x3x3, center orientations are conventionally\n ignored. This is similar to the polar center case for Eitan's\n FisherTwist, and the \"orientation mod\" of each piece is 1. This is also\n the core motivating use case.\n- For a supercube\n (https://experiments.cubing.net/cubing.js/twisty/supercube.html) or the\n general case of a \"picture cube\", all four center orientations are\n distinguishable for every center. This means all centers have the default\n orientation mod of 4. As documented above, this can be recorded with a\n `.orientationMod` of `[0, 0, 0, 0, 0, 0]`, or equivalently by omitting\n the `.orientationMod` field.\n- When modeling a real 3x3x3 speedcube, it is common to have a logo on a\n single sticker. If you want to model the exact visually distinguishable\n states of such a puzzles, it is possible to use an `.orientationMod` such\n as `[0, 1, 1, 1, 1, 1]`. For example, this can make it easy to find an\n alg for a given case \"while keeping the logo the same\", without placing\n more restrictions on other centers (which could make the search slower or\n produce longer solutions).\n\nFor those with a mathematical background, you may notice a relationship to\nthe concept of a coset (https://en.wikipedia.org/wiki/Coset). For example,\nconsider the group of patterns of a `KPuzzle` (without indistinguishable\npieces) generated by a set of transformations. We can assign each set of\npiece orbits an orientation mod value (which must be identical for all\nconstituent pieces of the same orbit). Each such choice generates a set of\nvalid `KPattern`s that forms a subgroup, and each set of valid `.orientation`\nvalues defines one coset of this set. However, note that the set of valid\n`KPattern`s does *not* form a group when there are any pieces with different\n`.orientationMod` values that share an orbit.\n\n--------\n\nNote that the concept of \"orientation mod\" exclusively applies to `KPattern`,\nnot `KTransformation`. If we tried to apply the orientation mod\ncalculations to the *transformations* of Eitan's FisherTwist, then `SWAP =\n[U, M' E2 M]` would be indistinguishable from the identity. This would mean\nthat if we calculated `SWAP` and then used this calculation for `S SWAP\nS'`, then we would conclude that it has no net effect. However, `S SWAP S'`\ndoes *not* have the same effect as doing nothing — it visibly rotates the L\nand R centers! (In mathematical terms: the set of `KTransformation`s would\nnot form a valid set of semigroup actions, due to broken associativity.)\n\nAlthough there are times that we could theoretically save some time/space\nby ignoring some information when it's not needed for working with certain\n`KTransformation`s (e.g. ignoring all center orientations for 3x3x3), it is\nmore practical for each `KTransformation` to always track the full range\nfor each piece's `.orientation`. For example:\n\n- This is simpler, both conceptually and in code.\n- This allows changing the set of moves for a puzzle, without recalculating\n cached transformations or certain lookup tables (useful for alg\n searches).\n- This allows swapping out a normal 3x3x3 in a `<twisty-player>` for a\n picture cube, without re-calculating the center orientations of the\n current alg.\n\nThese use cases may not be strictly \"necessary\", but the opposite behaviour\nmight be surprising or frustrating if someone does not expect it. So we\nimplement it this way.\n\nInformally, the `KTransformation` has the full responsibility for tracking\n\"what really happens\" — even if the effect is invisible in some cases,\nwhile the `KPattern` tracks both what \"is\" and what \"isn't\" known.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "pieces": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
         }
-      }
-    },
-    "KPatternData": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/definitions/KPatternOrbitData"
       },
-      "properties": {
-        "$schema": {
-          "type": "string"
-        }
-      }
+      "required": ["orientation", "pieces"],
+      "type": "object"
     }
   },
-  "$ref": "#/definitions/KPatternData"
+  "type": "object"
 }

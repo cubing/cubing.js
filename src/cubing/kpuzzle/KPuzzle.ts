@@ -3,11 +3,11 @@ import type { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
 import { algToTransformation } from "./calculate";
 import { moveToTransformationUncached } from "./construct";
 import { KPattern } from "./KPattern";
+import type { KPuzzleDefinition } from "./KPuzzleDefinition";
 import type {
-  KPuzzleDefinition,
   KPuzzleOrbitDefinition,
   KTransformationData,
-} from "./KPuzzleDefinition";
+} from "./KPuzzleDefinitionJSON";
 import { KTransformation } from "./KTransformation";
 
 export type KTransformationSource = Alg | Move | string | KTransformation;

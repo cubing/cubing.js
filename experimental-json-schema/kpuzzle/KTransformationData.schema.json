@@ -1,36 +1,27 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": {
+    "$ref": "#/definitions/KTransformationOrbitData"
+  },
   "definitions": {
-    "numbers": {
-      "type": "array",
-      "items": {
-        "type": "number"
-      }
-    },
     "KTransformationOrbitData": {
-      "type": "object",
-      "required": ["permutation", "orientationDelta"],
-      "additionalProperties": false,
       "properties": {
-        "permutation": {
-          "$ref": "#/definitions/numbers"
-        },
         "orientationDelta": {
-          "$ref": "#/definitions/numbers"
-        }
-      }
-    },
-    "KTransformationData": {
-      "type": "object",
-      "properties": {
-        "$schema": {
-          "type": "string"
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "permutation": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
         }
       },
-      "additionalProperties": {
-        "$ref": "#/definitions/KTransformationOrbitData"
-      }
+      "required": ["orientationDelta", "permutation"],
+      "type": "object"
     }
   },
-  "$ref": "#/definitions/KTransformationData"
+  "type": "object"
 }

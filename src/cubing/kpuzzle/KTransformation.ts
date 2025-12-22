@@ -9,7 +9,7 @@ import { combineTransformationData } from "./combine";
 import { constructIdentityTransformationDataUncached } from "./construct";
 import { KPattern } from "./KPattern";
 import type { KPuzzle, KTransformationSource } from "./KPuzzle";
-import type { KTransformationData } from "./KPuzzleDefinition";
+import type { KTransformationData } from "./KPuzzleDefinitionJSON";
 
 export class KTransformation {
   constructor(

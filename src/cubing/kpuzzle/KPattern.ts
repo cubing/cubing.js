@@ -6,7 +6,7 @@ import type {
   KPatternData,
   KTransformationData,
   KTransformationOrbitData,
-} from "./KPuzzleDefinition";
+} from "./KPuzzleDefinitionJSON";
 import { KTransformation } from "./KTransformation";
 
 export class KPattern {

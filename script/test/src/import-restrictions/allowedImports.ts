@@ -12,6 +12,7 @@ export const mainAllowedImports: AllowedImports = {
       "node:assert",
       "node:http",
       "node:process",
+      "node:util",
 
       "bun",
 
