@@ -121,10 +121,14 @@
     "puzzle",
     "visualization",
     "kpuzzle",
-    "cuble",
     "bluetooth",
     "rubik",
-    "rubik's"
+    "rubik's",
+    "Twizzle",
+    "scramble",
+    "scrambles",
+    "alg",
+    "algs"
   ],
   "@cubing/deploy": {
     "https://experiments.cubing.net/cubing.js/": {
