@@ -2,7 +2,7 @@ import type { Object3D } from "three/src/Three.js";
 import type { Alg, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { AppendCancelOptions, AppendOptions } from "../../alg/simplify";
-import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
+import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles.temp";
 import type { ExperimentalStickeringMask } from "../../puzzles/cubing-private";
 import type { ExperimentalStickering } from "..";
 import { RenderScheduler } from "../controllers/RenderScheduler";

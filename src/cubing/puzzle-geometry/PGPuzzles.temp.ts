@@ -1,6 +1,6 @@
 export type PuzzleDescriptionString = string;
 
-export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
+export const pgPuzzle: { [name: string]: PuzzleDescriptionString } = {
   "2x2x2": "c f 0",
   "3x3x3": "c f 0.333333333333333",
   "4x4x4": "c f 0.5 f 0",
@@ -93,4 +93,4 @@ export const legacyPuzzleNameMapping: Partial<Record<string, string>> = {
   "icosahedron moving faces": "Icosaminx",
 };
 
-export type PuzzleName = keyof typeof PGPuzzles;
+export type PuzzleName = keyof typeof pgPuzzle;

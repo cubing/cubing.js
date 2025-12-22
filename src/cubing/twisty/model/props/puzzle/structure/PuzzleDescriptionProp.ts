@@ -1,4 +1,4 @@
-import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/PGPuzzles";
+import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/PGPuzzles.temp";
 import {
   NO_VALUE,
   type NoValueType,

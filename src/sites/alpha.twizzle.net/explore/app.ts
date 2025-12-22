@@ -9,7 +9,7 @@ import {
   getPuzzleDescriptionString,
   type PuzzleGeometry,
 } from "../../../cubing/puzzle-geometry";
-import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
+import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles.temp";
 import type { PuzzleLoader } from "../../../cubing/puzzles";
 import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import { constructMoveCountDisplay } from "../../../cubing/twisty/cubing-private";

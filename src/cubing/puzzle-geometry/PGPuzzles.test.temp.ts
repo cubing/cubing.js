@@ -2,7 +2,7 @@ import { expect, test } from "bun:test";
 import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS";
 import { Alg, type Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
-import { PGPuzzles } from "./PGPuzzles";
+import { pgPuzzle } from "./PGPuzzles.temp";
 import { getPuzzleGeometryByDesc, PGNotation } from "./PuzzleGeometry";
 
 function slow(s: string): string | null {
@@ -99,7 +99,7 @@ const expectedData: { [name: string]: string | null } = {
   "starminx combo": slow("starminx combo, 12, 11, 102, 3, 48, 2520"),
 };
 
-for (const [name, desc] of Object.entries(PGPuzzles)) {
+for (const [name, desc] of Object.entries(pgPuzzle)) {
   if (expectedData[name] === null) {
     continue;
   }

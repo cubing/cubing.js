@@ -32,10 +32,10 @@ import {
   VisibleState,
 } from "./PermOriSet";
 import {
-  PGPuzzles,
   type PuzzleDescriptionString,
   type PuzzleName,
-} from "./PGPuzzles";
+  pgPuzzle,
+} from "./PGPuzzles.temp";
 import {
   closure,
   cube,
@@ -498,14 +498,14 @@ export function getPG3DNamedPuzzles(): {
   [s: string]: PuzzleDescriptionString;
 } {
   // get some simple definitions of basic puzzles
-  return PGPuzzles;
+  return pgPuzzle;
 }
 
 export function getPuzzleDescriptionString(
   puzzleName: PuzzleName,
 ): PuzzleDescriptionString {
   // get some simple definitions of basic puzzles
-  return PGPuzzles[puzzleName];
+  return pgPuzzle[puzzleName];
 }
 
 export const PUZZLE_BASE_SHAPES = ["c", "t", "o", "d", "i"] as const;
@@ -572,7 +572,7 @@ export function getPuzzleGeometryByName(
   puzzleName: PuzzleName,
   options?: PuzzleGeometryOptions,
 ): PuzzleGeometry {
-  return getPuzzleGeometryByDesc(PGPuzzles[puzzleName], options);
+  return getPuzzleGeometryByDesc(pgPuzzle[puzzleName], options);
 }
 
 function getmovename(
