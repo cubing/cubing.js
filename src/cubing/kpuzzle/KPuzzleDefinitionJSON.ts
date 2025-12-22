@@ -1,4 +1,3 @@
-// TODO: Use a list instead of an object for performance?
 export type KPatternData = { [orbitName: string]: KPatternOrbitData };
 export interface KPatternOrbitData {
   pieces: number[];
@@ -129,7 +128,6 @@ export interface KPatternOrbitData {
   orientationMod?: number[];
 }
 
-// TODO: Use a list instead of an object for performance?
 export type KTransformationData = {
   [orbitName: string]: KTransformationOrbitData;
 };
