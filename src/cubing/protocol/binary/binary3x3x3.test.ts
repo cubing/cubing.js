@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-
+import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS";
 import { KPattern } from "../../kpuzzle/KPattern";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import {
@@ -21,7 +21,7 @@ function superPatternForAlg(alg: string): KPattern {
   return supersolved.applyAlg(alg);
 }
 
-test("converts to binary", () => {
+test.skipIf(SKIP_SLOW_TESTS)("converts to binary", () => {
   expect(reid3x3x3ToTwizzleBinary(patternForAlg(""))).toEqual(
     new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
   );

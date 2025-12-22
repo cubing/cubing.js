@@ -1,55 +1,59 @@
 import { expect, test } from "bun:test";
+import { SKIP_SLOW_TESTS } from "../../../../test/SKIP_SLOW_TESTS";
 import { cube5x5x5 } from ".";
 
-test("`experimentalIsSolved(…)` for 5×5×5", async () => {
-  const kpuzzle = await cube5x5x5.kpuzzle();
+test.skipIf(SKIP_SLOW_TESTS)(
+  "`experimentalIsSolved(…)` for 5×5×5",
+  async () => {
+    const kpuzzle = await cube5x5x5.kpuzzle();
 
-  expect(
-    kpuzzle.defaultPattern().experimentalIsSolved({
-      ignorePuzzleOrientation: true,
-      ignoreCenterOrientation: true,
-    }),
-  ).toBe(true);
+    expect(
+      kpuzzle.defaultPattern().experimentalIsSolved({
+        ignorePuzzleOrientation: true,
+        ignoreCenterOrientation: true,
+      }),
+    ).toBe(true);
 
-  expect(
-    kpuzzle.defaultPattern().applyAlg("R").experimentalIsSolved({
-      ignorePuzzleOrientation: true,
-      ignoreCenterOrientation: true,
-    }),
-  ).toBe(false);
+    expect(
+      kpuzzle.defaultPattern().applyAlg("R").experimentalIsSolved({
+        ignorePuzzleOrientation: true,
+        ignoreCenterOrientation: true,
+      }),
+    ).toBe(false);
 
-  expect(
-    kpuzzle.defaultPattern().applyAlg("U2 D2").experimentalIsSolved({
-      ignorePuzzleOrientation: false,
-      ignoreCenterOrientation: true,
-    }),
-  ).toBe(false);
+    expect(
+      kpuzzle.defaultPattern().applyAlg("U2 D2").experimentalIsSolved({
+        ignorePuzzleOrientation: false,
+        ignoreCenterOrientation: true,
+      }),
+    ).toBe(false);
 
-  expect(
-    kpuzzle.defaultPattern().applyAlg("x y").experimentalIsSolved({
-      ignorePuzzleOrientation: true,
-      ignoreCenterOrientation: true,
-    }),
-  ).toBe(true);
+    expect(
+      kpuzzle.defaultPattern().applyAlg("x y").experimentalIsSolved({
+        ignorePuzzleOrientation: true,
+        ignoreCenterOrientation: true,
+      }),
+    ).toBe(true);
 
-  expect(
-    kpuzzle.defaultPattern().applyAlg("x y").experimentalIsSolved({
-      ignorePuzzleOrientation: false,
-      ignoreCenterOrientation: true,
-    }),
-  ).toBe(false);
+    expect(
+      kpuzzle.defaultPattern().applyAlg("x y").experimentalIsSolved({
+        ignorePuzzleOrientation: false,
+        ignoreCenterOrientation: true,
+      }),
+    ).toBe(false);
 
-  expect(
-    kpuzzle.defaultPattern().applyAlg("(R' U' R U')5").experimentalIsSolved({
-      ignorePuzzleOrientation: true,
-      ignoreCenterOrientation: true,
-    }),
-  ).toBe(true);
+    expect(
+      kpuzzle.defaultPattern().applyAlg("(R' U' R U')5").experimentalIsSolved({
+        ignorePuzzleOrientation: true,
+        ignoreCenterOrientation: true,
+      }),
+    ).toBe(true);
 
-  expect(
-    kpuzzle.defaultPattern().applyAlg("[[m: e], U]").experimentalIsSolved({
-      ignorePuzzleOrientation: true,
-      ignoreCenterOrientation: true,
-    }),
-  ).toBe(true);
-});
+    expect(
+      kpuzzle.defaultPattern().applyAlg("[[m: e], U]").experimentalIsSolved({
+        ignorePuzzleOrientation: true,
+        ignoreCenterOrientation: true,
+      }),
+    ).toBe(true);
+  },
+);

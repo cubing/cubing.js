@@ -1,9 +1,10 @@
 import { expect, test } from "bun:test";
+import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS";
 import { Alg, Move, Pause } from "../../alg";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import { TwistyPlayerModel } from "./TwistyPlayerModel";
 
-test("generates Twizzle links", async () => {
+test.skipIf(SKIP_SLOW_TESTS)("generates Twizzle links", async () => {
   const twistyPlayerModel = new TwistyPlayerModel();
   expect(await twistyPlayerModel.twizzleLink()).toStrictEqual(
     "https://alpha.twizzle.net/edit/",
