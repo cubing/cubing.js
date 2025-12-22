@@ -93,7 +93,7 @@
     "esbuild": "^0.25.0",
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
-    "path-class": ">=0.10.13",
+    "path-class": ">=0.11.0",
     "playwright": "^1.47.2",
     "printable-shell-command": "^4.0.3",
     "tsup": "^8.3.0",

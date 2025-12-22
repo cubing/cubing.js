@@ -47,7 +47,6 @@ build-lib-types: update-dependencies
 .PHONY: build-bin
 build-bin: build-lib-js
 	${BUN_RUN} ./script/build/bin/build-bin.ts
-	chmod +x ./dist/bin/*.js
 
 .PHONY: build-sites
 build-sites: build-site-twizzle build-site-experiments
