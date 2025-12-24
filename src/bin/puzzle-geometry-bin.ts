@@ -191,25 +191,40 @@ const args = run(
         description: message`Give centers an orientation.`,
       }),
     }),
-    object({
-      // TODO: make these exclusive. https://github.com/dahlia/optique/issues/57#issuecomment-3678636097
-      puzzleOrientation: optional(
-        map(
-          option("--puzzleorientation", string({ metavar: "JSON_STRING" }), {
-            description: message`For 3D formats, give puzzle orientation.`,
-          }),
-          (s) => JSON.parse(s),
-        ),
+    optional(
+      or(
+        object({
+          puzzleOrientation: optional(
+            map(
+              option(
+                "--puzzleorientation",
+                string({ metavar: "JSON_STRING" }),
+                {
+                  description: message`For 3D formats, give puzzle orientation.`,
+                },
+              ),
+              (s) => JSON.parse(s),
+            ),
+          ),
+          puzzleOrientations: constant(undefined),
+        }),
+        object({
+          puzzleOrientation: constant(undefined),
+          puzzleOrientations: optional(
+            map(
+              option(
+                "--puzzleorientations",
+                string({ metavar: "JSON_STRING" }),
+                {
+                  description: message`For 3D formats, give puzzle orientations.`,
+                },
+              ),
+              (s) => JSON.parse(s),
+            ),
+          ),
+        }),
       ),
-      puzzleOrientations: optional(
-        map(
-          option("--puzzleorientations", string({ metavar: "JSON_STRING" }), {
-            description: message`For 3D formats, give puzzle orientations.`,
-          }),
-          (s) => JSON.parse(s),
-        ),
-      ),
-    }),
+    ),
     object({
       fixedPieceType: optional(
         or(

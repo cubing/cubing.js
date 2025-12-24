@@ -64,8 +64,8 @@
     "scramble": "dist/bin/scramble.js"
   },
   "dependencies": {
-    "@optique/core": ">=0.8.2",
-    "@optique/run": ">=0.8.2",
+    "@optique/core": "v0.9.0-dev.187",
+    "@optique/run": "v0.9.0-dev.187",
     "@types/three": "^0.169.0",
     "@types/web-bluetooth": "^0.0.20",
     "comlink": "^4.4.1",
