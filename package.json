@@ -113,7 +113,8 @@
   "scripts": {
     "build": "make build",
     "dev": "make dev",
-    "prepublishOnly": "make prepublishOnly"
+    "prepublishOnly": "make prepublishOnly",
+    "postpublish": "make postpublish"
   },
   "keywords": [
     "cubing",
