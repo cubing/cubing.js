@@ -8,7 +8,11 @@ import {
   unsafeDecryptBlock,
   unsafeEncryptBlock,
 } from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import {
+  type BluetoothConfig,
+  BluetoothPuzzle,
+  type ConnectionArguments,
+} from "./bluetooth-puzzle";
 import { getPatternData } from "./common";
 
 const UUIDs = {
@@ -230,9 +234,9 @@ export class QiyiCube extends BluetoothPuzzle {
   ];
   private batteryLevel: number = 100;
 
-  public static async connect(
-    server: BluetoothRemoteGATTServer,
-  ): Promise<BluetoothPuzzle> {
+  public static async connect({
+    server,
+  }: ConnectionArguments): Promise<BluetoothPuzzle> {
     const aesKey = await importKey(
       new Uint8Array([
         87, 177, 249, 171, 205, 90, 232, 167, 156, 185, 140, 231, 87, 140, 81,

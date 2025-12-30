@@ -1,6 +1,9 @@
 import { Alg, Move as AlgNode, Move } from "../../alg";
 import { cube3x3x3 } from "../../puzzles";
-import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
+import type {
+  BluetoothConfig,
+  ConnectionArguments as BluetoothConnectionArguments,
+} from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Remove this. It's only used for debugging.
 function buf2hex(buffer: ArrayBuffer | Uint8Array): string {
@@ -132,10 +135,7 @@ export class GanRobot extends EventTarget {
   }
 
   // We have to perform async operations before we call the constructor.
-  static async connect(
-    server: BluetoothRemoteGATTServer,
-    device: BluetoothDevice,
-  ) {
+  static async connect({ server, device }: BluetoothConnectionArguments) {
     const ganTimerService = await server.getPrimaryService(
       UUIDs.ganRobotService,
     );

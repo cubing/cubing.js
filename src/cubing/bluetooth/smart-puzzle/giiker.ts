@@ -4,7 +4,11 @@ import { Move } from "../../alg";
 import { KPattern, type KPatternData } from "../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import {
+  type BluetoothConfig,
+  BluetoothPuzzle,
+  type ConnectionArguments,
+} from "./bluetooth-puzzle";
 
 const MESSAGE_LENGTH = 20;
 
@@ -112,9 +116,9 @@ async function decodeState(data: Uint8Array): Promise<Uint8Array> {
 
 /** @category Smart Puzzles */
 export class GiiKERCube extends BluetoothPuzzle {
-  public static async connect(
-    server: BluetoothRemoteGATTServer,
-  ): Promise<GiiKERCube> {
+  public static async connect({
+    server,
+  }: ConnectionArguments): Promise<GiiKERCube> {
     const cubeService = await server.getPrimaryService(UUIDs.cubeService);
     debugLog("Service:", cubeService);
 

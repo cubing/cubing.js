@@ -1,4 +1,5 @@
 import { debugLog } from "../debug";
+import { getMacAddressProvider, type MacAddressProviderOption } from "../mac";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 /******** requestOptions ********/
@@ -32,6 +33,7 @@ function requestOptions<T>(
 
 export interface BluetoothConnectOptions {
   acceptAllDevices?: boolean;
+  macAddressProvider?: MacAddressProviderOption;
 }
 
 // We globally track the number of connection failures,
@@ -83,10 +85,14 @@ export async function bluetoothConnect<T>(
   for (const config of configs) {
     for (const prefix of config.prefixes) {
       if (name?.startsWith(prefix)) {
-        return config.connect(server, device);
+        return config.connect({
+          server,
+          device,
+          macAddressProvider: getMacAddressProvider(options.macAddressProvider),
+        });
       }
     }
   }
 
-  throw Error("Unknown Bluetooth devive.");
+  throw Error("Unknown Bluetooth device.");
 }

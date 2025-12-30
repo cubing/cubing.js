@@ -1,5 +1,6 @@
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { KPattern } from "../../kpuzzle/KPattern";
+import type { MacAddressProvider } from "../mac";
 import {
   BasicRotationTransformer,
   type StreamTransformer,
@@ -31,16 +32,14 @@ export interface OrientationEvent {
   debug?: Record<string, unknown>;
 }
 
+export type ConnectionArguments = {
+  server: BluetoothRemoteGATTServer;
+  device: BluetoothDevice;
+  macAddressProvider: MacAddressProvider;
+};
+
 export interface BluetoothConfig<T> {
-  connect:
-    | ((
-        server: BluetoothRemoteGATTServer,
-        device: BluetoothDevice,
-      ) => Promise<T>)
-    | ((
-        server: BluetoothRemoteGATTServer,
-        device?: BluetoothDevice,
-      ) => Promise<T>);
+  connect: (connectionArguments: ConnectionArguments) => Promise<T>;
   // TODO: Can we reuse `filters`?
   prefixes: string[]; // `[""]` for GiiKER
   filters: BluetoothLEScanFilter[];
