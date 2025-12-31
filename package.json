@@ -74,7 +74,7 @@
     "type-fest": "^5.2.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.1",
+    "@biomejs/biome": "2.3.9",
     "@cubing/deploy": ">=0.4.10",
     "@cubing/dev-config": ">=0.8.3",
     "@esm-bundle/chai": "^4.3.4-fix.0",
