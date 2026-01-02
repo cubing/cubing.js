@@ -2,6 +2,10 @@ import type { KPuzzle } from "../../../kpuzzle";
 import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import type { StickeringMask } from "../../../puzzles/stickerings/mask";
+import {
+  type HintFaceletStyleWithAuto,
+  hintFaceletStyles,
+} from "../../../twisty/model/props/puzzle/display/HintFaceletProp";
 import type { PuzzleID } from "../..";
 import {
   Direction,
@@ -11,6 +15,7 @@ import {
 import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
@@ -46,6 +51,13 @@ export class Twisty2DPuzzle
         if (puzzleLoader?.id !== puzzleID) {
           this.disconnect();
         }
+      },
+    );
+
+    this.#freshListenerManager.addListener(
+      this.model!.twistySceneModel.hintFacelet,
+      (hintFacelet) => {
+        this.setHintFacelet(hintFacelet);
       },
     );
 
@@ -123,6 +135,17 @@ export class Twisty2DPuzzle
     if (this.#cachedPosition) {
       this.onPositionChange(this.#cachedPosition);
     }
+  }
+
+  private hintFaceletsClassListManager = new ClassListManager(
+    this,
+    "hint-facelets-",
+    Object.keys(hintFaceletStyles),
+  );
+  setHintFacelet(hintFacelet: HintFaceletStyleWithAuto) {
+    this.hintFaceletsClassListManager.setValue(
+      hintFacelet === "auto" ? "floating" : hintFacelet,
+    );
   }
 
   private render(): void {

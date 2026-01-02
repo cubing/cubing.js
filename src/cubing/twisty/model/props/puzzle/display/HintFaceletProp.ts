@@ -1,6 +1,6 @@
 import { SimpleTwistyPropSource } from "../../TwistyProp";
 
-// TODO: turn these maps into lists?
+// TODO: turn these maps into `Set`s?
 export const hintFaceletStyles = {
   floating: true, // default
   none: true,

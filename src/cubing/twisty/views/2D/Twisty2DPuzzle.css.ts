@@ -34,5 +34,9 @@ svg {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+.hint-facelets-none .hint-facelet {
+  display: none;
+}
 `,
 );

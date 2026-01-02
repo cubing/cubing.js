@@ -15,18 +15,19 @@ export const cube3x3x3SVG = `<?xml version="1.0" encoding="UTF-8"?>
     </g>
   </defs>
   <g id="puzzle" transform="translate(5,40) scale(40)">
-    <!-- Hints -->
-    <use data-copy-id="CORNERS-l0-o1" href="#sticker-thin-v" transform="translate(6.5,2.1)" style="fill: red"/>
-    <use data-copy-id="EDGES-l1-o1"   href="#sticker-thin-v" transform="translate(6.5,1.1)" style="fill: red"/>
-    <use data-copy-id="CORNERS-l1-o2" href="#sticker-thin-v" transform="translate(6.5,0.1)" style="fill: red"/>
+    <g class="hint-facelet">
+      <use data-copy-id="CORNERS-l0-o1" href="#sticker-thin-v" transform="translate(6.5,2.1)" style="fill: red"/>
+      <use data-copy-id="EDGES-l1-o1"   href="#sticker-thin-v" transform="translate(6.5,1.1)" style="fill: red"/>
+      <use data-copy-id="CORNERS-l1-o2" href="#sticker-thin-v" transform="translate(6.5,0.1)" style="fill: red"/>
 
-    <use data-copy-id="CORNERS-l2-o2" href="#sticker-thin-h" transform="translate(3.3,-0.6)" style="fill: #26f"/>
-    <use data-copy-id="EDGES-l2-o1"   href="#sticker-thin-h" transform="translate(4.3,-0.6)" style="fill: #26f"/>
-    <use data-copy-id="CORNERS-l1-o1" href="#sticker-thin-h" transform="translate(5.3,-0.6)" style="fill: #26f"/>
+      <use data-copy-id="CORNERS-l2-o2" href="#sticker-thin-h" transform="translate(3.3,-0.6)" style="fill: #26f"/>
+      <use data-copy-id="EDGES-l2-o1"   href="#sticker-thin-h" transform="translate(4.3,-0.6)" style="fill: #26f"/>
+      <use data-copy-id="CORNERS-l1-o1" href="#sticker-thin-h" transform="translate(5.3,-0.6)" style="fill: #26f"/>
 
-    <use data-copy-id="CORNERS-l3-o2" href="#sticker-thin-v" transform="translate(2.6,2.1)" style="fill: orange"/>
-    <use data-copy-id="EDGES-l3-o1"   href="#sticker-thin-v" transform="translate(2.6,1.1)" style="fill: orange"/>
-    <use data-copy-id="CORNERS-l2-o1" href="#sticker-thin-v" transform="translate(2.6,0.1)" style="fill: orange"/>
+      <use data-copy-id="CORNERS-l3-o2" href="#sticker-thin-v" transform="translate(2.6,2.1)" style="fill: orange"/>
+      <use data-copy-id="EDGES-l3-o1"   href="#sticker-thin-v" transform="translate(2.6,1.1)" style="fill: orange"/>
+      <use data-copy-id="CORNERS-l2-o1" href="#sticker-thin-v" transform="translate(2.6,0.1)" style="fill: orange"/>
+    </g>
 
     <!-- CORNERS -->
     <use id="CORNERS-l0-o0" href="#sticker" transform="translate(5.3,2.1)" style="fill: white"/>
