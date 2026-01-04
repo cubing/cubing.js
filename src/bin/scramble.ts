@@ -3,7 +3,7 @@
 To run this file directly:
 
 ```shell
-bun run ./src/bin/scramble.ts -- 333
+bun run -- ./src/bin/scramble.ts 333
 ```
 
 To test completions:

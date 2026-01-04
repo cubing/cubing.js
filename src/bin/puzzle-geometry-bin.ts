@@ -3,7 +3,7 @@
 To run this file directly:
 
 ```shell
-bun run ./src/bin/puzzle-geometry-bin.ts -- <program args>
+bun run -- ./src/bin/puzzle-geometry-bin.ts <program args>
 ```
 
 To test completions:

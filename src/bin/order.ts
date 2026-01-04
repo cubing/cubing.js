@@ -3,7 +3,7 @@
 To run this file directly:
 
 ```shell
-bun run ./src/bin/order.ts -- 3x3x3 "R U R' U R U2' R'"
+bun run -- ./src/bin/order.ts 3x3x3 "R U R' U R U2' R'"
 ```
 
 To test completions:
