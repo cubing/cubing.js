@@ -1,7 +1,8 @@
+// Generated from `twips` v0.11.3
+
 // @ts-nocheck
 
-// Generated from `twips` v0.9.99
-import "./chunks/chunk-44VDESDN.js";
+import "./chunks/chunk-4VODYKQX.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -162,35 +163,6 @@ function takeFromExternrefTable0(idx) {
   wasm.__externref_table_dealloc(idx);
   return value;
 }
-function wasmDeriveScrambleForEvent(hex_derivation_seed_str, derivation_salt_hierarchy_str, subevent_str) {
-  let deferred5_0;
-  let deferred5_1;
-  try {
-    const ptr0 = passStringToWasm0(hex_derivation_seed_str, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passStringToWasm0(derivation_salt_hierarchy_str, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len1 = WASM_VECTOR_LEN;
-    const ptr2 = passStringToWasm0(subevent_str, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len2 = WASM_VECTOR_LEN;
-    const ret = wasm.wasmDeriveScrambleForEvent(ptr0, len0, ptr1, len1, ptr2, len2);
-    var ptr4 = ret[0];
-    var len4 = ret[1];
-    if (ret[3]) {
-      ptr4 = 0;
-      len4 = 0;
-      throw takeFromExternrefTable0(ret[2]);
-    }
-    deferred5_0 = ptr4;
-    deferred5_1 = len4;
-    return getStringFromWasm0(ptr4, len4);
-  } finally {
-    wasm.__wbindgen_free(deferred5_0, deferred5_1, 1);
-  }
-}
-function wasmFreeMemoryForAllScrambleFinders() {
-  const ret = wasm.wasmFreeMemoryForAllScrambleFinders();
-  return ret >>> 0;
-}
 function wasmTwips(kpuzzle_json, search_pattern_json, options_json) {
   let deferred5_0;
   let deferred5_1;
@@ -236,6 +208,35 @@ function wasmRandomScrambleForEvent(event_str) {
   } finally {
     wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
   }
+}
+function wasmDeriveScrambleForEvent(hex_derivation_seed_str, derivation_salt_hierarchy_str, subevent_str) {
+  let deferred5_0;
+  let deferred5_1;
+  try {
+    const ptr0 = passStringToWasm0(hex_derivation_seed_str, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(derivation_salt_hierarchy_str, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm0(subevent_str, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ret = wasm.wasmDeriveScrambleForEvent(ptr0, len0, ptr1, len1, ptr2, len2);
+    var ptr4 = ret[0];
+    var len4 = ret[1];
+    if (ret[3]) {
+      ptr4 = 0;
+      len4 = 0;
+      throw takeFromExternrefTable0(ret[2]);
+    }
+    deferred5_0 = ptr4;
+    deferred5_1 = len4;
+    return getStringFromWasm0(ptr4, len4);
+  } finally {
+    wasm.__wbindgen_free(deferred5_0, deferred5_1, 1);
+  }
+}
+function wasmFreeMemoryForAllScrambleFinders() {
+  const ret = wasm.wasmFreeMemoryForAllScrambleFinders();
+  return ret >>> 0;
 }
 var EXPECTED_RESPONSE_TYPES = /* @__PURE__ */ new Set(["basic", "cors", "default"]);
 async function __wbg_load(module, imports) {
@@ -392,7 +393,7 @@ var twips_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./chunks/twips_wasm_bg-TPXD7W4R.js")).default;
+    const wasmUint8Array = (await import("./chunks/twips_wasm_bg-RWVQBVBA.js")).default;
     await twips_wasm_default({ module_or_path: wasmUint8Array.buffer });
   })());
 }
