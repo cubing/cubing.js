@@ -1,6 +1,6 @@
 {
   "name": "cubing",
-  "version": "0.61.3",
+  "version": "0.61.4-dev",
   "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
   "license": "MPL-2.0 OR GPL-3.0-or-later",
