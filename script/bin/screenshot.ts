@@ -21,17 +21,17 @@ import {
 } from "@optique/core";
 import { run } from "@optique/run";
 import { path } from "@optique/run/valueparser";
-import { Alg } from "cubing/alg";
-import { experimentalStickerings } from "cubing/puzzles/cubing-private";
-// We would use named imports, but that doesn't seem to be an option.
-import { visualizationFormats } from "cubing/twisty/model/props/viewer/VisualizationProp.js";
 import { Path } from "path-class";
 import { chromium } from "playwright";
+import { Alg } from "../../src/cubing/alg";
+import { experimentalStickerings } from "../../src/cubing/puzzles/cubing-private";
 import type {
   PuzzleID,
   TwistyPlayerConfig,
   VisualizationFormat,
 } from "../../src/cubing/twisty/index.js";
+// We would use named imports, but that doesn't seem to be an option.
+import { visualizationFormats } from "../../src/cubing/twisty/model/props/viewer/VisualizationProp.js";
 import { packageVersion } from "../../src/metadata/packageVersion.js";
 import { startServer } from "../lib/experiments-server";
 

@@ -7,20 +7,17 @@
     "noEmit": true,
     "rootDir": "./",
     "types": ["web-bluetooth", "dom-speech-recognition"],
-    "resolveJsonModule": true,
-    "paths": {
-      // Workaround for the `bin` build: https://github.com/cubing/cubing.js/issues/292
-      "cubing/*": ["./src/cubing/*"]
-    }
+    "resolveJsonModule": true
   },
   "include": ["script", "src"],
   "exclude": [
     "./.temp/",
     "./dist/",
     // Avoid indexing `dist`.
-    "script/test/dist/lib/cubing/build-size/src/total.js",
-    "script/test/dist/lib/cubing/node/",
-    "script/test/dist/lib/cubing/perf/"
+    "./script/test/dist/lib/cubing/build-size/src/total.js",
+    "./script/test/dist/lib/cubing/node/",
+    "./script/test/dist/lib/cubing/perf/",
+    "./src/bin/"
   ],
   "typedocOptions": {
     "out": "dist/sites/js.cubing.net/cubing/api",

@@ -1,7 +1,7 @@
-import type { AlgTransformData } from "cubing/puzzles/cubing-private";
 import type { ExperimentalStickering } from "../../../twisty";
 import { PGPuzzleLoader } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
+import type { AlgTransformData } from "../../cubing-private";
 import {
   ftoStickering,
   ftoStickerings,

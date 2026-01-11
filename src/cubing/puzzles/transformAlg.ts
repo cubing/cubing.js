@@ -1,4 +1,3 @@
-import type { AlgTransformData } from "cubing/puzzles/cubing-private";
 import {
   Alg,
   type AlgNode,
@@ -12,6 +11,7 @@ import {
   type Pause,
   TraversalDownUp,
 } from "../alg";
+import type { AlgTransformData } from "./cubing-private";
 
 class TransformAlg extends TraversalDownUp<
   AlgTransformData[string],

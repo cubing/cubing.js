@@ -1,4 +1,3 @@
-import type { AlgTransformData } from "cubing/puzzles/cubing-private";
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
 import { puzzles } from "../../../cubing/puzzles";
@@ -26,7 +25,10 @@ import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/
 import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
 import "../../../cubing/twisty/views/stream/TwistyStreamSource";
-import { transformAlg } from "../../../cubing/puzzles/cubing-private";
+import {
+  type AlgTransformData,
+  transformAlg,
+} from "../../../cubing/puzzles/cubing-private";
 import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";

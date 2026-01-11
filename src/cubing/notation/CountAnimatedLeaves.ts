@@ -1,4 +1,3 @@
-import type { LeafCount } from "cubing/twisty/controllers/indexer/AlgIndexer";
 import {
   type Alg,
   type Commutator,
@@ -11,6 +10,7 @@ import {
   type Pause,
   TraversalUp,
 } from "../alg";
+import type { LeafCount } from "../twisty/controllers/indexer/AlgIndexer";
 
 // TODO: Include Pause, include amounts
 class CountAnimatedLeaves extends TraversalUp<LeafCount, LeafCount> {

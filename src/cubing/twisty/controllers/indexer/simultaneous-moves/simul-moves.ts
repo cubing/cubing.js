@@ -1,4 +1,3 @@
-import type { AnimationTimelineLeaf } from "cubing/twisty/model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import {
   type Alg,
   type Commutator,
@@ -11,6 +10,7 @@ import {
   type Pause,
   TraversalUp,
 } from "../../../../alg";
+import type { AnimationTimelineLeaf } from "../../../model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import type {
   MillisecondDuration,
   MillisecondTimestamp,

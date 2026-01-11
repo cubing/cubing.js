@@ -1,6 +1,6 @@
-import type { AlgTransformData } from "cubing/puzzles/cubing-private";
 import { PGPuzzleLoader } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
+import type { AlgTransformData } from "../../cubing-private";
 
 class PyraminxPuzzleLoader extends PGPuzzleLoader {
   constructor() {

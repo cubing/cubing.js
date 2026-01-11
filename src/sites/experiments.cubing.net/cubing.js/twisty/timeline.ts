@@ -1,6 +1,6 @@
-import type { MillisecondTimestamp } from "cubing/twisty/controllers/AnimationTypes";
 import { Alg, Move } from "../../../../cubing/alg";
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
+import type { MillisecondTimestamp } from "../../../../cubing/twisty/controllers/AnimationTypes";
 
 function t(n: number): MillisecondTimestamp {
   return n as MillisecondTimestamp;

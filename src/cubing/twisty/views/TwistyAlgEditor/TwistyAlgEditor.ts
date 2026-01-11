@@ -11,7 +11,6 @@
  * proper rewrite with a better model would be very welcome.
  */
 
-import type { MillisecondTimestamp } from "cubing/twisty/controllers/AnimationTypes";
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, type Move, type Pause } from "../../../alg";
 import {
@@ -19,6 +18,7 @@ import {
   type Parsed,
   startCharIndexKey,
 } from "../../../alg/parseAlg";
+import type { MillisecondTimestamp } from "../../controllers/AnimationTypes";
 import type {
   AlgProp,
   AlgWithIssues,

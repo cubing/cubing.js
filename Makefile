@@ -125,7 +125,8 @@ test-all: test-src test-build test-dist
 test-src: update-dependencies \
 	test-ts \
 	lint-ci \
-	test-src-tsc \
+	test-src-tsc-main \
+	test-src-tsc-bin \
 	test-src-import-restrictions
 
 .PHONY: test-ts
@@ -159,9 +160,13 @@ test-ts-dom-with-coverage: update-dependencies
 test-src-import-restrictions: update-dependencies
 	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
 
-.PHONY: test-src-tsc
-test-src-tsc: update-dependencies
+.PHONY: test-src-tsc-main
+test-src-tsc-main: update-dependencies
 	${BUN_DX} --package typescript tsc -- --project ./tsconfig.json
+
+.PHONY: test-src-tsc-bin
+test-src-tsc-bin:
+	${BUN_DX} --package typescript tsc -- --project ./src/bin/tsconfig.json
 
 .PHONY: test-build
 test-build: \

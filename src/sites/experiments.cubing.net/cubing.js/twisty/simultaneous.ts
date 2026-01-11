@@ -1,6 +1,6 @@
-import type { MillisecondTimestamp } from "cubing/twisty/controllers/AnimationTypes";
 import { Alg, Move } from "../../../../cubing/alg";
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
+import type { MillisecondTimestamp } from "../../../../cubing/twisty/controllers/AnimationTypes";
 
 const supercubeSprite = new URL(
   "./supercube-sprite.png",

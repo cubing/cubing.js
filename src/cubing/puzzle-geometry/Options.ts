@@ -1,4 +1,4 @@
-import type { Move } from "cubing/alg";
+import type { Move } from "../alg";
 import {
   type PuzzleDescription,
   parsePuzzleDescription,

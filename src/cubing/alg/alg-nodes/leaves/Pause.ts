@@ -1,6 +1,6 @@
-import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
 import { AlgCommon, type Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
+import type { ExperimentalSerializationOptions } from "../../SerializationOptions";
 import type { AlgLeaf } from "../AlgNode";
 import type { Grouping } from "../containers/Grouping";
 

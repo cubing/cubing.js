@@ -1,12 +1,12 @@
 // TODO: Move this?
 
-import type { LeafCount } from "cubing/twisty/controllers/indexer/AlgIndexer";
 import type { Alg } from "../../../alg";
 import {
   endCharIndexKey,
   type Parsed,
   startCharIndexKey,
 } from "../../../alg/parseAlg";
+import type { LeafCount } from "../../controllers/indexer/AlgIndexer";
 import {
   type AlgWithIssues,
   algWithIssuesFromString,

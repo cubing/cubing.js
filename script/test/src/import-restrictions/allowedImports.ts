@@ -32,6 +32,9 @@ export const mainAllowedImports: AllowedImports = {
     ],
     dynamic: ["cubing"],
   },
+  "script/bin": {
+    static: ["src/cubing"],
+  },
   "script/build/bin/build-bin.ts": {
     static: ["node:fs/promises"],
   },

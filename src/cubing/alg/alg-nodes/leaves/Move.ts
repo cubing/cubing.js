@@ -1,8 +1,8 @@
-import type { ExperimentalSerializationOptions } from "cubing/alg/SerializationOptions";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
 import { parseMove, parseQuantumMove, transferCharIndex } from "../../parseAlg";
+import type { ExperimentalSerializationOptions } from "../../SerializationOptions";
 import { warnOnce } from "../../warnOnce";
 import type { AlgLeaf } from "../AlgNode";
 import { QuantumWithAmount } from "../QuantumWithAmount";

@@ -1,10 +1,10 @@
-import type {
-  AnimationTimelineLeaf,
-  AnimationTimelineLeaves,
-} from "cubing/twisty/model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import { type Alg, Move } from "../../../../alg";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
+import type {
+  AnimationTimelineLeaf,
+  AnimationTimelineLeaves,
+} from "../../../model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
 import {
   Direction,
   type MillisecondDuration,

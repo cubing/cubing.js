@@ -1,7 +1,3 @@
-import type {
-  LeafCount,
-  LeafIndex,
-} from "cubing/twisty/controllers/indexer/AlgIndexer";
 import {
   type Alg,
   type Commutator,
@@ -15,6 +11,10 @@ import {
   TraversalDownUp,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parseAlg";
+import type {
+  LeafCount,
+  LeafIndex,
+} from "../../controllers/indexer/AlgIndexer";
 import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves";
 
 export type AnimatedLeafAlgNodeInfo = {
