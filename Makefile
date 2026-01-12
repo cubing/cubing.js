@@ -239,7 +239,7 @@ check-engines: update-dependencies
 	@${BUN_RUN} "./script/check-engine-versions.ts"
 
 .PHONY: lint
-lint: lint-biome lint-import-restrictions lint-tsc-main lint-tsc-bin check-schemas
+lint: lint-biome lint-import-restrictions lint-tsc-main lint-tsc-lib lint-tsc-bin check-schemas
 
 .PHONY: lint-biome
 lint-biome: update-dependencies
@@ -257,8 +257,12 @@ lint-import-restrictions: update-dependencies
 lint-tsc-main: update-dependencies
 	${BUN_DX} --package typescript tsc -- --project ./tsconfig.json
 
+.PHONY: lint-tsc-lib
+lint-tsc-lib: update-dependencies
+	${BUN_DX} --package typescript tsc -- --project ./tsconfig.lib.jsonc
+
 .PHONY: lint-tsc-bin
-lint-tsc-bin:
+lint-tsc-bin: update-dependencies
 	${BUN_DX} --package typescript tsc -- --project ./src/bin/tsconfig.json
 
 .PHONY: check-schemas

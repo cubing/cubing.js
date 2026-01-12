@@ -1,0 +1,12 @@
+{
+  // This file is a workaround for: https://github.com/oven-sh/bun/issues/25974
+  "schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./node_modules/@cubing/dev-config/ts/es2022-types/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "rootDir": "./src/cubing/",
+    "types": ["web-bluetooth", "node"]
+  },
+  "include": ["./src/cubing/"],
+  "exclude": ["./**/*.test.dom.ts", "./**/*.test.ts"]
+}
