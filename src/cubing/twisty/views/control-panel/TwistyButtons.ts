@@ -63,7 +63,7 @@ export class TwistyButtons extends ManagedCustomElement {
   #onCommand(command: ButtonCommand) {
     switch (command) {
       case "fullscreen": {
-        this.onFullscreenButton();
+        void this.onFullscreenButton();
         break;
       }
       case "jump-to-start": {
@@ -93,7 +93,7 @@ export class TwistyButtons extends ManagedCustomElement {
         break;
       }
       case "twizzle-link": {
-        this.controller?.visitTwizzleLink();
+        void this.controller?.visitTwizzleLink();
         break;
       }
       default:
@@ -109,12 +109,12 @@ export class TwistyButtons extends ManagedCustomElement {
     }
 
     if (documentFullscreenElement() === this.defaultFullscreenElement) {
-      documentExitFullscreen();
+      void documentExitFullscreen();
     } else {
       // TODO: Propagate button info to `ButtonAppearanceProp`.
       this.buttons?.fullscreen.setIcon("exit-fullscreen");
 
-      requestFullscreen(
+      void requestFullscreen(
         (await this.model?.twistySceneModel.fullscreenElement.get()) ??
           this.defaultFullscreenElement,
       );

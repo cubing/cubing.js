@@ -74,7 +74,7 @@ export class Twisty2DSceneWrapper
       this.effectiveVisualization!,
     );
 
-    this.setCurrentTwisty2DPuzzleWrapper(twisty2DPuzzleWrapper);
+    void this.setCurrentTwisty2DPuzzleWrapper(twisty2DPuzzleWrapper);
   }
 }
 

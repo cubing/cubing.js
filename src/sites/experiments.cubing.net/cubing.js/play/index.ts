@@ -108,7 +108,7 @@ const fn = async (
       sender.sendMoveEvent(e);
     }
 
-    updateAlgLink();
+    void updateAlgLink();
   }
 
   const clearButton = document.createElement("button");
@@ -228,7 +228,7 @@ const fn = async (
   function space() {
     resetCamera();
     swipeyPuzzle.twistyPlayer.alg = new Alg();
-    updateAlgLink();
+    void updateAlgLink();
 
     if (sender) {
       console.log("resetting!");
@@ -243,15 +243,18 @@ const fn = async (
 
   function backspace() {
     swipeyPuzzle.twistyPlayer.experimentalRemoveFinalChild();
-    updateAlgLink();
+    void updateAlgLink();
   }
 
-  async function enter() {
-    const url = await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
-    // const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
-    const a = document.createElement("a");
-    a.href = url;
-    a.click();
+  function enter() {
+    void (async () => {
+      const url =
+        await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
+      // const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
+      const a = document.createElement("a");
+      a.href = url;
+      a.click();
+    })();
   }
 
   window.addEventListener("keydown", (e: KeyboardEvent) => {

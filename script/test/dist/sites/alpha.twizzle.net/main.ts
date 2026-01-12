@@ -101,4 +101,4 @@ async function runTest() {
 }
 
 startServer();
-runTest();
+await runTest();

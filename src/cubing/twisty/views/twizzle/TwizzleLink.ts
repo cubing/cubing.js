@@ -227,13 +227,13 @@ export class TwizzleLink extends ManagedCustomElement {
         if (textToCopy) {
           try {
             await navigator.clipboard.writeText(textToCopy);
-            setAndClear("📋✅");
+            void setAndClear("📋✅");
           } catch (e) {
-            setAndClear("📋❌");
+            void setAndClear("📋❌");
             throw e;
           }
         } else {
-          setAndClear("📋❌");
+          void setAndClear("📋❌");
         }
       });
     }

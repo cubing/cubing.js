@@ -86,11 +86,11 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.addCSS(twisty3DVantageCSS);
     this.addElement((await this.canvasInfo()).canvas);
 
-    this.#onResize();
+    void this.#onResize();
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
-    this.orbitControls(); // Instantiate orbit controls
-    this.#setupBasicPresses();
+    void this.orbitControls(); // Instantiate orbit controls
+    void this.#setupBasicPresses();
 
     this.scheduleRender();
   }
@@ -156,7 +156,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
     camera.setViewOffset(w, h - excess, off, yoff, w, h);
     camera.updateProjectionMatrix(); // TODO
 
-    this.clearCanvas();
+    void this.clearCanvas();
     if (this.rendererIsShared) {
       const canvasInfo = await this.canvasInfo();
 
@@ -265,7 +265,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
           this.model.twistySceneModel.orbitCoordinates,
           async (orbitCoordinates: OrbitCoordinates) => {
             const camera = await this.camera();
-            setCameraFromOrbitCoordinates(
+            void setCameraFromOrbitCoordinates(
               camera,
               orbitCoordinates,
               this.options?.backView,
@@ -318,7 +318,13 @@ export class Twisty3DVantage extends ManagedCustomElement {
       this.canvasInfo(),
     ]);
     if (this.rendererIsShared) {
-      renderPooled(this.#width, this.#height, canvas.canvas, scene, camera);
+      await renderPooled(
+        this.#width,
+        this.#height,
+        canvas.canvas,
+        scene,
+        camera,
+      );
     } else {
       (await this.renderer()).render(scene, camera);
     }

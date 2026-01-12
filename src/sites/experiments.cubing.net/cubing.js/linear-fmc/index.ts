@@ -100,7 +100,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     scrambleDisplayAlgViewer.classList.toggle("correct", false);
     // timeDisplay.hidden = true;
   }
-  displayNewScramble();
+  void displayNewScramble();
 
   // function showTimer() {
   //   // timeDisplay.hidden = false;
@@ -135,7 +135,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       );
     }
 
-    async function updateCountingAlg(newAlg: Alg) {
+    function updateCountingAlg(newAlg: Alg) {
       countingAlg = newAlg;
       countingMovesElem.textContent = countingAlg.toString();
       const numMoves = countingAlgNumMoves();
@@ -173,7 +173,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     const resetButton = document.querySelector(
       "#player-pattern-reset",
     ) as HTMLButtonElement;
-    resetButton.addEventListener("click", () => {
+    resetButton.addEventListener("click", async () => {
       // twistyPlayer.experimentalSetStartStateOverride(null);
       twistyPlayer.experimentalSetupAlg = new Alg();
       twistyPlayer.alg = new Alg();
@@ -185,7 +185,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       resetButton.disabled = true;
       timer.reset();
       moveAlgToScrambleButton.focus();
-      displayNewScramble();
+      await displayNewScramble();
     });
     resetButton.disabled = true;
 

@@ -5,7 +5,7 @@ import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 import { needPath } from "../../lib/needPath";
 
-needPath(
+await needPath(
   Path.resolve("../../../node_modules/barely-a-dev-server", import.meta.url),
   "make setup",
 );

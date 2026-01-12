@@ -68,7 +68,7 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
 
       anchor.addEventListener("click", (e) => {
         e.preventDefault();
-        dataDown.twistyAlgViewer.jumpToIndex(
+        void dataDown.twistyAlgViewer.jumpToIndex(
           dataDown.earliestMoveIndex,
           offsetIntoMove,
         );
@@ -442,7 +442,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
   }
 
   set twistyPlayer(twistyPlayer: TwistyPlayer | null) {
-    this.#setTwistyPlayer(twistyPlayer);
+    void this.#setTwistyPlayer(twistyPlayer);
   }
 
   async #setTwistyPlayer(twistyPlayer: TwistyPlayer | null) {

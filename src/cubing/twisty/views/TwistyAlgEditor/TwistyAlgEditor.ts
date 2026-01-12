@@ -251,7 +251,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     if (!twistyPlayer) {
       return;
     }
-    (async () => {
+    void (async () => {
       this.algString = this.#algProp
         ? (await this.#algProp.get()).alg.toString()
         : "";

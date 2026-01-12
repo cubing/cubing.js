@@ -60,16 +60,13 @@ twistyStreamSource.addEventListener("move", (e) => {
   );
 });
 
-window.addEventListener("keydown", (e: KeyboardEvent) => {
+window.addEventListener("keydown", async (e: KeyboardEvent) => {
   if (e.which === 13) {
     e.preventDefault();
-    (async () => {
-      const a = document.createElement("a");
-      a.href = await player.experimentalModel.twizzleLink();
-      a.click();
-    })();
-  }
-  if (e.code === "Backspace") {
+    const a = document.createElement("a");
+    a.href = await player.experimentalModel.twizzleLink();
+    a.click();
+  } else if (e.code === "Backspace") {
     player.experimentalRemoveFinalChild();
     e.preventDefault();
   }
@@ -86,18 +83,16 @@ function flashSolution() {
       },
     );
 }
-document.addEventListener("copy", (e: ClipboardEvent) => {
+document.addEventListener("copy", async (e: ClipboardEvent) => {
   if (globalThis.getSelection?.()?.toString() === "") {
     console.log(
       "Detected no selected text, so the clipboard will be set to the solution.",
     );
     e.preventDefault();
-    (async () => {
-      navigator.clipboard.writeText(
-        (await player.experimentalGet.alg()).toString(),
-      );
-      flashSolution();
-    })();
+    navigator.clipboard.writeText(
+      (await player.experimentalGet.alg()).toString(),
+    );
+    flashSolution();
   }
 });
 

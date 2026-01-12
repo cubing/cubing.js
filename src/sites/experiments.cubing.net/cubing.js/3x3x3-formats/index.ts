@@ -64,7 +64,7 @@ class App {
     const svgWrapper = document
       .querySelector("#viewer")!
       .appendChild(document.createElement("div"));
-    (async () => {
+    void (async () => {
       svgWrapper.appendChild((await this.svg).wrapperElement);
     })();
 
@@ -131,7 +131,7 @@ class App {
 
   setPattern(pattern: KPattern): void {
     this.pattern = pattern;
-    (async () => {
+    void (async () => {
       (await this.svg).draw(pattern);
     })();
     this.kpatternTextarea.value = kpatternToString(pattern);

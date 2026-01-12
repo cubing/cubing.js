@@ -63,33 +63,35 @@ export class URLParamUpdater {
     updateURL(url);
   }
 
-  async listenToStringSourceProp<T extends string>(
+  listenToStringSourceProp<T extends string>(
     prop: TwistyPropSource<T>,
     key: string,
     defaultString?: T,
-  ): Promise<void> {
-    const actualDefaultString =
-      defaultString ?? (await prop.getDefaultValue()) ?? ""; // TODO
-    prop.addFreshListener((s: string) => {
-      this.setURLParam(key, s, actualDefaultString);
-    });
+  ): void {
+    void (async () => {
+      const actualDefaultString =
+        defaultString ?? (await prop.getDefaultValue()) ?? ""; // TODO
+      prop.addFreshListener((s: string) => {
+        this.setURLParam(key, s, actualDefaultString);
+      });
+    })();
   }
 
-  async listenToStringOrNullProp(
+  listenToStringOrNullProp(
     prop: TwistyPropSource<string | null>,
     key: string,
     defaultString: string = "",
-  ): Promise<void> {
+  ): void {
     prop.addFreshListener((s: string | null) => {
       this.setURLParam(key, s ?? defaultString, defaultString);
     });
   }
 
-  async listenToStringOrNoValueProp<T extends string>(
+  listenToStringOrNoValueProp<T extends string>(
     prop: TwistyPropSource<T | typeof EXPERIMENTAL_PROP_NO_VALUE>,
     key: string,
     defaultString: T | typeof EXPERIMENTAL_PROP_NO_VALUE,
-  ): Promise<void> {
+  ): void {
     prop.addFreshListener((s: string | typeof EXPERIMENTAL_PROP_NO_VALUE) => {
       if (s === EXPERIMENTAL_PROP_NO_VALUE) {
         s = defaultString;

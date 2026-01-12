@@ -64,7 +64,7 @@ class App {
     }
 
     puzzleSelect?.addEventListener("change", () => {
-      (async () => {
+      void (async () => {
         (await this.puzzle).setPuzzle(puzzles[puzzleSelect.value]);
       })();
 
@@ -138,7 +138,7 @@ class PuzzlePatternEditor {
     this.displayPatternText();
   }
 
-  private async setPuzzleSync(svgString: string, kpuzzle: KPuzzle) {
+  private setPuzzleSync(svgString: string, kpuzzle: KPuzzle) {
     this.kpuzzle = kpuzzle;
     this.pattern = new KPattern(
       kpuzzle,
@@ -278,7 +278,7 @@ class Facelet {
     this.element.addEventListener(
       "pointerdown",
       ((e: PointerEvent) => {
-        this.click(e);
+        void this.click(e);
       }) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357
     );
   }
@@ -292,14 +292,16 @@ class Facelet {
     this.element.style.opacity = "1";
   }
 
-  async select() {
-    const puzzle = await app.puzzle;
-    if (puzzle.selectedFacelet) {
-      puzzle.selectedFacelet.deselect();
-    }
+  select() {
+    void (async () => {
+      const puzzle = await app.puzzle;
+      if (puzzle.selectedFacelet) {
+        puzzle.selectedFacelet.deselect();
+      }
 
-    puzzle.selectedFacelet = this;
-    this.element.style.opacity = "0.7";
+      puzzle.selectedFacelet = this;
+      this.element.style.opacity = "0.7";
+    })();
   }
 
   async click(e: PointerEvent) {

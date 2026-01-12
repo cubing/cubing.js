@@ -21,7 +21,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
     private visualizationStrategy: VisualizationStrategy,
   ) {
     super();
-    this.twisty3DPuzzle(); // Start constructing.
+    void this.twisty3DPuzzle(); // Start constructing.
 
     // TODO: Hook up listeners before loading the heavy code in the async constructor, so we get any intermediate updates?
     // Repro: Switch to 40x40x40 a fraction of a second before animation finishes. When it's loaded the itmeline is at the end, but the 40x40x40 is rendered with an earlier position.

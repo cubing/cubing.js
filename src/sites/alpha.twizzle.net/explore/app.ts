@@ -283,12 +283,12 @@ class SelectUI {
       }
       case "screenshot":
       case "screenshot-back": {
-        this.app.twistyPlayer.experimentalDownloadScreenshot(); // TODO: back!
+        void this.app.twistyPlayer.experimentalDownloadScreenshot(); // TODO: back!
         break;
       }
       case "bluetooth":
       case "keyboard": {
-        (async (): Promise<void> => {
+        void (async (): Promise<void> => {
           const inputPuzzle = await (action === "bluetooth"
             ? connectSmartPuzzle
             : debugKeyboardConnect)();

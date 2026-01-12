@@ -103,7 +103,7 @@ export class GanTimer extends EventTarget {
 
     this.previousDetail = detail;
 
-    this.poll();
+    void this.poll();
   }
 
   onDisconnect(): void {
@@ -127,7 +127,7 @@ export class GanTimer extends EventTarget {
 
   startPolling() {
     this.polling = true;
-    this.poll();
+    void this.poll();
   }
 
   stopPolling() {

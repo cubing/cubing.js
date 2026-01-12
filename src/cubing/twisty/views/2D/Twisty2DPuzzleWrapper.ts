@@ -15,7 +15,7 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
       | "experimental-2D-LL"
       | "experimental-2D-LL-face",
   ) {
-    this.twisty2DPuzzle(); // Start constructing.
+    void this.twisty2DPuzzle(); // Start constructing.
 
     this.#freshListenerManager.addListener(
       this.model.twistySceneModel.stickeringMask,

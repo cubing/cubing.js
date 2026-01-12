@@ -18,7 +18,7 @@ export async function nodeEndpointPort(): Promise<
 
 export function expose(api: any) {
   if (useNodeWorkarounds) {
-    (async () => {
+    void (async () => {
       comlinkExpose(api, await nodeEndpointPort());
     })();
   } else {

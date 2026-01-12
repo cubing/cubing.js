@@ -166,44 +166,46 @@ export class TwistyAnimationController {
   }
 
   // TODO: bundle playing direction, and boundary into `toggle`.
-  async play(options?: {
+  play(options?: {
     direction?: SimpleDirection;
     untilBoundary?: BoundaryType;
     autoSkipToOtherEndIfStartingAtBoundary?: boolean; // TODO What's a good short name that doesn't imply a more general looping concept?
     loop?: boolean;
-  }): Promise<void> {
-    // TODO: We might need to cache all playing info?
-    // Or maybe we don't have to worry about short-circuiting, since this is idempotent?
-    // if (this.playing) {
-    //   return;
-    // }
+  }): void {
+    void (async () => {
+      // TODO: We might need to cache all playing info?
+      // Or maybe we don't have to worry about short-circuiting, since this is idempotent?
+      // if (this.playing) {
+      //   return;
+      // }
 
-    const direction = options?.direction ?? Direction.Forwards;
+      const direction = options?.direction ?? Direction.Forwards;
 
-    const coarseTimelineInfo = await this.model.coarseTimelineInfo.get(); // TODO: Why do we need to read this if we don't use it?
-    if (options?.autoSkipToOtherEndIfStartingAtBoundary ?? true) {
-      if (direction === Direction.Forwards && coarseTimelineInfo.atEnd) {
-        this.model.timestampRequest.set("start");
-        this.delegate.flash();
+      const coarseTimelineInfo = await this.model.coarseTimelineInfo.get(); // TODO: Why do we need to read this if we don't use it?
+      if (options?.autoSkipToOtherEndIfStartingAtBoundary ?? true) {
+        if (direction === Direction.Forwards && coarseTimelineInfo.atEnd) {
+          this.model.timestampRequest.set("start");
+          this.delegate.flash();
+        }
+        if (direction === Direction.Backwards && coarseTimelineInfo.atStart) {
+          this.model.timestampRequest.set("end");
+          this.delegate.flash();
+        }
       }
-      if (direction === Direction.Backwards && coarseTimelineInfo.atStart) {
-        this.model.timestampRequest.set("end");
-        this.delegate.flash();
-      }
-    }
-    this.model.playingInfo.set({
-      playing: true,
-      direction,
-      untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
-      loop: options?.loop ?? false,
-    });
+      this.model.playingInfo.set({
+        playing: true,
+        direction,
+        untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
+        loop: options?.loop ?? false,
+      });
 
-    this.playing = true;
-    this.lastDatestamp = performance.now() as MillisecondTimestamp; // TODO: Take from event.
-    this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
+      this.playing = true;
+      this.lastDatestamp = performance.now() as MillisecondTimestamp; // TODO: Take from event.
+      this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
-    // TODO: Save timestamp from model?
-    this.scheduler.requestAnimFrame();
+      // TODO: Save timestamp from model?
+      this.scheduler.requestAnimFrame();
+    })();
   }
 
   pause(): void {

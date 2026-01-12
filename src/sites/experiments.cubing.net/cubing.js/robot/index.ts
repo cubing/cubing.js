@@ -46,7 +46,7 @@ class RobotDemo {
     );
     this.outputButton.addEventListener("click", this.connectOutput.bind(this));
     this.pauseButton.addEventListener("click", () => this.togglePause());
-    this.connectKeyboardInput();
+    void this.connectKeyboardInput();
 
     this.streamSelect.addEventListener("change", () => this.onStreamSelect());
     // this.getStreams();

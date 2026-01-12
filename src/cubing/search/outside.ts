@@ -41,7 +41,7 @@ export function _preInitializationHintForEvent(
       _preInitializationHintForEvent("333");
       return;
   }
-  (async () => {
+  void (async () => {
     await (await getCachedWorkerInstance()).insideAPI.initialize(eventID);
   })();
 }
@@ -172,11 +172,13 @@ export function setSearchDebug(
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
     searchOutsideDebugGlobals.logPerf = logPerf;
-    mapToAllWorkers((worker) => worker.insideAPI.setDebugMeasurePerf(logPerf));
+    void mapToAllWorkers((worker) =>
+      worker.insideAPI.setDebugMeasurePerf(logPerf),
+    );
   }
   if (typeof scramblePrefetchLevel !== "undefined") {
     searchOutsideDebugGlobals.scramblePrefetchLevel = scramblePrefetchLevel;
-    mapToAllWorkers((worker) =>
+    void mapToAllWorkers((worker) =>
       worker.insideAPI.setScramblePrefetchLevel(
         scramblePrefetchLevel as PrefetchLevel,
       ),

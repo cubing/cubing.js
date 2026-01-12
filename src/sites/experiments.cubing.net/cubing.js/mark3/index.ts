@@ -56,7 +56,7 @@ additionalInfoInput.addEventListener("input", () => {
 
 const table = document.querySelector("table")!;
 
-async function addScramble(
+function addScramble(
   tbody: HTMLTableSectionElement,
   i: number,
   extra: boolean,
@@ -76,13 +76,16 @@ async function addScramble(
   });
   player.classList.add("dim");
   playerTD.appendChild(player);
-  const scramble = await randomScrambleForEvent(currentEventID);
-  scrambleTD.textContent = "";
-  const a = scrambleTD.appendChild(document.createElement("a"));
-  a.textContent = scramble.toString();
-  player.alg = scramble;
-  player.classList.remove("dim");
-  a.href = await player.experimentalModel.twizzleLink();
+
+  void (async () => {
+    const scramble = await randomScrambleForEvent(currentEventID);
+    scrambleTD.textContent = "";
+    const a = scrambleTD.appendChild(document.createElement("a"));
+    a.textContent = scramble.toString();
+    player.alg = scramble;
+    player.classList.remove("dim");
+    a.href = await player.experimentalModel.twizzleLink();
+  })();
 }
 
 function addBody(num: number, extra: boolean) {

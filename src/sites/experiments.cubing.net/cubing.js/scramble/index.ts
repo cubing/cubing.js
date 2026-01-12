@@ -10,7 +10,7 @@ const scrambleStringDiv = document.querySelector(
 const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayer;
 const button = document.querySelector("button") as HTMLButtonElement;
 
-async function newScramble() {
+async function loadNewScramble() {
   scrambleStringDiv.textContent = "⏳";
   twistyPlayer.alg = "";
   const scramble = await randomScrambleForEvent(select.value);
@@ -18,8 +18,8 @@ async function newScramble() {
   twistyPlayer.alg = scramble;
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  button.addEventListener("click", newScramble);
+window.addEventListener("DOMContentLoaded", async () => {
+  button.addEventListener("click", loadNewScramble);
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";
     try {
@@ -30,8 +30,8 @@ window.addEventListener("DOMContentLoaded", () => {
     twistyPlayer.visualization = ["clock", "sq1"].includes(select.value)
       ? "2D"
       : "3D";
-    setTimeout(newScramble, 100);
+    setTimeout(loadNewScramble, 100);
   });
 
-  newScramble();
+  void loadNewScramble();
 });

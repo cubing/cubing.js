@@ -204,7 +204,7 @@ export class Twisty3DSceneWrapper
         ]),
       );
 
-    this.setCurrentTwisty3DPuzzleWrapper(scene, twisty3DPuzzleWrapper);
+    void this.setCurrentTwisty3DPuzzleWrapper(scene, twisty3DPuzzleWrapper);
   }
 }
 

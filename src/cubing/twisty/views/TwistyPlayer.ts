@@ -247,7 +247,7 @@ export class TwistyPlayer
   #visualizationWrapperElem = document.createElement("div"); // TODO: Better pattern.
   #errorElem = document.createElement("div"); // TODO: Better pattern.
   #alreadyConnected = false; // TODO: support resetting
-  async connectedCallback(): Promise<void> {
+  connectedCallback(): void {
     this.addCSS(twistyPlayerCSS);
     waitForIntersection(this);
   }

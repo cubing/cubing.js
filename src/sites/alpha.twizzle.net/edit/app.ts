@@ -164,7 +164,7 @@ export class App {
   #autofixEnabled: boolean = true;
   // TODO: factor this out into a class
   async #onSetupOrAlgChange() {
-    (async () => {
+    void (async () => {
       const [originalPuzzleID, puzzleAlgWithIssue, puzzleSetupAlgWithIssue] =
         await Promise.all([
           this.twistyPlayer.experimentalModel.puzzleID.get(),
@@ -663,7 +663,7 @@ class ControlPane {
   }
 
   private screenshot(): void {
-    this.app.twistyPlayer.experimentalDownloadScreenshot();
+    void this.app.twistyPlayer.experimentalDownloadScreenshot();
   }
 
   private connectInput(): void {

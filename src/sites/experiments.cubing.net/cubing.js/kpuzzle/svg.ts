@@ -21,9 +21,7 @@ class SVGDisplay {
   }
 }
 
-(async () => {
-  const puzzle = puzzles["3x3x3"];
-  const svgDisplay = new SVGDisplay(await puzzle.kpuzzle(), await puzzle.svg());
-  document.body.appendChild(svgDisplay.element());
-  svgDisplay.setAlg(Alg.fromString("R U R'"));
-})();
+const puzzle = puzzles["3x3x3"];
+const svgDisplay = new SVGDisplay(await puzzle.kpuzzle(), await puzzle.svg());
+document.body.appendChild(svgDisplay.element());
+svgDisplay.setAlg(Alg.fromString("R U R'"));

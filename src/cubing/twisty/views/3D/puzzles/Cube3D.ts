@@ -908,7 +908,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       ) {
         const [rotate, offsetX, offsetY] =
           pictureStickerCoords[orbit][orbitPieceIdx][i];
-        (async () => {
+        void (async () => {
           const addImageSticker = async (hint: boolean) => {
             const texture: Texture = await (hint
               ? this.hintSprite
@@ -977,8 +977,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
           //   CORNERS: 3500,
           // } as Record<string, number>)[orbit];
           // if (orbit === "CENTERS" && orbitPieceIdx === 5) {
-          addImageSticker(true);
-          addImageSticker(false);
+          void addImageSticker(true);
+          void addImageSticker(false);
           // } else {
           //   await this.sprite;
           //   await this.hintSprite;

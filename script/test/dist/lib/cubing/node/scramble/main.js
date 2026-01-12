@@ -6,4 +6,4 @@ await needPath(
   "make build-lib-js",
 );
 
-import("./test.js");
+await import("./test.js");
