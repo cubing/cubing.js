@@ -24,14 +24,14 @@ default:
 	@echo ""
 
 .PHONY: check
-check: clean lint test-all build check-package.json
+check: lint test-all build check-package.json
 
 # By convention, we'd normally place `build-bin` first, but `build-lib` is the main target and
 # it can be less confusing to build first (especially if the build aborts with
 # an error).
 
 .PHONY: build
-build: clean build-lib build-bin build-sites
+build: build-lib build-bin build-sites
 
 .PHONY: build-lib
 build-lib: build-lib-js build-lib-types
@@ -95,25 +95,30 @@ test-info:
 	@echo "Run one of the following."
 	@echo "(Time estimates are based on a fast computer.)"
 	@echo ""
-	@echo "    make test-ts (≈2s, unit tests only)"
-	@echo ""
-	@echo "    make test-src   (≈5s, includes \`make test-ts\`)"
-	@echo "    make test-build (≈13s)"
+	@echo "    make test-src   (≈3s)"
+	@echo "    make test-build (≈14s)"
 	@echo "    make test-dist  (≈10s)"
 	@echo ""
-	@echo "    make test-all  (≈27s, runs all of the above)"
-	@echo "    make test-fast (≈2s, runs a subset of the above)"
+	@echo "    make test-all (≈27s, includes all of the above)"
+	@echo ""
+	@echo "Also, if you want to run all possible checks in the project, run:"
+	@echo ""
+	@echo "    make check (≈40s, includes all of the above)"
+	@echo ""
+	@echo "If you want the best \"bang for your buck\" without running everything, run:"
+	@echo ""
+	@echo "    make check-fast (≈2.5s, includes a subset of the above)"
 	@echo ""
 	@echo "Press enter to exit this message."
 	@read
 
 # The following deps are in a custom order so that the more "useful" tests are first.
 # In case of failure, this is likely to be more helpful.
-.PHONY: test-fast
-test-fast: update-dependencies \
+.PHONY: check-fast
+check-fast: update-dependencies \
 	build-lib-js test-ts-bun-fast build-bin build-sites \
 	lint-biome \
-	test-src-import-restrictions \
+	lint-import-restrictions \
 	test-dist-lib-node-import \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-bin-shebang
@@ -122,12 +127,7 @@ test-fast: update-dependencies \
 test-all: test-src test-build test-dist
 
 .PHONY: test-src
-test-src: update-dependencies \
-	test-ts \
-	lint-ci \
-	test-src-tsc-main \
-	test-src-tsc-bin \
-	test-src-import-restrictions
+test-src: test-ts
 
 .PHONY: test-ts
 test-ts: test-ts-bun test-ts-dom
@@ -155,18 +155,6 @@ install-playwright: update-dependencies
 .PHONY: test-ts-dom-with-coverage
 test-ts-dom-with-coverage: update-dependencies
 	${WEB_TEST_RUNNER} --coverage
-
-.PHONY: test-src-import-restrictions
-test-src-import-restrictions: update-dependencies
-	${BUN_RUN} ./script/test/src/import-restrictions/main.ts
-
-.PHONY: test-src-tsc-main
-test-src-tsc-main: update-dependencies
-	${BUN_DX} --package typescript tsc -- --project ./tsconfig.json
-
-.PHONY: test-src-tsc-bin
-test-src-tsc-bin:
-	${BUN_DX} --package typescript tsc -- --project ./src/bin/tsconfig.json
 
 .PHONY: test-build
 test-build: \
@@ -251,7 +239,7 @@ check-engines: update-dependencies
 	@${BUN_RUN} "./script/check-engine-versions.ts"
 
 .PHONY: lint
-lint: lint-biome check-schemas
+lint: lint-biome lint-import-restrictions lint-tsc-main lint-tsc-bin check-schemas
 
 .PHONY: lint-biome
 lint-biome: update-dependencies
@@ -260,6 +248,18 @@ lint-biome: update-dependencies
 .PHONY: lint-ci
 lint-ci: update-dependencies
 	${BIOME} ci
+
+.PHONY: lint-import-restrictions
+lint-import-restrictions: update-dependencies
+	${BUN_RUN} ./script/lint/import-restrictions/main.ts
+
+.PHONY: lint-tsc-main
+lint-tsc-main: update-dependencies
+	${BUN_DX} --package typescript tsc -- --project ./tsconfig.json
+
+.PHONY: lint-tsc-bin
+lint-tsc-bin:
+	${BUN_DX} --package typescript tsc -- --project ./src/bin/tsconfig.json
 
 .PHONY: check-schemas
 check-schemas: update-dependencies
@@ -280,7 +280,7 @@ prepack: clean build test-dist-lib-node-import test-dist-lib-node-scramble test-
 prepublishOnly: update-dependencies
 	# Lucas is usually the one publishing, and `mak` is over twice as fast. So we use it when available.
 	# https://github.com/lgarron/mak
-	mak check build || make check build
+	mak clean check build || make clean check build
 
 .PHONY: postpublish
 postpublish: update-cdn update-create-cubing-app deploy

@@ -66,7 +66,7 @@ make dev
 # Now visit http://cubing.localhost:3333
 ```
 
-To quickly check any changes for issues, try `make test-fast`. Run `make test` for more thorough testing options.
+To quickly check any changes for issues, try `make check-fast`. Run `make check` to run all possible checks.
 
 ### Developing on Windows
 
