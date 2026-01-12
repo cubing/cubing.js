@@ -30,7 +30,7 @@ async function unsafeEncryptBlockWithIV(
   plaintextBlock: BufferSource | Uint8Array,
   iv: BufferSource | Uint8Array,
 ): Promise<ArrayBuffer> {
-  const cryptoResult: ArrayBuffer = await window.crypto.subtle.encrypt(
+  const cryptoResult: ArrayBuffer = await globalThis.crypto.subtle.encrypt(
     {
       name: AES_CBC,
       iv: iv as BufferSource,
@@ -65,7 +65,7 @@ export async function unsafeDecryptBlock(
   cbcCiphertext.set(new Uint8Array(ciphertextBlock as Uint8Array), 0);
   cbcCiphertext.set(new Uint8Array(paddingBlock), blockSize);
 
-  const cryptoResult: ArrayBuffer = await window.crypto.subtle.decrypt(
+  const cryptoResult: ArrayBuffer = await globalThis.crypto.subtle.decrypt(
     {
       name: AES_CBC,
       iv: zeros,

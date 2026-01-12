@@ -103,7 +103,7 @@ test-info:
 	@echo ""
 	@echo "Also, if you want to run all possible checks in the project, run:"
 	@echo ""
-	@echo "    make check (≈40s, includes all of the above)"
+	@echo "    make check (≈46s, includes all of the above)"
 	@echo ""
 	@echo "If you want the best \"bang for your buck\" without running everything, run:"
 	@echo ""
@@ -239,7 +239,7 @@ check-engines: update-dependencies
 	@${BUN_RUN} "./script/check-engine-versions.ts"
 
 .PHONY: lint
-lint: lint-biome lint-import-restrictions lint-tsc-main lint-tsc-lib lint-tsc-bin check-schemas
+lint: lint-biome lint-import-restrictions lint-tsc check-schemas
 
 .PHONY: lint-biome
 lint-biome: update-dependencies
@@ -253,6 +253,9 @@ lint-ci: update-dependencies
 lint-import-restrictions: update-dependencies
 	${BUN_RUN} ./script/lint/import-restrictions/main.ts
 
+.PHONY: lint-tsc
+lint-tsc: lint-tsc-main lint-tsc-lib lint-tsc-lib-no-dom lint-tsc-bin
+
 .PHONY: lint-tsc-main
 lint-tsc-main: update-dependencies
 	${BUN_DX} --package typescript tsc -- --project ./tsconfig.json
@@ -260,6 +263,10 @@ lint-tsc-main: update-dependencies
 .PHONY: lint-tsc-lib
 lint-tsc-lib: update-dependencies
 	${BUN_DX} --package typescript tsc -- --project ./tsconfig.lib.jsonc
+
+.PHONY: lint-tsc-lib-no-dom
+lint-tsc-lib-no-dom: update-dependencies
+	${BUN_DX} --package typescript tsc -- --project ./tsconfig.lib.no-dom.jsonc
 
 .PHONY: lint-tsc-bin
 lint-tsc-bin: update-dependencies

@@ -72,7 +72,7 @@ async function instantiateModuleWorkerAttempt(
       const worker = (await constructWorker(url, {
         type: "module",
       })) as Worker & {
-        nodeWorker?: import("worker_threads").Worker;
+        nodeWorker?: import("node:worker_threads").Worker;
       } & BunWorker;
 
       worker.unref?.(); // Unref in `bun`.

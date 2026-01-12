@@ -1,10 +1,11 @@
+// TODO: deprecate these exports?
+export type {
+  ExperimentalAlgLeafEvent as MoveEvent,
+  ExperimentalOrientationEvent as OrientationEvent,
+} from "../stream";
 export { enableDebugLogging } from "./debug";
 export { debugKeyboardConnect, KeyboardPuzzle } from "./keyboard";
-export type {
-  AlgLeafEvent as MoveEvent,
-  BluetoothPuzzle,
-  OrientationEvent,
-} from "./smart-puzzle/bluetooth-puzzle";
+export type { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
 export { connectSmartPuzzle } from "./smart-puzzle/connect";
 export { GanCube } from "./smart-puzzle/gan";
 export { GiiKERCube } from "./smart-puzzle/giiker";

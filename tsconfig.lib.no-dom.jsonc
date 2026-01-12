@@ -1,0 +1,21 @@
+{
+  "schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.lib.jsonc",
+  "compilerOptions": {
+    "types": [
+      // Specifying a deeply nested type file like this is bad practice, but the
+      // `@types/node` types are constructed well and including this one file
+      // does a great job of preventing much more complicated workarounds.
+      //
+      // Hopefully some day this won't be necessary:
+      // https://github.com/nodejs/node/issues/43583
+      "./node_modules/@types/node/worker_threads.d.ts"
+    ]
+  },
+  "exclude": [
+    "./**/*.test.dom.ts",
+    "./**/*.test.ts",
+    "./src/cubing/bluetooth/",
+    "./src/cubing/twisty/"
+  ]
+}

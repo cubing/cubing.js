@@ -1,16 +1,16 @@
 import { Quaternion } from "three/src/math/Quaternion.js";
 import { Vector3 } from "three/src/math/Vector3.js";
 import type {
-  AlgLeafEvent,
-  OrientationEvent,
-} from "./smart-puzzle/bluetooth-puzzle";
+  ExperimentalAlgLeafEvent,
+  ExperimentalOrientationEvent,
+} from "../stream";
 
 // TODO: Combine orientation and alg leaves into a single event to handle quaternion remapping.
 export interface StreamTransformer {
   // Modifies the input.
-  transformAlgLeaf(algLeafEvent: AlgLeafEvent): void;
+  transformAlgLeaf(algLeafEvent: ExperimentalAlgLeafEvent): void;
   // Modifies the input.
-  transformOrientation(orientationEvent: OrientationEvent): void;
+  transformOrientation(orientationEvent: ExperimentalOrientationEvent): void;
 }
 
 function maxAxis(v: Vector3): string {
@@ -45,11 +45,13 @@ const m: { [s: string]: Quaternion } = {
 export class BasicRotationTransformer implements StreamTransformer {
   // private reorientQuat = new Quaternion();
 
-  public transformAlgLeaf(_algLeafEvent: AlgLeafEvent): void {
+  public transformAlgLeaf(_algLeafEvent: ExperimentalAlgLeafEvent): void {
     // Nothing to do.
   }
 
-  public transformOrientation(orientationEvent: OrientationEvent): void {
+  public transformOrientation(
+    orientationEvent: ExperimentalOrientationEvent,
+  ): void {
     const { x, y, z, w } = orientationEvent.quaternion;
     const quat = new Quaternion(x, y, z, w);
 

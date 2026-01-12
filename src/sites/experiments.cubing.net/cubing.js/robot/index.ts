@@ -5,9 +5,9 @@ import {
   connectSmartPuzzle,
   debugKeyboardConnect,
 } from "../../../../cubing/bluetooth";
-import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
 import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot";
 import type { GanRobot } from "../../../../cubing/bluetooth/smart-robot/GanRobot";
+import type { ExperimentalAlgLeafEvent } from "../../../../cubing/stream";
 import { TwizzleStreamServer } from "../../../../cubing/stream/twizzle/TwizzleStream";
 import "../../../../cubing/twisty";
 import type { TwistyPlayer } from "../../../../cubing/twisty";
@@ -173,7 +173,7 @@ class RobotDemo {
     }
   }
 
-  recordAlgLeaf(algLeafEvent: AlgLeafEvent): void {
+  recordAlgLeaf(algLeafEvent: ExperimentalAlgLeafEvent): void {
     localStorage[this.recorderStorageName!] = `${
       (localStorage[this.recorderStorageName!] ?? "") as string
     }${algLeafEvent.latestAlgLeaf.toString()} // ${Date.now()}\n`;

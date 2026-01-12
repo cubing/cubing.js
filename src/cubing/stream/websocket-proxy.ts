@@ -1,5 +1,4 @@
-import type { MoveEvent, OrientationEvent } from "../bluetooth";
-import type { ProxyEvent } from "./proxy-event";
+import type { AlgLeafEvent, OrientationEvent, ProxyEvent } from "./events";
 
 export class WebSocketProxySender {
   protected websocket: WebSocket;
@@ -10,7 +9,7 @@ export class WebSocketProxySender {
     this.websocket.onmessage = this.onmessage.bind(this);
   }
 
-  public sendMoveEvent(e: MoveEvent): void {
+  public sendMoveEvent(e: AlgLeafEvent): void {
     (e as any).latestAlgLeaf = e.latestAlgLeaf.toString(); // TODO
     this.sendProxyEvent({
       event: "move",

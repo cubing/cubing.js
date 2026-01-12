@@ -6,8 +6,9 @@ import {
   type GoCube,
   type OrientationEvent,
 } from "../../../../cubing/bluetooth";
-import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
+
 import {
+  type ExperimentalAlgLeafEvent,
   type ExperimentalProxyEvent,
   ExperimentalWebSocketProxySender,
 } from "../../../../cubing/stream";
@@ -72,7 +73,7 @@ const fn = async (
   controlBar.classList.add("control-bar");
   swipeWrapper.appendChild(controlBar);
 
-  function algLeafListener(e: AlgLeafEvent) {
+  function algLeafListener(e: ExperimentalAlgLeafEvent) {
     // TODO: This is a total hack. Needs to be pushed down into the keyboard map.
     if (getPuzzleID() !== "3x3x3") {
       const move = e.latestAlgLeaf.as(Move);

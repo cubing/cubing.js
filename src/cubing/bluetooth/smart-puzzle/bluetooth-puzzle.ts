@@ -1,35 +1,14 @@
-import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { KPattern } from "../../kpuzzle/KPattern";
+import type {
+  ExperimentalAlgLeafEvent,
+  ExperimentalOrientationEvent,
+} from "../../stream";
 import {
   BasicRotationTransformer,
   type StreamTransformer,
 } from "../transformer";
 
 /******** BluetoothPuzzle ********/
-
-// TODO: Use actual `CustomEvent`s?
-// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
-/** @category Smart Puzzles */
-export interface AlgLeafEvent {
-  latestAlgLeaf: AlgLeaf;
-  timeStamp: number;
-  debug?: Record<string, unknown>;
-  pattern?: KPattern;
-  quaternion?: any; // TODO: Unused
-}
-
-// TODO: Only use the `quaternion` field in the `AlgLeafEvent`?
-/** @category Smart Puzzles */
-export interface OrientationEvent {
-  quaternion: {
-    x: number;
-    y: number;
-    z: number;
-    w: number;
-  };
-  timeStamp: number;
-  debug?: Record<string, unknown>;
-}
 
 export interface BluetoothConfig<T> {
   connect:
@@ -52,8 +31,10 @@ export interface BluetoothConfig<T> {
 /** @category Smart Puzzles */
 export abstract class BluetoothPuzzle extends EventTarget {
   public transformers: StreamTransformer[] = [];
-  protected listeners: Array<(e: AlgLeafEvent) => void> = []; // TODO: type
-  protected orientationListeners: Array<(e: OrientationEvent) => void> = []; // TODO: type
+  protected listeners: Array<(e: ExperimentalAlgLeafEvent) => void> = []; // TODO: type
+  protected orientationListeners: Array<
+    (e: ExperimentalOrientationEvent) => void
+  > = []; // TODO: type
 
   public abstract name(): string | undefined;
   public abstract disconnect(): void; // TODO: Can we make this reutrn (async) on success?
@@ -63,11 +44,15 @@ export abstract class BluetoothPuzzle extends EventTarget {
     throw new Error("cannot get pattern");
   }
 
-  public addAlgLeafListener(listener: (e: AlgLeafEvent) => void): void {
+  public addAlgLeafListener(
+    listener: (e: ExperimentalAlgLeafEvent) => void,
+  ): void {
     this.listeners.push(listener);
   }
 
-  public addOrientationListener(listener: (e: OrientationEvent) => void): void {
+  public addOrientationListener(
+    listener: (e: ExperimentalOrientationEvent) => void,
+  ): void {
     this.orientationListeners.push(listener);
   }
 
@@ -75,7 +60,7 @@ export abstract class BluetoothPuzzle extends EventTarget {
     this.transformers.push(new BasicRotationTransformer());
   }
 
-  protected dispatchAlgLeaf(algLeaf: AlgLeafEvent): void {
+  protected dispatchAlgLeaf(algLeaf: ExperimentalAlgLeafEvent): void {
     for (const transformer of this.transformers) {
       transformer.transformAlgLeaf(algLeaf);
     }
@@ -84,7 +69,9 @@ export abstract class BluetoothPuzzle extends EventTarget {
     }
   }
 
-  protected dispatchOrientation(orientationEvent: OrientationEvent): void {
+  protected dispatchOrientation(
+    orientationEvent: ExperimentalOrientationEvent,
+  ): void {
     for (const transformer of this.transformers) {
       transformer.transformOrientation(orientationEvent);
     }

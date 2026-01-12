@@ -25,6 +25,7 @@ jobs:
       - run: make lint-ci
       - run: make lint-tsc-main
       - run: make lint-tsc-lib
+      - run: make lint-tsc-lib-no-dom
       - run: make lint-tsc-bin
       - run: make lint-import-restrictions
       - run: make check-schemas

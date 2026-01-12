@@ -5,11 +5,13 @@
  */
 
 export type {
+  AlgLeafEvent as ExperimentalAlgLeafEvent,
+  OrientationEvent as ExperimentalOrientationEvent,
   ProxyEvent as ExperimentalProxyEvent,
   ProxyMoveEvent as ExperimentalProxyMoveEvent,
   ProxyOrientationEvent as ExperimentalProxyOrientationEvent,
   ProxyResetEvent as ExperimentalProxyResetEvent,
-} from "./proxy-event";
+} from "./events";
 export { TwizzleStreamServer as ExperimentalTwizzleStreamServer } from "./twizzle/TwizzleStream";
 export {
   WebSocketProxyReceiver as ExperimentalWebSocketProxyReceiver,

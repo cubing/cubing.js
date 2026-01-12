@@ -50,7 +50,7 @@ function nodeEndpoint(parentPort: NodeMessagePort | NodeWorker): Worker & {
     },
     // start: nep.start && nep.start.bind(nep),
   } as Worker & {
-    nodeWorker?: import("worker_threads").Worker;
+    nodeWorker?: import("node:worker_threads").Worker;
   };
 
   /**  Unref the parent port to prevent `node` from hanging:
