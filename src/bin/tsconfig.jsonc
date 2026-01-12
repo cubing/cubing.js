@@ -2,6 +2,7 @@
   "schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "skipLibCheck": true,
     "types": ["web-bluetooth", "dom-speech-recognition", "node"],
     "paths": {
       // Workaround for the `bin` build: https://github.com/cubing/cubing.js/issues/292

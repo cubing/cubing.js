@@ -2,6 +2,7 @@
   "schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.lib.jsonc",
   "compilerOptions": {
+    "skipLibCheck": true,
     "types": [
       // Specifying a deeply nested type file like this is bad practice, but the
       // `@types/node` types are constructed well and including this one file
