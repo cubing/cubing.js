@@ -224,7 +224,10 @@ format: update-dependencies
 	${BIOME} check --write
 
 .PHONY: setup
-setup: bun-required update-dependencies check-engines install-playwright
+setup: setup-without-playwright install-playwright
+
+.PHONY: setup-without-playwright
+setup-without-playwright: bun-required update-dependencies check-engines
 
 .PHONY: bun-required
 bun-required:

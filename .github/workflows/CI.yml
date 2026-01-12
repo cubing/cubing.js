@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: make setup
+      - run: make setup-without-playwright
       - run: make lint-ci
       - run: make lint-tsc-main
       - run: make lint-tsc-lib
@@ -52,7 +52,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: make setup
+      - run: make setup-without-playwright
       - run: make build-lib-js
       - run: make build-bin
       - run: make build-lib-types
@@ -133,5 +133,5 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: make setup
+      - run: make setup-without-playwright
       - run: time make check-fast
