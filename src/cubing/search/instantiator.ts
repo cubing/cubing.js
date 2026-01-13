@@ -1,3 +1,4 @@
+import type { NodeWorker } from "../vendor/apache/comlink-everywhere/node-adapter";
 import {
   constructWorker,
   wrap,
@@ -13,6 +14,8 @@ import {
 
 export interface WorkerOutsideAPI {
   terminate: () => void; // `node` can return a `Promise` with an exit code, but we match the web worker API.
+  ref: () => void;
+  unref: () => void;
 }
 
 export interface InsideOutsideAPI {
@@ -72,7 +75,7 @@ async function instantiateModuleWorkerAttempt(
       const worker = (await constructWorker(url, {
         type: "module",
       })) as Worker & {
-        nodeWorker?: import("node:worker_threads").Worker;
+        nodeWorker?: NodeWorker;
       } & BunWorker;
 
       worker.unref?.(); // Unref in `bun`.
@@ -85,7 +88,7 @@ async function instantiateModuleWorkerAttempt(
       const onFirstMessage = (messageData: string) => {
         if (messageData === "comlink-exposed") {
           // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
-          resolve(wrapWithTerminate(worker));
+          resolve(wrapWithTerminateAndRefs(worker));
         } else {
           reject(
             new Error(`wrong module instantiation message ${messageData}`),
@@ -127,7 +130,7 @@ export async function instantiateModuleWorkerDirectlyForBrowser(): Promise<Insid
       const onFirstMessage = (messageData: string) => {
         if (messageData === "comlink-exposed") {
           // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
-          resolve(wrapWithTerminate(worker));
+          resolve(wrapWithTerminateAndRefs(worker));
         } else {
           reject(
             new Error(`wrong module instantiation message ${messageData}`),
@@ -147,10 +150,14 @@ export async function instantiateModuleWorkerDirectlyForBrowser(): Promise<Insid
   });
 }
 
-function wrapWithTerminate(worker: Worker): InsideOutsideAPI {
+function wrapWithTerminateAndRefs(worker: Worker): InsideOutsideAPI {
   const insideAPI = wrap<WorkerInsideAPI>(worker);
   const terminate = worker.terminate.bind(worker);
-  return { insideAPI, outsideAPI: { terminate } };
+  const nodeWorker = (worker as Worker & { nodeWorker?: NodeWorker })
+    .nodeWorker;
+  const ref = nodeWorker?.ref?.bind(nodeWorker) ?? (() => {});
+  const unref = nodeWorker?.unref?.bind(nodeWorker) ?? (() => {});
+  return { insideAPI, outsideAPI: { terminate, ref, unref } };
 }
 
 export const allInsideOutsideAPIPromises: Promise<InsideOutsideAPI>[] = [];
@@ -164,14 +171,6 @@ export async function instantiateWorker(): Promise<InsideOutsideAPI> {
     searchOutsideDebugGlobals.scramblePrefetchLevel,
   );
   return insideOutsideAPIPromise;
-}
-
-export async function mapToAllWorkers(
-  f: (worker: InsideOutsideAPI) => void,
-): Promise<void> {
-  await Promise.all(
-    allInsideOutsideAPIPromises.map((worker) => worker.then(f)),
-  );
 }
 
 type FallbackStrategyInfo = [

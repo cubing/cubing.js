@@ -3,6 +3,8 @@ import type {
   Worker as NodeWorker,
 } from "node:worker_threads";
 
+export type { NodeWorker };
+
 /**
  * Copyright 2019 Google Inc. All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +60,7 @@ function nodeEndpoint(parentPort: NodeMessagePort | NodeWorker): Worker & {
    * - https://github.com/cubing/cubing.js/issues/358
    * - https://github.com/nodejs/node/issues/53036#issuecomment-2118106710
    */
-  parentPortAsNodeWorker.unref();
+  // parentPortAsNodeWorker.unref();
 
   return constructedWorker;
 }

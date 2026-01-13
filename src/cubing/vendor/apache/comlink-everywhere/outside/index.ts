@@ -14,7 +14,7 @@ async function nodeWorker(
     "node:worker_threads",
   );
   const worker = new NodeWorker(source, options);
-  worker.unref();
+  // worker.unref();
   return nodeEndpoint(worker);
 }
 
