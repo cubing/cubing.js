@@ -24,6 +24,7 @@ source <(puzzle-geometry --completions zsh)
 
 */
 
+import { basename } from "node:path";
 import { argv } from "node:process";
 import {
   argument,
@@ -50,7 +51,6 @@ import {
   PuzzleGeometry,
   parsePuzzleDescription,
 } from "cubing/puzzle-geometry";
-import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 import { packageVersion } from "../metadata/packageVersion";
 
@@ -299,7 +299,7 @@ The recognized puzzle names are: ${Object.keys(puzzleList)
     }),
   ),
   {
-    programName: new Path(argv[1]).basename.path,
+    programName: basename(argv[1]),
     description: message`
 Examples:
 

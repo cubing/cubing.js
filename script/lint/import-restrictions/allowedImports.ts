@@ -50,11 +50,11 @@ export const mainAllowedImports: AllowedImports = {
   // src/bin
   "src/bin": {
     static: [
+      "node:path",
       "node:process",
 
       "@optique/core",
       "@optique/run",
-      "path-class",
       "printable-shell-command",
 
       "cubing",

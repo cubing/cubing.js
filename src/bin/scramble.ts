@@ -24,6 +24,7 @@ source <(scramble --completions zsh)
 
 */
 
+import { basename } from "node:path";
 import { argv } from "node:process";
 import {
   argument,
@@ -41,7 +42,6 @@ import type { Alg } from "cubing/alg";
 import { eventInfo, twizzleEvents } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
-import { Path } from "path-class";
 import { packageVersion } from "../metadata/packageVersion";
 
 const outputFormats = ["auto", "text", "link", "json-text"] as const;
@@ -86,7 +86,7 @@ const args = run(
     }),
   ),
   {
-    programName: new Path(argv[1]).basename.path,
+    programName: basename(argv[1]),
     description: message`Example: order 3x3x3 "R U R' U R U2' R'"`,
     help: "option",
     completion: {
