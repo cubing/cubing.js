@@ -64,7 +64,7 @@ export const mainAllowedImports: AllowedImports = {
   },
   // src/metadata
   "src/metadata": {
-    static: ["@optique/core", "@optique/run", "path-class"],
+    static: ["package.json"],
   },
   // src/cubing
   "src/cubing/alg": {},
