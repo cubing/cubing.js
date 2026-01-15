@@ -4,7 +4,7 @@
   "files": {
     "includes": [
       "**",
-      "!.temp",
+      "!!.temp",
       "!dist",
       "!**/*/index.d.ts",
       "!src/cubing/vendor/mit/cs0x7f/**/*",
