@@ -17,7 +17,8 @@
     "./script/test/dist/lib/cubing/build-size/src/total.js",
     "./script/test/dist/lib/cubing/node/",
     "./script/test/dist/lib/cubing/perf/",
-    "./src/bin/"
+    "./src/bin/",
+    "./vendor/"
   ],
   "typedocOptions": {
     "out": "dist/sites/js.cubing.net/cubing/api",

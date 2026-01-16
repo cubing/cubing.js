@@ -99,11 +99,7 @@ export const mainAllowedImports: AllowedImports = {
     static: ["src/cubing/alg", "src/cubing/search/cubing-private"],
   },
   "src/cubing/search": {
-    static: [
-      "src/cubing/alg",
-      "src/cubing/notation",
-      "src/cubing/vendor/apache/comlink-everywhere",
-    ],
+    static: ["comlink", "src/cubing/alg", "src/cubing/notation"],
   },
   "src/cubing/search/inside": {
     static: [
@@ -161,9 +157,6 @@ export const mainAllowedImports: AllowedImports = {
   },
   "src/cubing/vendor": {
     static: ["src/cubing/alg", "random-uint-below"],
-  },
-  "src/cubing/vendor/apache/comlink-everywhere": {
-    static: ["comlink"],
   },
   "src/cubing/vendor/mit/cs0x7f/cstimer/src/js/scramble/444-solver.ts": {
     static: ["src/cubing/search/cubing-private"],

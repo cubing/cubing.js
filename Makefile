@@ -223,6 +223,12 @@ test-dist-bin-npm-exec: build-bin
 format: update-dependencies
 	${BIOME} check --write
 
+.PHONY: setup-comlink-link
+setup-comlink-link:
+	cd ${HOME} && git clone https://github.com/lgarron/comlink
+	cd ${HOME}/comlink && git checkout portabilitymaxxing && git rev-parse HEAD && npm install && npm run build && bun link
+	bun link comlink
+
 .PHONY: setup
 setup: setup-without-playwright install-playwright
 

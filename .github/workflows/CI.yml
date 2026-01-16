@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - run: make setup-comlink-link
       - run: make setup-without-playwright
       - run: make lint-ci
       - run: make lint-tsc-main
@@ -52,6 +53,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - run: make setup-comlink-link
       - run: make setup-without-playwright
       - run: make build-lib-js
       - run: make build-bin
@@ -78,6 +80,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - run: make setup-comlink-link
       - run: make setup
       - run: make test-ts-bun-with-coverage
       - run: make test-ts-dom-with-coverage
@@ -100,6 +103,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - run: make setup-comlink-link
       - run: make setup
       - run: make build-lib-js
       - run: make test-dist-lib-node-import
@@ -133,5 +137,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - run: make setup-comlink-link
       - run: make setup-without-playwright
       - run: time make check-fast
