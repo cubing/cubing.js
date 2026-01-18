@@ -11,7 +11,6 @@
   },
   "include": ["script", "src"],
   "exclude": [
-    "./.temp/",
     "./dist/",
     // Avoid indexing `dist`.
     "./script/test/dist/lib/cubing/build-size/src/total.js",

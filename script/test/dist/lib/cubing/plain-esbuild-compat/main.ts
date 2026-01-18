@@ -8,7 +8,7 @@ import {
 import { needPath } from "../../../../../lib/needPath.js";
 
 // TODO: relative
-const OUT_DIR = "./.temp/plain-esbuild-compat";
+const OUT_DIR = await Path.makeTempDir();
 
 await needPath(
   Path.resolve("../../../../../../dist/lib/cubing", import.meta.url),

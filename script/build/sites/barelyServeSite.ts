@@ -74,7 +74,9 @@ async function writeVersionJSON(siteFolder: Path) {
 }
 
 export async function barelyServeSite(srcFolder: string, dev: boolean) {
-  const outDir = new Path(dev ? ".temp/dev" : "dist").join(srcFolder);
+  const outDir = new Path(
+    dev ? await Path.makeTempDir("cubing-js-") : "dist",
+  ).join(srcFolder);
   await barelyServe({
     entryRoot: new Path("src").join(srcFolder).path,
     outDir: outDir.path, // TODO: accept `Path` arg in the `barelyServe(…)` signature?

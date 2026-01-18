@@ -1,7 +1,5 @@
 import { Path } from "path-class";
 
-export const tempPath = new Path("./.temp");
-
 export const SRC_CUBING = new Path("./src/cubing");
 
 export const JAVASCRIPT_INDEX = new Path("index.js");

@@ -1,6 +1,6 @@
 import { type BuildOptions, build } from "esbuild";
 import { packageEntryPointsWithSearchWorkerEntry } from "../common/package-info";
-import { DIST_LIB_CUBING, tempPath } from "../common/paths";
+import { DIST_LIB_CUBING } from "../common/paths";
 
 // In theory we could set `packages: "external"` here and rely on `make
 // test-src-import-restrictions`, but this is safer.
@@ -19,9 +19,6 @@ export const esmOptions: BuildOptions = {
   sourcemap: true,
   //
   external: external,
-  metafile: true,
 };
 
-const result = await build(esmOptions);
-
-await tempPath.join("esbuild-metafile.json").writeJSON(result.metafile);
+await build(esmOptions);

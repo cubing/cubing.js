@@ -1,4 +1,3 @@
-/.temp
 /dist
 /node_modules
 
@@ -18,3 +17,6 @@
 /search/index.d.ts
 /stream/index.d.ts
 /twisty/index.d.ts
+
+# Old temp dir
+/.temp

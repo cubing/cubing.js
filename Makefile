@@ -142,7 +142,7 @@ test-ts-bun-fast: update-dependencies
 
 .PHONY: test-ts-bun-with-coverage
 test-ts-bun-with-coverage: update-dependencies install-playwright
-	${BUN} test
+	${BUN} test --coverage
 
 .PHONY: test-ts-dom
 test-ts-dom: update-dependencies

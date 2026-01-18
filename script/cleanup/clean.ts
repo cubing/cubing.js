@@ -21,6 +21,7 @@ for (const packageName of packageNames) {
 
 await Promise.all([
   rm("./dist", GET_IT_DONE),
-  rm("./.temp", GET_IT_DONE),
   rm("./package-lock.json", GET_IT_DONE),
+  // Old temp dir
+  rm("./.temp", GET_IT_DONE),
 ]);
