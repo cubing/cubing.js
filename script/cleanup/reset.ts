@@ -5,7 +5,6 @@
 // NOTE: This only cleans what is needed for `make reset` *on top of* `make clean`.
 
 import { rm } from "node:fs/promises";
-
-const GET_IT_DONE = { recursive: true, force: true, maxRetries: 5 };
+import { GET_IT_DONE } from "./clean";
 
 await Promise.all([rm("./node_modules", GET_IT_DONE)]);

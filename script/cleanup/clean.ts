@@ -8,20 +8,24 @@ import { join } from "node:path";
 import { packageNames } from "../build/common/packageNames";
 
 export const TYPESCRIPT_DECLARATION_INDEX_STRING = "index.d.ts";
+export const GET_IT_DONE = { recursive: true, force: true, maxRetries: 5 };
 
-const GET_IT_DONE = { recursive: true, force: true, maxRetries: 5 };
-
-for (const packageName of packageNames) {
-  const indexFileName = join(packageName, TYPESCRIPT_DECLARATION_INDEX_STRING);
-  await rm(indexFileName, { force: true });
-  if (existsSync(packageName)) {
-    await rmdir(packageName);
+if (import.meta.main) {
+  for (const packageName of packageNames) {
+    const indexFileName = join(
+      packageName,
+      TYPESCRIPT_DECLARATION_INDEX_STRING,
+    );
+    await rm(indexFileName, { force: true });
+    if (existsSync(packageName)) {
+      await rmdir(packageName);
+    }
   }
-}
 
-await Promise.all([
-  rm("./dist", GET_IT_DONE),
-  rm("./package-lock.json", GET_IT_DONE),
-  // Old temp dir
-  rm("./.temp", GET_IT_DONE),
-]);
+  await Promise.all([
+    rm("./dist", GET_IT_DONE),
+    rm("./package-lock.json", GET_IT_DONE),
+    // Old temp dir
+    rm("./.temp", GET_IT_DONE),
+  ]);
+}
