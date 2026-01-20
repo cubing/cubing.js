@@ -295,4 +295,4 @@ export const insideAPI = {
   },
 };
 
-export type WorkerInsideAPI = typeof insideAPI;
+export type WorkerAPI = typeof insideAPI;

@@ -4,7 +4,7 @@ import { DIST_LIB_CUBING, tempPath } from "../common/paths";
 
 // In theory we could set `packages: "external"` here and rely on `make
 // test-src-import-restrictions`, but this is safer.
-export const external = ["three/src/*", "comlink", "random-uint-below"];
+export const external = ["three/src/*", "random-uint-below"];
 
 export const esmOptions: BuildOptions = {
   // TODO: construct entry points based on `exports` and add tests.

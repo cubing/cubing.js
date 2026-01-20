@@ -2,75 +2,21 @@ import { Alg } from "../alg";
 import type { KPuzzle } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KPattern } from "../kpuzzle/KPattern";
-import type { PrefetchLevel } from "./inside/api";
+import type { PrefetchLevel, WorkerAPI } from "./inside/api";
 import type { TwipsOptions } from "./inside/solve/twips";
-import {
-  allInsideOutsideAPIPromises,
-  type InsideOutsideAPI,
-  instantiateWorker,
-} from "./instantiator";
+import { allWorkerAPIPromises, instantiateWorkerAPI } from "./instantiator";
 
-let cachedWorkerInstance: Promise<InsideOutsideAPI> | undefined;
-function getCachedWorkerInstance(): Promise<InsideOutsideAPI> {
-  return (cachedWorkerInstance ??= instantiateWorker());
-}
-
-/**
- * `node` has the unfortunate semantics that:
- *
- * - Every message refs a worker.
- * - The process hangs if any reffed worker still exists.
- *
- * And we need workers with pending scrambles to be reffed to avoid
- * https://github.com/cubing/cubing.js/issues/358
- *
- * So we have to carefully track everything that can result in message
- * exchanges, and unref once the line has gone quiet (until reffed again).
- *
- * We don't technically need to ref here (just unref), but we do it because:
- *
- * - it's not hard to do,
- * - it makes the implementation more clear,
- * - it can guard against subtle race conditions to do it here synchronously.
- *
- */
-// TODO: this should be pushed to the comlink layer.
-const leases: WeakMap<InsideOutsideAPI, Set<Promise<any>>> = new WeakMap();
-async function leaseRef<T>(
-  api: InsideOutsideAPI,
-  promiseFn: (api: InsideOutsideAPI) => Promise<T>,
-) {
-  if (!leases.has(api)) {
-    leases.set(api, new Set());
-  }
-  const promise = promiseFn(api);
-  const leasesForWorker = leases.get(api)!;
-  leasesForWorker.add(promise);
-  api.outsideAPI?.ref?.();
-  try {
-    // Note: the `await` is critical here.
-    return await promise;
-  } finally {
-    leasesForWorker.delete(promise);
-    if (leasesForWorker.size === 0) {
-      api.outsideAPI?.unref();
-    }
-  }
-}
-
-async function leaseCachedWorkerInstanceRef<T>(
-  promiseFn: (cwi: InsideOutsideAPI) => Promise<T>,
-): Promise<T> {
-  // TODO: typing
-  return leaseRef((await getCachedWorkerInstance()) as any, promiseFn);
+let cachedWorkerInstance: Promise<WorkerAPI> | undefined;
+function getCachedWorkerInstance(): Promise<WorkerAPI> {
+  return (cachedWorkerInstance ??= instantiateWorkerAPI());
 }
 
 export async function mapToAllWorkers(
-  f: (worker: InsideOutsideAPI) => void,
+  f: (worker: WorkerAPI) => void,
 ): Promise<void> {
   await Promise.all(
-    allInsideOutsideAPIPromises.map(async (worker) => {
-      await leaseRef(await worker, async (worker) => f(worker));
+    allWorkerAPIPromises.map(async (worker) => {
+      f(await worker);
     }),
   );
 }
@@ -102,17 +48,16 @@ export function _preInitializationHintForEvent(
       return;
   }
   void (async () => {
-    await (await getCachedWorkerInstance()).insideAPI.initialize(eventID);
+    await (await getCachedWorkerInstance()).initialize(eventID);
   })();
 }
 
 export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
   const worker = searchOutsideDebugGlobals.forceNewWorkerForEveryScramble
-    ? await instantiateWorker()
+    ? await instantiateWorkerAPI()
     : await getCachedWorkerInstance();
-  const scrambleString = await leaseRef(worker, (worker) =>
-    worker.insideAPI.randomScrambleStringForEvent(eventID),
-  );
+  const scrambleString = await worker.randomScrambleStringForEvent(eventID);
+
   return Alg.fromString(scrambleString);
 }
 
@@ -125,14 +70,12 @@ export async function deriveScrambleForEvent(
     throw new Error("Derived scrambles are not allowed.");
   }
   const worker = searchOutsideDebugGlobals.forceNewWorkerForEveryScramble
-    ? await instantiateWorker()
+    ? await instantiateWorkerAPI()
     : await getCachedWorkerInstance();
-  const scrambleString = await leaseRef(worker, (worker) =>
-    worker.insideAPI.deriveScrambleStringForEvent(
-      derivationSeedHex,
-      derivationSaltHierarchy,
-      eventID,
-    ),
+  const scrambleString = await worker.deriveScrambleStringForEvent(
+    derivationSeedHex,
+    derivationSaltHierarchy,
+    eventID,
   );
   return Alg.fromString(scrambleString);
 }
@@ -140,43 +83,28 @@ export async function deriveScrambleForEvent(
 export async function experimentalSolve3x3x3IgnoringCenters(
   pattern: KPattern,
 ): Promise<Alg> {
-  return Alg.fromString(
-    await leaseCachedWorkerInstanceRef((cwi) =>
-      cwi.insideAPI.solve333ToString(pattern.patternData),
-    ),
-  );
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solve333ToString(pattern.patternData));
 }
 
 export async function experimentalSolve2x2x2(pattern: KPattern): Promise<Alg> {
-  return Alg.fromString(
-    await leaseCachedWorkerInstanceRef((cwi) =>
-      cwi.insideAPI.solve222ToString(pattern.patternData),
-    ),
-  );
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solve222ToString(pattern.patternData));
 }
 
 export async function solveSkewb(pattern: KPattern): Promise<Alg> {
-  return Alg.fromString(
-    await leaseCachedWorkerInstanceRef((cwi) =>
-      cwi.insideAPI.solveSkewbToString(pattern.patternData),
-    ),
-  );
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solveSkewbToString(pattern.patternData));
 }
 
 export async function solvePyraminx(pattern: KPattern): Promise<Alg> {
-  return Alg.fromString(
-    await leaseCachedWorkerInstanceRef((cwi) =>
-      cwi.insideAPI.solvePyraminxToString(pattern.patternData),
-    ),
-  );
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solvePyraminxToString(pattern.patternData));
 }
 
 export async function solveMegaminx(pattern: KPattern): Promise<Alg> {
-  return Alg.fromString(
-    await leaseCachedWorkerInstanceRef((cwi) =>
-      cwi.insideAPI.solveMegaminxToString(pattern.patternData),
-    ),
-  );
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solveMegaminxToString(pattern.patternData));
 }
 
 export interface SolveTwipsOptions {
@@ -199,22 +127,20 @@ export async function solveTwips(
   const { ...def } = kpuzzle.definition;
   delete def.experimentalIsPatternSolved;
   // delete def.derivedMoves;
-  const dedicatedWorker = await instantiateWorker();
+  const dedicatedWorker = await instantiateWorkerAPI();
   try {
     return Alg.fromString(
       // TODO: unnecessary because we terminate the worker?
-      await leaseRef(dedicatedWorker, (worker) =>
-        worker.insideAPI.solveTwipsToString(
-          def,
-          pattern.patternData,
-          apiOptions,
-        ),
+      await dedicatedWorker.solveTwipsToString(
+        def,
+        pattern.patternData,
+        apiOptions,
       ),
     );
   } finally {
     console.log("Search ended, terminating dedicated `twips` worker.");
     // TODO: support re-using the same worker for multiple searches..
-    dedicatedWorker.outsideAPI.terminate();
+    // dedicatedWorker.terminate?.(); // TODO
   }
 }
 
@@ -243,16 +169,12 @@ export function setSearchDebug(
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
     searchOutsideDebugGlobals.logPerf = logPerf;
-    void mapToAllWorkers((worker) =>
-      worker.insideAPI.setDebugMeasurePerf(logPerf),
-    );
+    void mapToAllWorkers((worker) => worker.setDebugMeasurePerf(logPerf));
   }
   if (typeof scramblePrefetchLevel !== "undefined") {
     searchOutsideDebugGlobals.scramblePrefetchLevel = scramblePrefetchLevel;
     void mapToAllWorkers((worker) =>
-      worker.insideAPI.setScramblePrefetchLevel(
-        scramblePrefetchLevel as PrefetchLevel,
-      ),
+      worker.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
     );
   }
   for (const booleanField of [
