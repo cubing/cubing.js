@@ -101,8 +101,7 @@
     "typescript-json-schema": "^0.67.1"
   },
   "overrides": {
-    "typescript": "5.9.3",
-    "comlink": "link:comlink"
+    "typescript": "5.9.3"
   },
   "files": [
     "./dist/bin/",

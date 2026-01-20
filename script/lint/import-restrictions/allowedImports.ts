@@ -99,7 +99,11 @@ export const mainAllowedImports: AllowedImports = {
     static: ["src/cubing/alg", "src/cubing/search/cubing-private"],
   },
   "src/cubing/search": {
-    static: ["comlink", "src/cubing/alg", "src/cubing/notation"],
+    static: [
+      "src/cubing/vendor/apache/comlink-everywhere",
+      "src/cubing/alg",
+      "src/cubing/notation",
+    ],
   },
   "src/cubing/search/inside": {
     static: [
@@ -179,7 +183,6 @@ export const specAllowedImports: AllowedImports = {
       "src/test/chai-workarounds",
       "src/test/SKIP_SLOW_TESTS.ts",
 
-      "comlink",
       "three/src",
       "random-uint-below",
     ],

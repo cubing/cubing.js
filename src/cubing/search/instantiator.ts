@@ -1,6 +1,5 @@
 import type { Worker as NodeWorker } from "node:worker_threads";
-import { wrap } from "comlink";
-import { PortableWorker } from "comlink/examples/portable-worker";
+import { PortableWorker, wrap } from "../vendor/apache/comlink-everywhere";
 import type { WorkerAPI } from "./inside/api";
 import { searchOutsideDebugGlobals } from "./outside";
 import {
@@ -19,7 +18,7 @@ async function instantiateModuleWorker(
   // biome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<WorkerAPI>(async (resolve, reject) => {
     try {
-      const worker = PortableWorker(workerEntryFileURL);
+      const worker = new PortableWorker(workerEntryFileURL);
 
       // TODO: Remove this once we can remove the workarounds for lack of `import.meta.resolve(…)` support.
       const onFirstMessage = (messageData: string) => {

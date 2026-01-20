@@ -1,4 +1,4 @@
-import { expose } from "comlink";
+import { expose } from "../../vendor/apache/comlink-everywhere";
 import { insideAPI } from "./api";
 
 expose(insideAPI);
