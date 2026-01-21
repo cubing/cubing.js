@@ -2,7 +2,7 @@ BUN=bun
 BUN_DX=${BUN} x -- bun-dx
 BUN_RUN=${BUN} run --
 BIOME=${BUN_DX} --package @biomejs/biome biome --
-NODE=node
+NODE=node --
 NPM=npm
 WEB_TEST_RUNNER=${BUN_DX} --package @web/test-runner web-test-runner -- # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
 
