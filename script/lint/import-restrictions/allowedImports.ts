@@ -182,10 +182,22 @@ export const specAllowedImports: AllowedImports = {
       "bun:test",
       "src/test/chai-workarounds",
       "src/test/SKIP_SLOW_TESTS.ts",
-
-      "three/src",
-      "random-uint-below",
     ],
+  },
+  "src/cubing/twisty/heavy-code-imports": {
+    static: ["three/src"],
+  },
+  "src/cubing/twisty/views": {
+    static: ["three/src"],
+  },
+  "src/cubing/bluetooth": {
+    static: ["three/src/math"],
+  },
+  "src/cubing/search": {
+    static: ["random-uint-below"],
+  },
+  "src/cubing/vendor": {
+    static: ["random-uint-below"],
   },
   "src/test/chai-workarounds": {
     static: ["src/cubing/alg"],
