@@ -24,7 +24,6 @@ const throwMarker = Symbol("Comlink.thrown");
 
 const REF_COUNT_BY_DEFAULT = true;
 
-// biome-ignore lint/suspicious/noExplicitAny: The API often requires us to effectively use `any`. This indicates "we really have no type for this".
 export type Any = any;
 
 /**
@@ -757,7 +756,6 @@ function toWireValue(value: Any): [WireValue, Transferable[]] {
 function fromWireValue(value: WireValue): Any {
   switch (value.type) {
     case WireValueType.HANDLER:
-      // biome-ignore lint/style/noNonNullAssertion: TODO: add an assertion?
       return transferHandlers.get(value.name)!.deserialize(value.value);
     case WireValueType.RAW:
       return value.value;
