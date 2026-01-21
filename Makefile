@@ -3,6 +3,7 @@ BUN_DX=${BUN} x -- bun-dx
 BUN_RUN=${BUN} run --
 BIOME=${BUN_DX} --package @biomejs/biome biome --
 NODE=node --
+DENO=bun x -- bun-dx --package deno deno --
 NPM=npm
 WEB_TEST_RUNNER=${BUN_DX} --package @web/test-runner web-test-runner -- # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
 
@@ -171,6 +172,8 @@ test-dist: test-dist-lib test-dist-bin
 test-dist-lib: \
 	test-dist-lib-node-import \
 	test-dist-lib-node-scramble \
+	test-dist-lib-deno-import \
+	test-dist-lib-deno-scramble \
 	test-dist-lib-bun-scramble-all-events \
 	test-dist-lib-perf \
 	test-dist-lib-plain-esbuild-compat \
@@ -184,6 +187,14 @@ test-dist-lib-node-import: build-lib-js
 .PHONY: test-dist-lib-node-scramble
 test-dist-lib-node-scramble: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/scramble/main.js
+
+.PHONY: test-dist-lib-deno-import
+test-dist-lib-deno-import: build-lib-js
+	${DENO} --allow-read --allow-sys --allow-env -- script/test/dist/lib/cubing/node/import/main.js
+
+.PHONY: test-dist-lib-deno-scramble
+test-dist-lib-deno-scramble: build-lib-js
+	${DENO} --allow-read --allow-sys --allow-env -- script/test/dist/lib/cubing/node/scramble/main.js
 
 .PHONY: test-dist-lib-bun-scramble-all-events
 test-dist-lib-bun-scramble-all-events: build-lib-js

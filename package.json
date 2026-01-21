@@ -89,6 +89,7 @@
     "barely-a-dev-server": "v0.8.0",
     "bun-dx": ">=0.1.3",
     "chai": "^5.1.1",
+    "deno": "^2.6.5",
     "esbuild": "^0.25.0",
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
