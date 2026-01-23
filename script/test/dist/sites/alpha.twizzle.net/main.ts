@@ -1,19 +1,10 @@
-import { env } from "node:process";
 import { chromium, type Page } from "playwright";
 import type { TwistyPlayer } from "../../../../../src/cubing/twisty";
 import type { TwizzleExplorerApp } from "../../../../../src/sites/alpha.twizzle.net/explore/app";
 import { startServer } from "../../../../lib/experiments-server";
 
-const OPEN_REPL = env["OPEN_REPL_FOR_BROWSER_TESTS"] === "true"; // Set to `true` for testing.
-const HEADLESS = !OPEN_REPL; // TODO: doesn't work?
-
-if (!OPEN_REPL) {
-  console.error(`To test with a repl and browser, run:
-
-    env OPEN_REPL_FOR_BROWSER_TESTS=true make test-dist-sites-twizzle
-
-`);
-}
+const OPEN_REPL = false; // Not supported in `bun`: https://bun.com/reference/node/repl
+const HEADLESS = !OPEN_REPL;
 
 let exitCode = 0;
 function assert<T>(description: string, expected: T, observed: T) {

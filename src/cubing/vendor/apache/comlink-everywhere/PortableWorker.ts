@@ -107,12 +107,10 @@ function constructPortableWorker(
 
   if (hasWebWorkers && hasBuiltinModules && webWorkersHaveUnref) {
     // `bun`
-    return constructPortableWebWorker(url, workerOptions) as Worker &
-      Record<Exclude<keyof NodeWorker, keyof Worker>, undefined>;
+    return constructPortableWebWorker(url, workerOptions);
   } else {
     // `node` and `deno`
-    return constructNodeStyleWorker(url, workerOptions) as NodeWorker &
-      Record<Exclude<keyof Worker, keyof NodeWorker>, undefined>;
+    return constructNodeStyleWorker(url, workerOptions);
   }
 }
 
