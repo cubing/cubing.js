@@ -93,7 +93,7 @@
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",
     "path-class": ">=0.11.0",
-    "playwright": "^1.47.2",
+    "playwright": "^1.58.0",
     "printable-shell-command": "^4.0.3",
     "tsup": "^8.3.0",
     "typedoc": "^0.28.10",
