@@ -64,7 +64,7 @@
     "scramble": "dist/bin/scramble.js"
   },
   "dependencies": {
-    "@optique/core": "v0.9.0-dev.187",
+    "@optique/core": ">=0.9.1",
     "@optique/run": "v0.9.0-dev.187",
     "@types/three": "^0.169.0",
     "@types/web-bluetooth": "^0.0.20",

@@ -5,7 +5,7 @@
     "": {
       "name": "cubing",
       "dependencies": {
-        "@optique/core": "v0.9.0-dev.187",
+        "@optique/core": ">=0.9.1",
         "@optique/run": "v0.9.0-dev.187",
         "@types/three": "^0.169.0",
         "@types/web-bluetooth": "^0.0.20",
@@ -149,7 +149,7 @@
 
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
-    "@optique/core": ["@optique/core@0.9.0-dev.187", "", {}, "sha512-wBTFbWaESwRTjF+429xzFueIBcsJ/xaD66pSwhJaIo1f7vljRfXa51R0H+EyY2tkNeFsM68YFcPPXw8TLtRuZw=="],
+    "@optique/core": ["@optique/core@0.9.1", "", {}, "sha512-RcQOKF+2CCdpS4ypDVsi2FhdOc/FYCB6wWr1joX7W5U5vzjzJHDEEt5FFfpIV/glEIPIiMvWulUDJwbHbE1sUg=="],
 
     "@optique/run": ["@optique/run@0.9.0-dev.187", "", { "dependencies": { "@optique/core": "0.9.0-dev.187+992128e2" } }, "sha512-JBV2icMvuoc/3W6/LxcGyRv93PCvLW0KsRtKXGz4xcEMgD08hPMuKM+xBQR4+waHUjq9cofyqst854lFx4ud5A=="],
 
@@ -1112,6 +1112,8 @@
     "@cubing/dev-config/esbuild": ["esbuild@0.27.2", "", { "optionalDependencies": { "@esbuild/aix-ppc64": "0.27.2", "@esbuild/android-arm": "0.27.2", "@esbuild/android-arm64": "0.27.2", "@esbuild/android-x64": "0.27.2", "@esbuild/darwin-arm64": "0.27.2", "@esbuild/darwin-x64": "0.27.2", "@esbuild/freebsd-arm64": "0.27.2", "@esbuild/freebsd-x64": "0.27.2", "@esbuild/linux-arm": "0.27.2", "@esbuild/linux-arm64": "0.27.2", "@esbuild/linux-ia32": "0.27.2", "@esbuild/linux-loong64": "0.27.2", "@esbuild/linux-mips64el": "0.27.2", "@esbuild/linux-ppc64": "0.27.2", "@esbuild/linux-riscv64": "0.27.2", "@esbuild/linux-s390x": "0.27.2", "@esbuild/linux-x64": "0.27.2", "@esbuild/netbsd-arm64": "0.27.2", "@esbuild/netbsd-x64": "0.27.2", "@esbuild/openbsd-arm64": "0.27.2", "@esbuild/openbsd-x64": "0.27.2", "@esbuild/openharmony-arm64": "0.27.2", "@esbuild/sunos-x64": "0.27.2", "@esbuild/win32-arm64": "0.27.2", "@esbuild/win32-ia32": "0.27.2", "@esbuild/win32-x64": "0.27.2" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-HyNQImnsOC7X9PMNaCIeAm4ISCQXs5a5YasTXVliKv4uuBo1dKrG0A+uQS8M5eXjVMnLg3WgXaKvprHlFJQffw=="],
 
     "@esm-bundle/chai/@types/chai": ["@types/chai@4.3.20", "", {}, "sha512-/pC9HAB5I/xMlc5FP77qjCnI16ChlJfW0tGa0IUcFn38VJrTV6DeZ60NU5KZBtaOZqjdpwTWohz5HU1RrhiYxQ=="],
+
+    "@optique/run/@optique/core": ["@optique/core@0.9.0-dev.187", "", {}, "sha512-wBTFbWaESwRTjF+429xzFueIBcsJ/xaD66pSwhJaIo1f7vljRfXa51R0H+EyY2tkNeFsM68YFcPPXw8TLtRuZw=="],
 
     "@puppeteer/browsers/yargs": ["yargs@17.7.2", "", { "dependencies": { "cliui": "^8.0.1", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "require-directory": "^2.1.1", "string-width": "^4.2.3", "y18n": "^5.0.5", "yargs-parser": "^21.1.1" } }, "sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w=="],
 
