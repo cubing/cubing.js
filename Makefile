@@ -145,7 +145,7 @@ test-ts-bun-with-coverage: update-dependencies install-playwright
 	${BUN} test
 
 .PHONY: test-ts-dom
-test-ts-dom: update-dependencies
+test-ts-dom: update-dependencies install-playwright
 	${WEB_TEST_RUNNER}
 
 .PHONY: install-playwright
