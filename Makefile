@@ -153,7 +153,7 @@ install-playwright: update-dependencies
 	${BUN_DX} --package playwright playwright -- install
 
 .PHONY: test-ts-dom-with-coverage
-test-ts-dom-with-coverage: update-dependencies
+test-ts-dom-with-coverage: update-dependencies install-playwright
 	${WEB_TEST_RUNNER} --coverage
 
 .PHONY: test-build
