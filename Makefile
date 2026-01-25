@@ -74,13 +74,16 @@ dev: update-dependencies
 link: build
 	${BUN} link
 
+RM_RF = ${BUN} -e 'process.argv.slice(1).map(p => process.getBuiltinModule("node:fs").rmSync(p, {recursive: true, force: true, maxRetries: 5}))' --
+
 .PHONY: clean
 clean:
-	${BUN_RUN} ./script/cleanup/clean.ts
+	${BUN_RUN} ./script/cleanup/clean-legacy-path-based-type-exports.ts
+	${RM_RF} ./dist/ ./.temp/ ./package-lock.json
 
 .PHONY: reset
 reset: clean
-	${BUN_RUN} ./script/cleanup/reset.ts
+	${RM_RF} ./node_modules/
 	@echo ""
 	@echo "To reinstall dependencies, run:"
 	@echo ""
