@@ -6,21 +6,14 @@ jobs:
   lint:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.3.0, latest]
-
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: "true"
       - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: "latest"
-      - name: Use `node` v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+          node-version: latest
       - run: make setup-without-playwright
       - run: make lint-ci
       - run: make lint-tsc-main
@@ -37,21 +30,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.3.0, latest]
-
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: "true"
       - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: "latest"
-      - name: Use `node` v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+          node-version: latest
       - run: make setup-without-playwright
       - run: make build-lib-js
       - run: make build-bin
@@ -63,21 +49,14 @@ jobs:
   test-src:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.3.0, latest]
-
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: "true"
       - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: "latest"
-      - name: Use `node` v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+          node-version: latest
       - run: make setup
       - run: make test-ts-bun-with-coverage
       - run: make test-ts-dom-with-coverage
@@ -85,21 +64,14 @@ jobs:
   test-dist:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.3.0, latest]
-
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: "true"
       - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: "latest"
-      - name: Use `node` v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+          node-version: latest
       - run: make setup
       - run: make build-lib-js
       - run: make test-dist-lib-node-import
@@ -115,23 +87,33 @@ jobs:
       - run: make check-package.json
       - run: make clean
 
-  check-fast:
+  test-dist-node-22:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [22.3.0, latest]
 
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: "true"
       - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: "latest"
-      - name: Use `node` v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+          node-version: 22.3.0
+      - run: make setup
+      - run: make build-lib-js
+      - run: make test-dist-lib-node-import
+      - run: make test-dist-lib-node-scramble
+      - run: make clean
+
+  check-fast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          lfs: "true"
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
       - run: make setup-without-playwright
       - run: time make check-fast
