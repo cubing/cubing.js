@@ -114,7 +114,8 @@
     "build": "make build",
     "dev": "make dev",
     "prepublishOnly": "make prepublishOnly",
-    "postpublish": "make postpublish"
+    "postpublish": "make postpublish",
+    "postinstall": "make postinstall"
   },
   "keywords": [
     "cubing",

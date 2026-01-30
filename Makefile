@@ -309,7 +309,9 @@ postinstall: dedupe-dependencies
 
 # This is a (hopefully temporary) workaround for: https://github.com/oven-sh/bun/issues/1343
 .PHONY: dedupe-dependencies
-dedupe-dependencies: update-dependencies
+dedupe-dependencies:
+	@# Note that we cannot use `--frozen-lockfile` here.
+	bun install --no-save --ignore-scripts
 	${BUN_DX} --package bun-dedupe dedupe --
 
 .PHONY: check-for-duplicate-dependencies
