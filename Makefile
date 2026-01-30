@@ -304,16 +304,6 @@ postpublish-clear-bun-cache:
 	# Ensure that we get the newly published `cubing` version in other `postpublish` steps.
 	bun pm cache rm
 
-.PHONY: postinstall
-postinstall: dedupe-dependencies
-
-# This is a (hopefully temporary) workaround for: https://github.com/oven-sh/bun/issues/1343
-.PHONY: dedupe-dependencies
-dedupe-dependencies:
-	@# Note that we cannot use `--frozen-lockfile` here.
-	bun install --no-save --ignore-scripts
-	${BUN_DX} --package bun-dedupe dedupe --
-
 .PHONY: check-for-duplicate-dependencies
 check-for-duplicate-dependencies: update-dependencies
 	${BUN_DX} --package bun-dedupe dedupe -- --check
