@@ -237,7 +237,7 @@ bun-required:
 	@command -v ${BUN} > /dev/null || { echo "\nPlease install \`bun\` to work on this project:\n\n    # from npm\n    npm install --global bun\n\n    # macOS (Homebrew)\n    brew install oven-sh/bun/bun\n\n    # For other options, see: https://bun.sh/\n" && exit 1 ; }
 
 .PHONY: update-dependencies
-update-dependencies:
+update-dependencies: bun-required
 	${BUN} install --frozen-lockfile
 
 .PHONY: check-engines
