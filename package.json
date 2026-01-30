@@ -101,7 +101,8 @@
     "typescript-json-schema": "^0.67.1"
   },
   "overrides": {
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "esbuild": "0.27.2"
   },
   "files": [
     "./dist/bin/",
