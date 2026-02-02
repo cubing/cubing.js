@@ -22,6 +22,7 @@ jobs:
       - run: make lint-tsc-bin
       - run: make lint-import-restrictions
       - run: make check-schemas
+      - run: make check-for-duplicate-dependencies
       - run: make format # note: not in `test-src` in `package.json`, only in CI
       - run: make clean
       - run: make reset # Should work the first time.

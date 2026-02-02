@@ -245,7 +245,7 @@ check-engines: update-dependencies
 	@${BUN_RUN} "./script/check-engine-versions.ts"
 
 .PHONY: lint
-lint: lint-biome lint-import-restrictions lint-tsc check-schemas
+lint: lint-biome lint-import-restrictions lint-tsc check-schemas check-for-duplicate-dependencies
 
 .PHONY: lint-biome
 lint-biome: update-dependencies
@@ -306,6 +306,14 @@ postpublish: update-cdn update-create-cubing-app deploy
 postpublish-clear-bun-cache:
 	# Ensure that we get the newly published `cubing` version in other `postpublish` steps.
 	bun pm cache rm
+
+.PHONY: check-for-duplicate-dependencies
+check-for-duplicate-dependencies: update-dependencies
+	${BUN_DX} --package bun-dedupe dedupe -- --check
+
+.PHONY: fix-duplicate-dependencies
+fix-duplicate-dependencies: update-dependencies
+	${BUN_DX} --package bun-dedupe dedupe --
 
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
