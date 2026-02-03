@@ -196,4 +196,4 @@ class RobotDemo {
   }
 }
 
-(window as any).robotDemo = new RobotDemo();
+(globalThis as any).robotDemo = new RobotDemo();

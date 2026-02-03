@@ -12,7 +12,7 @@ import {
 } from "../../../../cubing/twisty/views/TwistyPlayer";
 
 function updateURL(url: URL): void {
-  window.history.replaceState("", "", url.toString());
+  globalThis.history.replaceState("", "", url.toString());
 }
 
 // TODO: Find a way to connect this to the `TwistyPlayer` constructor?

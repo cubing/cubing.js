@@ -27,5 +27,5 @@ export const cubingGlobalExports = {
 console.log("cubing", cubingGlobalExports);
 for (const [moduleName, moduleExport] of Object.entries(cubingGlobalExports)) {
   console.log(moduleName, moduleExport);
-  (window as any)[moduleName] = moduleExport;
+  (globalThis as any)[moduleName] = moduleExport;
 }

@@ -2,7 +2,7 @@ import { puzzles } from "../../../../cubing/puzzles";
 import "../../../../cubing/twisty";
 import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG";
 
-window.addEventListener("DOMContentLoaded", async () => {
+globalThis.addEventListener("DOMContentLoaded", async () => {
   const kpuzzle = await puzzles["3x3x3"].kpuzzle();
   const llSVG = await puzzles["3x3x3"].llSVG!(); // TODO: Avoid the need for an assertion?
 

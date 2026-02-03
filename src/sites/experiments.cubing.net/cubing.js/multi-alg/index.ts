@@ -48,7 +48,7 @@ puzzleSelect.addEventListener("change", () => {
 
   const url = new URL(location.href);
   url.searchParams.set("puzzle", puzzleID);
-  window.history.replaceState("", "", url.toString());
+  globalThis.history.replaceState("", "", url.toString());
 });
 
 const stickeringSelect = document.querySelector(
@@ -77,7 +77,7 @@ stickeringSelect?.addEventListener("change", () => {
 
   const url = new URL(location.href);
   url.searchParams.set("stickering", stickering);
-  window.history.replaceState("", "", url.toString());
+  globalThis.history.replaceState("", "", url.toString());
 });
 
 document.querySelector("#download")?.addEventListener("click", async () => {

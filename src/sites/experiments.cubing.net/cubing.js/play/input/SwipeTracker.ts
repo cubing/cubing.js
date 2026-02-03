@@ -28,7 +28,7 @@ export class SwipeTracker {
       sector.addEventListener("touchcancel", this.touchEnd.bind(this, sector));
       // sector.addEventListener("mousedown", this.swipeStart.bind(this, sector));
       // sector.addEventListener("mouseup", this.swipeStop.bind(this, sector));
-      // window.addEventListener("mouseup", this.globalMouseup.bind(this));
+      // globalThis.addEventListener("mouseup", this.globalMouseup.bind(this));
       // sector.addEventListener("mouseenter", this.swipeStart.bind(this, sector));
     }
   }

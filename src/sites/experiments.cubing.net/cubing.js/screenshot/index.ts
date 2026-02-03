@@ -1,6 +1,6 @@
 import { TwistyPlayer } from "../../../../cubing/twisty";
 
-window.addEventListener("DOMContentLoaded", async () => {
+globalThis.addEventListener("DOMContentLoaded", async () => {
   const options = JSON.parse(
     new URL(location.href).searchParams.get("options") || "{}",
   );

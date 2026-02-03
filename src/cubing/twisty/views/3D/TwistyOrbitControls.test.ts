@@ -51,7 +51,7 @@ test("TwistyOrbitControls should update correctly", async () => {
   //   // Values are:true if currently set, false if previously set, undefined otherwise.
   //   const canvasEventListenersRegistered: Record<string, boolean> = {};
   //   const windowEventListenersRegistered: Record<string, boolean> = {};
-  //   window.addEventListener = (event: string): void => {
+  //   globalThis.addEventListener = (event: string): void => {
   //     windowEventListenersRegistered[event] = true;
   //   };
   //   window.removeEventListener = (event: string): void => {

@@ -303,8 +303,7 @@ export class GanCube extends BluetoothPuzzle {
   }
 
   public startTrackingMoves(): void {
-    // `window.setInterval` instead of `setInterval`:
-    // https://github.com/Microsoft/TypeScript/issues/842#issuecomment-252445883
+    // biome-ignore lint/nursery/useGlobalThis: `window.setInterval` instead of `setInterval`: https://github.com/Microsoft/TypeScript/issues/842#issuecomment-252445883
     this.intervalHandle = window.setInterval(
       this.intervalHandler.bind(this),
       this.INTERVAL_MS,

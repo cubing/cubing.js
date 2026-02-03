@@ -164,4 +164,4 @@ class App {
   }
 }
 const app = new App();
-(window as any).app = app;
+(globalThis as any).app = app;

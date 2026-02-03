@@ -14,7 +14,7 @@ class ResizeObserver {
 }
 
 if (globalThis.window) {
-  (window as any).ResizeObserver = ResizeObserver;
+  (globalThis as any).ResizeObserver = ResizeObserver;
 }
 
 describe("TwistyAlgEditor", () => {

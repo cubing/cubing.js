@@ -1,6 +1,6 @@
 import { TwistyPlayer } from "../../../../cubing/twisty";
 
-window.addEventListener("DOMContentLoaded", () => {
+globalThis.addEventListener("DOMContentLoaded", () => {
   const twistyPlayer = new TwistyPlayer({
     puzzle: "3x3x3",
     visualization: "2D",

@@ -122,10 +122,10 @@ export class TwistyButtons extends ManagedCustomElement {
       const onFullscreen = (): void => {
         if (documentFullscreenElement() !== this.defaultFullscreenElement) {
           this.buttons?.fullscreen.setIcon("enter-fullscreen");
-          window.removeEventListener("fullscreenchange", onFullscreen);
+          globalThis.removeEventListener("fullscreenchange", onFullscreen);
         }
       };
-      window.addEventListener("fullscreenchange", onFullscreen);
+      globalThis.addEventListener("fullscreenchange", onFullscreen);
     }
   }
 

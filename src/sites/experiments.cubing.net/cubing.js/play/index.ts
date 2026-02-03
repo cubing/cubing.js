@@ -215,7 +215,7 @@ const fn = async (
   const kbp = await debugKeyboardConnect(document.body, getPuzzleID());
   kbp.addAlgLeafListener(algLeafListener);
 
-  window.removeEventListener("keydown", keyboardCallback);
+  globalThis.removeEventListener("keydown", keyboardCallback);
   document.body.removeEventListener(
     "mousedown",
     mouseCallback as any as EventListener,
@@ -257,7 +257,7 @@ const fn = async (
     })();
   }
 
-  window.addEventListener("keydown", (e: KeyboardEvent) => {
+  globalThis.addEventListener("keydown", (e: KeyboardEvent) => {
     if (e.which === 32) {
       space();
     }
@@ -342,8 +342,8 @@ const keyboardCallback = fn.bind(fn, false, true);
 const mouseCallback = fn.bind(fn, true, false);
 const swipeCallback = fn.bind(fn, false, false);
 
-window.addEventListener("DOMContentLoaded", () => {
-  window.addEventListener("keydown", keyboardCallback);
+globalThis.addEventListener("DOMContentLoaded", () => {
+  globalThis.addEventListener("keydown", keyboardCallback);
   document.body.addEventListener(
     "mousedown",
     mouseCallback as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357

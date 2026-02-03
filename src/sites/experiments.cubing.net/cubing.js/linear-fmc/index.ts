@@ -56,7 +56,7 @@ const competitor = new Competitor();
 
 const timeLimit: Milliseconds = 2 * 60 * 1000; // 2 minutes
 
-window.addEventListener("DOMContentLoaded", async () => {
+globalThis.addEventListener("DOMContentLoaded", async () => {
   const kpuzzle = await cube3x3x3.kpuzzle();
 
   const timeDisplay = document.querySelector(".time-display") as HTMLDivElement;

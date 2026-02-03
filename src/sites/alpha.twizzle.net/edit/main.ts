@@ -10,7 +10,7 @@ function getRawBooleanURLParam(
   paramName: string,
   defaultValue: boolean,
 ): boolean {
-  const value = new URLSearchParams(window.location.search).get(paramName);
+  const value = new URLSearchParams(globalThis.location.search).get(paramName);
   switch (value) {
     case "true":
       return true;
@@ -27,7 +27,7 @@ remapLegacyURLParams({
   "experimental-stickering": "stickering",
 });
 
-window.addEventListener("DOMContentLoaded", () => {
+globalThis.addEventListener("DOMContentLoaded", () => {
   if (!getRawBooleanURLParam("debug-js", true)) {
     console.warn("Disabling JS based on URL param (for testing!)");
     return;
@@ -38,5 +38,5 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   const appElement = document.querySelector("twizzle-app")!;
-  (window as any).app = new App(appElement, getConfigFromURL());
+  (globalThis as any).app = new App(appElement, getConfigFromURL());
 });

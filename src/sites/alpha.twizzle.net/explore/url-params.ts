@@ -44,9 +44,9 @@ const paramDefaultStrings: { [s: string]: string } = {
 export function getURLParam<K extends ParamName>(
   paramName: K,
 ): CompleteURLParamValues[K] {
-  const str: string | null = new URLSearchParams(window.location.search).get(
-    paramName,
-  );
+  const str: string | null = new URLSearchParams(
+    globalThis.location.search,
+  ).get(paramName);
   if (!str) {
     return paramDefaults[paramName];
   }
@@ -75,29 +75,29 @@ export function setAlgParam(key: ParamName, s: string): void {
   if (!algParamEnabled) {
     return;
   }
-  const url = new URL(window.location.href);
+  const url = new URL(globalThis.location.href);
   const params = url.searchParams;
   if (s === "") {
     params.delete(key);
   } else {
     params.set(key, s);
   }
-  window.history.replaceState("", "", url.toString());
+  globalThis.history.replaceState("", "", url.toString());
 }
 
 let algParamEnabled: boolean = true;
 export function setAlgParamEnabled(enabled: boolean) {
   algParamEnabled = enabled;
   if (!algParamEnabled) {
-    const url = new URL(window.location.href);
+    const url = new URL(globalThis.location.href);
     const params = url.searchParams;
     params.delete("alg");
-    window.history.replaceState("", "", url.toString());
+    globalThis.history.replaceState("", "", url.toString());
   }
 }
 
 export function setURLParams(newParams: PartialURLParamValues): void {
-  const url = new URL(window.location.href);
+  const url = new URL(globalThis.location.href);
   const params = url.searchParams;
   function setParam(key: ParamName, s: string): void {
     if (s === paramDefaultStrings[key]) {
@@ -134,7 +134,7 @@ export function setURLParams(newParams: PartialURLParamValues): void {
         console.warn("Unknown param", key, value);
     }
   }
-  window.history.replaceState("", "", url.toString());
+  globalThis.history.replaceState("", "", url.toString());
 }
 
 const remappedPuzzleName = legacyPuzzleNameMapping[getURLParam("puzzle")];

@@ -60,7 +60,7 @@ twistyStreamSource.addEventListener("move", (e) => {
   );
 });
 
-window.addEventListener("keydown", async (e: KeyboardEvent) => {
+globalThis.addEventListener("keydown", async (e: KeyboardEvent) => {
   if (e.which === 13) {
     e.preventDefault();
     const a = document.createElement("a");

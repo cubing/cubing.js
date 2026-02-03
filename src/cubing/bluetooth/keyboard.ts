@@ -76,7 +76,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
 // TODO: Type
 /** @category Keyboard Puzzles */
 export async function debugKeyboardConnect(
-  target: any = window,
+  target: any = globalThis,
   puzzle: PuzzleID | PuzzleLoader = "3x3x3",
 ): Promise<KeyboardPuzzle> {
   return new KeyboardPuzzle(target, puzzle);

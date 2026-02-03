@@ -38,7 +38,7 @@
 //     document.body.appendChild(this.renderer.domElement);
 //     document.body.appendChild(VRButton.createButton(this.renderer));
 
-//     window.addEventListener("resize", this.onWindowResize.bind(this), false);
+//     globalThis.addEventListener("resize", this.onWindowResize.bind(this), false);
 
 //     this.animate();
 //   }

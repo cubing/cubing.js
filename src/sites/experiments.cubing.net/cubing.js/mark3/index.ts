@@ -51,7 +51,7 @@ additionalInfoInput.value =
 additionalInfoInput.addEventListener("input", () => {
   const url = new URL(location.href);
   url.searchParams.set("additional-info", additionalInfoInput.value);
-  window.history.replaceState("", "", url.toString());
+  globalThis.history.replaceState("", "", url.toString());
 });
 
 const table = document.querySelector("table")!;

@@ -70,7 +70,7 @@ class App {
 
       const url = new URL(location.href);
       url.searchParams.set("puzzle", puzzleSelect.value);
-      window.history.replaceState("", "", url.toString());
+      globalThis.history.replaceState("", "", url.toString());
     });
 
     for (const radio of document.querySelectorAll<HTMLInputElement>(
@@ -339,4 +339,4 @@ class Facelet {
 }
 
 const app = new App();
-(window as any).app = app;
+(globalThis as any).app = app;

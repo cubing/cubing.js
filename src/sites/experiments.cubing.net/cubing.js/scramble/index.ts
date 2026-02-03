@@ -18,7 +18,7 @@ async function loadNewScramble() {
   twistyPlayer.alg = scramble;
 }
 
-window.addEventListener("DOMContentLoaded", async () => {
+globalThis.addEventListener("DOMContentLoaded", async () => {
   button.addEventListener("click", loadNewScramble);
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";
