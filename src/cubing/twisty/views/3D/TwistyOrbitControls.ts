@@ -71,7 +71,7 @@ class Inertia {
 export async function positionToOrbitCoordinates(
   position: Vector3,
 ): Promise<OrbitCoordinates> {
-  const spherical = new (await bulk3DCode()).ThreeSpherical();
+  const spherical = new (await bulk3DCode).ThreeSpherical();
   spherical.setFromVector3(position);
   return {
     latitude: 90 - spherical.phi * DEGREES_PER_RADIAN,

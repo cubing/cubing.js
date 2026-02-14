@@ -41,7 +41,7 @@ export class Twisty2DSceneWrapper
   #cachedScene?: Promise<ThreeScene>;
   async scene(): Promise<ThreeScene> {
     return (this.#cachedScene ??= (async () =>
-      new (await bulk3DCode()).ThreeScene())());
+      new (await bulk3DCode).ThreeScene())());
   }
 
   scheduleRender(): void {

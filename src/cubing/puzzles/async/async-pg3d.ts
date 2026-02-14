@@ -6,7 +6,7 @@ import {
 import { KPuzzle, type KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
-import { PLazy } from "../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../vendor/first-party/LazyPromise/LazyPromise";
 import { cubeMirrorTransforms } from "../implementations/3x3x3";
 import type { AlgTransformData, PuzzleLoader } from "../PuzzleLoader";
 import {
@@ -153,14 +153,12 @@ export class CubePGPuzzleLoader extends PGPuzzleLoader {
 export function puzzleSpecificSimplifyOptionsPromise(
   kpuzzlePromiseFn: () => Promise<KPuzzle>,
 ): Promise<PuzzleSpecificSimplifyOptions> {
-  return new PLazy(
-    async (resolve: (options: PuzzleSpecificSimplifyOptions) => void) => {
-      const kpuzzle = await kpuzzlePromiseFn();
-      resolve({
-        quantumMoveOrder: (m: QuantumMove) => {
-          return kpuzzle.moveToTransformation(new Move(m)).repetitionOrder();
-        },
-      });
-    },
-  );
+  return new LazyPromise(async () => {
+    const kpuzzle = await kpuzzlePromiseFn();
+    return {
+      quantumMoveOrder: (m: QuantumMove) => {
+        return kpuzzle.moveToTransformation(new Move(m)).repetitionOrder();
+      },
+    };
+  });
 }

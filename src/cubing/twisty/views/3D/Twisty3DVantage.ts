@@ -23,7 +23,7 @@ export async function setCameraFromOrbitCoordinates(
   orbitCoordinates: OrbitCoordinates,
   backView: boolean = false,
 ): Promise<void> {
-  const spherical = new (await bulk3DCode()).ThreeSpherical(
+  const spherical = new (await bulk3DCode).ThreeSpherical(
     orbitCoordinates.distance,
     (90 - (backView ? -1 : 1) * orbitCoordinates.latitude) / DEGREES_PER_RADIAN,
     ((backView ? 180 : 0) + orbitCoordinates.longitude) / DEGREES_PER_RADIAN,
@@ -233,14 +233,14 @@ export class Twisty3DVantage extends ManagedCustomElement {
   #cachedCamera: Promise<PerspectiveCamera> | null = null;
   async camera(): Promise<PerspectiveCamera> {
     return (this.#cachedCamera ??= (async () => {
-      const camera = new (await bulk3DCode()).ThreePerspectiveCamera(
+      const camera = new (await bulk3DCode).ThreePerspectiveCamera(
         20,
         1, // We rely on the resize logic to handle this.
         0.1,
         20,
       );
       camera.position.copy(
-        new (await bulk3DCode()).ThreeVector3(2, 4, 4).multiplyScalar(
+        new (await bulk3DCode).ThreeVector3(2, 4, 4).multiplyScalar(
           this.options?.backView ? -1 : 1,
         ),
       );

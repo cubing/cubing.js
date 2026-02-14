@@ -70,7 +70,7 @@ const linearSRGBColorSpace =
   "srgb-linear" satisfies typeof LinearSRGBColorSpace;
 
 export async function newRenderer(): Promise<WebGLRenderer> {
-  const rendererConstructor = (await bulk3DCode()).ThreeWebGLRenderer;
+  const rendererConstructor = (await bulk3DCode).ThreeWebGLRenderer;
   const renderer = new rendererConstructor({
     antialias: true,
     alpha: true,

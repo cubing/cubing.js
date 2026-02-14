@@ -1,5 +1,5 @@
-import { from } from "../../../../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../../../../../vendor/first-party/LazyPromise/LazyPromise";
 
-export const searchDynamicSideEvents = from<
-  typeof import("./search-dynamic-sgs-side-events")
->(() => import("./search-dynamic-sgs-side-events"));
+export const searchDynamicSideEvents = new LazyPromise(
+  () => import("./search-dynamic-sgs-side-events"),
+);

@@ -1,5 +1,5 @@
-import { from } from "../../../../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../../../../../vendor/first-party/LazyPromise/LazyPromise";
 
-export const dynamicMasterTetraminxSolver = from<
-  typeof import("./search-dynamic-solve-master_tetraminx")
->(() => import("./search-dynamic-solve-master_tetraminx"));
+export const dynamicMasterTetraminxSolver = new LazyPromise(
+  () => import("./search-dynamic-solve-master_tetraminx"),
+);

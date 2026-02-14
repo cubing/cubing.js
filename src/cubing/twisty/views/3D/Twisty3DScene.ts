@@ -8,7 +8,7 @@ export class Twisty3DScene implements Twisty3DRenderTarget {
   public twisty3Ds: Set<Twisty3DPuzzle> = new Set();
 
   threeJSScene: Promise<ThreeScene> = (async () =>
-    new (await bulk3DCode()).ThreeScene())();
+    new (await bulk3DCode).ThreeScene())();
 
   addRenderTarget(renderTarget: Twisty3DRenderTarget): void {
     this.renderTargets.add(renderTarget);

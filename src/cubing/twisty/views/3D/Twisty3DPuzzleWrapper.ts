@@ -145,7 +145,6 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
   #cachedTwisty3DPuzzle: Promise<Twisty3DPuzzle> | null = null;
   async twisty3DPuzzle(): Promise<Twisty3DPuzzle> {
     return (this.#cachedTwisty3DPuzzle ??= (async () => {
-      const proxyPromise = bulk3DCode();
       if (
         this.puzzleLoader.id === "3x3x3" &&
         this.visualizationStrategy === "Cube3D"
@@ -166,7 +165,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
           this.model.twistySceneModel.faceletScale.get(),
           this.model.twistySceneModel.hintFaceletsElevation.get(),
         ]);
-        return (await proxyPromise).cube3DShim(
+        return (await bulk3DCode).cube3DShim(
           () => this.schedulable.scheduleRender(),
           {
             foundationSprite,
@@ -185,7 +184,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
             this.model.twistySceneModel.hintStickerSprite.get(),
             this.model.twistySceneModel.faceletScale.get(),
           ]);
-        const pg3d = (await proxyPromise).pg3dShim(
+        const pg3d = (await bulk3DCode).pg3dShim(
           () => this.schedulable.scheduleRender(),
           this.puzzleLoader,
           hintFacelets === "auto" ? "floating" : hintFacelets,

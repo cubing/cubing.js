@@ -1,15 +1,15 @@
 import { Alg } from "../../../../alg";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
 import { puzzles } from "../../../../puzzles";
-import { from } from "../../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../../../vendor/first-party/LazyPromise/LazyPromise";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 import { dynamicFTO } from "./dynamic/fto";
 
-const dynamic = from<
-  typeof import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial")
->(() => import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial"));
+const dynamic = new LazyPromise(
+  () => import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial"),
+);
 
 const TREMBLE_DEPTH = 3;
 

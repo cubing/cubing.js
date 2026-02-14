@@ -1,3 +1,5 @@
+console.log("dynamic");
+
 import { cube3x3x3, type PuzzleLoader } from "../../../puzzles";
 import type { FaceletScale } from "../../model/props/puzzle/display/FaceletScaleProp";
 import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp";

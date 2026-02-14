@@ -1,5 +1,5 @@
 import type { Tagged } from "type-fest";
-import { from } from "../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../../vendor/first-party/LazyPromise/LazyPromise";
 import { StaleDropper } from "../PromiseFreshener";
 import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
 
@@ -144,7 +144,7 @@ export abstract class TwistyPropSource<
 
   constructor(initialValue?: PromiseOrValue<InputType>) {
     super();
-    this.#value = from(() => this.getDefaultValue());
+    this.#value = new LazyPromise(async () => this.getDefaultValue());
     if (initialValue) {
       this.#value = this.deriveFromPromiseOrValue(initialValue, this.#value);
     }

@@ -4,7 +4,7 @@ import { TwistyPropDerived } from "../../TwistyProp";
 
 let cachedLoader: TextureLoader | null = null;
 async function loader(): Promise<TextureLoader> {
-  return (cachedLoader ??= new (await bulk3DCode()).ThreeTextureLoader());
+  return (cachedLoader ??= new (await bulk3DCode).ThreeTextureLoader());
 }
 
 type SpritePropInputs = {

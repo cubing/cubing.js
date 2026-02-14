@@ -90,7 +90,7 @@ export const mainAllowedImports: AllowedImports = {
     static: [
       "src/cubing/alg",
       "src/cubing/kpuzzle",
-      "src/cubing/vendor/mit/p-lazy",
+      "src/cubing/vendor/first-party/LazyPromise",
     ],
     dynamic: ["src/cubing/puzzle-geometry"],
   },
@@ -103,6 +103,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/vendor/apache/comlink-everywhere",
       "src/cubing/alg",
       "src/cubing/notation",
+      "src/cubing/vendor/first-party/LazyPromise",
     ],
   },
   "src/cubing/search/inside": {
@@ -113,7 +114,6 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/vendor/mit/cs0x7f/min2phase",
       "src/cubing/vendor/mit/cs0x7f/fto",
       "src/cubing/vendor/mit/cs0x7f/sq12phase",
-      "src/cubing/vendor/mit/p-lazy",
       "src/cubing/vendor/mpl/xyzzy",
       "random-uint-below",
     ],
@@ -127,7 +127,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/alg",
       "src/cubing/puzzles",
       "src/cubing/notation",
-      "src/cubing/vendor/mit/p-lazy",
+      "src/cubing/vendor/first-party/LazyPromise",
       // TODO: denylist `src/cubing/twisty/heavy-code-imports`
     ],
     dynamic: [

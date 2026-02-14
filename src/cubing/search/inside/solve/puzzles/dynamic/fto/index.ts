@@ -1,5 +1,5 @@
-import { from } from "../../../../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../../../../../vendor/first-party/LazyPromise/LazyPromise";
 
-export const dynamicFTO = from<typeof import("./search-dynamic-solve-fto")>(
+export const dynamicFTO = new LazyPromise(
   () => import("./search-dynamic-solve-fto"),
 );

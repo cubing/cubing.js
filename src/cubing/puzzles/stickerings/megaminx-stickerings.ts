@@ -1,5 +1,5 @@
 import type { ExperimentalStickering } from "../../twisty";
-import { from } from "../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../vendor/first-party/LazyPromise/LazyPromise";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   cubeLikeStickeringList,
@@ -22,7 +22,7 @@ export async function megaminxStickeringMask(
   return cubeLikeStickeringMask(puzzleLoader, "full");
 }
 
-const megaminxStickeringListPromise: Promise<string[]> = from(() =>
+const megaminxStickeringListPromise: Promise<string[]> = new LazyPromise(() =>
   cubeLikeStickeringList("megaminx"),
 );
 export function megaminxStickerings(): Promise<string[]> {

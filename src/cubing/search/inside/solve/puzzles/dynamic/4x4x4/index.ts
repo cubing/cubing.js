@@ -1,5 +1,5 @@
-import { from } from "../../../../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../../../../../vendor/first-party/LazyPromise/LazyPromise";
 
-export const dynamic4x4x4Solver = from<
-  typeof import("./search-dynamic-solve-4x4x4")
->(() => import("./search-dynamic-solve-4x4x4"));
+export const dynamic4x4x4Solver = new LazyPromise(
+  () => import("./search-dynamic-solve-4x4x4"),
+);

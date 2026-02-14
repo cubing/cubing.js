@@ -29,7 +29,7 @@ export async function screenshot(
     orbitCoordinates,
   ] = await Promise.all([
     (async () => {
-      const { ThreePerspectiveCamera, ThreeScene } = await bulk3DCode();
+      const { ThreePerspectiveCamera, ThreeScene } = await bulk3DCode;
       return { ThreePerspectiveCamera, ThreeScene };
     })(),
     await model.puzzleLoader.get(),

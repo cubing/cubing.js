@@ -4,10 +4,11 @@ import type {
   KPatternData,
   KPuzzleDefinition,
 } from "../../../kpuzzle";
-import { from } from "../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "../../../vendor/first-party/LazyPromise/LazyPromise";
 
-export const twipsPromise: Promise<typeof import("../../../vendor/mpl/twips")> =
-  from(async () => import("../../../vendor/mpl/twips"));
+export const twipsPromise = new LazyPromise(
+  async () => import("../../../vendor/mpl/twips"),
+);
 
 export interface TwipsOptions {
   // TODO: start prune depth?

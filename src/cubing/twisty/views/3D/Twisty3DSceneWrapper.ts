@@ -97,7 +97,7 @@ export class Twisty3DSceneWrapper
       const [camera, { ThreeRaycaster, ThreeVector2 }] = await Promise.all([
         e.detail.cameraPromise,
         (async () => {
-          const { ThreeRaycaster, ThreeVector2 } = await bulk3DCode();
+          const { ThreeRaycaster, ThreeVector2 } = await bulk3DCode;
           return { ThreeRaycaster, ThreeVector2 };
         })(),
       ]);
@@ -124,7 +124,7 @@ export class Twisty3DSceneWrapper
   #cachedScene?: Promise<ThreeScene>;
   async scene(): Promise<ThreeScene> {
     return (this.#cachedScene ??= (async () =>
-      new (await bulk3DCode()).ThreeScene())());
+      new (await bulk3DCode).ThreeScene())());
   }
 
   #vantages: Set<Twisty3DVantage> = new Set();
