@@ -21,7 +21,10 @@ function subpackageEntry(subpackageName: string): Path {
   );
 }
 
-async function bundleSize(entryFile: Path, threeExternal = false) {
+async function bundleSize(
+  entryFile: Path,
+  options?: { threeExternal: boolean },
+) {
   const tempDir = await Path.makeTempDir("build-size-");
   const outfile = tempDir.join("bundle.js");
   await build({
@@ -31,7 +34,7 @@ async function bundleSize(entryFile: Path, threeExternal = false) {
     format: "esm",
     target: "es2022",
     outfile: outfile.path,
-    external: threeExternal ? ["three/src/*"] : [],
+    external: options?.threeExternal ? ["three/src/*"] : [],
   });
   const { size } = await outfile.stat(); // TODO: add `.state
   const bundleContents = await outfile.read();
@@ -76,7 +79,7 @@ async function bundleSizeSummary(s: string): Promise<{
   const path = s === "(total)" ? CONSOLE_PATH : subpackageEntry(s);
   const [bundleSizeWithThree, bundleSizeNoTHREE] = await Promise.all([
     bundleSize(path),
-    bundleSize(path, true),
+    bundleSize(path, { threeExternal: true }),
   ]);
   const sizes = {
     size: bundleSizeWithThree.size,
