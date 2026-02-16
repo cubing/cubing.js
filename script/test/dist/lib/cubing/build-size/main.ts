@@ -134,11 +134,11 @@ const BYTES_PER_KILOBYTE = 1000;
 function check(description: string, value: number, maxKilobytes: number) {
   if (value > maxKilobytes * BYTES_PER_KILOBYTE) {
     throw new Error(
-      `❌ ${description} build size (${value / BYTES_PER_KILOBYTE}) is over ${maxKilobytes}kB.`,
+      `❌ ${description} build size (${value / BYTES_PER_KILOBYTE}kB) is over ${maxKilobytes}kB.`,
     );
   } else {
     console.log(
-      `✅ ${description} build size (${value / BYTES_PER_KILOBYTE}) is ≤ ${maxKilobytes}kB.`,
+      `✅ ${description} build size (${value / BYTES_PER_KILOBYTE}kB) is ≤ ${maxKilobytes}kB.`,
     );
   }
 }
