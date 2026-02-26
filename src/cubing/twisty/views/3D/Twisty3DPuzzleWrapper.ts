@@ -95,6 +95,18 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       },
     );
 
+    this.#freshListenerManager.addListener(
+      this.model.twistySceneModel.hintFaceletsElevation,
+      async (hintFaceletsElevation: "auto" | number) => {
+        (
+          (await this.twisty3DPuzzle()) as Cube3D | PG3D
+        ).experimentalUpdateOptions({
+          hintFaceletsElevation,
+        });
+        this.scheduleRender();
+      },
+    );
+
     this.#freshListenerManager.addMultiListener3(
       [
         this.model.twistySceneModel.stickeringMask,
@@ -144,11 +156,15 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
           hintSprite,
           experimentalStickeringMask,
           initialHintFaceletsAnimation,
+          faceletScale,
+          hintFaceletsElevation,
         ] = await Promise.all([
           this.model.twistySceneModel.foundationStickerSprite.get(),
           this.model.twistySceneModel.hintStickerSprite.get(),
           this.model.twistySceneModel.stickeringMask.get(),
           this.model.twistySceneModel.initialHintFaceletsAnimation.get(),
+          this.model.twistySceneModel.faceletScale.get(),
+          this.model.twistySceneModel.hintFaceletsElevation.get(),
         ]);
         return (await proxyPromise).cube3DShim(
           () => this.schedulable.scheduleRender(),
@@ -157,6 +173,8 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
             hintSprite,
             experimentalStickeringMask,
             initialHintFaceletsAnimation,
+            faceletScale,
+            hintFaceletsElevation,
           },
         );
       } else {

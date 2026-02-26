@@ -2,6 +2,7 @@ import { URLProp } from "./props/general/URLProp";
 import { FaceletScaleProp } from "./props/puzzle/display/FaceletScaleProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
+import { HintFaceletsElevationProp } from "./props/puzzle/display/HintFaceletsElevationProp";
 import { InitialHintFaceletsAnimationProp } from "./props/puzzle/display/InitialHintFaceletsAnimationProp";
 import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp";
@@ -30,6 +31,7 @@ export class TwistySceneModel {
   hintFacelet = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
   initialHintFaceletsAnimation = new InitialHintFaceletsAnimationProp();
+  hintFaceletsElevation = new HintFaceletsElevationProp();
   latitudeLimit = new LatitudeLimitProp();
   movePressInput = new MovePressInputProp();
   movePressCancelOptions = new MovePressCancelOptions();

@@ -242,16 +242,9 @@ const cubieDimensions = {
   // stickerWidth: 0.85, // Now `faceletScale` in options.
   stickerElevation: 0.503,
   foundationWidth: 1,
-  hintStickerElevation: 1.45,
+  defaultHintStickerElevation: 1.45,
 };
 const EXPERIMENTAL_PICTURE_CUBE_HINT_ELEVATION = 2;
-
-/** @deprecated */
-export function experimentalSetDefaultStickerElevation(
-  stickerElevation: number,
-): void {
-  cubieDimensions.stickerElevation = stickerElevation;
-}
 
 export interface Cube3DOptions {
   showMainStickers?: boolean;
@@ -262,6 +255,7 @@ export interface Cube3DOptions {
   hintSprite?: Texture | null;
   initialHintFaceletsAnimation?: InitialHintFaceletsAnimation;
   faceletScale?: "auto" | number;
+  hintFaceletsElevation?: "auto" | number;
 }
 
 const cube3DOptionsDefaults: Cube3DOptions = {
@@ -273,6 +267,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   hintSprite: null,
   initialHintFaceletsAnimation: "auto",
   faceletScale: "auto",
+  hintFaceletsElevation: "auto",
 };
 
 const DEFAULT_STICKER_SCALE = 0.85;
@@ -567,12 +562,9 @@ function newStickerGeometry(): BufferGeometry {
   return r;
 }
 
-let sharedStickerGeometryCache: BufferGeometry | null = null;
+let sharedStickerGeometryCache: BufferGeometry | undefined;
 function sharedStickerGeometry(): BufferGeometry {
-  return (
-    sharedStickerGeometryCache ??
-    (sharedStickerGeometryCache = newStickerGeometry())
-  );
+  return (sharedStickerGeometryCache ??= newStickerGeometry());
 }
 
 // TODO: Split into "scene model" and "view".
@@ -647,20 +639,50 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     if (this.options.experimentalStickeringMask) {
       this.setStickeringMask(this.options.experimentalStickeringMask);
     }
-    this.#animateRaiseHintFacelets();
+    void this.#animateRaiseHintFacelets();
 
     if (this.options.faceletScale) {
       this.experimentalSetFaceletScale(this.options.faceletScale);
     }
+
+    if (typeof this.options["hintFaceletsElevation"] !== "undefined") {
+      this.#elevationRequest = this.options.hintFaceletsElevation;
+    }
   }
 
-  #sharedHintStickerGeometryCache: BufferGeometry | null = null;
+  #sharedHintStickerGeometryCache: BufferGeometry | undefined;
   #sharedHintStickerGeometry(): BufferGeometry {
     return (this.#sharedHintStickerGeometryCache ??= newStickerGeometry());
   }
 
+  #elevationRequest: "auto" | number | undefined;
+  setHintFaceletsElevation(elevation: "auto" | number) {
+    if (elevation === this.#elevationRequest) {
+      return;
+    }
+    this.#cancelAnimateRaiseHintSticker = true;
+    this.#setHintFaceletsElevation(
+      typeof elevation === "number"
+        ? elevation
+        : cubieDimensions.defaultHintStickerElevation,
+    );
+    this.#elevationRequest = elevation;
+  }
+
+  #lastHintStickerElevation = 0;
+  #setHintFaceletsElevation(elevation: number) {
+    this.#sharedHintStickerGeometry().translate(
+      0,
+      0,
+      elevation - this.#lastHintStickerElevation,
+    );
+    this.#lastHintStickerElevation = elevation;
+  }
+
+  // TODO: support smooth physics
+  #cancelAnimateRaiseHintSticker = false;
   // TODO: Generalize this into an animation mechanism.
-  #animateRaiseHintFacelets(): void {
+  async #animateRaiseHintFacelets(): Promise<void> {
     if (
       this.options.initialHintFaceletsAnimation === "none" ||
       (this.options.initialHintFaceletsAnimation !== "always" &&
@@ -668,33 +690,39 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     ) {
       return;
     }
-    const translationRange =
-      cubieDimensions.hintStickerElevation - cubieDimensions.stickerElevation;
-    this.#sharedHintStickerGeometry().translate(0, 0, -translationRange);
-    setTimeout(() => {
-      const hintStartTime = performance.now();
-      let lastTranslation = 0;
-      const translationDuration = 1000 as MillisecondTimestamp;
-      function ease(x: number) {
-        return x * (2 - x);
+    const targetElevation =
+      typeof this.options.hintFaceletsElevation !== "undefined" &&
+      this.options.hintFaceletsElevation !== "auto"
+        ? this.options.hintFaceletsElevation
+        : cubieDimensions.defaultHintStickerElevation;
+    const translationRange = targetElevation - cubieDimensions.stickerElevation;
+    this.#setHintFaceletsElevation(cubieDimensions.stickerElevation);
+
+    // TODO: constant/config
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const hintStartTime = performance.now();
+    // TODO: constant/config
+    const translationDuration = 1000 as MillisecondTimestamp;
+    function ease(x: number) {
+      return x * (2 - x);
+    }
+    const animateRaiseHintSticker = () => {
+      if (this.#cancelAnimateRaiseHintSticker) {
+        return;
       }
-      const animateRaiseHintSticker = () => {
-        const elapsed = performance.now() - hintStartTime;
-        const newTranslation =
-          ease(elapsed / translationDuration) * translationRange;
-        this.#sharedHintStickerGeometry().translate(
-          0,
-          0,
-          newTranslation - lastTranslation,
-        );
-        lastTranslation = newTranslation;
-        if (elapsed < translationDuration) {
-          requestAnimationFrame(animateRaiseHintSticker);
-          this.scheduleRenderCallback?.();
-        }
-      };
-      animateRaiseHintSticker();
-    }, 500);
+      const elapsed = performance.now() - hintStartTime;
+      const fraction = Math.min(elapsed / translationDuration, 1);
+      const newTranslation =
+        ease(fraction) * translationRange + cubieDimensions.stickerElevation;
+      this.#setHintFaceletsElevation(newTranslation);
+
+      this.scheduleRenderCallback?.();
+      if (elapsed < translationDuration) {
+        requestAnimationFrame(animateRaiseHintSticker);
+      }
+    };
+    animateRaiseHintSticker();
   }
 
   // Can only be called once.
@@ -815,6 +843,11 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     const { faceletScale } = options;
     if (typeof faceletScale !== "undefined") {
       this.experimentalSetFaceletScale(faceletScale);
+    }
+
+    const { hintFaceletsElevation } = options;
+    if (typeof hintFaceletsElevation !== "undefined") {
+      this.setHintFaceletsElevation(hintFaceletsElevation);
     }
   }
 
@@ -1032,15 +1065,28 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     );
     stickerMesh.setRotationFromEuler(posAxisInfo.fromZ);
     stickerMesh.position.copy(posAxisInfo.vector);
-    stickerMesh.position.multiplyScalar(
-      isHint
-        ? this.options.experimentalStickeringMask?.specialBehaviour ===
-          "picture"
-          ? EXPERIMENTAL_PICTURE_CUBE_HINT_ELEVATION
-          : cubieDimensions.hintStickerElevation
-        : cubieDimensions.stickerElevation,
-    );
-    stickerMesh.scale.setScalar(getFaceletScale(this.options));
+
+    const elevation = (() => {
+      if (!isHint) {
+        return cubieDimensions.stickerElevation;
+      }
+      if (typeof this.options.hintFaceletsElevation === "number") {
+        return this.options.hintFaceletsElevation;
+      }
+      if (
+        this.options.experimentalStickeringMask?.specialBehaviour === "picture"
+      ) {
+        return EXPERIMENTAL_PICTURE_CUBE_HINT_ELEVATION;
+      }
+      return cubieDimensions.defaultHintStickerElevation;
+    })();
+    if (isHint) {
+      this.#lastHintStickerElevation = elevation;
+    }
+    const scale = getFaceletScale(this.options);
+    stickerMesh.scale.setX(scale);
+    stickerMesh.scale.setY(scale);
+    stickerMesh.translateZ(elevation - 1);
     return stickerMesh;
   }
 
@@ -1057,10 +1103,11 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     for (const orbitInfo of Object.values(this.kpuzzleFaceletInfo)) {
       for (const pieceInfo of orbitInfo) {
         for (const faceletInfo of pieceInfo) {
-          faceletInfo.facelet.scale.setScalar(getFaceletScale(this.options));
-          faceletInfo.hintFacelet?.scale.setScalar(
-            getFaceletScale(this.options),
-          );
+          const scale = getFaceletScale(this.options);
+          faceletInfo.facelet.scale.setX(scale);
+          faceletInfo.facelet.scale.setY(scale);
+          faceletInfo.hintFacelet?.scale.setX(scale);
+          faceletInfo.hintFacelet?.scale.setY(scale);
           // faceletInfo.facelet.setRotationFromAxisAngle(new Vector3(0, 1, 0), 0);
           // faceletInfo.facelet.rotateOnAxis(new Vector3(1, 0, 1), TAU / 6);
         }

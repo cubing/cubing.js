@@ -261,6 +261,15 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
     throw err("experimentalInitialHintFaceletsAnimation");
   }
 
+  set experimentalHintFaceletsElevation(elevation: "auto" | number) {
+    this.experimentalModel.twistySceneModel.hintFaceletsElevation.set(
+      elevation,
+    );
+  }
+  get experimentalHintFaceletsElevation(): never {
+    throw err("experimentalHintFaceletsElevation");
+  }
+
   set experimentalDragInput(dragInputMode: DragInputMode) {
     this.experimentalModel.twistySceneModel.dragInput.set(dragInputMode);
   }
