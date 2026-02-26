@@ -95,4 +95,4 @@ As of this time, `cubing.js` primarily contains code by [Lucas Garron (@lgarron)
 - [Chen Shuang (@cs0x7f)](https://github.com/cs0x7f): Scramblers for 3x3x3, 4x4x4, and Square-1
 - [`xyxxy` (@torchlight)](https://github.com/torchlight): Scramblers for unofficial events
 
-It also uses the [`three.js`](https://github.com/mrdoob/three.js), and [`comlink`](https://github.com/GoogleChromeLabs/comlink) libraries. Twizzle also uses the [Ubuntu font](https://design.ubuntu.com/font/).
+It also uses the [`three.js`](https://github.com/mrdoob/three.js) and a vendored fork of [`comlink`](https://github.com/GoogleChromeLabs/comlink). Twizzle also uses the [Ubuntu font](https://design.ubuntu.com/font/).
