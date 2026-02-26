@@ -8,6 +8,7 @@ import type { ExperimentalStickering } from "..";
 import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
+import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp";
 import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
 import type { HintFaceletsElevationRequest } from "../model/props/puzzle/display/HintFaceletsElevationProp";
 import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
@@ -67,6 +68,7 @@ export const twistyPlayerAttributeMap = {
   "color-scheme": "colorScheme",
   "control-panel": "controlPanel",
   "back-view": "backView",
+  "experimental-facelet-scale": "experimentalFaceletScale",
   "experimental-initial-hint-facelets-animation":
     "experimentalInitialHintFaceletsAnimation",
   "experimental-hint-facelets-elevation": "experimentalHintFaceletsElevation",
@@ -146,6 +148,7 @@ export interface TwistyPlayerConfig {
   controlPanel?: ControlPanelThemeWithAuto;
   backView?: BackViewLayoutWithAuto;
   experimentalInitialHintFaceletsAnimation?: InitialHintFaceletsAnimation;
+  experimentalFaceletScale?: FaceletScale;
   experimentalHintFaceletsElevation?: HintFaceletsElevationRequest;
   // "indexer"?: "indexer";
   viewerLink?: ViewerLinkPageWithAuto;
