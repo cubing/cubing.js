@@ -12,7 +12,11 @@
       "!src/cubing/vendor/mpl/xyzzy/**/*.js",
       "!src/sites/experiments.cubing.net/cubing.js/rust/wasm/**/*.js",
       "!src/sites/experiments.cubing.net/cubing.js/rust/wasm/**/*.d.ts",
-      "!vendor"
+      "!vendor",
+      // Exclude HTML files
+      // - https://github.com/biomejs/biome/discussions/9209
+      // - https://github.com/biomejs/biome/discussions/9308
+      "!**/*.html"
     ]
   },
   "linter": {
@@ -32,5 +36,6 @@
         "noExplicitAny": "off"
       }
     }
-  }
+  },
+  "html": {}
 }
