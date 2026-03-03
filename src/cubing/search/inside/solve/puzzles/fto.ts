@@ -1,7 +1,7 @@
+import { LazyPromise } from "@cubing/lazy-promise";
 import { Alg } from "../../../../alg";
 import type { KPattern } from "../../../../kpuzzle/KPattern";
 import { puzzles } from "../../../../puzzles";
-import { LazyPromise } from "../../../../vendor/first-party/LazyPromise/LazyPromise";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";

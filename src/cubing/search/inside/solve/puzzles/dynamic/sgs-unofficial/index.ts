@@ -1,4 +1,4 @@
-import { LazyPromise } from "../../../../../../vendor/first-party/LazyPromise/LazyPromise";
+import { LazyPromise } from "@cubing/lazy-promise";
 
 export const searchDynamicUnofficial = new LazyPromise(
   () => import("./search-dynamic-sgs-unofficial"),

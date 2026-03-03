@@ -1,5 +1,5 @@
+import { LazyPromise } from "@cubing/lazy-promise";
 import type { Tagged } from "type-fest";
-import { LazyPromise } from "../../../vendor/first-party/LazyPromise/LazyPromise";
 import { StaleDropper } from "../PromiseFreshener";
 import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
 

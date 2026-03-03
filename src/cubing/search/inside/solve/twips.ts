@@ -1,10 +1,10 @@
+import { LazyPromise } from "@cubing/lazy-promise";
 import type { Alg } from "../../../alg";
 import type {
   KPattern,
   KPatternData,
   KPuzzleDefinition,
 } from "../../../kpuzzle";
-import { LazyPromise } from "../../../vendor/first-party/LazyPromise/LazyPromise";
 
 export const twipsPromise = new LazyPromise(
   async () => import("../../../vendor/mpl/twips"),

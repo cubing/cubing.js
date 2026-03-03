@@ -5,6 +5,7 @@
     "": {
       "name": "cubing",
       "dependencies": {
+        "@cubing/lazy-promise": "0.1.1",
         "@optique/core": ">=0.9.1",
         "@optique/run": ">=0.9.1",
         "@types/three": "^0.169.0",
@@ -75,6 +76,8 @@
     "@cubing/deploy": ["@cubing/deploy@0.4.10", "", { "dependencies": { "path-class": ">=0.10.3", "printable-shell-command": ">=2.6.3" }, "bin": { "deploy": "dist/cli/main.js" } }, "sha512-IQ13vLUpMvIU/cZxw0wDnwoUpwEpiZDNDTlaaUV/mfUnOxzbyZi/TrIucar400oPTq/rC1/9qWrKCIxxTbXIAg=="],
 
     "@cubing/dev-config": ["@cubing/dev-config@0.9.2", "", { "dependencies": { "esbuild": ">=0.25.3 && <1.0.0", "path-class": ">=0.10.8", "printable-shell-command": ">=4.0.3" }, "bin": { "package.json": "bin/package.json/index.js" } }, "sha512-ctSD3waNFqp4wa2fr40qc60cacbqwxGzSx2TI6Z2BEGDMnT6vUsytVgXtnIp7C3kwXziokJYm3WMeC9kAcdpEQ=="],
+
+    "@cubing/lazy-promise": ["@cubing/lazy-promise@0.1.1", "", {}, "sha512-yeNQuAfwcZTTPkJhrkIIQFjg0Lr76awN+lWYh4bm6UK6AKUIbjuBBGjcoXWLw2zE78Y4na1rAx3OjMYEr2tYBA=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.25.12", "", { "os": "aix", "cpu": "ppc64" }, "sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA=="],
 

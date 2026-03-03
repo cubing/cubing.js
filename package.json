@@ -64,6 +64,7 @@
     "scramble": "dist/bin/scramble.js"
   },
   "dependencies": {
+    "@cubing/lazy-promise": "0.1.1",
     "@optique/core": ">=0.9.1",
     "@optique/run": ">=0.9.1",
     "@types/three": "^0.169.0",

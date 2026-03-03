@@ -1,4 +1,4 @@
-import { LazyPromise } from "../../vendor/first-party/LazyPromise/LazyPromise";
+import { LazyPromise } from "@cubing/lazy-promise";
 
 export function getCached<T>(getValue: () => Promise<T>): () => Promise<T> {
   const lazyPromise = new LazyPromise(getValue);

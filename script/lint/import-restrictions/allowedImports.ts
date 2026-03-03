@@ -87,11 +87,7 @@ export const mainAllowedImports: AllowedImports = {
     static: ["src/cubing/kpuzzle", "src/cubing/puzzles/cubing-private"],
   },
   "src/cubing/puzzles": {
-    static: [
-      "src/cubing/alg",
-      "src/cubing/kpuzzle",
-      "src/cubing/vendor/first-party/LazyPromise",
-    ],
+    static: ["@cubing/lazy-promise", "src/cubing/alg", "src/cubing/kpuzzle"],
     dynamic: ["src/cubing/puzzle-geometry"],
   },
   "src/cubing/puzzle-geometry": { static: ["src/cubing/alg"] },
@@ -103,7 +99,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/vendor/apache/comlink-everywhere",
       "src/cubing/alg",
       "src/cubing/notation",
-      "src/cubing/vendor/first-party/LazyPromise",
+      "@cubing/lazy-promise",
     ],
   },
   "src/cubing/search/inside": {
@@ -127,7 +123,7 @@ export const mainAllowedImports: AllowedImports = {
       "src/cubing/alg",
       "src/cubing/puzzles",
       "src/cubing/notation",
-      "src/cubing/vendor/first-party/LazyPromise",
+      "@cubing/lazy-promise",
       // TODO: denylist `src/cubing/twisty/heavy-code-imports`
     ],
     dynamic: [
@@ -182,6 +178,7 @@ export const specAllowedImports: AllowedImports = {
       "bun:test",
       "src/test/chai-workarounds",
       "src/test/SKIP_SLOW_TESTS.ts",
+      "@cubing/lazy-promise",
     ],
   },
   "src/cubing/twisty/heavy-code-imports": {

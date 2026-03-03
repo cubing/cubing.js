@@ -1,3 +1,4 @@
+import { LazyPromise } from "@cubing/lazy-promise";
 import {
   Move,
   type PuzzleSpecificSimplifyOptions,
@@ -6,7 +7,6 @@ import {
 import { KPuzzle, type KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
-import { LazyPromise } from "../../vendor/first-party/LazyPromise/LazyPromise";
 import { cubeMirrorTransforms } from "../implementations/3x3x3";
 import type { AlgTransformData, PuzzleLoader } from "../PuzzleLoader";
 import {

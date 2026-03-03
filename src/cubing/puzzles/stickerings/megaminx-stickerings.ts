@@ -1,5 +1,5 @@
+import { LazyPromise } from "@cubing/lazy-promise";
 import type { ExperimentalStickering } from "../../twisty";
-import { LazyPromise } from "../../vendor/first-party/LazyPromise/LazyPromise";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   cubeLikeStickeringList,
