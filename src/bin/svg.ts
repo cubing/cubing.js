@@ -33,7 +33,7 @@ import { packageVersion } from "../metadata/packageVersion";
 
 const args = run(
   object({
-    puzzleID: argument(choice(Object.keys(puzzles))),
+    puzzleID: argument(choice(Object.keys(puzzles), { metavar: "PUZZLE_ID" })),
   }),
   {
     programName: basename(argv[1]),
