@@ -20,6 +20,7 @@ export const esmOptions: BuildOptions = {
   //
   external: external,
   metafile: true,
+  supported: { "top-level-await": false },
 };
 
 const result = await build(esmOptions);
