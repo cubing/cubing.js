@@ -1,6 +1,6 @@
 export { eventInfo, twizzleEvents, wcaEventInfo, wcaEvents } from "./events";
-export { cube2x2x2, cube3x3x3 };
 export type { PuzzleLoader };
+export { cube2x2x2, cube3x3x3 };
 
 import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";

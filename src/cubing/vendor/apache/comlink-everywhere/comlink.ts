@@ -13,6 +13,7 @@ import {
   type WireValue,
   WireValueType,
 } from "./protocol";
+
 export type { Endpoint };
 
 export const proxyMarker = Symbol("Comlink.proxy");
