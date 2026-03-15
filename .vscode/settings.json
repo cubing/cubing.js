@@ -1,13 +1,10 @@
 {
   "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "[javascript][typescript][json]": {
+  "[javascript][typescript][json][jsonc]": {
     "editor.defaultFormatter": "biomejs.biome",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit"
     }
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome"
   }
 }
