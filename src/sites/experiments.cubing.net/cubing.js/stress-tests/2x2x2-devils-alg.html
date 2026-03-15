@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="utf8" />
-  <title>cubing.js | 2x2x2 Devil's Algorithm</title>
-  <script src="./2x2x2-devils-alg.js" href="./2x2x2-devils-alg.ts" type="module"></script>
-  <link rel="stylesheet" href="./stress-test.css" />
-  <style>
+  <head>
+    <meta charset="utf8">
+    <title>cubing.js | 2x2x2 Devil's Algorithm</title>
+    <script
+      src="./2x2x2-devils-alg.js"
+      href="./2x2x2-devils-alg.ts"
+      type="module"
+    ></script>
+    <link rel="stylesheet" href="./stress-test.css">
+    <style>
     /* From Twizzle Editor */
     .spinner {
       width: 4em;
@@ -39,26 +42,27 @@
       width: 100%;
       height: 100%;
     }
-  </style>
-</head>
+    </style>
+  </head>
 
-<body>
-  <div id="player-wrapper">
-    <div id="spinner-wrapper">
-      <div class="spinner"></div>
+  <body>
+    <div id="player-wrapper">
+      <div id="spinner-wrapper">
+        <div class="spinner"></div>
+      </div>
     </div>
-  </div>
-  <div id="controls">
-    <h1>2x2x2 Devil's Algorithm 😈</h1>
-    <div id="please-wait">
-      A Hamiltonian circuit of the 2x2x2 pattern graph
-      <a href="https://www.speedsolving.com/threads/hamiltonian-circuit-for-the-entire-2x2x2-cube-group.34318/">by Bruce
-        Norskog</a>. This may take a minute or longer to load.
+    <div id="controls">
+      <h1>2x2x2 Devil's Algorithm 😈</h1>
+      <div id="please-wait">
+        A Hamiltonian circuit of the 2x2x2 pattern graph
+        <a
+          href="https://www.speedsolving.com/threads/hamiltonian-circuit-for-the-entire-2x2x2-cube-group.34318/"
+          >by Bruce Norskog</a
+        >. This may take a minute or longer to load.
+      </div>
+      <br>
+      <div id="progress"></div>
+      <br><br>
     </div>
-    <br />
-    <div id="progress"></div>
-    <br /><br />
-  </div>
-</body>
-
+  </body>
 </html>

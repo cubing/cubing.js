@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf8" />
+    <meta charset="utf8">
     <title>Twizzle Binary 3x3x3 Format</title>
-    <link href="./index.css" rel="stylesheet" type="text/css" />
+    <link href="./index.css" rel="stylesheet" type="text/css">
     <script src="./index.js" href="./index.ts" type="module"></script>
   </head>
 
@@ -66,7 +66,7 @@
           </tr>
           <tr class="centerOri">
             <td><span class="componentName">MO_Q</span></td>
-            <td>whether center ("middle")<br />orientation is supported</td>
+            <td>whether center ("middle")<br>orientation is supported</td>
             <td>0 to 1</td>
             <td>1 bit</td>
           </tr>
@@ -108,10 +108,9 @@
     <section id="byte-layout">
       <h2>Byte Layout</h2>
       <div id="stub">
-        <noscript
-          >This page currently requires JavaScript to load the example
-          table.</noscript
-        >
+        <noscript>
+          This page currently requires JavaScript to load the example table.
+        </noscript>
       </div>
       <p>
         Each component is stored with binary bits contiguously from high to low.
@@ -122,14 +121,16 @@
       <p>If puzzle orientation is not encoded:</p>
       <ul>
         <li>
-          <span class="componentName">PO_U</span> is set to <code>0b111</code>.
+          <span class="componentName">PO_U</span>
+          is set to <code>0b111</code>.
         </li>
         <li><span class="componentName">PO_L</span> is ignored.</li>
       </ul>
       <p>If center orientation is not encoded:</p>
       <ul>
         <li>
-          <span class="componentName">MO_Q</span> is set to <code>0b0</code>.
+          <span class="componentName">MO_Q</span>
+          is set to <code>0b0</code>.
         </li>
         <li>The <span class="componentName">MO</span> bits are ignored.</li>
       </ul>
@@ -153,7 +154,8 @@
       <p>
         The other components are encoded relative to centers. That is,
         reorienting the puzzle changes
-        <span class="componentName">PO_U</span> and
+        <span class="componentName">PO_U</span>
+        and
         <span class="componentName">PO_L</span>, but does not affect any other
         components.
       </p>
@@ -164,7 +166,8 @@
           The <code>L</code> center has moved to <code>U</code>.
           <ul>
             <li>
-              <code>L</code> is at (zero-indexed) position 1 in
+              <code>L</code>
+              is at (zero-indexed) position 1 in
               <code>ULFRBD</code>, so <span class="componentName">PO_U</span> =
               <code>1</code>
             </li>
@@ -175,12 +178,15 @@
           <ul>
             <li>
               The <code>L</code> and <code>R</code> centers are on
-              <code>U</code> and <code>D</code> (respectively), so remove
-              <code>L</code> and <code>R</code> from <code>ULFRBD</code> to get
+              <code>U</code>
+              and <code>D</code> (respectively), so remove
+              <code>L</code>
+              and <code>R</code> from <code>ULFRBD</code> to get
               <code>UFBD</code>.
             </li>
             <li>
-              <code>B</code> is at (zero-indexed) position 2 in
+              <code>B</code>
+              is at (zero-indexed) position 2 in
               <code>UFBD</code>, so <span class="componentName">PO_L</span> =
               <code>2</code>
             </li>

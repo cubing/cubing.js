@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="utf8" />
-  <title>cubing.js | twips</title>
-  <script src="./text-ui.js" href="./text-ui.ts" type="module"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=0.75">
-  <style>
+  <head>
+    <meta charset="utf8">
+    <title>cubing.js | twips</title>
+    <script src="./text-ui.js" href="./text-ui.ts" type="module"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <style>
     :root {
       color-scheme: light dark;
     }
@@ -17,7 +16,7 @@
 
     textarea {
       width: 400px;
-      height: 300px
+      height: 300px;
     }
 
     .valid {
@@ -27,50 +26,63 @@
     .invalid {
       background: rgba(255, 0, 0, 0.25);
     }
-  </style>
-</head>
+    </style>
+  </head>
 
-<h1><code>twips</code> Text UI</h1>
+  <h1><code>twips</code> Text UI</h1>
 
-<p>Here be dragons. 🐉</p>
+  <p>Here be dragons. 🐉</p>
 
-<fieldset>
-  <summary>Definition and search <button id="reset-def-search">Reset to 2x2x2 example</button><select
-      id="puzzle-select">
-      <option>Select a puzzle</option>
-    </select></summary>
+  <fieldset>
+    <summary>
+      Definition and search
+      <button id="reset-def-search">Reset to 2x2x2 example</button
+      ><select id="puzzle-select">
+        <option>Select a puzzle</option>
+      </select>
+    </summary>
+    <br>
+    <textarea id="def" placeholder="Definition"></textarea>
+    <textarea id="search" placeholder="Search"></textarea>
+  </fieldset>
+  <fieldset>
+    <summary>
+      Alg
+      <button id="set-search-alg">
+        Apply alg to default pattern and set as search goal
+      </button>
+    </summary>
+    <br>
+    <input id="search-alg" placeholder="Alg">
+  </fieldset>
   <br>
-  <textarea id="def" placeholder="Definition"></textarea>
-  <textarea id="search" placeholder="Search"></textarea>
-</fieldset>
-<fieldset>
-  <summary>Alg <button id="set-search-alg">Apply alg to default pattern and set as search goal</button></summary>
+  <fieldset>
+    <summary>
+      Move subset <button id="reset-generator-moves">Reset to defaults</button>
+    </summary>
+    <br>
+    <div id="generator-moves"></div>
+    <button id="toggle-generator-moves">Toggle every move</button>
+    <button id="generator-moves-check-all">Check all moves</button>
+    <button id="generator-moves-uncheck-all">Un-check all moves</button>
+  </fieldset>
   <br>
-  <input id="search-alg" placeholder="Alg">
-</fieldset>
-<br>
-<fieldset>
-  <summary>Move subset <button id="reset-generator-moves">Reset to defaults</button>
-  </summary>
+  <fieldset>
+    <summary>Additional options</summary>
+    <br>
+    Min depth: <input id="min-depth" type="number" value="0">
+  </fieldset>
   <br>
-  <div id="generator-moves"></div>
-  <button id="toggle-generator-moves">Toggle every move</button> <button id="generator-moves-check-all">Check all
-    moves</button>
-  <button id="generator-moves-uncheck-all">Un-check all moves</button>
-</fieldset>
-<br>
-<fieldset>
-  <summary>Additional options</summary>
-  <br>
-  Min depth: <input id="min-depth" type="number" value="0">
-</fieldset>
-<br>
-<fieldset>
-  <input type="checkbox" id="use-server"><label for="use-server">Use local <a
-      href="https://github.com/cubing/twips/#rust-implementation"><code>twips</code></a> server
-    (experimental)</label>
-  <summary><button id="go">Search</button></summary>
-  <textarea id="results" value=""></textarea>
-</fieldset>
-
+  <fieldset>
+    <input type="checkbox" id="use-server">
+    <label for="use-server"
+      >Use local
+      <a href="https://github.com/cubing/twips/#rust-implementation"
+        ><code>twips</code></a
+      >
+      server (experimental)</label
+    >
+    <summary><button id="go">Search</button></summary>
+    <textarea id="results" value=""></textarea>
+  </fieldset>
 </html>

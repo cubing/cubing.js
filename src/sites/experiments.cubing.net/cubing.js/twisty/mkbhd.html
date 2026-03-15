@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf8" />
-    <meta name="theme-color" value="#141414" />
+    <meta charset="utf8">
+    <meta name="theme-color" value="#141414">
     <title>cubing.js | MKBHD</title>
     <style>
-      html,
-      body {
-        margin: 0;
-        height: 100%;
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+    }
+    body {
+      background-color: #303030;
+      background-image: url(mkbhd-background.png);
+      background-repeat: repeat;
+      box-shadow: inset 0 0 1em black;
+    }
+    body.animate {
+      animation-name: background-movement;
+      animation-duration: 600s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+    twisty-player {
+      width: 100%;
+      height: 100%;
+    }
+    @keyframes background-movement {
+      from {
+        background-position: 0% 0%;
       }
-      body {
-        background-color: #303030;
-        background-image: url(mkbhd-background.png);
-        background-repeat: repeat;
-        box-shadow: inset 0 0 1em black;
+      to {
+        background-position: 800% 100%;
       }
-      body.animate {
-        animation-name: background-movement;
-        animation-duration: 600s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-      }
-      twisty-player {
-        width: 100%;
-        height: 100%;
-      }
-      @keyframes background-movement {
-        from {
-          background-position: 0% 0%;
-        }
-        to {
-          background-position: 800% 100%;
-        }
-      }
+    }
     </style>
-    <script src="./demo-player.js" href="./demo-player.ts" type="module"></script>
+    <script
+      src="./demo-player.js"
+      href="./demo-player.ts"
+      type="module"
+    ></script>
   </head>
 
   <body>

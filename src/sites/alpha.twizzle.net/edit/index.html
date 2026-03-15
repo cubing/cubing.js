@@ -1,163 +1,192 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf8">
+    <meta name="viewport" content="initial-scale=0.8">
+    <title>Twizzle Editor ᴬᴸᴾᴴᴬ</title>
+    <link rel="icon" href="./favicon.ico">
+    <link rel="apple-touch-icon" href="./app-icon.png">
+    <link href="./index.css" rel="stylesheet" type="text/css">
+    <link href="./responsive.css" rel="stylesheet" type="text/css">
+    <link href="./spinner.css" rel="stylesheet" type="text/css">
+    <link href="./control-pane.css" rel="stylesheet" type="text/css">
+    <script src="./main.js" href="./main.ts" type="module"></script>
+  </head>
 
-<head>
-  <meta charset="utf8" />
-  <meta name="viewport" content="initial-scale=0.8" />
-  <title>Twizzle Editor ᴬᴸᴾᴴᴬ</title>
-  <link rel="icon" href="./favicon.ico" />
-  <link rel="apple-touch-icon" href="./app-icon.png" />
-  <link href="./index.css" rel="stylesheet" type="text/css" />
-  <link href="./responsive.css" rel="stylesheet" type="text/css" />
-  <link href="./spinner.css" rel="stylesheet" type="text/css" />
-  <link href="./control-pane.css" rel="stylesheet" type="text/css" />
-  <script src="./main.js" href="./main.ts" type="module"></script>
-</head>
-
-<body>
-  <twizzle-app>
-    <puzzle-pane class="loading">
-      <div class="spinner"></div>
-    </puzzle-pane>
-    <control-pane class="loading">
-      <section>
-        <div class="title">✍️ Twizzle Editor ᴬᴸᴾᴴᴬ</div>
-        <a href="" class="metadata-url video-url"></a>
-        <a href="" class="metadata-url competition-url"></a>
-      </section>
-      <div class="alg-features">
-        <p class="auto-notation" hidden>
-          The puzzle has been automatically changed to <span class="auto-notation-puzzle-new">—</span> based on the
-          provided
-          notation.<br>
-          <span class="auto-notation-change-back">Want to <a href="#" class="auto-notation-undo">change it
-              back to <span class="auto-notation-puzzle-old">—</span></a>?</span>
-          <span class="auto-notation-change-redo">🚫 Auto-detection has been temporarily disabled. Want to <a href="#"
-              class="auto-notation-redo">re-enable it and change the puzzle to
-              <span class="auto-notation-puzzle-new auto-notation-puzzle-new-new">—</span></a>?</span>
-        </p>
-      </div>
-      <expand-button for="setup" expanded="true" exclusive="false">
-        <a href="#">
-          <h2>
-            <span class="expand-icon">▾</span>
-            Setup
-          </h2>
-        </a>
-      </expand-button>
-      <section id="setup" class="unpadded">
-        <twisty-alg-editor class="experimental-setup-alg" placeholder="[Click here to add anchor setup alg.]"
-          twisty-player-prop="setupAlg"></twisty-alg-editor>
-      </section>
-      <div id="moves-sticky-wrapper">
-        <expand-button for="moves" expanded="true" exclusive="false">
+  <body>
+    <twizzle-app>
+      <puzzle-pane class="loading"> <div class="spinner"></div> </puzzle-pane>
+      <control-pane class="loading">
+        <section>
+          <div class="title">✍️ Twizzle Editor ᴬᴸᴾᴴᴬ</div>
+          <a href="" class="metadata-url video-url"></a>
+          <a href="" class="metadata-url competition-url"></a>
+        </section>
+        <div class="alg-features">
+          <p class="auto-notation" hidden>
+            The puzzle has been automatically changed to
+            <span class="auto-notation-puzzle-new">—</span>
+            based on the provided notation.<br>
+            <span class="auto-notation-change-back"
+              >Want to
+              <a href="#" class="auto-notation-undo"
+                >change it back to
+                <span class="auto-notation-puzzle-old">—</span></a
+              >?</span
+            >
+            <span class="auto-notation-change-redo"
+              >🚫 Auto-detection has been temporarily disabled. Want to
+              <a href="#" class="auto-notation-redo"
+                >re-enable it and change the puzzle to
+                <span
+                  class="auto-notation-puzzle-new auto-notation-puzzle-new-new"
+                  >—</span
+                ></a
+              >?</span
+            >
+          </p>
+        </div>
+        <expand-button for="setup" expanded="true" exclusive="false">
           <a href="#">
-            <h2 class="move-count-header no-hover-underline">
-              <span class="hover-underline">
-                <span class="expand-icon">▾</span>
-                Moves
-              </span>
-              <span class="move-count"></span>
+            <h2>
+              <span class="expand-icon">▾</span>
+              Setup
             </h2>
           </a>
         </expand-button>
-        <section id="moves" class="unpadded">
-          <twisty-alg-editor class="alg" placeholder="[Click here to add alg.]"></twisty-alg-editor>
-          <div class="alg-features">
-            <p class="caret-niss-info" hidden>
-              This alg uses <a href="https://www.speedsolving.com/threads/caret-niss-notation-b-l-u-f2.88529/">caret
-                NISS notation</a>, a convention for Fewest Moves.
-            </p>
-            <p class="commutator-conjugate-info" hidden>
-              This alg uses <a href="https://www.speedsolving.com/wiki/index.php/Commutators_and_Conjugates">commutator
-                or conjugate notation</a> to show structure.
-            </p>
-            <p class="square1-info" hidden>
-              This alg uses <a href="https://www.speedsolving.com/wiki/index.php/Square-1_notation">Square-1
-                notation</a>.
-            </p>
+        <section id="setup" class="unpadded">
+          <twisty-alg-editor
+            class="experimental-setup-alg"
+            placeholder="[Click here to add anchor setup alg.]"
+            twisty-player-prop="setupAlg"
+          ></twisty-alg-editor>
+        </section>
+        <div id="moves-sticky-wrapper">
+          <expand-button for="moves" expanded="true" exclusive="false">
+            <a href="#">
+              <h2 class="move-count-header no-hover-underline">
+                <span class="hover-underline">
+                  <span class="expand-icon">▾</span>
+                  Moves
+                </span>
+                <span class="move-count"></span>
+              </h2>
+            </a>
+          </expand-button>
+          <section id="moves" class="unpadded">
+            <twisty-alg-editor
+              class="alg"
+              placeholder="[Click here to add alg.]"
+            ></twisty-alg-editor>
+            <div class="alg-features">
+              <p class="caret-niss-info" hidden>
+                This alg uses
+                <a
+                  href="https://www.speedsolving.com/threads/caret-niss-notation-b-l-u-f2.88529/"
+                  >caret NISS notation</a
+                >, a convention for Fewest Moves.
+              </p>
+              <p class="commutator-conjugate-info" hidden>
+                This alg uses
+                <a
+                  href="https://www.speedsolving.com/wiki/index.php/Commutators_and_Conjugates"
+                  >commutator or conjugate notation</a
+                >
+                to show structure.
+              </p>
+              <p class="square1-info" hidden>
+                This alg uses
+                <a
+                  href="https://www.speedsolving.com/wiki/index.php/Square-1_notation"
+                  >Square-1 notation</a
+                >.
+              </p>
+            </div>
+          </section>
+        </div>
+        <expand-button for="puzzle-settings" expanded="true">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▿</span>
+              ⚙️ Puzzle Settings
+            </h2>
+          </a>
+        </expand-button>
+        <section class="unpadded" id="puzzle-settings">
+          <select class="puzzle">
+            <option>Puzzle</option>
+          </select>
+          <select class="stickering">
+            <option>Stickering</option>
+          </select>
+          <select class="setup-anchor">
+            <option>Setup Anchor</option>
+          </select>
+        </section>
+        <expand-button for="playback-options">
+          <a href="#">
+            <h2><span class="expand-icon">▹</span>👓 Playback Options</h2>
+          </a>
+        </expand-button>
+        <section id="playback-options" hidden>
+          <div class="inline">Tempo:</div>
+          <input
+            class="tempo"
+            type="range"
+            min="0.1"
+            max="6"
+            step="0.1"
+            value="1"
+          >
+          <div class="inline">(<span class="tempo-display">1×</span>)</div>
+          <br>
+          <div class="inline">
+            <input
+              type="checkbox"
+              id="hint-facelets"
+              class="hint-facelets"
+              checked
+            ><label for="hint-facelets">Hint Facelets</label>
+            <input type="checkbox" id="show-2D" class="show-2D">
+            <label for="show-2D">Show 2D view</label>
           </div>
         </section>
-      </div>
-      <expand-button for="puzzle-settings" expanded="true">
-        <a href="#">
-          <h2>
-            <span class="expand-icon">▿</span>
-            ⚙️ Puzzle Settings
-          </h2>
-        </a>
-      </expand-button>
-      <section class="unpadded" id="puzzle-settings">
-        <select class="puzzle">
-          <option>Puzzle</option>
-        </select>
-        <select class="stickering">
-          <option>Stickering</option>
-        </select>
-        <select class="setup-anchor">
-          <option>Setup Anchor</option>
-        </select>
-      </section>
-      <expand-button for="playback-options">
-        <a href="#">
-          <h2>
-            <span class="expand-icon">▹</span>
-            👓 Playback Options
-          </h2>
-        </a>
-      </expand-button>
-      <section id="playback-options" hidden>
-        <div class="inline">Tempo:</div>
-        <input class="tempo" type="range" min="0.1" max="6" step="0.1" value="1" />
-        <div class="inline">(<span class="tempo-display">1×</span>)</div>
-        <br />
-        <div class="inline">
-          <input type="checkbox" id="hint-facelets" class="hint-facelets" checked /><label for="hint-facelets">Hint
-            Facelets</label>
-          <input type="checkbox" id="show-2D" class="show-2D" /><label for="show-2D">Show 2D view</label>
-        </div>
-      </section>
-      <expand-button for="alg-tools">
-        <a href="#">
-          <h2>
-            <span class="expand-icon">▹</span>
-            ✍️ Alg Tools
-          </h2>
-        </a>
-      </expand-button>
-      <section id="alg-tools" class="unpadded" hidden>
-        <button-grid class="tool-grid">
-          <button id="expand">↔️ Expand</button>
-          <button id="simplify">❇️ Simplify</button>
-          <button id="clear">🧹 Clear</button>
-          <button id="invert">◀️ Invert</button>
-          <button id="scramble">🔀 Scramble</button>
-          <button id="solve">🏁 Solve</button>
-          <button id="screenshot">📸 Screenshot</button>
-          <button id="connect-input">📥 Input</button>
-        </button-grid>
-        <button-grid class="transform-grid">
-        </button-grid>
-        <twisty-stream-source style="display: none"></twisty-stream-source>
-      </section>
-      <expand-button for="examples">
-        <a href="#">
-          <h2>
-            <span class="expand-icon">▹</span>
-            📖 Examples
-          </h2>
-        </a>
-      </expand-button>
-      <section id="examples" class="unpadded" hidden>
-        <button-grid class="examples-grid">
-          <button id="wr" hidden>WR</button>
-          <button id="tperm">T-Perm</button>
-          <button id="sune">Sune</button>
-          <button id="notation" hidden>Notation</button>
-        </button-grid>
-      </section>
-    </control-pane>
-  </twizzle-app>
-</body>
-
+        <expand-button for="alg-tools">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▹</span>
+              ✍️ Alg Tools
+            </h2>
+          </a>
+        </expand-button>
+        <section id="alg-tools" class="unpadded" hidden>
+          <button-grid class="tool-grid">
+            <button id="expand">↔️ Expand</button>
+            <button id="simplify">❇️ Simplify</button>
+            <button id="clear">🧹 Clear</button>
+            <button id="invert">◀️ Invert</button>
+            <button id="scramble">🔀 Scramble</button>
+            <button id="solve">🏁 Solve</button>
+            <button id="screenshot">📸 Screenshot</button>
+            <button id="connect-input">📥 Input</button>
+          </button-grid>
+          <button-grid class="transform-grid"> </button-grid>
+          <twisty-stream-source style="display: none"></twisty-stream-source>
+        </section>
+        <expand-button for="examples">
+          <a href="#">
+            <h2><span class="expand-icon">▹</span>📖 Examples</h2>
+          </a>
+        </expand-button>
+        <section id="examples" class="unpadded" hidden>
+          <button-grid class="examples-grid">
+            <button id="wr" hidden>WR</button>
+            <button id="tperm">T-Perm</button>
+            <button id="sune">Sune</button>
+            <button id="notation" hidden>Notation</button>
+          </button-grid>
+        </section>
+      </control-pane>
+    </twizzle-app>
+  </body>
 </html>

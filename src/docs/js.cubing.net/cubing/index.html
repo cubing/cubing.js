@@ -1,205 +1,308 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf8">
+    <title>cubing.js</title>
+    <meta name="theme-color" content="#4285f4">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../main.css">
+    <script
+      src="https://cdn.cubing.net/v0/js/cubing/twisty"
+      type="module"
+    ></script>
+  </head>
 
-<head>
-  <meta charset="utf8">
-  <title>cubing.js</title>
-  <meta name="theme-color" content="#4285f4">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="../main.css">
-  <script src="https://cdn.cubing.net/v0/js/cubing/twisty" type="module"></script>
-</head>
-
-<body>
-  <div
-    style="text-align: center; margin: 1em 0; display: grid; grid-template-columns: repeat(2, auto); gap: 0.5em; place-content: center; align-content: space-around;">
-    <twisty-player style="height: 100%; width: 8em; aspect-ratio: 1;" control-panel="none" background="none"
-      experimental-initial-hint-facelets-animation="none">
-    </twisty-player>
-    <img src="./cubing.js-transparent-bright.png" style="height: 8em;">
-  </div>
-  <content>
-    <!-- Tip: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
-    <section class="no-header">
-      <p>
-        <code>cubing.js</code> is a library for showing and playing with twisty
-        puzzles. You may use it for free in any website or app.
-      </p>
-    </section>
-
-    <section id="twisty">
-      <h1><code><a href="./twisty/" class="separate-page">cubing/twisty</a></code></h1>
-      <p>The main feature of <code>cubing.js</code> is the <code>&lt;twisty-player&gt;</code> element that can be used
-        on any website:</p>
-
-      <div class="code-demo">
-        <code class="sample">
-          &lt;script
-            src=&quot;<code class="boilerplate"
-            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/twisty&quot;
-        type=&quot;module&quot;&gt;&lt;/script&gt;<br>
-        <br>
-        <span>&lt;twisty-player alg=&quot;R U R&#x27; U R U2&#x27; R&#x27;&quot;&gt;&lt;/twisty-player&gt;</span>
-        </code>
-        <twisty-player alg="R U R' U R U2' R'">
-        </twisty-player>
-      </div>
-      <p>
-        See the <a href="./twisty/"><code>cubing/twisty</code> docs</a> for more features.
-      </p>
-    </section>
-
-    <section id="alg">
-      <h1><code><a href="./alg/" class="separate-page">cubing/alg</a></code></h1>
-      <p>At the core of <code>cubing.js</code> is a powerful <code>Alg</code> class that is compatible with all SiGN and
-        WCA notation.</p>
-
-      <div class="code-demo">
-        <div>
-          <code class="sample">
-<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
-          import { Alg } from &quot;<code class="boilerplate"
-            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/alg&quot;;<br>
-          <br>
-          const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
-          commutator.invert().expand().log();<br>
-          <code class="boilerplate">&lt;/script&gt;</code>
-          </code>
-        </div>
-        <code class="sample output">
-          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;U' L' U R U' L U R'&quot;</span>
-        </code>
-      </div>
-      <p>
-        See the <a href="./alg/"><code>cubing/alg</code> docs</a> for more features.
-      </p>
-    </section>
-
-    <section id="scramble">
-      <h1><code><a href="./scramble/" class="separate-page">cubing/scramble</a></code></h1>
-      <p><code>cubing.js</code> makes it easy to generate fair random-state scrambles.</p>
-
-      <div class="code-demo">
-        <div>
-          <code class="sample">
-<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
-          import { randomScrambleForEvent } from &quot;<code class="boilerplate"
-            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/scramble&quot;;<br>
-          <br>
-          const scramble = await randomScrambleForEvent("333");<br>
-          scramble.log();<br>
-          <code class="boilerplate">&lt;/script&gt;</code>
-          </code>
-        </div>
-        <code class="sample output">
-          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;F' R' F' U2 B D' L' U F R B' R2 F' L2 F2 L2 D2 B R2 L2 F'&quot;</span>
-        </code>
-      </div>
-      <p>
-        Note: this requires the page to be accessed from a server (either from the internet or <code>localhost</code>).
-        It will not work for <code>file://</code> URLs.
-      </p>
-      <p>
-        See the <a href="./scramble/"><code>cubing/scramble</code> docs</a> for more features.
-      </p>
-    </section>
-
-    <section id="bluetooth">
-      <h1><code><a href="./bluetooth/" class="separate-page">cubing/bluetooth</a></code></h1>
-
-      <p>
-        <code>cubing/bluetooth</code> supports connecting to a variety of Bluetooth devices, particularly smart cubes.
-      </p>
-
-      <p>Connect to a smart puzzle and listen like this:
-      </p>
-      <code class="sample">
-import { connectSmartPuzzle } from &quot;<code class="boilerplate"
-            title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/v0/js/</code>cubing/bluetooth&quot;;<br>
-      <br>
-      const puzzle = await connectSmartPuzzle();<br>
-      puzzle.addAlgLeafListener((e) => {<br>
-      &nbsp;console.log(e.latestAlgLeaf);<br>
-      });
-      </code>
-      <p>
-        See the <a href="./bluetooth/"><code>cubing/bluetooth</code> docs</a> for more information.
-      </p>
-    </section>
-
-    <section id="javascript">
-      <h1><a href="#javascript"><code>npm</code> package</a></h1>
-      <p>
-        <code>cubing.js</code> is published as <a href="https://www.npmjs.com/package/cubing">
-          <code>cubing</code></a> on <code>npm</code>.
-        If you are familiar with tools like JavaScript bundlers, you can use this for development.
-        Install the package:
-      </p>
-      <code class="sample">
-        <span>npm install cubing</span>
-      </code>
-      Then you can use direct imports (as well as types for TypeScript):
-      <code class="sample">
-        <span>
-import { Alg } from &quot;cubing/alg&quot;;<br>
-import { TwistyPlayer } from &quot;cubing/twisty&quot;;<br>
-import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
-        </span>
-      </code>
-      <p>
-        Most examples on this site use CDN import paths for convenient copy-and-pasting. To import from
-        <code>npm</code>, remove the <code class="boilerplate">https://cdn.cubing.net/v0/js/</code> prefix from any
-        relevant imports.
-      </p>
-      <section id="create-cubing-app" class="inline no-header">
-        <h3>Create a project using <code>create-cubing-app</code></h3>
-        <p>If you have <code>npm</code> installed, you may find it easy to start a project using <a
-            href="https://github.com/cubing/create-cubing-app#getting-started">using
-            <code>create-cubing-app</code></a>:
+  <body>
+    <div
+      style="text-align: center; margin: 1em 0; display: grid; grid-template-columns: repeat(2, auto); gap: 0.5em; place-content: center; align-content: space-around;"
+    >
+      <twisty-player
+        style="height: 100%; width: 8em; aspect-ratio: 1;"
+        control-panel="none"
+        background="none"
+        experimental-initial-hint-facelets-animation="none"
+      > </twisty-player>
+      <img src="./cubing.js-transparent-bright.png" style="height: 8em;">
+    </div>
+    <content>
+      <!-- Tip: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
+      <section class="no-header">
+        <p>
+          <code>cubing.js</code>
+          is a library for showing and playing with twisty puzzles. You may use
+          it for free in any website or app.
         </p>
+      </section>
+
+      <section id="twisty">
+        <h1>
+          <code
+            ><a href="./twisty/" class="separate-page">cubing/twisty</a></code
+          >
+        </h1>
+        <p>
+          The main feature of <code>cubing.js</code> is the
+          <code>&lt;twisty-player&gt;</code>
+          element that can be used on any website:
+        </p>
+
+        <div class="code-demo">
+          <code class="sample">
+            &lt;script src=&quot;<code
+              class="boilerplate"
+              title="Remove this part of the import path if you are using `npm`."
+              >https://cdn.cubing.net/v0/js/</code
+            >cubing/twisty&quot; type=&quot;module&quot;&gt;&lt;/script&gt;<br>
+            <br>
+            <span
+              >&lt;twisty-player alg=&quot;R U R&#x27; U R U2&#x27;
+              R&#x27;&quot;&gt;&lt;/twisty-player&gt;</span
+            >
+          </code>
+          <twisty-player alg="R U R' U R U2' R'"> </twisty-player>
+        </div>
+        <p>
+          See the <a href="./twisty/"><code>cubing/twisty</code> docs</a> for
+          more features.
+        </p>
+      </section>
+
+      <section id="alg">
+        <h1>
+          <code><a href="./alg/" class="separate-page">cubing/alg</a></code>
+        </h1>
+        <p>
+          At the core of <code>cubing.js</code> is a powerful
+          <code>Alg</code>
+          class that is compatible with all SiGN and WCA notation.
+        </p>
+
+        <div class="code-demo">
+          <div>
+            <code class="sample">
+              <code class="boilerplate"
+                >&lt;script type=&quot;module&quot;&gt;</code
+              ><br>
+              import { Alg } from &quot;<code
+                class="boilerplate"
+                title="Remove this part of the import path if you are using `npm`."
+                >https://cdn.cubing.net/v0/js/</code
+              >cubing/alg&quot;;<br>
+              <br>
+              const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
+              commutator.invert().expand().log();<br>
+              <code class="boilerplate">&lt;/script&gt;</code>
+            </code>
+          </div>
+          <code class="sample output">
+            <span
+              ><span
+                class="js-object"
+                title="This will show available methods and internal details of the Alg object, depending on your JS environment."
+                >Alg { }</span
+              >
+              &quot;U' L' U R U' L U R'&quot;</span
+            >
+          </code>
+        </div>
+        <p>
+          See the <a href="./alg/"><code>cubing/alg</code> docs</a> for more
+          features.
+        </p>
+      </section>
+
+      <section id="scramble">
+        <h1>
+          <code
+            ><a href="./scramble/" class="separate-page"
+              >cubing/scramble</a
+            ></code
+          >
+        </h1>
+        <p>
+          <code>cubing.js</code>
+          makes it easy to generate fair random-state scrambles.
+        </p>
+
+        <div class="code-demo">
+          <div>
+            <code class="sample">
+              <code class="boilerplate"
+                >&lt;script type=&quot;module&quot;&gt;</code
+              ><br>
+              import { randomScrambleForEvent } from &quot;<code
+                class="boilerplate"
+                title="Remove this part of the import path if you are using `npm`."
+                >https://cdn.cubing.net/v0/js/</code
+              >cubing/scramble&quot;;<br>
+              <br>
+              const scramble = await randomScrambleForEvent("333");<br>
+              scramble.log();<br>
+              <code class="boilerplate">&lt;/script&gt;</code>
+            </code>
+          </div>
+          <code class="sample output">
+            <span
+              ><span
+                class="js-object"
+                title="This will show available methods and internal details of the Alg object, depending on your JS environment."
+                >Alg { }</span
+              >
+              &quot;F' R' F' U2 B D' L' U F R B' R2 F' L2 F2 L2 D2 B R2 L2
+              F'&quot;</span
+            >
+          </code>
+        </div>
+        <p>
+          Note: this requires the page to be accessed from a server (either from
+          the internet or <code>localhost</code>). It will not work for
+          <code>file://</code>
+          URLs.
+        </p>
+        <p>
+          See the
+          <a href="./scramble/"><code>cubing/scramble</code> docs</a>
+          for more features.
+        </p>
+      </section>
+
+      <section id="bluetooth">
+        <h1>
+          <code
+            ><a href="./bluetooth/" class="separate-page"
+              >cubing/bluetooth</a
+            ></code
+          >
+        </h1>
+
+        <p>
+          <code>cubing/bluetooth</code>
+          supports connecting to a variety of Bluetooth devices, particularly
+          smart cubes.
+        </p>
+
+        <p>Connect to a smart puzzle and listen like this:</p>
         <code class="sample">
-          <span>npm create --yes cubing-app@latest my-cubing-project<br>
-  cd my-cubing-project<br>
-  npm run dev
+          import { connectSmartPuzzle } from &quot;<code
+            class="boilerplate"
+            title="Remove this part of the import path if you are using `npm`."
+            >https://cdn.cubing.net/v0/js/</code
+          >cubing/bluetooth&quot;;<br>
+          <br>
+          const puzzle = await connectSmartPuzzle();<br>
+          puzzle.addAlgLeafListener((e) => {<br>
+          &nbsp;console.log(e.latestAlgLeaf);<br>
+          } );
+        </code>
+        <p>
+          See the
+          <a href="./bluetooth/"><code>cubing/bluetooth</code> docs</a>
+          for more information.
+        </p>
+      </section>
+
+      <section id="javascript">
+        <h1>
+          <a href="#javascript"><code>npm</code> package</a>
+        </h1>
+        <p>
+          <code>cubing.js</code>
+          is published as
+          <a href="https://www.npmjs.com/package/cubing">
+            <code>cubing</code></a
+          >
+          on <code>npm</code>. If you are familiar with tools like JavaScript
+          bundlers, you can use this for development. Install the package:
+        </p>
+        <code class="sample"> <span>npm install cubing</span> </code>
+        Then you can use direct imports (as well as types for TypeScript):
+        <code class="sample">
+          <span>
+            import { Alg } from &quot;cubing/alg&quot;;<br>
+            import { TwistyPlayer } from &quot;cubing/twisty&quot;;<br>
+            import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
           </span>
         </code>
+        <p>
+          Most examples on this site use CDN import paths for convenient
+          copy-and-pasting. To import from
+          <code>npm</code>, remove the
+          <code class="boilerplate">https://cdn.cubing.net/v0/js/</code>
+          prefix from any relevant imports.
+        </p>
+        <section id="create-cubing-app" class="inline no-header">
+          <h3>Create a project using <code>create-cubing-app</code></h3>
+          <p>
+            If you have <code>npm</code> installed, you may find it easy to
+            start a project using
+            <a
+              href="https://github.com/cubing/create-cubing-app#getting-started"
+              >using
+              <code>create-cubing-app</code></a
+            >:
+          </p>
+          <code class="sample">
+            <span
+              >npm create --yes cubing-app@latest my-cubing-project<br>
+              cd my-cubing-project<br>
+              npm run dev
+            </span>
+          </code>
+        </section>
+        <h2>Compatibility</h2>
+        <p>
+          The <code>npm</code> package should work with any modern bundlers and
+          tools. If you are having trouble,
+          <b>make sure your tool is compatible with ES2022 syntax</b>. We
+          recommend using
+          <a href="https://esbuild.github.io/"><code>esbuild</code></a>
+          or tools based on <code>esbuild</code>, and you may find
+          <a href="https://github.com/cubing/cubing-app-template"
+            >this project template</a
+          >
+          a helpful start.
+        </p>
+        <p>
+          If you are having issues using <code>cubing.js</code> with a bundler,
+          please refer to
+          <a href="https://github.com/cubing/cubing.js/issues/323"
+            >this issue</a
+          >
+          with the latest compatibility details.
+        </p>
       </section>
-      <h2>Compatibility</h2>
-      <p>
-        The <code>npm</code> package should work with any modern bundlers and tools. If you are having trouble,
-        <b>make
-          sure your tool is compatible with ES2022 syntax</b>. We recommend using <a
-          href="https://esbuild.github.io/"><code>esbuild</code></a> or tools based on <code>esbuild</code>, and you
-        may
-        find <a href="https://github.com/cubing/cubing-app-template">this project template</a> a helpful start.
-      </p>
-      <p>
-        If you are having issues using <code>cubing.js</code> with a bundler, please refer to <a
-          href="https://github.com/cubing/cubing.js/issues/323">this issue</a> with the latest compatibility
-        details.
-      </p>
-    </section>
 
-    <section id="code-experiments">
-      <h1><a href="#code-experiments">Code Experiments</a></h1>
-      <p>For a taste of upcoming features, check out the <a href="https://experiments.cubing.net/cubing.js/">development
-          experiments</a> site.</p>
-    </section>
+      <section id="code-experiments">
+        <h1><a href="#code-experiments">Code Experiments</a></h1>
+        <p>
+          For a taste of upcoming features, check out the
+          <a href="https://experiments.cubing.net/cubing.js/"
+            >development experiments</a
+          >
+          site.
+        </p>
+      </section>
 
-    <section id="api-reference">
-      <h1><a href="#api-reference">API Reference</a></h1>
-      <p>For information on the full JavaScript API, take a look at the <a href="./api/">API reference</a>.</p>
-    </section>
+      <section id="api-reference">
+        <h1><a href="#api-reference">API Reference</a></h1>
+        <p>
+          For information on the full JavaScript API, take a look at the
+          <a href="./api/">API reference</a>.
+        </p>
+      </section>
 
-    <section id="contribute">
-      <h1><a href="#contribute">Contribute</a></h1>
-      <p>If you have any questions or ideas, please visit the
-        project source on GitHub:</p>
-      <div style="font-size: 1.25em; word-break: break-all;">
-        <a href="https://github.com/cubing/cubing.js">https://github.com/cubing/cubing.js</a>
-      </div>
-    </section>
-  </content>
-</body>
-
+      <section id="contribute">
+        <h1><a href="#contribute">Contribute</a></h1>
+        <p>
+          If you have any questions or ideas, please visit the project source on
+          GitHub:
+        </p>
+        <div style="font-size: 1.25em; word-break: break-all;">
+          <a href="https://github.com/cubing/cubing.js"
+            >https://github.com/cubing/cubing.js</a
+          >
+        </div>
+      </section>
+    </content>
+  </body>
 </html>

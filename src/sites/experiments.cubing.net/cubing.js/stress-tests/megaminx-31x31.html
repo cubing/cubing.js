@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf8">
+    <title>cubing.js | megaminx-31x31</title>
+    <script
+      src="./megaminx-31x31.js"
+      href="./megaminx-31x31.ts"
+      type="module"
+    ></script>
+    <link rel="stylesheet" href="./stress-test.css">
+  </head>
 
-<head>
-  <meta charset="utf8" />
-  <title>cubing.js | megaminx-31x31</title>
-  <script src="./megaminx-31x31.js" href="./megaminx-31x31.ts" type="module"></script>
-  <link rel="stylesheet" href="./stress-test.css" />
-</head>
-
-<body>
-  <div id="player-wrapper"></div>
-  <div id="controls">
-    <h1>
-      31x31 Megaminx Solve in 10:26.36<br />by Ben Whitmore
-    </h1>
-    <div id="please-wait">
-      Please be patient. The <code>&lt;twisty-player&gt;</code> on the left
-      may take a minute or longer to load.
+  <body>
+    <div id="player-wrapper"></div>
+    <div id="controls">
+      <h1>31x31 Megaminx Solve in 10:26.36<br>by Ben Whitmore</h1>
+      <div id="please-wait">
+        Please be patient. The <code>&lt;twisty-player&gt;</code> on the left
+        may take a minute or longer to load.
+      </div>
+      <br>
+      <br>
+      <div id="alg-viewer-wrapper">
+        <button id="show-reconstruction">Show reconstruction moves</button>
+        <br>
+        (Note: button may not respond while the player is still loading the
+        solve.)
+      </div>
     </div>
-    <br />
-    <br />
-    <div id="alg-viewer-wrapper">
-      <button id="show-reconstruction">Show reconstruction moves</button>
-      <br />
-      (Note: button may not respond while the player is still loading the
-      solve.)
-    </div>
-  </div>
-</body>
-
+  </body>
 </html>
