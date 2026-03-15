@@ -11,11 +11,7 @@
       "!src/cubing/vendor/mpl/twips/**/*.js",
       "!src/cubing/vendor/mpl/xyzzy/**/*.js",
       "!src/sites/experiments.cubing.net/cubing.js/rust/wasm/**/*.js",
-      "!src/sites/experiments.cubing.net/cubing.js/rust/wasm/**/*.d.ts",
-      // Exclude HTML files
-      // - https://github.com/biomejs/biome/discussions/9209
-      // - https://github.com/biomejs/biome/discussions/9308
-      "!**/*.html"
+      "!src/sites/experiments.cubing.net/cubing.js/rust/wasm/**/*.d.ts"
     ]
   },
   "linter": {
@@ -33,8 +29,19 @@
       "suspicious": {
         "noAssignInExpressions": "off",
         "noExplicitAny": "off"
+      },
+      "a11y": {
+        "useButtonType": "off",
+        "noAutofocus": "off"
       }
     }
   },
-  "html": {}
+  "html": {
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
+    }
+  }
 }
