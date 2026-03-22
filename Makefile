@@ -14,12 +14,10 @@ default:
 	@echo ""
 	@echo "To build the project, run:"
 	@echo ""
-	@echo "    make setup"
 	@echo "    make build"
 	@echo ""
 	@echo "To see available tests, run:"
 	@echo ""
-	@echo "    make setup"
 	@echo "    make test-info"
 	@echo ""
 
