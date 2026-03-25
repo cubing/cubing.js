@@ -6,7 +6,7 @@ To run this file directly:
 bun run -- ./src/bin/puzzle-geometry-bin.ts <program args>
 ```
 
-To test completions:
+To add a `puzzle-geometry` binary to your path and test completions:
 
 ```shell
 # fish (from repo root)

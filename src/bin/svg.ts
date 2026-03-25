@@ -6,7 +6,7 @@ To run this file directly:
 bun run -- ./src/bin/svg.ts <program args>
 ```
 
-To test completions:
+To add an `svg` binary to your path and test completions:
 
 ```shell
 # fish (from repo root)

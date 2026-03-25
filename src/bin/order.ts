@@ -6,7 +6,7 @@ To run this file directly:
 bun run -- ./src/bin/order.ts 3x3x3 "R U R' U R U2' R'"
 ```
 
-To test completions:
+To add an `order` binary to your path and test completions:
 
 ```shell
 # fish (from repo root)

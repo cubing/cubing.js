@@ -6,7 +6,7 @@ To run this file directly:
 bun run -- ./src/bin/scramble.ts 333
 ```
 
-To test completions:
+To add a `scramble` binary to your path and test completions:
 
 ```shell
 # fish (from repo root)
