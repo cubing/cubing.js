@@ -141,5 +141,8 @@
       "fromLocalDir": "./dist/sites/experiments.cubing.net/cubing.js/"
     }
   },
-  "$schema": "./node_modules/@cubing/deploy/config-schema.package.json"
+  "$schema": "./node_modules/@cubing/deploy/config-schema.package.json",
+  "patchedDependencies": {
+    "tsup@8.5.1": "patches/tsup@8.5.1.patch"
+  }
 }
