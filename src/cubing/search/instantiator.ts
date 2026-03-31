@@ -1,5 +1,5 @@
 import type { Worker as NodeWorker } from "node:worker_threads";
-import { PortableWorker, wrap } from "../vendor/apache/comlink-everywhere";
+import { PortableWorker, wrap } from "@cubing/comlink-everywhere";
 import type { WorkerAPI } from "./inside/api";
 import { searchOutsideDebugGlobals } from "./outside";
 import {

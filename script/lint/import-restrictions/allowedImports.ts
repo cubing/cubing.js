@@ -96,7 +96,7 @@ export const mainAllowedImports: AllowedImports = {
   },
   "src/cubing/search": {
     static: [
-      "src/cubing/vendor/apache/comlink-everywhere",
+      "@cubing/comlink-everywhere",
       "src/cubing/alg",
       "src/cubing/notation",
       "@cubing/lazy-promise",
@@ -191,7 +191,7 @@ export const specAllowedImports: AllowedImports = {
     static: ["three/src/math"],
   },
   "src/cubing/search": {
-    static: ["random-uint-below"],
+    static: ["@cubing/comlink-everywhere", "random-uint-below"],
   },
   "src/cubing/vendor": {
     static: ["random-uint-below"],

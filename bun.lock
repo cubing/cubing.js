@@ -16,6 +16,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "^2.4.8",
+        "@cubing/comlink-everywhere": "^0.1.1",
         "@cubing/deploy": ">=0.4.10",
         "@cubing/dev-config": ">=0.9.3",
         "@esm-bundle/chai": "^4.3.4-fix.0",
@@ -72,6 +73,8 @@
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.4.8", "", { "os": "win32", "cpu": "x64" }, "sha512-vAn7iXDoUbqFXqVocuq1sMYAd33p8+mmurqJkWl6CtIhobd/O6moe4rY5AJvzbunn/qZCdiDVcveqtkFh1e7Hg=="],
 
     "@cspotcode/source-map-support": ["@cspotcode/source-map-support@0.8.1", "", { "dependencies": { "@jridgewell/trace-mapping": "0.3.9" } }, "sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw=="],
+
+    "@cubing/comlink-everywhere": ["@cubing/comlink-everywhere@0.1.1", "", {}, "sha512-tJxzNGfrJZh38tTijzOZbOLFBld+pSXYKV1LKP7BeimmNfoCw3+aqkrVFu4cmzB0HW8F1DPa6uwSW+KXIEaJhQ=="],
 
     "@cubing/deploy": ["@cubing/deploy@0.4.10", "", { "dependencies": { "path-class": ">=0.10.3", "printable-shell-command": ">=2.6.3" }, "bin": { "deploy": "dist/cli/main.js" } }, "sha512-IQ13vLUpMvIU/cZxw0wDnwoUpwEpiZDNDTlaaUV/mfUnOxzbyZi/TrIucar400oPTq/rC1/9qWrKCIxxTbXIAg=="],
 

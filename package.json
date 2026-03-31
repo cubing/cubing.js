@@ -75,6 +75,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.8",
+    "@cubing/comlink-everywhere": "^0.1.1",
     "@cubing/deploy": ">=0.4.10",
     "@cubing/dev-config": ">=0.9.3",
     "@esm-bundle/chai": "^4.3.4-fix.0",
