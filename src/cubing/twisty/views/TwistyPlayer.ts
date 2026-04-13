@@ -526,6 +526,44 @@ export class TwistyPlayer
     return (await screenshot(this.experimentalModel, options)).dataURL;
   }
 
+  async #get2DSvgMarkup(): Promise<string> {
+    const wrapper2D = this.#visualizationWrapper as Twisty2DSceneWrapper;
+    const twisty2DPuzzleWrapper = wrapper2D.currentTwisty2DPuzzleWrapper();
+    if (!twisty2DPuzzleWrapper) {
+      throw new Error("No 2D puzzle wrapper available");
+    }
+    const twisty2DPuzzle = await twisty2DPuzzleWrapper.twisty2DPuzzle();
+
+    // Force SVG to reflect current model state. After property changes like
+    // experimentalSetupAlg, the model has already computed the new position but
+    // the async listener dispatch (setTimeout 0) hasn't fired yet. Fetching the
+    // position directly and pushing it into the 2D puzzle forces a synchronous draw.
+    const position = await this.experimentalModel.legacyPosition.get();
+
+    twisty2DPuzzle.onPositionChange(position);
+
+    const serialized = new XMLSerializer().serializeToString(
+      twisty2DPuzzle.svgWrapper!.svgElement,
+    );
+
+    return serialized;
+  }
+
+  async experimentalGet2DSvgMarkup(): Promise<string> {
+    const strategy =
+      await this.experimentalModel.visualizationStrategy.get();
+    if (
+      !["2D", "experimental-2D-LL", "experimental-2D-LL-face"].includes(
+        strategy,
+      )
+    ) {
+      throw new Error(
+        `experimentalGet2DSvgMarkup() requires a 2D visualization, but the current strategy is "${strategy}"`,
+      );
+    }
+    return this.#get2DSvgMarkup();
+  }
+
   // TODO: Make this more ergonomic and flexible.
   // TODO: dimensions.
   async experimentalDownloadScreenshot(filename?: string): Promise<void> {
@@ -534,14 +572,7 @@ export class TwistyPlayer
         await this.experimentalModel.visualizationStrategy.get(),
       )
     ) {
-      // TODO: This has lots of async issues. It should also go into the screenshot impl file.
-      const wrapper2D = this.#visualizationWrapper as Twisty2DSceneWrapper;
-      const twisty2DPuzzle = await wrapper2D
-        .currentTwisty2DPuzzleWrapper()!
-        .twisty2DPuzzle();
-      const str = new XMLSerializer().serializeToString(
-        twisty2DPuzzle.svgWrapper!.svgElement,
-      );
+      const str = await this.#get2DSvgMarkup();
       const url = URL.createObjectURL(new Blob([str]));
       downloadURL(
         url,
