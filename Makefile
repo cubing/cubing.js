@@ -262,19 +262,19 @@ lint-tsc: lint-tsc-main lint-tsc-lib lint-tsc-lib-no-dom lint-tsc-bin
 
 .PHONY: lint-tsc-main
 lint-tsc-main: update-dependencies
-	${BUN_DX} --package typescript tsc -- --project ./tsconfig.json
+	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./tsconfig.json
 
 .PHONY: lint-tsc-lib
 lint-tsc-lib: update-dependencies
-	${BUN_DX} --package typescript tsc -- --project ./tsconfig.lib.jsonc
+	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./tsconfig.lib.jsonc
 
 .PHONY: lint-tsc-lib-no-dom
 lint-tsc-lib-no-dom: update-dependencies
-	${BUN_DX} --package typescript tsc -- --project ./tsconfig.lib.no-dom.jsonc
+	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./tsconfig.lib.no-dom.jsonc
 
 .PHONY: lint-tsc-bin
 lint-tsc-bin: update-dependencies
-	${BUN_DX} --package typescript tsc -- --project ./src/bin/tsconfig.json
+	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./src/bin/tsconfig.json
 
 .PHONY: check-schemas
 check-schemas: update-dependencies
