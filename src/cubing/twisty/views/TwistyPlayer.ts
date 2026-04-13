@@ -550,8 +550,7 @@ export class TwistyPlayer
   }
 
   async experimentalGet2DSvgMarkup(): Promise<string> {
-    const strategy =
-      await this.experimentalModel.visualizationStrategy.get();
+    const strategy = await this.experimentalModel.visualizationStrategy.get();
     if (
       !["2D", "experimental-2D-LL", "experimental-2D-LL-face"].includes(
         strategy,
