@@ -39,7 +39,7 @@
         "mocha": "^10.7.3",
         "path-class": ">=0.11.0",
         "playwright": "^1.58.0",
-        "printable-shell-command": "^4.0.3",
+        "printable-shell-command": "^5.3.0",
         "tsup": "^8.5.1",
         "typedoc": "^0.28.18",
         "typescript": "^6.0.2",
@@ -885,7 +885,7 @@
 
     "postcss-load-config": ["postcss-load-config@6.0.1", "", { "dependencies": { "lilconfig": "^3.1.1" }, "peerDependencies": { "jiti": ">=1.21.0", "postcss": ">=8.0.9", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["jiti", "postcss", "tsx", "yaml"] }, "sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g=="],
 
-    "printable-shell-command": ["printable-shell-command@4.0.4", "", { "dependencies": { "@types/node": ">=25.0.3", "path-class": ">=0.10.3" } }, "sha512-0wUqzs668cD5Y6/SzwDyuWToh4cFe2zIN3ijCFLvecLONiP7OQMX1Vzb0Sbsczwiz/ZdDFTze+kFxsgWSL3I+Q=="],
+    "printable-shell-command": ["printable-shell-command@5.3.0", "", { "dependencies": { "path-class": ">=0.12.1" } }, "sha512-oLEv8/WzisCTQwsmnAE+uiEzmAQnk0Rjk2GCB2HsTqIFIRslVopB8bqLPZBkylPsdaj+ygefpexJ11xOAks2kA=="],
 
     "process-nextick-args": ["process-nextick-args@2.0.1", "", {}, "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag=="],
 

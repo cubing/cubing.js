@@ -98,7 +98,7 @@
     "mocha": "^10.7.3",
     "path-class": ">=0.11.0",
     "playwright": "^1.58.0",
-    "printable-shell-command": "^4.0.3",
+    "printable-shell-command": "^5.3.0",
     "tsup": "^8.5.1",
     "typedoc": "^0.28.18",
     "typescript": "^6.0.2"
