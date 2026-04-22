@@ -14,8 +14,6 @@ export const mainAllowedImports: AllowedImports = {
       "node:process",
       "node:util",
 
-      "bun",
-
       "package.json",
       "cubing",
       "src/metadata",
@@ -37,6 +35,9 @@ export const mainAllowedImports: AllowedImports = {
   },
   "script/build/bin/build-bin.ts": {
     static: ["node:fs/promises"],
+  },
+  "script/check-engine-versions.ts": {
+    static: ["bun"],
   },
   "script/lint/import-restrictions": {
     static: ["@cubing/dev-config"],

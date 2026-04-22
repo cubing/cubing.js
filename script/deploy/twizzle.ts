@@ -1,14 +1,19 @@
 import * as assert from "node:assert";
-import { $ } from "bun";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 import type { VersionJSON } from "../build/sites/barelyServeSite";
 import { rsync } from "./rsync";
 
-const gitDescribeVersion = (await $`git describe --tags`.text()).trim();
-const versionFolderName = (
-  await $`date "+%Y-%m-%d@%H-%M-%S-%Z@${gitDescribeVersion}@unixtime%s"`.text()
-).trim();
+const gitDescribeVersion = await new PrintableShellCommand("git", [
+  "describe",
+  "--tags",
+]).text({
+  trimTrailingNewlines: "single-required",
+});
+// TODO: compute this in JS with identical semantics.
+const versionFolderName = await new PrintableShellCommand("date", [
+  `+%Y-%m-%d@%H-%M-%S-%Z@${gitDescribeVersion}@unixtime%s`,
+]).text({ trimTrailingNewlines: "single-required" });
 const twizzleSSHServer = "cubing_deploy@twizzle.net";
 const twizzleSFTPPath = "~/alpha.twizzle.net";
 const twizzleSFTPVersionsPath = "~/_deploy-versions/alpha.twizzle.net";

@@ -1,5 +1,4 @@
 import { barelyServe } from "barely-a-dev-server";
-import { $ } from "bun";
 import type { Plugin } from "esbuild";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
@@ -56,12 +55,28 @@ export interface VersionJSON {
 
 async function writeVersionJSON(siteFolder: Path) {
   // https://git-scm.com/docs/git-describe
-  const gitDescribeVersion = (
-    await $`git describe --tags || echo v0.0.0`.text()
-  ).trim();
-  const gitBranch = (await $`git rev-parse --abbrev-ref HEAD`.text()).trim();
-  const date = (await $`date`.text()).trim();
-  const commitHash = (await $`git rev-parse HEAD`.text()).trim();
+  const gitDescribeVersion = await new PrintableShellCommand("git", [
+    "describe",
+    "--tags",
+  ]).text({
+    trimTrailingNewlines: "single-required",
+  });
+  const gitBranch = await new PrintableShellCommand("git", [
+    "rev-parse",
+    "--abbrev-ref",
+    "HEAD",
+  ]).text({
+    trimTrailingNewlines: "single-required",
+  });
+  const date = await new PrintableShellCommand("date", []).text({
+    trimTrailingNewlines: "single-required",
+  });
+  const commitHash = await new PrintableShellCommand("git", [
+    "rev-parse",
+    "HEAD",
+  ]).text({
+    trimTrailingNewlines: "single-required",
+  });
   const commitGitHubURL = `https://github.com/cubing/cubing.js/commit/${commitHash}`;
 
   await siteFolder.join("version.json").writeJSON({
