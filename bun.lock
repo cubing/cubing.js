@@ -7,7 +7,7 @@
       "dependencies": {
         "@cubing/lazy-promise": "0.1.1",
         "@optique/core": ">=0.9.1",
-        "@optique/run": ">=0.9.1",
+        "@optique/run": "^1.0.1",
         "@types/three": "^0.169.0",
         "@types/web-bluetooth": "^0.0.20",
         "random-uint-below": "v3.3.0",
@@ -155,9 +155,9 @@
 
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
-    "@optique/core": ["@optique/core@0.9.2", "", {}, "sha512-UpDMdV1hdHF1qZJVZKsQpLOnQMajwjBny+DBjP+yyH95fBqJQPnUGrhARn6R/REPnchoxQWjwPRhSjTHnS4rPA=="],
+    "@optique/core": ["@optique/core@1.0.1", "", {}, "sha512-ovA0uP2fcO1R3YpMLHcq2qz3Mu2zot4y+OO2wzRIcnFgG6P73uHXZHgL27uwFg4YdCF2opTRyK75GX8ZhE7Fqg=="],
 
-    "@optique/run": ["@optique/run@0.9.2", "", { "dependencies": { "@optique/core": "0.9.2" } }, "sha512-kEIvyOhOSFtCHj5f68TcsYYpkwL43alznalBOsfeAMRNhC2NQRoYHfZ4QHgmUZ8bfG/oZgjt1fAq8pKXGWhD+Q=="],
+    "@optique/run": ["@optique/run@1.0.1", "", { "dependencies": { "@optique/core": "1.0.1" } }, "sha512-gseIWtVr9OAXTc5uGeZh7kACdFLS9SBhspMclfvZx4drl/u/oJcJMuCr3FmJ4kdgItpoqjAOpOa/yPVE6lnFkg=="],
 
     "@puppeteer/browsers": ["@puppeteer/browsers@2.6.1", "", { "dependencies": { "debug": "^4.4.0", "extract-zip": "^2.0.1", "progress": "^2.0.3", "proxy-agent": "^6.5.0", "semver": "^7.6.3", "tar-fs": "^3.0.6", "unbzip2-stream": "^1.4.3", "yargs": "^17.7.2" }, "bin": { "browsers": "lib/cjs/main-cli.js" } }, "sha512-aBSREisdsGH890S2rQqK82qmQYU3uFpSH8wcZWHgHzl3LfzsxAKbLNiAG9mO8v1Y0UICBeClICxPJvyr0rcuxg=="],
 
