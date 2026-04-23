@@ -39,11 +39,15 @@ const args = run(
     programName: basename(argv[1]),
     help: "option",
     completion: {
-      mode: "option",
-      name: "plural",
+      option: {
+        names: ["--completions"],
+        hidden: false,
+      },
     },
     version: {
-      mode: "option",
+      option: {
+        hidden: false,
+      },
       value: packageVersion,
     },
   },

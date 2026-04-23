@@ -76,11 +76,15 @@ const args = run(
     help: "option",
     description: message`Screenshot an alg. (You can specify an empty alg string.)`,
     completion: {
-      mode: "option",
-      name: "plural",
+      option: {
+        names: ["--completions"],
+        hidden: false,
+      },
     },
     version: {
-      mode: "option",
+      option: {
+        hidden: false,
+      },
       value: packageVersion,
     },
   },
