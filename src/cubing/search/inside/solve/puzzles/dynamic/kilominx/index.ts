@@ -1,5 +1,5 @@
-import { from } from "../../../../../../vendor/mit/p-lazy/p-lazy";
+import { LazyPromise } from "@cubing/lazy-promise";
 
-export const dynamicKilominxSolver = from<
+export const dynamicKilominxSolver = new LazyPromise<
   typeof import("./search-dynamic-solve-kilominx")
 >(() => import("./search-dynamic-solve-kilominx"));
