@@ -6,7 +6,7 @@
       "name": "cubing",
       "dependencies": {
         "@cubing/lazy-promise": "0.1.1",
-        "@optique/core": ">=0.9.1",
+        "@optique/core": "^1.0.1",
         "@optique/run": "^1.0.1",
         "@types/three": "^0.169.0",
         "@types/web-bluetooth": "^0.0.20",
