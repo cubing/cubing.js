@@ -1,3 +1,4 @@
+import { env } from "node:process";
 import { barelyServe } from "barely-a-dev-server";
 import type { Plugin } from "esbuild";
 import { Path } from "path-class";
@@ -55,12 +56,21 @@ export interface VersionJSON {
 
 async function writeVersionJSON(siteFolder: Path) {
   // https://git-scm.com/docs/git-describe
-  const gitDescribeVersion = await new PrintableShellCommand("git", [
-    "describe",
-    "--tags",
-  ]).text({
-    trimTrailingNewlines: "single-required",
-  });
+  const gitDescribeVersion = await (async () => {
+    try {
+      return await new PrintableShellCommand("git", [
+        "describe",
+        "--tags",
+      ]).text({
+        trimTrailingNewlines: "single-required",
+      });
+    } catch (e) {
+      if (env["CI"]) {
+        return "(unknown due to CI)";
+      }
+      throw e;
+    }
+  })();
   const gitBranch = await new PrintableShellCommand("git", [
     "rev-parse",
     "--abbrev-ref",
