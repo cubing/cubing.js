@@ -20,6 +20,7 @@ import {
   random444Scramble,
 } from "./solve/puzzles/4x4x4";
 import { randomFTOScramble } from "./solve/puzzles/fto";
+import { randomKilominxScramble } from "./solve/puzzles/kilominx";
 import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
 import { solvePyraminx } from "./solve/puzzles/pyraminx";
@@ -118,7 +119,7 @@ async function randomScrambleForEvent(
       // case "333mbf":
       // case "fto":
       // case "master_tetraminx":
-      case "kilominx":
+      // case "kilominx":
       // case "redi_cube":
       case "baby_fto":
         return wasm();
@@ -152,6 +153,10 @@ async function randomScrambleForEvent(
           "randomMasterTetraminxScramble",
           randomMasterTetraminxScramble,
         );
+      case "kilominx":
+        return measurePerf("randomKilominxScramble", randomKilominxScramble, {
+          isPrefetch: options?.isPrefetch,
+        });
       case "redi_cube":
         return measurePerf("randomRediCubeScramble", randomRediCubeScramble, {
           isPrefetch: options?.isPrefetch,
