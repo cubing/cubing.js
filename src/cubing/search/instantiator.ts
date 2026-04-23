@@ -64,6 +64,9 @@ export async function instantiateWorkerAPI(): Promise<WorkerAPI> {
   allWorkerAPIPromises.push(workerAPIPromise);
   const insideAPI = await workerAPIPromise;
   insideAPI.setDebugMeasurePerf(searchOutsideDebugGlobals.logPerf);
+  insideAPI.setDebugForceTwipsForScrambles(
+    searchOutsideDebugGlobals.forceTwipsForScrambles,
+  );
   insideAPI.setScramblePrefetchLevel(
     searchOutsideDebugGlobals.scramblePrefetchLevel,
   );

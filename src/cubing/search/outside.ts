@@ -149,6 +149,7 @@ interface SearchOutsideDebugGlobals {
   scramblePrefetchLevel: `${PrefetchLevel}`;
   forceNewWorkerForEveryScramble: boolean;
   showWorkerInstantiationWarnings: boolean;
+  forceTwipsForScrambles: boolean;
   // This can prevent a request to `search-worker-entry.js` when it doesn't exist, if the library semantics have been mangled by `esbuild`.
   prioritizeEsbuildWorkaroundForWorkerInstantiation: boolean;
   allowDerivedScrambles: boolean;
@@ -158,6 +159,7 @@ export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   logPerf: true,
   scramblePrefetchLevel: "auto",
   forceNewWorkerForEveryScramble: false,
+  forceTwipsForScrambles: false,
   showWorkerInstantiationWarnings: true,
   prioritizeEsbuildWorkaroundForWorkerInstantiation: false,
   allowDerivedScrambles: false,
@@ -166,10 +168,16 @@ export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
 export function setSearchDebug(
   options: Partial<SearchOutsideDebugGlobals>,
 ): void {
-  const { logPerf, scramblePrefetchLevel } = options;
+  const { logPerf, forceTwipsForScrambles, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
     searchOutsideDebugGlobals.logPerf = logPerf;
     void mapToAllWorkers((worker) => worker.setDebugMeasurePerf(logPerf));
+  }
+  if (typeof forceTwipsForScrambles !== "undefined") {
+    searchOutsideDebugGlobals.forceTwipsForScrambles = forceTwipsForScrambles;
+    void mapToAllWorkers((worker) =>
+      worker.setDebugMeasurePerf(forceTwipsForScrambles),
+    );
   }
   if (typeof scramblePrefetchLevel !== "undefined") {
     searchOutsideDebugGlobals.scramblePrefetchLevel = scramblePrefetchLevel;
