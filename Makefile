@@ -40,7 +40,7 @@ build-lib-js: update-dependencies
 
 .PHONY: build-lib-types
 build-lib-types: update-dependencies
-	${BUN_RUN} ./script/build/lib/build-lib-types.ts
+	${BUN_DX} --package tsdown tsdown --
 
 .PHONY: build-bin
 build-bin: build-lib-js
