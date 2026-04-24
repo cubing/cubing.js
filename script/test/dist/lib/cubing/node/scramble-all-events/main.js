@@ -49,13 +49,22 @@ const eventsOrdered = [
 
 const eventsParallel = ["kilominx", "444", "444bf", "fto"];
 
+async function testEvent(event) {
+  const { promise, resolve, reject } = Promise.withResolvers();
+
+  void (async () => {
+    (await randomScrambleForEvent(event)).log(event);
+    resolve();
+  })();
+
+  setTimeout(() => reject(`Timed out for event: ${event}`), 30_000); // 30 seconds
+
+  return promise;
+}
+
 await (async () => {
   setSearchDebug({ forceNewWorkerForEveryScramble: true });
-  const parallelPromise = Promise.all(
-    eventsParallel.map(async (event) =>
-      (await randomScrambleForEvent(event)).log(event),
-    ),
-  );
+  const parallelPromise = Promise.all(eventsParallel.map(testEvent));
   setSearchDebug({ forceNewWorkerForEveryScramble: false });
   for (const event of eventsOrdered) {
     console.log(`Generating scramble for event: ${event}... `);
