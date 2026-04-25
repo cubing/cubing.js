@@ -10,7 +10,7 @@ Note: The \`types\` target is slow. Expect several seconds.
 ⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳
 `);
 await new PrintableShellCommand("bun", [
-  ["x", "tsup"],
+  ["x", "--", "bun-dx", "--package", "tsdown", "tsdown", "--"],
   ...packageEntryPoints,
   "--dts-only",
   ["--format", "esm"],
