@@ -72,7 +72,7 @@ await (async () => {
   setSearchDebug({ forceNewWorkerForEveryScramble: false });
   for (const event of eventsOrdered) {
     console.log(`Generating scramble for event: ${event}... `);
-    (await randomScrambleForEvent(event)).log(event);
+    await testEvent(event);
   }
   await parallelPromise;
 
