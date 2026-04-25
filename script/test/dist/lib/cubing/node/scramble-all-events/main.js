@@ -45,9 +45,13 @@ const eventsOrdered = [
   "333mbf",
   "redi_cube",
   "master_tetraminx",
+  "kilominx",
+  "444",
+  "444bf",
+  "fto",
 ];
 
-const eventsParallel = ["kilominx", "444", "444bf", "fto"];
+const eventsParallel = [];
 
 async function testEvent(event) {
   const { promise, resolve, reject } = Promise.withResolvers();
