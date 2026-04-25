@@ -28,6 +28,10 @@ setSearchDebug({ scramblePrefetchLevel: "none" });
 import { randomScrambleForEvent } from "cubing/scramble";
 
 const eventsOrdered = [
+  "444",
+  "444bf",
+  "kilominx",
+  "fto",
   "333",
   "222",
   "555",
@@ -45,10 +49,6 @@ const eventsOrdered = [
   "333mbf",
   "redi_cube",
   "master_tetraminx",
-  "kilominx",
-  "444",
-  "444bf",
-  "fto",
 ];
 
 const eventsParallel = [];
