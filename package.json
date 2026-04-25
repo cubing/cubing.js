@@ -103,7 +103,6 @@
     "typedoc": "^0.28.18"
   },
   "patchedDependencies": {
-    "tsup@8.5.1": "patches/tsup@8.5.1.patch",
     "bun-types@1.3.12": "patches/bun-types@1.3.12.patch"
   },
   "files": [
