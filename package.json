@@ -103,7 +103,7 @@
     "typedoc": "^0.28.18"
   },
   "patchedDependencies": {
-    "bun-types@1.3.12": "patches/bun-types@1.3.12.patch"
+    "bun-types@1.3.13": "patches/bun-types@1.3.13.patch"
   },
   "files": [
     "./dist/bin/",
