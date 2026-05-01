@@ -74,7 +74,7 @@
     "type-fest": "^5.2.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.10",
+    "@biomejs/biome": "^2.4.14",
     "@cubing/comlink-everywhere": ">=0.1.2",
     "@cubing/deploy": ">=0.4.10",
     "@cubing/dev-config": ">=0.9.3",
