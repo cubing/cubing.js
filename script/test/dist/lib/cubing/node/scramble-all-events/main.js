@@ -52,18 +52,31 @@ const eventsOrdered = [
 ];
 
 const eventsParallel = [];
+const DEFAULT_TIMEOUT_MS = 30_000; // TODO: Use `Temporal.Duration.from(…)` once `Temporal` is available in `bun`: https://github.com/oven-sh/bun/issues/15853
 
-async function testEvent(event) {
-  const { promise, resolve, reject } = Promise.withResolvers();
+function withTimeout(promiseFn, { abortSignal, timeoutMS } = {}) {
+  const { promise: wrappedPromise, resolve, reject } = Promise.withResolvers();
+
+  const timeout = setTimeout(() => {
+    abortSignal?.();
+    reject(new Error(`Timed out for event: ${event}`));
+  }, timeoutMS ?? DEFAULT_TIMEOUT_MS);
 
   void (async () => {
-    (await randomScrambleForEvent(event)).log(event);
+    await promiseFn();
+    // Types are a bit borked, so `timeout.unref()` isn't recognized as valid.
+    // Fortunately the DOM API is still valid in `node`, so we call that instead.
+    clearTimeout(timeout);
     resolve();
   })();
 
-  setTimeout(() => reject(`Timed out for event: ${event}`), 30_000); // 30 seconds
+  return wrappedPromise;
+}
 
-  return promise;
+async function testEvent(event) {
+  await withTimeout(async () =>
+    (await randomScrambleForEvent(event)).log(event),
+  );
 }
 
 await (async () => {
