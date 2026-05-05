@@ -232,7 +232,17 @@ setup-without-playwright: bun-required update-dependencies
 
 .PHONY: bun-required
 bun-required:
-	@command -v ${BUN} > /dev/null || { echo "\nPlease install \`bun\` to work on this project:\n\n    # from npm\n    npm install --global bun\n\n    # macOS (Homebrew)\n    brew install oven-sh/bun/bun\n\n    # For other options, see: https://bun.sh/\n" && exit 1 ; }
+	@command -v ${BUN} > /dev/null || { echo "\
+Please install \`bun\` to work on this project:\
+\
+    # from npm\
+    npm install --global bun\
+\
+    # macOS (Homebrew)\
+    brew install oven-sh/bun/bun\
+\
+    # For other options, see: https://bun.sh/\
+" && exit 1 ; }
 
 .PHONY: update-dependencies
 update-dependencies: bun-required
