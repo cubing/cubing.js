@@ -228,7 +228,7 @@ format: update-dependencies
 setup: setup-without-playwright install-playwright
 
 .PHONY: setup-without-playwright
-setup-without-playwright: bun-required update-dependencies check-engines
+setup-without-playwright: bun-required update-dependencies
 
 .PHONY: bun-required
 bun-required:
@@ -237,9 +237,6 @@ bun-required:
 .PHONY: update-dependencies
 update-dependencies: bun-required
 	${BUN} install --frozen-lockfile
-
-.PHONY: check-engines
-check-engines: update-dependencies
 	@${BUN_RUN} "./script/check-engine-versions.ts"
 
 .PHONY: lint
