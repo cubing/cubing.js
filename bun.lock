@@ -17,7 +17,7 @@
       "devDependencies": {
         "@biomejs/biome": "^2.4.14",
         "@cubing/comlink-everywhere": ">=0.1.2",
-        "@cubing/deploy": ">=0.4.10",
+        "@cubing/deploy": ">=0.4.11",
         "@cubing/dev-config": ">=0.9.3",
         "@esm-bundle/chai": "^4.3.4-fix.0",
         "@schemastore/package": "^0.0.10",
@@ -81,7 +81,7 @@
 
     "@cubing/comlink-everywhere": ["@cubing/comlink-everywhere@0.1.2", "", {}, "sha512-YIqhRAga7/GXAHnZgmnZTPrUsU0aFIb3Qvvx+adnabkPNJPdpwrKW6szctEavXjvCfLcqLzWx2tdXG1sypblEQ=="],
 
-    "@cubing/deploy": ["@cubing/deploy@0.4.10", "", { "dependencies": { "path-class": ">=0.10.3", "printable-shell-command": ">=2.6.3" }, "bin": { "deploy": "dist/cli/main.js" } }, "sha512-IQ13vLUpMvIU/cZxw0wDnwoUpwEpiZDNDTlaaUV/mfUnOxzbyZi/TrIucar400oPTq/rC1/9qWrKCIxxTbXIAg=="],
+    "@cubing/deploy": ["@cubing/deploy@0.4.11", "", { "dependencies": { "path-class": ">=0.10.3", "printable-shell-command": ">=2.6.3" }, "bin": { "deploy": "dist/cli/main.js" } }, "sha512-0Mp09ZvWHQVSpfjCggk+6C/qelwLjKf2GpetRRJ4fu5fnPHobxVoqsKBJwc/UOH/s2j13hwt7lJj1+0n/OByqQ=="],
 
     "@cubing/dev-config": ["@cubing/dev-config@0.9.3", "", { "dependencies": { "esbuild": ">=0.25.3 && <1.0.0", "path-class": ">=0.10.8", "printable-shell-command": ">=4.0.3" }, "bin": { "package.json": "bin/package.json/index.js" } }, "sha512-NFcD+KH11rnqlthqnuNiMfDRDWc3/PygPwZKvubpQYJb7uWZwWMgmfmxd/80qvMYI735OEXBxcaPby0ZeWNUyQ=="],
 
