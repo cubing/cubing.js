@@ -172,7 +172,7 @@ test-dist: test-dist-lib test-dist-bin
 test-dist-lib: \
 	test-dist-lib-node-import \
 	test-dist-lib-node-scramble \
-	test-dist-lib-bun-scramble-all-events \
+	test-dist-lib-node-scramble-all-events \
 	test-dist-lib-perf \
 	test-dist-lib-plain-esbuild-compat \
 	test-dist-lib-build-size \
@@ -186,8 +186,8 @@ test-dist-lib-node-import: build-lib-js
 test-dist-lib-node-scramble: build-lib-js
 	${NODE} script/test/dist/lib/cubing/node/scramble/main.js
 
-.PHONY: test-dist-lib-bun-scramble-all-events
-test-dist-lib-bun-scramble-all-events: build-lib-js
+.PHONY: test-dist-lib-node-scramble-all-events
+test-dist-lib-node-scramble-all-events: build-lib-js
 	${BUN} script/test/dist/lib/cubing/node/scramble-all-events/main.js
 
 .PHONY: test-dist-lib-perf
