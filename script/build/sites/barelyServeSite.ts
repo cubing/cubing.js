@@ -56,6 +56,7 @@ export interface VersionJSON {
 
 async function writeVersionJSON(siteFolder: Path) {
   // https://git-scm.com/docs/git-describe
+  console.log("writeVersionJSON");
   const gitDescribeVersion = await (async () => {
     try {
       return await new PrintableShellCommand("git", [
@@ -65,6 +66,9 @@ async function writeVersionJSON(siteFolder: Path) {
         trimTrailingNewlines: "single-required",
       });
     } catch (e) {
+      console.log("caught");
+      console.log(`env["CI"]: `, env["CI"]);
+      console.log(`env: `, env);
       if (env["CI"]) {
         return "(unknown due to CI)";
       }
