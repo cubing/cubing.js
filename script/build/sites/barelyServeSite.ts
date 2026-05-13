@@ -59,12 +59,19 @@ async function writeVersionJSON(siteFolder: Path) {
   console.log("writeVersionJSON");
   const gitDescribeVersion = await (async () => {
     try {
-      return await new PrintableShellCommand("git", [
+      const subprocess = new PrintableShellCommand("git", [
         "describe",
         "--tags",
-      ]).text({
+      ]).spawn({ stdio: ["ignore", "pipe", "ignore"] });
+      const text = subprocess.stdout.text({
         trimTrailingNewlines: "single-required",
       });
+      if ((await subprocess.exitCodePromise) !== 0) {
+        if (env["CI"]) {
+          return "(unknown due to CI also)";
+        }
+      }
+      return await text;
     } catch (e) {
       console.log("caught");
       console.log(`env["CI"]: `, env["CI"]);
