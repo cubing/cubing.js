@@ -1,0 +1,6 @@
+error: generatorrrrr
+      at #generator (./script/build/sites/temp-vendor/printable-shell-command/PrintableShellCommand.ts:578:35)
+      at stdout (./script/build/sites/temp-vendor/printable-shell-command/PrintableShellCommand.ts:615:39)
+      at text (./script/build/sites/temp-vendor/printable-shell-command/PrintableShellCommand.ts:676:40)
+      at writeVersionJSON (./script/build/sites/barelyServeSite.ts:98:6)
+      at async barelyServeSite (./script/build/sites/barelyServeSite.ts:128:11)

@@ -82,22 +82,9 @@ async function writeVersionJSON(siteFolder: Path) {
       throw e;
     }
   })();
-  const gitBranch = await new PrintableShellCommand("git", [
-    "rev-parse",
-    "--abbrev-ref",
-    "HEAD",
-  ]).text({
-    trimTrailingNewlines: "single-required",
-  });
-  const date = await new PrintableShellCommand("date", []).text({
-    trimTrailingNewlines: "single-required",
-  });
-  const commitHash = await new PrintableShellCommand("git", [
-    "rev-parse",
-    "HEAD",
-  ]).text({
-    trimTrailingNewlines: "single-required",
-  });
+  const gitBranch = "TEMPBRANCH";
+  const date = "TEMPDATE";
+  const commitHash = "TEMPHASH";
   const commitGitHubURL = `https://github.com/cubing/cubing.js/commit/${commitHash}`;
 
   await siteFolder.join("version.json").writeJSON({
