@@ -575,6 +575,7 @@ export class PrintableShellCommand {
     exiter: WithExitPromises,
     options?: AllowFailureOptions,
   ): AsyncGenerator<string> {
+    console.log("#generator", new Error("generatorrrrr"));
     // TODO: we'd make this a `ReadableStream`, but `ReadableStream.from(…)` is
     // not implemented in `bun`: https://github.com/oven-sh/bun/issues/3700
     return (async function* () {
