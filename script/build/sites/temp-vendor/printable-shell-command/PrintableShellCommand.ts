@@ -431,6 +431,7 @@ export class PrintableShellCommand {
     Object.defineProperty(subprocess, "success", {
       get() {
         return (async () => {
+          console.log("stack:", new Error("test"));
           const exitCode = await getCachedExitCode();
           if (exitCode !== 0) {
             throw new Error(
