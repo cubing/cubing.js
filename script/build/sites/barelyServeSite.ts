@@ -2,8 +2,8 @@ import { env } from "node:process";
 import { barelyServe } from "barely-a-dev-server";
 import type { Plugin } from "esbuild";
 import { Path } from "path-class";
-import { PrintableShellCommand } from "printable-shell-command";
 import { needPath } from "../../lib/needPath";
+import { PrintableShellCommand } from "./temp-vendor/printable-shell-command/index";
 
 await needPath(
   Path.resolve("../../../node_modules/barely-a-dev-server", import.meta.url),
