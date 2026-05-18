@@ -1,3 +1,5 @@
+/// <reference types="web-bluetooth" />
+
 // TODO: deprecate these exports?
 export type {
   ExperimentalAlgLeafEvent as MoveEvent,

@@ -68,7 +68,7 @@
     "@optique/core": "^1.0.1",
     "@optique/run": "^1.0.1",
     "@types/three": "^0.169.0",
-    "@types/web-bluetooth": "^0.0.20",
+    "@types/web-bluetooth": ">=0.0.20",
     "random-uint-below": "v3.3.0",
     "three": "^0.170.0",
     "type-fest": "^5.2.0"
