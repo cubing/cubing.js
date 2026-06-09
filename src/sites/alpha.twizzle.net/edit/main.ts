@@ -33,7 +33,10 @@ globalThis.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  if (getRawBooleanURLParam("debug-show-render-stats", false)) {
+  if (
+    getRawBooleanURLParam("debug-show-render-stats", false) ||
+    getRawBooleanURLParam("stats", false)
+  ) {
     setTwistyDebug({ showRenderStats: true });
   }
 
