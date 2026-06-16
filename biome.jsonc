@@ -16,7 +16,8 @@
       // Exclude HTML files
       // - https://github.com/biomejs/biome/discussions/9209
       // - https://github.com/biomejs/biome/discussions/9308
-      "!**/*.html"
+      "!**/*.html",
+      "!**/*.svg"
     ]
   },
   "linter": {
