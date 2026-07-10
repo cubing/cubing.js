@@ -5,6 +5,9 @@ import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 import { needPath } from "../../lib/needPath";
 
+// TODO: debug the phantom crash in `printable-shell-command` so that we don't need this.
+const USE_PREEMPTIVE_CI_WORKAROUND = true;
+
 await needPath(
   Path.resolve("../../../node_modules/barely-a-dev-server", import.meta.url),
   "make setup",
@@ -57,6 +60,10 @@ export interface VersionJSON {
 async function writeVersionJSON(siteFolder: Path) {
   // https://git-scm.com/docs/git-describe
   const gitDescribeVersion = await (async () => {
+    if (USE_PREEMPTIVE_CI_WORKAROUND && env["CI"]) {
+      return "(unknown due to CI)";
+    }
+
     try {
       return await new PrintableShellCommand("git", [
         "describe",
