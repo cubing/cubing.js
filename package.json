@@ -102,9 +102,6 @@
     "tsdown": "^0.21.10",
     "typedoc": "^0.28.18"
   },
-  "overrides": {
-    "esbuild": ">=0.28.1"
-  },
   "files": [
     "./dist/bin/",
     "./dist/lib/",
