@@ -211,10 +211,18 @@ test-dist-sites-twizzle: install-playwright build-sites
 test-dist-bin: test-dist-bin-shebang test-dist-bin-npm-exec
 
 .PHONY: test-dist-bin-shebang
-test-dist-bin-shebang: build-bin
-	# Note: we're not testing the output, just that these don't exit with an error.
+test-dist-bin-shebang: test-dist-bin-shebang-order test-dist-bin-shebang-puzzle-geometry test-dist-bin-shebang-scramble
+
+.PHONY: test-dist-bin-shebang-order
+test-dist-bin-shebang-order: build-bin
 	time dist/bin/order.js 3x3x3 "R U R'"
+
+.PHONY: test-dist-bin-shebang-puzzle-geometry
+test-dist-bin-shebang-puzzle-geometry: build-bin
 	time dist/bin/puzzle-geometry-bin.js --svg 2x2x2
+
+.PHONY: test-dist-bin-shebang-scramble
+test-dist-bin-shebang-scramble: build-bin
 	time dist/bin/scramble.js 222
 
 .PHONY: test-dist-bin-npm-exec
