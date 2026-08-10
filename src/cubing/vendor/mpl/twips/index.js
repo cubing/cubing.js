@@ -1,8 +1,8 @@
-// Generated from `twips` v0.11.3
+// Generated from `twips` v0.12.2
 
 // @ts-nocheck
 
-import "./chunks/chunk-4VODYKQX.js";
+import "./chunks/chunk-DRPECMPY.js";
 
 // src/wasm-package/index.ts
 import { Alg } from "../../../alg";
@@ -393,7 +393,7 @@ var twips_wasm_default = __wbg_init;
 var cachedInitWrapper;
 async function initWrapper() {
   await (cachedInitWrapper ??= (async () => {
-    const wasmUint8Array = (await import("./chunks/twips_wasm_bg-RWVQBVBA.js")).default;
+    const wasmUint8Array = (await import("./chunks/twips_wasm_bg-FIINDMR5.js")).default;
     await twips_wasm_default({ module_or_path: wasmUint8Array.buffer });
   })());
 }
