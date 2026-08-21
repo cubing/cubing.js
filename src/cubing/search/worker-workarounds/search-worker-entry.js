@@ -2,14 +2,7 @@ import { exposeAPI } from "./worker-guard";
 
 if (exposeAPI.expose) {
   void import("../inside").then(() => {
-    // Workaround for `node`'
-    if (globalThis.postMessage) {
-      globalThis.postMessage("comlink-exposed"); // TODO: remove this
-    } else {
-      globalThis.process
-        .getBuiltinModule("node:worker_threads")
-        .parentPort?.postMessage("comlink-exposed");
-    }
+    globalThis.postMessage("comlink-exposed"); // TODO: remove this
   });
 }
 
