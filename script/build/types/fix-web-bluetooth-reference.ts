@@ -21,5 +21,5 @@ if (currentContents.startsWith(RESTORED_WEB_BLUETOOTH_REFERENCE)) {
   console.info(
     `✍️ Updating \`web-bluetooth\` path reference prefix: ${OUTPUT_PATH}`,
   );
-  OUTPUT_PATH.write(RESTORED_WEB_BLUETOOTH_REFERENCE + currentContents);
+  await OUTPUT_PATH.write(RESTORED_WEB_BLUETOOTH_REFERENCE + currentContents);
 }
