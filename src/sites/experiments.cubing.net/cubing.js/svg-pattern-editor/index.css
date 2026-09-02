@@ -1,7 +1,4 @@
-@font-face {
-  font-family: "Ubuntu";
-  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
-}
+@import "../../../fonts/ubuntu.css";
 
 body {
   display: flex;

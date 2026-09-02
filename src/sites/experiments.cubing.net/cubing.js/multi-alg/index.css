@@ -1,3 +1,5 @@
+@import "../../../fonts/ubuntu.css";
+
 html,
 body {
   margin: 0;
@@ -27,11 +29,6 @@ body > div:first-child {
 body > div:nth-child(2) {
   grid-template-rows: 2em 2em 5fr;
   overflow: hidden;
-}
-
-@font-face {
-  font-family: "Ubuntu";
-  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
 }
 
 textarea {

@@ -1,10 +1,7 @@
+@import "../../fonts/ubuntu.css";
+
 * {
   box-sizing: border-box;
-}
-
-@font-face {
-  font-family: "Ubuntu";
-  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
 }
 
 html,

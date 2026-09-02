@@ -1,0 +1,6 @@
+@import "../../../fonts/ubuntu.css";
+
+twizzle-link {
+  margin: 1em;
+  font-family: Ubuntu, Tahoma, sans-serif;
+}

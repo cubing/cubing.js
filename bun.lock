@@ -20,6 +20,7 @@
         "@cubing/deploy": ">=0.4.11",
         "@cubing/dev-config": ">=0.10.1",
         "@esm-bundle/chai": "^4.3.4-fix.0",
+        "@fontsource/ubuntu": "^5.3.0",
         "@schemastore/package": "^0.0.10",
         "@types/bun": "^1.3.14",
         "@types/chai": "^5.0.0",
@@ -146,6 +147,8 @@
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.28.1", "", { "os": "win32", "cpu": "x64" }, "sha512-bm4Mowrv+GXMlpWX++EcXw/iLyd1o3+bJkC2DkWXYVvgZCqD/bSj9ctZeAMC3cIxgjRVR2Dufaiu4YPxr5gW1A=="],
 
     "@esm-bundle/chai": ["@esm-bundle/chai@4.3.4-fix.0", "", { "dependencies": { "@types/chai": "^4.2.12" } }, "sha512-26SKdM4uvDWlY8/OOOxSB1AqQWeBosCX3wRYUZO7enTAj03CtVxIiCimYVG2WpULcyV51qapK4qTovwkUr5Mlw=="],
+
+    "@fontsource/ubuntu": ["@fontsource/ubuntu@5.3.0", "", {}, "sha512-LsjJXgE430QLs8LKfn1RIFbbdGAiZBU1gao8ASa4Z2kGNGh7lMb7Rzx09v3bLLuuK+3XA/JSLgPWTAbLD6r1fg=="],
 
     "@gerrit0/mini-shiki": ["@gerrit0/mini-shiki@3.23.0", "", { "dependencies": { "@shikijs/engine-oniguruma": "^3.23.0", "@shikijs/langs": "^3.23.0", "@shikijs/themes": "^3.23.0", "@shikijs/types": "^3.23.0", "@shikijs/vscode-textmate": "^10.0.2" } }, "sha512-bEMORlG0cqdjVyCEuU0cDQbORWX+kYCeo0kV1lbxF5bt4r7SID2l9bqsxJEM0zndaxpOUT7riCyIVEuqq/Ynxg=="],
 

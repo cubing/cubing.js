@@ -109,6 +109,7 @@ export async function barelyServeSite(srcFolder: string, dev: boolean) {
   const outDir = new Path(dev ? ".temp/dev" : "dist").join(srcFolder);
   await barelyServe({
     entryRoot: new Path("src").join(srcFolder).path,
+    bundleCSS: true,
     outDir: outDir.path, // TODO: accept `Path` arg in the `barelyServe(…)` signature?
     dev,
     devDomain: "cubing.localhost",
@@ -117,6 +118,7 @@ export async function barelyServeSite(srcFolder: string, dev: boolean) {
       chunkNames: "chunks/[name]-[hash]",
       target: "es2022",
       plugins: plugins(dev),
+      loader: { ".woff": "copy", ".woff2": "copy", ".ttf": "copy" },
     },
   });
   if (!dev) {
