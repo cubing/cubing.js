@@ -39,6 +39,7 @@ interface DataDown {
   earliestMoveIndex: LeafIndex;
   twistyAlgViewer: TwistyAlgViewer;
   direction: ExperimentalIterationDirection;
+  type?: string;
 }
 
 interface DataUp {
@@ -102,6 +103,10 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
     this.classList.add(className);
   }
 
+  addClass(className: string) {
+    this.classList.add(className);
+  }
+
   addString(str: string) {
     this.queue.push(document.createTextNode(str));
   }
@@ -160,6 +165,9 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-alg", alg); // TODO: pick a better class name.
+    if (dataDown.type) {
+      element.addClass(dataDown.type);
+    }
     let first = true;
     for (const algNode of experimentalDirect(
       alg.childAlgNodes(),
@@ -321,6 +329,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
           moveCount) as LeafIndex,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction: dataDown.direction,
+        type: "setup",
       }),
     );
     moveCount += aLen;
@@ -331,6 +340,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
           moveCount) as LeafIndex,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction: dataDown.direction,
+        type: "execution",
       }),
     );
     element.addString("]");
@@ -395,12 +405,17 @@ class MoveHighlighter {
     this.moveCharIndexMap.set(charIndex, elem);
   }
 
-  set(move: Parsed<Move> | null): void {
+  set(move: Parsed<Move> | null, twistyPlayer: TwistyPlayer): void {
     const newElem = move
       ? (this.moveCharIndexMap.get(move[startCharIndexKey]) ?? null)
       : null;
     if (this.currentElem === newElem) {
       return;
+    }
+    if (newElem?.parentElement?.classList.contains('execution')) {
+      twistyPlayer.tempoScale = 10;
+    } else {
+      twistyPlayer.tempoScale = 1;
     }
     this.currentElem?.classList.remove("twisty-alg-current-move");
     this.currentElem?.setCurrentMove(false);
@@ -476,10 +491,10 @@ export class TwistyAlgViewer extends HTMLElementShim {
         moveInfo ??= currentMoveInfo.movesStarting[0];
         moveInfo ??= currentMoveInfo.movesFinishing[0];
         if (!moveInfo) {
-          this.highlighter.set(null);
+          this.highlighter.set(null, twistyPlayer);
         } else {
           const mainCurrentMove = moveInfo.move; // TODO
-          this.highlighter.set(mainCurrentMove as Parsed<Move>);
+          this.highlighter.set(mainCurrentMove as Parsed<Move>, twistyPlayer);
         }
       },
     );
