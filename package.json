@@ -71,7 +71,8 @@
     "@types/web-bluetooth": ">=0.0.20",
     "random-uint-below": "v3.3.0",
     "three": "^0.170.0",
-    "type-fest": "^5.2.0"
+    "type-fest": "^5.2.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.11",

@@ -1,7 +1,8 @@
-export type KPatternData = { [orbitName: string]: KPatternOrbitData };
-export interface KPatternOrbitData {
-  pieces: number[];
-  orientation: number[];
+import { array, exactOptional, number, object, record, string } from "zod/mini";
+
+const ZodKPatternOrbitData = object({
+  pieces: array(number()),
+  orientation: array(number()),
   /** Each piece may have an "orientation mod" that means "the orientation of
    * this piece is known mod [value]".
    *
@@ -125,37 +126,45 @@ export interface KPatternOrbitData {
    * "what really happens" — even if the effect is invisible in some cases,
    * while the `KPattern` tracks both what "is" and what "isn't" known.
    **/
-  orientationMod?: number[];
-}
+  orientationMod: exactOptional(array(number())),
+});
+export type KPatternOrbitData = ReturnType<typeof ZodKPatternOrbitData.parse>;
 
-export type KTransformationData = {
-  [orbitName: string]: KTransformationOrbitData;
-};
-export interface KTransformationOrbitData {
-  permutation: number[];
-  orientationDelta: number[];
-}
+export const ZodKPatternData = record(string(), ZodKPatternOrbitData);
+export type KPatternData = ReturnType<typeof ZodKPatternData.parse>;
 
-export interface KPuzzleOrbitDefinition {
-  orbitName: string;
-  numPieces: number;
-  numOrientations: number;
-}
+const ZodKTransformationOrbitData = object({
+  permutation: array(number()),
+  orientationDelta: array(number()),
+});
+export type KTransformationOrbitData = ReturnType<
+  typeof ZodKTransformationOrbitData.parse
+>;
 
-export interface KPuzzleDefinitionJSON {
-  name: string;
-  orbits: KPuzzleOrbitDefinition[];
-  defaultPattern: KPatternData;
-  moves: { [orbitName: string]: KTransformationData };
-  derivedMoves?: { [derivedMove: string]: string };
-  // Note: the options are intentionally required for now, since we haven't yet
-  // figured out how to make sure there is no unexpected behaviour with the
-  // defaults.
-  // experimentalIsPatternSolved?: (
-  //   kpattern: KPattern,
-  //   options: {
-  //     ignorePuzzleOrientation: boolean;
-  //     ignoreCenterOrientation: boolean;
-  //   },
-  // ) => boolean;
-}
+export const ZodKTransformationData = record(
+  string(),
+  ZodKTransformationOrbitData,
+);
+export type KTransformationData = ReturnType<
+  typeof ZodKTransformationData.parse
+>;
+
+const ZodKPuzzleOrbitDefinition = object({
+  orbitName: string(),
+  numPieces: number(),
+  numOrientations: number(),
+});
+export type KPuzzleOrbitDefinition = ReturnType<
+  typeof ZodKPuzzleOrbitDefinition.parse
+>;
+
+export const ZodKPuzzleDefinitionJSON = object({
+  name: string(),
+  orbits: array(ZodKPuzzleOrbitDefinition),
+  defaultPattern: ZodKPatternData,
+  moves: record(string(), record(string(), ZodKTransformationOrbitData)),
+  derivedMoves: exactOptional(record(string(), string())),
+});
+export type KPuzzleDefinitionJSON = ReturnType<
+  typeof ZodKPuzzleDefinitionJSON.parse
+>;

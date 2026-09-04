@@ -4,41 +4,25 @@ import assert from "node:assert";
 import { styleText } from "node:util";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
+import { toJSONSchema, type ZodMiniObject, type ZodMiniRecord } from "zod/mini";
+import {
+  ZodKPatternData,
+  ZodKPuzzleDefinitionJSON,
+  ZodKTransformationData,
+} from "../../src/cubing/kpuzzle/KPuzzleDefinitionJSON";
 
 const PACKAGE_SCHEMA_FOLDER = new Path("./experimental-json-schema/kpuzzle/");
-
-// TODO
-type JSONSchema = any;
 
 class SchemaInfo {
   // TODO: Return type for JSON schema?
   constructor(
-    private typeName: string,
-    private outputName: string = typeName,
+    private zodSchema: ZodMiniRecord<any> | ZodMiniObject<any>,
+    private outputName: string,
   ) {}
 
-  #cachedSchema: Promise<JSONSchema> | undefined;
-  async schema(): Promise<JSONSchema> {
+  async schema(): Promise<any> {
     // TODO: get this working with the JSON API.
-    return (this.#cachedSchema ??= new PrintableShellCommand("bun", [
-      [
-        "x",
-        "--",
-        "bun-dx",
-        "--package",
-        "typescript-json-schema",
-        "typescript-json-schema",
-        "--",
-      ],
-      "--skipLibCheck",
-      "--strictNullChecks",
-      "--required",
-      "src/cubing/kpuzzle/KPuzzleDefinitionJSON.ts",
-      this.typeName,
-    ])
-      .print({ skipLineWrapBeforeFirstArg: true })
-      .stdout()
-      .json());
+    return toJSONSchema(this.zodSchema);
   }
 
   get outputPath(): Path {
@@ -59,17 +43,16 @@ class SchemaInfo {
 }
 
 export const schemas = [
-  new SchemaInfo("KPatternData"),
-  new SchemaInfo("KPuzzleDefinitionJSON", "KPuzzleDefinition"),
-  new SchemaInfo("KTransformationData"),
+  new SchemaInfo(ZodKPatternData, "KPatternData"),
+  new SchemaInfo(ZodKPuzzleDefinitionJSON, "KPuzzleDefinition"),
+  new SchemaInfo(ZodKTransformationData, "KTransformationData"),
 ];
 
 if (import.meta.main) {
   await Promise.all(schemas.map((schema) => schema.write()));
   await new PrintableShellCommand("bun", [
-    ["x", "@biomejs/biome"],
-    "check",
-    "--write",
-    PACKAGE_SCHEMA_FOLDER,
+    ["x", "--", "bun-dx", "--package", "@biomejs/biome", "biome", "--"],
+    ["check", "--write", "--"],
+    ...schemas.map((schema) => schema.outputPath),
   ]).shellOut();
 }

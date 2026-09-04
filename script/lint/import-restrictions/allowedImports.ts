@@ -80,7 +80,9 @@ export const mainAllowedImports: AllowedImports = {
     ],
     dynamic: ["src/cubing/puzzles"],
   },
-  "src/cubing/kpuzzle": { static: ["src/cubing/alg", "src/cubing/kpuzzle"] },
+  "src/cubing/kpuzzle": {
+    static: ["src/cubing/alg", "src/cubing/kpuzzle", "zod/mini"],
+  },
   "src/cubing/notation": {
     static: ["src/cubing/alg", "src/cubing/puzzles"],
   },

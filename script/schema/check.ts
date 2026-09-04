@@ -13,7 +13,8 @@ for (const [schema, schemaCheck] of schemas.map(
     console.log(
       `✅ ${styleText(["underline", "blue"], schema.outputPath.path)} is up to date.`,
     );
-  } catch {
+  } catch (e) {
+    console.log(e);
     console.log(
       `❌ ${styleText(["underline", "blue"], schema.outputPath.path)} is not up to date.`,
     );
