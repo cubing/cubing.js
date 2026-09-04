@@ -294,12 +294,10 @@ lint-tsc-bin: update-dependencies
 
 .PHONY: check-schemas
 check-schemas: update-dependencies
-	# TODO: https://github.com/YousefED/typescript-json-schema/issues/633
-	# 	${BUN_RUN} "./script/schema/check.ts"
+	${BUN_RUN} "./script/schema/check.ts"
 
 .PHONY: update-schemas
 update-schemas: update-dependencies
-	# TODO: https://github.com/YousefED/typescript-json-schema/issues/633
 	${BUN_RUN} "./script/schema/update.ts"
 
 .PHONY: check-package.json

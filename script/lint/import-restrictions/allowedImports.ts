@@ -48,6 +48,9 @@ export const mainAllowedImports: AllowedImports = {
   "script/cleanup": {
     static: ["node:fs", "node:fs/promises", "node:path"],
   },
+  "script/schema": {
+    static: ["zod/mini"],
+  },
   // src/bin
   "src/bin": {
     static: [
@@ -80,7 +83,9 @@ export const mainAllowedImports: AllowedImports = {
     ],
     dynamic: ["src/cubing/puzzles"],
   },
-  "src/cubing/kpuzzle": { static: ["src/cubing/alg", "src/cubing/kpuzzle"] },
+  "src/cubing/kpuzzle": {
+    static: ["src/cubing/alg", "src/cubing/kpuzzle", "zod/mini"],
+  },
   "src/cubing/notation": {
     static: ["src/cubing/alg", "src/cubing/puzzles"],
   },
