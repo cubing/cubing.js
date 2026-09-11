@@ -427,7 +427,7 @@ class ControlPane {
       "puzzle",
       "select",
     );
-    this.twistyPlayer.experimentalModel.puzzleID
+    void this.twistyPlayer.experimentalModel.puzzleID
       .get()
       .then((puzzleID) => this.initializePuzzleSelect(puzzleID));
 
@@ -436,7 +436,7 @@ class ControlPane {
       "setup-anchor",
       "select",
     );
-    this.twistyPlayer.experimentalModel.setupAnchor
+    void this.twistyPlayer.experimentalModel.setupAnchor
       .get()
       .then((anchor) => this.initializeSetupAnchorSelect(anchor));
 

@@ -111,7 +111,7 @@ export class Twisty3DSceneWrapper
       return raycaster;
     })();
 
-    twisty3DPuzzleWrapper.raycastMove(raycasterPromise, {
+    await twisty3DPuzzleWrapper.raycastMove(raycasterPromise, {
       invert: !e.detail.pressInfo.rightClick,
       depth: e.detail.pressInfo.keys.ctrlOrMetaKey
         ? "rotation"
