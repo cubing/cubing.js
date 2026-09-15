@@ -176,6 +176,14 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
             hintFaceletsElevation,
           },
         );
+      } else if (this.visualizationStrategy === "Square1_3D") {
+        const faceletScale =
+          await this.model.twistySceneModel.faceletScale.get();
+        return (await bulk3DCode).square1_3DShim(
+          () => this.schedulable.scheduleRender(),
+          this.puzzleLoader,
+          faceletScale,
+        );
       } else {
         const [hintFacelets, foundationSprite, hintSprite, faceletScale] =
           await Promise.all([
