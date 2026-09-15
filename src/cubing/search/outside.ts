@@ -150,6 +150,8 @@ interface SearchOutsideDebugGlobals {
   forceNewWorkerForEveryScramble: boolean;
   showWorkerInstantiationWarnings: boolean;
   forceTwipsForScrambles: boolean;
+  // Allow fallbacks from `import.meta.resolve(…)`.
+  allowLegacyPatternsForWorkerInstantiation: boolean;
   // This can prevent a request to `search-worker-entry.js` when it doesn't exist, if the library semantics have been mangled by `esbuild`.
   prioritizeEsbuildWorkaroundForWorkerInstantiation: boolean;
   allowDerivedScrambles: boolean;
@@ -162,6 +164,7 @@ export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   forceTwipsForScrambles: false,
   showWorkerInstantiationWarnings: true,
   prioritizeEsbuildWorkaroundForWorkerInstantiation: false,
+  allowLegacyPatternsForWorkerInstantiation: true,
   allowDerivedScrambles: false,
 };
 
@@ -189,6 +192,7 @@ export function setSearchDebug(
     "forceNewWorkerForEveryScramble",
     "showWorkerInstantiationWarnings",
     "prioritizeEsbuildWorkaroundForWorkerInstantiation",
+    "allowLegacyPatternsForWorkerInstantiation",
     "allowDerivedScrambles",
   ] as const) {
     if (booleanField in options) {
