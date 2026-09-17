@@ -21,13 +21,13 @@
  * safe/correct/long-lasting they are), and would probably still best be done by
  * vendoring the output. So instead we do something simple and about equally
  * robust: we leave the TypeScript definitions in `KPuzzleDefinitionJSON.ts` and
- * *also* maintain separate definitions in `zod`, then use Zod's
+ * *also* maintain separate definitions here using `zod`, then use Zod's
  * [`toZod()`](https://zod.dev/api?id=matching-an-existing-type#matching-an-existing-type)
  * function to check/generate the schema in a way that also allows TypeScript to
  * check for an exact type match.
  *
  * This means that any change in a definition (including extra/missing fields) —
- * whether in this file or in `KPuzzleDefinitionJSON.ts` will cause `make
+ * whether in this file or in `KPuzzleDefinitionJSON.ts` — will cause `make
  * lint-tsc` to fail. It also means that any change will have to be made
  * simultaneously in both places (which of course is the intended effect of this
  * approach).
