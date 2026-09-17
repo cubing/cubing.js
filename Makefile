@@ -319,7 +319,7 @@ postpublish: update-cdn update-create-cubing-app deploy
 .PHONY: postpublish-clear-bun-cache
 postpublish-clear-bun-cache:
 	# Ensure that we get the newly published `cubing` version in other `postpublish` steps.
-	bun pm cache rm
+	# bun pm cache rm # TODO: this is not compatible with the global install cache.
 
 .PHONY: check-for-duplicate-dependencies
 check-for-duplicate-dependencies: update-dependencies
