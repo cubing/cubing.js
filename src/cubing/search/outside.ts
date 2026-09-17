@@ -162,7 +162,7 @@ export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
   scramblePrefetchLevel: "auto",
   forceNewWorkerForEveryScramble: false,
   forceTwipsForScrambles: false,
-  showWorkerInstantiationWarnings: true,
+  showWorkerInstantiationWarnings: false,
   prioritizeEsbuildWorkaroundForWorkerInstantiation: false,
   allowLegacyPatternsForWorkerInstantiation: true,
   allowDerivedScrambles: false,
