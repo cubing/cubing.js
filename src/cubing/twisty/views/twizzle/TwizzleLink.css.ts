@@ -156,7 +156,6 @@ twizzleLinkForumTweaksCSS.replaceSync(`
   background: #262626;
   --text-color: 142, 142, 142;
   border-color: #FFFFFF44;
-  color-scheme: dark;
 }
 
 .wrapper.dark-mode .heading:not(.title) {

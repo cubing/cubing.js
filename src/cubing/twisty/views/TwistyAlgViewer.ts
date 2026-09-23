@@ -46,7 +46,7 @@ interface DataUp {
   element: TwistyAlgWrapperElem | TwistyAlgLeafElem;
 }
 
-class TwistyAlgLeafElem extends ManagedCustomElement {
+class TwistyAlgLeafElem extends HTMLElementShim {
   constructor(
     className: string,
     text: string,
@@ -55,14 +55,11 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
     offsetIntoMove: boolean,
     clickable: boolean,
   ) {
-    super({ mode: "open" });
+    super();
     this.classList.add(className);
 
-    this.addCSS(twistyAlgViewerCSS);
     if (clickable) {
-      const anchor = this.contentWrapper.appendChild(
-        document.createElement("a"),
-      );
+      const anchor = this.appendChild(document.createElement("a"));
       anchor.href = "#";
       anchor.textContent = text;
 
@@ -74,9 +71,7 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
         );
       });
     } else {
-      this.contentWrapper.appendChild(
-        document.createElement("span"),
-      ).textContent = text;
+      this.appendChild(document.createElement("span")).textContent = text;
     }
   }
 
@@ -85,14 +80,14 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
   }
 
   setCurrentMove(current: boolean) {
-    this.contentWrapper.classList.toggle("current-move", current);
+    this.classList.toggle("current-move", current);
   }
 }
 
 customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
 
 class TwistyAlgWrapperElem extends HTMLElementShim {
-  private queue: (Element | Text)[] = [];
+  private queue: Element[] = [];
 
   constructor(
     className: string,
@@ -103,7 +98,9 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
   }
 
   addString(str: string) {
-    this.queue.push(document.createTextNode(str));
+    const span = document.createElement("span");
+    span.textContent = str;
+    this.queue.push(span);
   }
 
   addElem(dataUp: DataUp): number {
@@ -402,23 +399,22 @@ class MoveHighlighter {
     if (this.currentElem === newElem) {
       return;
     }
-    this.currentElem?.classList.remove("twisty-alg-current-move");
     this.currentElem?.setCurrentMove(false);
-    newElem?.classList.add("twisty-alg-current-move");
     newElem?.setCurrentMove(true);
     this.currentElem = newElem;
   }
 }
 
 /** @category Other Custom Elements */
-export class TwistyAlgViewer extends HTMLElementShim {
+export class TwistyAlgViewer extends ManagedCustomElement {
   highlighter: MoveHighlighter = new MoveHighlighter();
   #domTree?: TwistyAlgWrapperElem | TwistyAlgLeafElem;
   #domTreeAlg?: Alg;
   #twistyPlayer: TwistyPlayer | null = null;
   lastClickTimestamp: number | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
-    super();
+    super({ mode: "open" });
+    this.addCSS(twistyAlgViewerCSS);
     if (options?.twistyPlayer) {
       this.twistyPlayer = options?.twistyPlayer;
     }
@@ -438,8 +434,8 @@ export class TwistyAlgViewer extends HTMLElementShim {
       direction: ExperimentalIterationDirection.Forwards,
     }).element;
     this.#domTreeAlg = alg;
-    this.textContent = "";
-    this.appendChild(this.#domTree);
+    this.contentWrapper.textContent = "";
+    this.contentWrapper.appendChild(this.#domTree);
   }
 
   get twistyPlayer(): TwistyPlayer | null {
