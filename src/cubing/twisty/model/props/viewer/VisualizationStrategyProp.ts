@@ -12,7 +12,8 @@ export type VisualizationStrategy =
   | "2D"
   | "experimental-2D-LL"
   | "experimental-2D-LL-face"
-  | "PG3D";
+  | "PG3D"
+  | "Square1_3D";
 
 export class VisualizationStrategyProp extends TwistyPropDerived<
   VisualizationStrategyPropInputs,
@@ -22,12 +23,19 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
     // TODO: let the puzzle loader tell us.
     switch (inputs.puzzleID) {
       case "clock":
-      case "square1":
       case "redi_cube":
       case "melindas2x2x2x2":
       case "tri_quad":
       case "loopover":
         return "2D";
+      case "square1":
+        switch (inputs.visualizationRequest) {
+          case "auto":
+          case "3D":
+            return "Square1_3D";
+          default:
+            return "2D";
+        }
       case "3x3x3":
         switch (inputs.visualizationRequest) {
           case "auto":
