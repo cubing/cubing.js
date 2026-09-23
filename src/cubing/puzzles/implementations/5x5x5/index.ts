@@ -11,6 +11,11 @@ const cube5x5x5: PuzzleLoader = new CubePGPuzzleLoader({
   inventionYear: 1981,
 });
 
+cube5x5x5.llSVG = getCached(async () => {
+  return (await import("../dynamic/5x5x5/puzzles-dynamic-5x5x5"))
+    .cube5x5x5LLSVG;
+});
+
 cube5x5x5.keyMapping = async () => cube4x4x4And5x5x5KeyMapping; // TODO: async loading
 
 cube5x5x5.kpuzzle = getCached(async () => {
