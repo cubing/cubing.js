@@ -3,7 +3,7 @@
 /**
  * Usage:
  *
- *    bun run "script/bin/screenshot.ts" "R U R' U R U2' R'"
+ *    bun run -- "script/bin/screenshot.ts" "R U R' U R U2' R'"
  *
  *  */
 
