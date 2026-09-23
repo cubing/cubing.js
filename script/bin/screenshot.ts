@@ -1,3 +1,5 @@
+#!/usr/bin/env -S bun run --
+
 /**
  * Usage:
  *
