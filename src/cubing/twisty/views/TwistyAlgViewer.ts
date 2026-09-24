@@ -1,5 +1,5 @@
 import {
-  Alg,
+  type Alg,
   type AlgNode,
   type Commutator,
   type Conjugate,
@@ -414,6 +414,7 @@ class MoveHighlighter {
 export class TwistyAlgViewer extends HTMLElementShim {
   highlighter: MoveHighlighter = new MoveHighlighter();
   #domTree?: TwistyAlgWrapperElem | TwistyAlgLeafElem;
+  #domTreeAlg?: Alg;
   #twistyPlayer: TwistyPlayer | null = null;
   lastClickTimestamp: number | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
@@ -428,11 +429,15 @@ export class TwistyAlgViewer extends HTMLElementShim {
   }
 
   private setAlg(alg: Alg): void {
+    if (this.#domTreeAlg?.isIdentical(alg)) {
+      return;
+    }
     this.#domTree = algToDOMTree(alg, {
       earliestMoveIndex: 0 as LeafIndex,
       twistyAlgViewer: this,
       direction: ExperimentalIterationDirection.Forwards,
     }).element;
+    this.#domTreeAlg = alg;
     this.textContent = "";
     this.appendChild(this.#domTree);
   }
@@ -460,15 +465,6 @@ export class TwistyAlgViewer extends HTMLElementShim {
         this.setAlg(algWithIssues.alg);
       },
     );
-
-    const sourceAlg = (await this.#twistyPlayer.experimentalModel.alg.get())
-      .alg;
-    // TODO: Use proper architecture instead of a heuristic to ensure we have a parsed alg annotated with char indices.
-    const parsedAlg =
-      startCharIndexKey in (sourceAlg as Partial<Parsed<Alg>>)
-        ? sourceAlg
-        : Alg.fromString(sourceAlg.toString());
-    this.setAlg(parsedAlg);
 
     twistyPlayer.experimentalModel.currentMoveInfo.addFreshListener(
       (currentMoveInfo: CurrentMoveInfo) => {
