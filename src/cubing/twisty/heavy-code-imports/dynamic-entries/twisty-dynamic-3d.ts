@@ -3,6 +3,7 @@ import type { FaceletScale } from "../../model/props/puzzle/display/FaceletScale
 import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp";
 import { Cube3D, type Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
+import { Square1_3D } from "../../views/3D/puzzles/Square1_3D";
 
 // TODO: figure out how to load these dynamically without a bottleneck.
 export { PerspectiveCamera as ThreePerspectiveCamera } from "three/src/cameras/PerspectiveCamera.js";
@@ -16,6 +17,7 @@ export { Scene as ThreeScene } from "three/src/scenes/Scene.js";
 
 export { Cube3D } from "../../views/3D/puzzles/Cube3D";
 export { PG3D } from "../../views/3D/puzzles/PG3D";
+export { Square1_3D } from "../../views/3D/puzzles/Square1_3D";
 export { Twisty3DScene } from "../../views/3D/Twisty3DScene";
 
 export async function cube3DShim(
@@ -23,6 +25,16 @@ export async function cube3DShim(
   options?: Cube3DOptions,
 ): Promise<Cube3D> {
   return new Cube3D(await cube3x3x3.kpuzzle(), renderCallback, options);
+}
+
+export async function square1_3DShim(
+  renderCallback: () => void,
+  puzzleLoader: PuzzleLoader,
+  faceletScale: FaceletScale,
+): Promise<Square1_3D> {
+  return new Square1_3D(await puzzleLoader.kpuzzle(), renderCallback, {
+    faceletScale,
+  });
 }
 
 // TODO: take loader?

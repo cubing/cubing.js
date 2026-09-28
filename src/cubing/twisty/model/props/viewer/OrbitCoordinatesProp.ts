@@ -113,6 +113,10 @@ export function defaultCameraOrbitCoordinates(
         return pyraminxCameraOrbitCoordinates;
       case "skewb":
         return cubePG3DCameraOrbitCoordinates;
+      case "square1":
+        return strategy === "Square1_3D"
+          ? cubePG3DCameraOrbitCoordinates
+          : centeredCameraOrbitCoordinates;
       default:
         return centeredCameraOrbitCoordinates;
     }
