@@ -7,6 +7,15 @@ import type {
 
 const xmlns = "http://www.w3.org/2000/svg";
 const DATA_COPY_ID_ATTRIBUTE = "data-copy-id";
+const DATA_FACELET_STROKE_WIDTH_ATTRIBUTE = "data-facelet-stroke-width";
+const DATA_PIECE_SEPARATOR_ATTRIBUTE = "data-piece-separator";
+const DATA_BONDED_PIECES_ATTRIBUTE = "data-bonded-pieces";
+
+interface PieceSeparator {
+  element: SVGElement;
+  orbitName: string;
+  slots: [number, number];
+}
 
 // Unique ID mechanism to keep SVG gradient element IDs unique. TODO: Is there
 // something more performant, and that can't be broken by other elements of the
@@ -43,6 +52,9 @@ export class TwistyAnimatedSVG {
   private originalColors: { [type: string]: string } = {};
   private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
+  private faceletStrokeWidth: string | null = null;
+  private pieceSeparators: PieceSeparator[] = [];
+  private bondedPieces = new Set<string>();
   constructor(
     public kpuzzle: KPuzzle,
     svgSource: string,
@@ -70,6 +82,16 @@ export class TwistyAnimatedSVG {
     }
     svgElem.style.maxWidth = "100%";
     svgElem.style.maxHeight = "100%";
+    this.faceletStrokeWidth = svgElem.getAttribute(
+      DATA_FACELET_STROKE_WIDTH_ATTRIBUTE,
+    );
+    for (const bond of (
+      svgElem.getAttribute(DATA_BONDED_PIECES_ATTRIBUTE) ?? ""
+    ).split(/\s+/)) {
+      if (bond) {
+        this.bondedPieces.add(bond);
+      }
+    }
     this.gradientDefs = document.createElementNS(xmlns, "defs");
     svgElem.insertBefore(this.gradientDefs, svgElem.firstChild);
 
@@ -126,7 +148,7 @@ export class TwistyAnimatedSVG {
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
           this.gradientDefs.appendChild(this.gradients[id]);
-          elem?.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
+          elem?.setAttribute("style", this.faceletStyle(id));
         }
       }
     }
@@ -135,7 +157,20 @@ export class TwistyAnimatedSVG {
       svgElem.querySelectorAll(`[${DATA_COPY_ID_ATTRIBUTE}]`),
     )) {
       const id = hintElem.getAttribute(DATA_COPY_ID_ATTRIBUTE);
-      hintElem.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
+      hintElem.setAttribute("style", this.faceletStyle(id!));
+    }
+
+    for (const separatorElem of Array.from(
+      svgElem.querySelectorAll(`[${DATA_PIECE_SEPARATOR_ATTRIBUTE}]`),
+    )) {
+      const [orbitName, slotA, slotB] = separatorElem
+        .getAttribute(DATA_PIECE_SEPARATOR_ATTRIBUTE)!
+        .split(/\s+/);
+      this.pieceSeparators.push({
+        element: separatorElem as SVGElement,
+        orbitName,
+        slots: [Number.parseInt(slotA, 10), Number.parseInt(slotB, 10)],
+      });
     }
 
     if (this.showUnknownOrientations) {
@@ -160,6 +195,15 @@ export class TwistyAnimatedSVG {
     const nextTransformation = nextPattern?.experimentalToTransformation();
     if (!pattern) {
       throw new Error("Distinguishable pieces are not handled for SVG yet!");
+    }
+
+    for (const separator of this.pieceSeparators) {
+      const { pieces } = pattern.patternData[separator.orbitName];
+      const [a, b] = separator.slots.map((slot) => pieces[slot]);
+      const bond = `${separator.orbitName}:${Math.min(a, b)}:${Math.max(a, b)}`;
+      separator.element.style.display = this.bondedPieces.has(bond)
+        ? "none"
+        : "";
     }
 
     for (const orbitDefinition of pattern.kpuzzle.definition.orbits) {
@@ -260,6 +304,13 @@ export class TwistyAnimatedSVG {
         }
       }
     }
+  }
+
+  private faceletStyle(id: string): string {
+    const paint = `url(#grad-${this.svgID}-${id})`;
+    return this.faceletStrokeWidth === null
+      ? `fill: ${paint}`
+      : `fill: ${paint}; stroke: ${paint}; stroke-width: ${this.faceletStrokeWidth}`;
   }
 
   private newGradient(id: string, originalColor: string): SVGGradientElement {
