@@ -126,12 +126,9 @@ export class PGOrbitsDef {
     result.push("");
     result.push("Solved");
     for (let i = 0; i < this.orbitnames.length; i++) {
-      this.solved.orbits[i].appendDefinition(
-        result,
-        this.orbitnames[i],
-        false,
-        false,
-      );
+      this.solved.orbits[i]
+        .renumberPieces()
+        .appendDefinition(result, this.orbitnames[i], false, false);
     }
     result.push("End");
     for (let i = 0; i < this.movenames.length; i++) {
@@ -458,6 +455,21 @@ export class PGOrbit {
       }
     }
     return new Perm(newPerm);
+  }
+
+  // number the pieces in order.
+  public renumberPieces(): PGOrbit {
+    const seen = new Array<number>(this.perm.length);
+    const newPerm = new Array<number>(this.perm.length);
+    let id = 0;
+    for (let i = 0; i < this.perm.length; i++) {
+      const v = this.perm[i];
+      if (seen[v] === undefined) {
+        seen[v] = id++;
+      }
+      newPerm[i] = seen[v];
+    }
+    return new PGOrbit(newPerm, this.ori, this.orimod);
   }
 
   // returns tuple of sets of identical pieces in this orbit
