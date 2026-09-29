@@ -375,7 +375,8 @@ update-create-cubing-app: postpublish-clear-bun-cache
 
 .PHONY: publish
 publish:
-	${NPM} publish --globalconfig=$HOME/.config/npm/cubing-publish.npmrc
+	${NPM} whoami || ${NPM} npm login
+	${NPM} publish
 
 .PHONY: pack
 
