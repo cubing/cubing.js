@@ -5,8 +5,7 @@ twistyAlgViewerCSS.replaceSync(
   `
 :host {
   display: inline;
-  --comment-shade: oklab(0.69 -0.19 0.14);
-  --comment-opacity: 0.6;
+  --comment-opacity: 0.4;
   --active-background-shade: rgba(66, 133, 244);
 }
 
@@ -38,7 +37,6 @@ a {
 }
 
 twisty-alg-leaf-elem.twisty-alg-line-comment {
-  color: color-mix(in oklab, var(--comment-shade) 75%, currentColor);
   opacity: var(--comment-opacity);
 }
 
