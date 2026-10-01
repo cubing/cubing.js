@@ -270,6 +270,19 @@ function defaultnets(): any {
   };
 }
 
+// Sometimes the net above is not particularly user-friendly; for instance,
+// the conventional FTO net is two squares with non-equilateral triangles
+// for each sticker (a projection of the puzzle, rather than a conventional
+// unfolding).  We can describe an alternate 2D map here for the
+// octahedron that matches this.
+
+const userFriendly2DProjections: { [faceCount: number]: string[][] } = {
+  8: [
+    ["U", "F", "L", "R"],
+    ["BB", "BR", "D", "BL"],
+  ],
+};
+
 // Orientation conventions are specified here.  For each of the five platonic
 // solids, by face count, we have three lists of "cubie names" consisting of
 // a concatenation of face names.  For vertex (corner) and edge cubies, the
@@ -3135,13 +3148,81 @@ export class PuzzleGeometry {
     return mappt2d;
   }
 
+  // If a user-friendly mapping is provided, we prefer to use that for
+  // any 2D representations.  This involves some geometrical remapping.
+
+  public generateUserFriendly2D(
+    w: number,
+    h: number,
+    trim: number,
+  ): ((fn: number, q: Quat) => number[]) | null {
+    const views = userFriendly2DProjections[this.baseFaceCount];
+    if (!views) {
+      return null;
+    }
+    this.genperms();
+    const faceView: number[] = [];
+    const frames = views.map((names, vi) => {
+      const fns: number[] = [];
+      for (let fi = 0; fi < names.length; fi++) {
+        for (let i = 0; i < this.faceNames.length; i++) {
+          if (this.faceNames[i][1] === names[fi]) {
+            fns[fi] = i;
+          }
+        }
+      }
+      let s = new Quat(0, 0, 0, 0); // sum of normals
+      for (const fn of fns) {
+        s = s.sum(this.basePlanes[fn].makenormal());
+        faceView[fn] = vi;
+      }
+      s = s.normalize();
+      const top = this.basePlanes[fns[0]].makenormal();
+      const up = top.sub(s.smul(top.dot(s))).normalize();
+      return { up, right: s.cross(up), lo: [1e9, 1e9], hi: [-1e9, -1e9] };
+    });
+    for (let fn = 0; fn < this.baseFaceCount; fn++) {
+      const fr = frames[faceView[fn]];
+      for (const v of this.faceNames[fn][0]) {
+        const p = [v.dot(fr.right), v.dot(fr.up)];
+        fr.lo = [Math.min(fr.lo[0], p[0]), Math.min(fr.lo[1], p[1])];
+        fr.hi = [Math.max(fr.hi[0], p[0]), Math.max(fr.hi[1], p[1])];
+      }
+    }
+    const gap = 0.2 * (frames[0].hi[0] - frames[0].lo[0]);
+    let totw = -gap;
+    let toth = 0;
+    for (const fr of frames) {
+      totw += fr.hi[0] - fr.lo[0] + gap;
+      toth = Math.max(toth, fr.hi[1] - fr.lo[1]);
+    }
+    const sc = Math.min((w - 2 * trim) / totw, (h - 2 * trim) / toth);
+    const left: number[] = [];
+    let x = (w - sc * totw) / 2;
+    for (const fr of frames) {
+      left.push(x - sc * fr.lo[0]);
+      x += sc * (fr.hi[0] - fr.lo[0] + gap);
+    }
+    return (fn: number, q: Quat): number[] => {
+      const vi = faceView[fn];
+      const fr = frames[vi];
+      const mid = (fr.lo[1] + fr.hi[1]) / 2;
+      return [
+        left[vi] + sc * q.dot(fr.right),
+        h / 2 - sc * (q.dot(fr.up) - mid),
+      ];
+    };
+  }
+
   public generatesvg(
     w: number = 800,
     h: number = 500,
     trim: number = 10,
     threed: boolean = false,
   ): string {
-    const mappt2d = this.generate2dmapping(w, h, trim, threed);
+    const mappt2d =
+      (!threed && this.generateUserFriendly2D(w, h, trim)) ||
+      this.generate2dmapping(w, h, trim, threed);
     function drawedges(id: string, pts: number[][], color: string): string {
       return `<polygon id="${id}" class="sticker" style="fill: ${color}" points="${pts
         .map((p) => `${p[0]} ${p[1]}`)
