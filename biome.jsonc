@@ -35,6 +35,9 @@
       "suspicious": {
         "noAssignInExpressions": "off",
         "noExplicitAny": "off"
+      },
+      "correctness": {
+        "useImportExtensions": "on"
       }
     }
   },

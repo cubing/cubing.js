@@ -6,7 +6,8 @@
     "skipLibCheck": true,
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "rootDir": "./src/cubing/",
-    "types": ["web-bluetooth", "node"]
+    "types": ["web-bluetooth", "node"],
+    "allowImportingTsExtensions": true
   },
   "include": ["./src/cubing/"],
   "exclude": ["./**/*.test.dom.ts", "./**/*.test.ts"]
