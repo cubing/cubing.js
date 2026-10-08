@@ -1,9 +1,9 @@
-import type { PuzzleLoader } from "../..";
-import { getCached } from "../../async/lazy-cached";
+import { getCached } from "../../async/lazy-cached.ts";
 import {
   asyncGetKPuzzleByDesc,
   descAsyncGetPuzzleGeometry,
-} from "../../customPGPuzzleLoader";
+} from "../../customPGPuzzleLoader.ts";
+import type { PuzzleLoader } from "../../index.ts";
 
 const KILOMINX_PUZZLE_DESCRIPTION = "d f 0.56";
 
@@ -23,7 +23,7 @@ export const kilominx: PuzzleLoader = {
       includeEdgeOrbits: false,
     }),
   svg: getCached(async () => {
-    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
+    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial.ts"))
       .kilominxSVG;
   }),
 };

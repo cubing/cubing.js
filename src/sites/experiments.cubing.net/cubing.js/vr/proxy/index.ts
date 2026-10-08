@@ -2,14 +2,14 @@
 
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import type { GoCube } from "../../../../../cubing/bluetooth";
+import type { GoCube } from "../../../../../cubing/bluetooth/index.ts";
 import {
   type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
-} from "../../../../../cubing/bluetooth";
-import { ExperimentalWebSocketProxySender } from "../../../../../cubing/stream";
-import { socketOrigin } from "../config";
+} from "../../../../../cubing/bluetooth/index.ts";
+import { ExperimentalWebSocketProxySender } from "../../../../../cubing/stream/index.ts";
+import { socketOrigin } from "../config.ts";
 
 class App {
   private proxySender: ExperimentalWebSocketProxySender;

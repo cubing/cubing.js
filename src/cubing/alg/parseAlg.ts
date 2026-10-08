@@ -1,14 +1,14 @@
-import { Alg } from "./Alg";
-import { AlgBuilder } from "./AlgBuilder";
-import type { AlgNode } from "./alg-nodes";
-import { Commutator } from "./alg-nodes/containers/Commutator";
-import { Conjugate } from "./alg-nodes/containers/Conjugate";
-import { Grouping } from "./alg-nodes/containers/Grouping";
-import { LineComment } from "./alg-nodes/leaves/LineComment";
-import { Move, QuantumMove } from "./alg-nodes/leaves/Move";
-import { Newline } from "./alg-nodes/leaves/Newline";
-import { Pause } from "./alg-nodes/leaves/Pause";
-import { algDebugGlobals } from "./debug";
+import { Alg } from "./Alg.ts";
+import { AlgBuilder } from "./AlgBuilder.ts";
+import { Commutator } from "./alg-nodes/containers/Commutator.ts";
+import { Conjugate } from "./alg-nodes/containers/Conjugate.ts";
+import { Grouping } from "./alg-nodes/containers/Grouping.ts";
+import type { AlgNode } from "./alg-nodes/index.ts";
+import { LineComment } from "./alg-nodes/leaves/LineComment.ts";
+import { Move, QuantumMove } from "./alg-nodes/leaves/Move.ts";
+import { Newline } from "./alg-nodes/leaves/Newline.ts";
+import { Pause } from "./alg-nodes/leaves/Pause.ts";
+import { algDebugGlobals } from "./debug.ts";
 
 type StoppingChar = "," | ":" | "]" | ")";
 

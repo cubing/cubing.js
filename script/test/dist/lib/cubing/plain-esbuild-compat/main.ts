@@ -1,10 +1,10 @@
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
-import { packageNames } from "../../../../../build/common/packageNames.js";
+import { packageNames } from "../../../../../build/common/packageNames.ts";
 import {
   DIST_LIB_CUBING,
   JAVASCRIPT_INDEX,
-} from "../../../../../build/common/paths.js";
+} from "../../../../../build/common/paths.ts";
 import { needPath } from "../../../../../lib/needPath.js";
 
 // TODO: relative

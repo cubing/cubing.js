@@ -1,4 +1,4 @@
-import { TwizzleLink } from "../../../../cubing/twisty";
+import { TwizzleLink } from "../../../../cubing/twisty/index.ts";
 
 const contentElem = document.querySelector(".content")!;
 

@@ -1,9 +1,9 @@
-import type { AlgLeaf, PuzzleSpecificSimplifyOptions } from "../alg";
-import type { AppendOptions } from "../alg/simplify";
-import type { KPuzzle } from "../kpuzzle";
-import type { PuzzleGeometry } from "../puzzle-geometry";
-import type { ExperimentalStickering } from "../twisty";
-import type { StickeringMask } from "./stickerings/mask";
+import type { AlgLeaf, PuzzleSpecificSimplifyOptions } from "../alg/index.ts";
+import type { AppendOptions } from "../alg/simplify/index.ts";
+import type { KPuzzle } from "../kpuzzle/index.ts";
+import type { PuzzleGeometry } from "../puzzle-geometry/index.ts";
+import type { ExperimentalStickering } from "../twisty/index.ts";
+import type { StickeringMask } from "./stickerings/mask.ts";
 
 export type KeyMapping = { [keyCode: string]: AlgLeaf };
 

@@ -3,24 +3,24 @@ import {
   Move,
   type PuzzleSpecificSimplifyOptions,
   type QuantumMove,
-} from "../../alg";
-import { KPuzzle, type KPuzzleDefinition } from "../../kpuzzle";
-import type { PuzzleGeometry } from "../../puzzle-geometry";
-import type { ExperimentalStickering, PuzzleID } from "../../twisty";
-import { cubeMirrorTransforms } from "../implementations/3x3x3";
-import type { AlgTransformData, PuzzleLoader } from "../PuzzleLoader";
+} from "../../alg/index.ts";
+import { KPuzzle, type KPuzzleDefinition } from "../../kpuzzle/index.ts";
+import type { PuzzleGeometry } from "../../puzzle-geometry/index.ts";
+import type { ExperimentalStickering, PuzzleID } from "../../twisty/index.ts";
+import { cubeMirrorTransforms } from "../implementations/3x3x3/index.ts";
+import type { AlgTransformData, PuzzleLoader } from "../PuzzleLoader.ts";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,
-} from "../stickerings/cube-like-stickerings";
-import type { StickeringMask } from "../stickerings/mask";
-import { getCached } from "./lazy-cached";
+} from "../stickerings/cube-like-stickerings.ts";
+import type { StickeringMask } from "../stickerings/mask.ts";
+import { getCached } from "./lazy-cached.ts";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
   puzzleName: string,
 ): Promise<PuzzleGeometry> {
-  const puzzleGeometry = await import("../../puzzle-geometry");
+  const puzzleGeometry = await import("../../puzzle-geometry/index.ts");
   return puzzleGeometry.getPuzzleGeometryByName(puzzleName, {
     allMoves: true,
     orientCenters: true,
@@ -37,7 +37,7 @@ export async function asyncGetPuzzleGeometry(
 async function asyncGetBasePuzzleGeometry(
   puzzleName: string,
 ): Promise<PuzzleGeometry> {
-  const puzzleGeometry = await import("../../puzzle-geometry");
+  const puzzleGeometry = await import("../../puzzle-geometry/index.ts");
   return puzzleGeometry.getPuzzleGeometryByName(puzzleName);
 }
 
@@ -52,7 +52,7 @@ export async function asyncGetKPuzzle(
   const pg = await pgPromise;
   const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
   kpuzzleDefinition.name = puzzleName;
-  const puzzleGeometry = await import("../../puzzle-geometry");
+  const puzzleGeometry = await import("../../puzzle-geometry/index.ts");
   const pgNotation = new puzzleGeometry.ExperimentalPGNotation(
     pg,
     pg.getOrbitsDef(true),

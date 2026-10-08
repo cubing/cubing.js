@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { TwistyPlayerModel } from "./TwistyPlayerModel";
+import { TwistyPlayerModel } from "./TwistyPlayerModel.ts";
 
 const R = { facelets: new Array(5).fill("regular") };
 const D = { facelets: new Array(5).fill("dim") };

@@ -2,11 +2,11 @@ import {
   type Alg,
   experimentalEnsureAlg,
   type FlexibleAlgSource,
-} from "../../Alg";
-import { AlgCommon, type Comparable } from "../../common";
-import { IterationDirection } from "../../iteration";
-import type { ExperimentalSerializationOptions } from "../../SerializationOptions";
-import type { AlgLeaf } from "../AlgNode";
+} from "../../Alg.ts";
+import { AlgCommon, type Comparable } from "../../common.ts";
+import { IterationDirection } from "../../iteration.ts";
+import type { ExperimentalSerializationOptions } from "../../SerializationOptions.ts";
+import type { AlgLeaf } from "../AlgNode.ts";
 
 /** @category Alg Nodes */
 export class Commutator extends AlgCommon<Commutator> {

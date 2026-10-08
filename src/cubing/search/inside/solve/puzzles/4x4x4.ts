@@ -1,7 +1,7 @@
-import type { Alg } from "../../../../alg";
-import { mustBeInsideWorker } from "../../inside-worker";
-import { addOrientationSuffix } from "../addOrientationSuffix";
-import { dynamic4x4x4Solver } from "./dynamic/4x4x4";
+import type { Alg } from "../../../../alg/index.ts";
+import { mustBeInsideWorker } from "../../inside-worker.ts";
+import { addOrientationSuffix } from "../addOrientationSuffix.ts";
+import { dynamic4x4x4Solver } from "./dynamic/4x4x4/index.ts";
 
 const randomSuffixes = [
   [null, "x", "x2", "x'", "z", "z'"],

@@ -1,9 +1,9 @@
-import type { PuzzleLoader } from "../../../puzzles";
-import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
-import type { Schedulable } from "../../controllers/RenderScheduler";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { Twisty2DPuzzle } from "./Twisty2DPuzzle";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private/index.ts";
+import type { PuzzleLoader } from "../../../puzzles/index.ts";
+import type { Schedulable } from "../../controllers/RenderScheduler.ts";
+import { FreshListenerManager } from "../../model/props/TwistyProp.ts";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
+import { Twisty2DPuzzle } from "./Twisty2DPuzzle.ts";
 
 export class Twisty2DPuzzleWrapper implements Schedulable {
   constructor(

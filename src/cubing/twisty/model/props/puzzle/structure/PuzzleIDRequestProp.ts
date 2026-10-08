@@ -2,7 +2,7 @@ import {
   NO_VALUE,
   type NoValueType,
   SimpleTwistyPropSource,
-} from "../../TwistyProp";
+} from "../../TwistyProp.ts";
 
 export const puzzleIDs = {
   "3x3x3": true, // default

@@ -1,13 +1,13 @@
-import type { Alg, Move } from "../alg";
-import { isPatternDataIdentical } from "./calculate";
-import { applyTransformationDataToKPatternData } from "./combine";
-import type { KPuzzle, KTransformationSource } from "./KPuzzle";
+import type { Alg, Move } from "../alg/index.ts";
+import { isPatternDataIdentical } from "./calculate.ts";
+import { applyTransformationDataToKPatternData } from "./combine.ts";
+import type { KPuzzle, KTransformationSource } from "./KPuzzle.ts";
 import type {
   KPatternData,
   KTransformationData,
   KTransformationOrbitData,
-} from "./KPuzzleDefinitionJSON";
-import { KTransformation } from "./KTransformation";
+} from "./KPuzzleDefinitionJSON.ts";
+import { KTransformation } from "./KTransformation.ts";
 
 export class KPattern {
   constructor(

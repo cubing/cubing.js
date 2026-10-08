@@ -42,7 +42,7 @@ import type { Alg } from "cubing/alg";
 import { eventInfo, twizzleEvents } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { setSearchDebug } from "cubing/search";
-import { packageVersion } from "../metadata/packageVersion";
+import { packageVersion } from "../metadata/packageVersion.ts";
 
 const outputFormats = ["auto", "text", "link", "json-text"] as const;
 const notationTypes = ["auto", "LGN"] as const;

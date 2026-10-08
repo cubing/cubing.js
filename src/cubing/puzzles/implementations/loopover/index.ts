@@ -1,6 +1,6 @@
-import { KPuzzle } from "../../../kpuzzle";
-import { getCached } from "../../async/lazy-cached";
-import type { PuzzleLoader } from "../../PuzzleLoader";
+import { KPuzzle } from "../../../kpuzzle/index.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import type { PuzzleLoader } from "../../PuzzleLoader.ts";
 
 export const loopover: PuzzleLoader = {
   id: "loopover",
@@ -10,12 +10,12 @@ export const loopover: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
+        (await import("../dynamic/unofficial/puzzles-dynamic-unofficial.ts"))
           .loopoverJSON,
       ),
   ),
   svg: async () => {
-    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
+    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial.ts"))
       .loopoverSVG;
   },
 };

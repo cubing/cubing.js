@@ -1,6 +1,6 @@
 import { type BuildOptions, build } from "esbuild";
-import { packageEntryPointsWithSearchWorkerEntry } from "../common/package-info";
-import { DIST_LIB_CUBING, tempPath } from "../common/paths";
+import { packageEntryPointsWithSearchWorkerEntry } from "../common/package-info.ts";
+import { DIST_LIB_CUBING, tempPath } from "../common/paths.ts";
 
 // In theory we could set `packages: "external"` here and rely on `make
 // test-src-import-restrictions`, but this is safer.

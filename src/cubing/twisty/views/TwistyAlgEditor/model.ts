@@ -1,26 +1,26 @@
 // TODO: Move this?
 
-import type { Alg } from "../../../alg";
+import type { Alg } from "../../../alg/index.ts";
 import {
   endCharIndexKey,
   type Parsed,
   startCharIndexKey,
-} from "../../../alg/parseAlg";
-import type { LeafCount } from "../../controllers/indexer/AlgIndexer";
+} from "../../../alg/parseAlg.ts";
+import type { LeafCount } from "../../controllers/indexer/AlgIndexer.ts";
 import {
   type AlgWithIssues,
   algWithIssuesFromString,
-} from "../../model/props/puzzle/state/AlgProp";
+} from "../../model/props/puzzle/state/AlgProp.ts";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
   TwistyPropSource,
-} from "../../model/props/TwistyProp";
+} from "../../model/props/TwistyProp.ts";
 import {
   type AnimatedLeafAlgNodeInfo,
   leafTokens,
   type OrderedLeafTokens,
-} from "./LeafTokens";
+} from "./LeafTokens.ts";
 
 export class TwistyAlgEditorValueProp extends SimpleTwistyPropSource<string> {
   getDefaultValue(): string {

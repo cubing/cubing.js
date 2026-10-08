@@ -5,7 +5,7 @@ import {
   maskToOrientations,
   orientationsToMask,
   permutationToLex,
-} from "./orbit-indexing";
+} from "./orbit-indexing.ts";
 
 test("indexes", () => {
   expect(permutationToLex([0, 1, 2])).toStrictEqual(0);

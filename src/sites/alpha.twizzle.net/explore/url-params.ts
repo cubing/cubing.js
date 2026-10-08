@@ -1,7 +1,7 @@
 // TODO: implement URL listener.
 
-import { Alg } from "../../../cubing/alg";
-import { legacyPuzzleNameMapping } from "../../../cubing/puzzle-geometry/cubing-private";
+import { Alg } from "../../../cubing/alg/index.ts";
+import { legacyPuzzleNameMapping } from "../../../cubing/puzzle-geometry/cubing-private/index.ts";
 
 export interface PartialURLParamValues {
   alg?: Alg;

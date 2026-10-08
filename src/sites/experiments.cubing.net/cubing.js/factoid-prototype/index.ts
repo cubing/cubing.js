@@ -1,6 +1,6 @@
-import "../../../../cubing/twisty";
-import type { TwistyPlayer } from "../../../../cubing/twisty";
-import { BoundaryType } from "../../../../cubing/twisty/controllers/AnimationTypes";
+import "../../../../cubing/twisty/index.ts";
+import { BoundaryType } from "../../../../cubing/twisty/controllers/AnimationTypes.ts";
+import type { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
 
 class FactoidSection extends HTMLElement {
   twistyPlayer: TwistyPlayer;

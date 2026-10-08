@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle/index.ts";
 
 const orientation = new Array(64).fill(0);
 const range = orientation.map((_, i) => i);

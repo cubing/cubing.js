@@ -1,10 +1,10 @@
-import type { Move } from "../../../../../alg";
+import type { Move } from "../../../../../alg/index.ts";
 import type {
   CurrentMoveInfo,
   LeafIndex,
-} from "../../../../controllers/indexer/AlgIndexer";
-import { arrayEqualsCompare } from "../../../helpers";
-import { TwistyPropDerived } from "../../TwistyProp";
+} from "../../../../controllers/indexer/AlgIndexer.ts";
+import { arrayEqualsCompare } from "../../../helpers.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
 
 interface CurrentLeavesSimplifiedPropInputs {
   currentMoveInfo: CurrentMoveInfo;

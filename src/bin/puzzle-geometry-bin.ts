@@ -52,7 +52,7 @@ import {
   parsePuzzleDescription,
 } from "cubing/puzzle-geometry";
 import { PrintableShellCommand } from "printable-shell-command";
-import { packageVersion } from "../metadata/packageVersion";
+import { packageVersion } from "../metadata/packageVersion.ts";
 
 const puzzleList = getPG3DNamedPuzzles();
 

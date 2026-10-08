@@ -1,5 +1,5 @@
-import { debugLog } from "../debug";
-import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
+import { debugLog } from "../debug.ts";
+import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle.ts";
 
 /******** requestOptions ********/
 

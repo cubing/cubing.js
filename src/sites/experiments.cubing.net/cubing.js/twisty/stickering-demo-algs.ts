@@ -1,9 +1,9 @@
-import { Alg } from "../../../../cubing/alg";
+import { Alg } from "../../../../cubing/alg/index.ts";
 import {
   type ExperimentalStickering,
   TwistyPlayer,
-} from "../../../../cubing/twisty";
-import type { VisualizationFormat } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
+} from "../../../../cubing/twisty/index.ts";
+import type { VisualizationFormat } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp.ts";
 
 export function demo(visualization: VisualizationFormat): void {
   const content = document.querySelector(".content")!;

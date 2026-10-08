@@ -1,5 +1,5 @@
 import { randomChoice } from "random-uint-below";
-import { type Alg, AlgBuilder, Move } from "../../../alg";
+import { type Alg, AlgBuilder, Move } from "../../../alg/index.ts";
 
 export function addOrientationSuffix(
   alg: Alg,

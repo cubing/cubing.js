@@ -2,7 +2,7 @@ import { expect, test } from "bun:test";
 import {
   type OrbitCoordinates,
   OrbitCoordinatesRequestProp,
-} from "./OrbitCoordinatesRequestProp";
+} from "./OrbitCoordinatesRequestProp.ts";
 
 test("longitude wraps from 180 to -180", async () => {
   const orbitCoordinatesRequestProp = new OrbitCoordinatesRequestProp();

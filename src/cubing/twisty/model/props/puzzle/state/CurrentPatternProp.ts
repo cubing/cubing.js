@@ -1,8 +1,8 @@
-import type { KTransformation } from "../../../../../kpuzzle";
-import type { KPattern } from "../../../../../kpuzzle/KPattern";
-import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { CurrentLeavesSimplified } from "./CurrentLeavesSimplified";
+import type { KTransformation } from "../../../../../kpuzzle/index.ts";
+import type { KPattern } from "../../../../../kpuzzle/KPattern.ts";
+import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { CurrentLeavesSimplified } from "./CurrentLeavesSimplified.ts";
 
 interface CurrentTransformationPropInputs {
   anchoredStart: KTransformation; // kpuzzle todo: KPattern?

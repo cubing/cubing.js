@@ -1,6 +1,6 @@
-import { KPuzzle } from "../../../kpuzzle";
-import { getCached } from "../../async/lazy-cached";
-import type { PuzzleLoader } from "../../PuzzleLoader";
+import { KPuzzle } from "../../../kpuzzle/index.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import type { PuzzleLoader } from "../../PuzzleLoader.ts";
 
 export const square1: PuzzleLoader = {
   id: "square1",
@@ -10,12 +10,13 @@ export const square1: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+        (await import("../dynamic/side-events/puzzles-dynamic-side-events.ts"))
           .sq1HyperOrbitJSON,
       ),
   ),
   svg: getCached(async () => {
-    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
-      .sq1HyperOrbitSVG;
+    return (
+      await import("../dynamic/side-events/puzzles-dynamic-side-events.ts")
+    ).sq1HyperOrbitSVG;
   }),
 };

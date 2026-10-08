@@ -1,14 +1,17 @@
-import { Alg } from "../../../../cubing/alg";
-import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
-import { backViewLayouts, TwistyPlayer } from "../../../../cubing/twisty";
-import { hintFaceletStyles } from "../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
-import { dragInputModes } from "../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
-import { setupToLocations } from "../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
-import { puzzleIDs } from "../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp";
-import { backgroundThemes } from "../../../../cubing/twisty/model/props/viewer/BackgroundProp";
-import { controlsLocations } from "../../../../cubing/twisty/model/props/viewer/ControlPanelProp";
-import { viewerLinkPages } from "../../../../cubing/twisty/model/props/viewer/ViewerLinkProp";
-import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
+import { Alg } from "../../../../cubing/alg/index.ts";
+import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private/index.ts";
+import {
+  backViewLayouts,
+  TwistyPlayer,
+} from "../../../../cubing/twisty/index.ts";
+import { hintFaceletStyles } from "../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp.ts";
+import { dragInputModes } from "../../../../cubing/twisty/model/props/puzzle/state/DragInputProp.ts";
+import { setupToLocations } from "../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp.ts";
+import { puzzleIDs } from "../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp.ts";
+import { backgroundThemes } from "../../../../cubing/twisty/model/props/viewer/BackgroundProp.ts";
+import { controlsLocations } from "../../../../cubing/twisty/model/props/viewer/ControlPanelProp.ts";
+import { viewerLinkPages } from "../../../../cubing/twisty/model/props/viewer/ViewerLinkProp.ts";
+import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp.ts";
 
 const contentElem = document.querySelector(".content")!;
 

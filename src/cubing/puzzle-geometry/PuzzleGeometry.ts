@@ -1,7 +1,10 @@
-import { Move, QuantumMove } from "../alg";
-import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle";
-import { defaultPlatonicColorSchemes } from "./colors";
-import { FaceNameSwizzler } from "./FaceNameSwizzler";
+import { Move, QuantumMove } from "../alg/index.ts";
+import type {
+  KPuzzleDefinition,
+  KTransformationData,
+} from "../kpuzzle/index.ts";
+import { defaultPlatonicColorSchemes } from "./colors.ts";
+import { FaceNameSwizzler } from "./FaceNameSwizzler.ts";
 import {
   FaceRenamingMapper,
   FTONotationMapper,
@@ -12,16 +15,16 @@ import {
   PyraminxNotationMapper,
   SkewbNotationMapper,
   TetraminxNotationMapper,
-} from "./notation-mapping";
-import { remapKPuzzleDefinition } from "./notation-mapping/NotationMapper";
+} from "./notation-mapping/index.ts";
+import { remapKPuzzleDefinition } from "./notation-mapping/NotationMapper.ts";
 import {
   type BaseFaceCount,
   type FaceBasedOrientationDescription,
   type FaceBasedOrientationDescriptionLookup,
   PuzzleGeometryFullOptions,
   type PuzzleGeometryOptions,
-} from "./Options";
-import { iota, Perm, zeros } from "./Perm";
+} from "./Options.ts";
+import { iota, Perm, zeros } from "./Perm.ts";
 import {
   externalName,
   PGOrbit,
@@ -30,7 +33,7 @@ import {
   PGTransform,
   showcanon,
   VisibleState,
-} from "./PermOriSet";
+} from "./PermOriSet.ts";
 import {
   closure,
   cube,
@@ -40,14 +43,14 @@ import {
   octahedron,
   tetrahedron,
   uniqueplanes,
-} from "./PlatonicGenerator";
+} from "./PlatonicGenerator.ts";
 import {
   type PuzzleDescriptionString,
   type PuzzleName,
   pgPuzzle,
-} from "./pgPuzzles";
-import { centermassface, Quat } from "./Quat";
-import { schreierSims } from "./SchreierSims";
+} from "./pgPuzzles.ts";
+import { centermassface, Quat } from "./Quat.ts";
+import { schreierSims } from "./SchreierSims.ts";
 
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];

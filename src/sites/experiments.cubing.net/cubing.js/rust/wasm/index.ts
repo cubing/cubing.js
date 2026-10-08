@@ -1,8 +1,12 @@
 console.log("loading…");
 
-import { Alg } from "../../../../../cubing/alg";
-import { solutionAlg } from "../../stress-tests/40x40x40-solve.js";
-import { default as init, internal_init, invert_alg } from "./cubing_rust_wasm";
+import { Alg } from "../../../../../cubing/alg/index.ts";
+import { solutionAlg } from "../../stress-tests/40x40x40-solve.ts";
+import {
+  default as init,
+  internal_init,
+  invert_alg,
+} from "./cubing_rust_wasm.ts";
 
 console.log("Initializating WASM");
 

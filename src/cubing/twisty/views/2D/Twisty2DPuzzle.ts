@@ -1,25 +1,25 @@
-import type { KPuzzle } from "../../../kpuzzle";
-import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
-import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
-import type { StickeringMask } from "../../../puzzles/stickerings/mask";
+import type { KPuzzle } from "../../../kpuzzle/index.ts";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private/index.ts";
+import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader.ts";
+import type { StickeringMask } from "../../../puzzles/stickerings/mask.ts";
 import {
   type HintFaceletStyleWithAuto,
   hintFaceletStyles,
-} from "../../../twisty/model/props/puzzle/display/HintFaceletProp";
-import type { PuzzleID } from "../..";
+} from "../../../twisty/model/props/puzzle/display/HintFaceletProp.ts";
 import {
   Direction,
   type PositionListener,
   type PuzzlePosition,
-} from "../../controllers/AnimationTypes";
-import { RenderScheduler } from "../../controllers/RenderScheduler";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { ClassListManager } from "../ClassListManager";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
-import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
-import { TwistyAnimatedSVG } from "./TwistyAnimatedSVG";
+} from "../../controllers/AnimationTypes.ts";
+import { RenderScheduler } from "../../controllers/RenderScheduler.ts";
+import type { PuzzleID } from "../../index.ts";
+import { FreshListenerManager } from "../../model/props/TwistyProp.ts";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
+import { ClassListManager } from "../ClassListManager.ts";
+import { ManagedCustomElement } from "../ManagedCustomElement.ts";
+import { customElementsShim } from "../node-custom-element-shims.ts";
+import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css.ts";
+import { TwistyAnimatedSVG } from "./TwistyAnimatedSVG.ts";
 
 export interface Twisty2DPuzzleOptions {
   experimentalStickeringMask?: ExperimentalStickeringMask;

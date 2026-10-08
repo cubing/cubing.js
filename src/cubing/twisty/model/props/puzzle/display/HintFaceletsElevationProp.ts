@@ -1,4 +1,4 @@
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
 
 export type HintFaceletsElevationRequest = "auto" | number;
 

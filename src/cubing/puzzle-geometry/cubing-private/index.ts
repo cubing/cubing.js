@@ -1,1 +1,1 @@
-export { legacyPuzzleNameMapping } from "../pgPuzzles";
+export { legacyPuzzleNameMapping } from "../pgPuzzles.ts";

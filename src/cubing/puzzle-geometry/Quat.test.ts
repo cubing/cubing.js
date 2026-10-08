@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { Quat } from "./Quat";
+import { Quat } from "./Quat.ts";
 
 test("Quat should multiply", () => {
   const a = new Quat(3, 1, 4, 1);

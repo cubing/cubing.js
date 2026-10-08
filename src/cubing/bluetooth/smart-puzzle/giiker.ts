@@ -1,10 +1,10 @@
 /* tslint:disable no-bitwise */
 
-import { Move } from "../../alg";
-import { KPattern, type KPatternData } from "../../kpuzzle";
-import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
-import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import { Move } from "../../alg/index.ts";
+import { KPattern, type KPatternData } from "../../kpuzzle/index.ts";
+import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private/index.ts";
+import { debugLog } from "../debug.ts";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle.ts";
 
 const MESSAGE_LENGTH = 20;
 

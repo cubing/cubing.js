@@ -1,10 +1,10 @@
-import type { PuzzleLoader } from "../../../../../puzzles";
 import type {
   ExperimentalPieceStickeringMask,
   ExperimentalStickeringMask,
-} from "../../../../../puzzles/cubing-private";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { ExperimentalStickering } from "./StickeringRequestProp";
+} from "../../../../../puzzles/cubing-private/index.ts";
+import type { PuzzleLoader } from "../../../../../puzzles/index.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { ExperimentalStickering } from "./StickeringRequestProp.ts";
 
 interface StickeringMaskPropInputs {
   stickeringMaskRequest: ExperimentalStickeringMask | null;

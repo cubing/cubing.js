@@ -1,8 +1,8 @@
-import { TwistyPropDerived } from "../TwistyProp";
+import { TwistyPropDerived } from "../TwistyProp.ts";
 import type {
   ColorScheme,
   ColorSchemeWithAuto,
-} from "./ColorSchemeRequestProp";
+} from "./ColorSchemeRequestProp.ts";
 
 interface ColorSchemePropInputs {
   colorSchemeRequest: ColorSchemeWithAuto;

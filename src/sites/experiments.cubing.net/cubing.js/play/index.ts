@@ -1,19 +1,19 @@
-import { Alg, Move } from "../../../../cubing/alg";
+import { Alg, Move } from "../../../../cubing/alg/index.ts";
 import {
   type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
   type GoCube,
   type OrientationEvent,
-} from "../../../../cubing/bluetooth";
+} from "../../../../cubing/bluetooth/index.ts";
 
 import {
   type ExperimentalAlgLeafEvent,
   type ExperimentalProxyEvent,
   ExperimentalWebSocketProxySender,
-} from "../../../../cubing/stream";
-import { setTwistyDebug } from "../../../../cubing/twisty";
-import { type Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
+} from "../../../../cubing/stream/index.ts";
+import { setTwistyDebug } from "../../../../cubing/twisty/index.ts";
+import { type Action, SwipeyPuzzle } from "./input/SwipeyPuzzle.ts";
 import {
   DEFAULT_PUZZLE_ID,
   debugShowRenderStats,
@@ -24,8 +24,8 @@ import {
   type PuzzleID,
   receivingSocketOrigin,
   sendingSocketOrigin,
-} from "./url-params";
-import { CallbackProxyReceiver } from "./websocket-proxy";
+} from "./url-params.ts";
+import { CallbackProxyReceiver } from "./websocket-proxy.ts";
 
 const bluetoothSVG = new URL("./bluetooth.svg", import.meta.url).toString();
 const clearSVG = new URL("./clear.svg", import.meta.url).toString();

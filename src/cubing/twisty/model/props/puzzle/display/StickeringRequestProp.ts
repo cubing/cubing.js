@@ -1,6 +1,6 @@
-import { experimentalStickerings } from "../../../../../puzzles/cubing-private";
-import { SimpleTwistyPropSource } from "../../TwistyProp";
-import type { PuzzleID } from "../structure/PuzzleIDRequestProp";
+import { experimentalStickerings } from "../../../../../puzzles/cubing-private/index.ts";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
+import type { PuzzleID } from "../structure/PuzzleIDRequestProp.ts";
 
 // TODO: turn these maps into lists?
 // TODO: alg.cubing.net parity

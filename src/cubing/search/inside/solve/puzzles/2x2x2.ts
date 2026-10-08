@@ -1,13 +1,13 @@
 import { randomPermuteInPlace, randomUIntBelow } from "random-uint-below";
-import type { Alg } from "../../../../alg";
-import type { KPuzzle } from "../../../../kpuzzle";
-import { KPattern } from "../../../../kpuzzle";
-import { cube2x2x2, puzzles } from "../../../../puzzles";
-import { mustBeInsideWorker } from "../../inside-worker";
-import type { SGSCachedData } from "../parseSGS";
-import { TrembleSolver } from "../tremble";
-import { wasmTwips } from "../twips";
-import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
+import type { Alg } from "../../../../alg/index.ts";
+import type { KPuzzle } from "../../../../kpuzzle/index.ts";
+import { KPattern } from "../../../../kpuzzle/index.ts";
+import { cube2x2x2, puzzles } from "../../../../puzzles/index.ts";
+import { mustBeInsideWorker } from "../../inside-worker.ts";
+import type { SGSCachedData } from "../parseSGS.ts";
+import { TrembleSolver } from "../tremble.ts";
+import { wasmTwips } from "../twips.ts";
+import { searchDynamicSideEvents } from "./dynamic/sgs-side-events/index.ts";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
 async function getCachedTrembleSolver(): Promise<TrembleSolver> {

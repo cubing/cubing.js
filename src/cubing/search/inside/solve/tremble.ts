@@ -1,9 +1,9 @@
 import { randomChoice } from "random-uint-below";
-import { Alg, AlgBuilder, Move, type QuantumMove } from "../../../alg";
-import type { KPuzzle, KTransformation } from "../../../kpuzzle";
-import type { KPattern } from "../../../kpuzzle/KPattern";
-import { experimentalCountMoves } from "../../../notation";
-import type { SGSCachedData } from "./parseSGS";
+import { Alg, AlgBuilder, Move, type QuantumMove } from "../../../alg/index.ts";
+import type { KPuzzle, KTransformation } from "../../../kpuzzle/index.ts";
+import type { KPattern } from "../../../kpuzzle/KPattern.ts";
+import { experimentalCountMoves } from "../../../notation/index.ts";
+import type { SGSCachedData } from "./parseSGS.ts";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 

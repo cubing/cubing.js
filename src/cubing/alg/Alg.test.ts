@@ -1,9 +1,15 @@
 import { expect, test } from "bun:test";
 
-import { Alg } from "./Alg";
-import { Commutator, Grouping, Move, Pause, QuantumMove } from "./alg-nodes";
-import { setAlgPartTypeMismatchReportingLevel } from "./debug";
-import { Example as Ex } from "./example";
+import { Alg } from "./Alg.ts";
+import {
+  Commutator,
+  Grouping,
+  Move,
+  Pause,
+  QuantumMove,
+} from "./alg-nodes/index.ts";
+import { setAlgPartTypeMismatchReportingLevel } from "./debug.ts";
+import { Example as Ex } from "./example.ts";
 
 setAlgPartTypeMismatchReportingLevel("error");
 

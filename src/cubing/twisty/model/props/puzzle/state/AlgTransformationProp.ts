@@ -1,6 +1,6 @@
-import type { KPuzzle, KTransformation } from "../../../../../kpuzzle";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { AlgWithIssues } from "./AlgProp";
+import type { KPuzzle, KTransformation } from "../../../../../kpuzzle/index.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { AlgWithIssues } from "./AlgProp.ts";
 
 type AlgTransformationPropInputs = {
   setupAlg: AlgWithIssues;

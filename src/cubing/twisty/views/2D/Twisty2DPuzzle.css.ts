@@ -1,4 +1,4 @@
-import { cssStyleSheetShim } from "../node-custom-element-shims";
+import { cssStyleSheetShim } from "../node-custom-element-shims.ts";
 
 // TODO: Can we do this without so much nesting, and styling all the nested elems?
 export const twisty2DSVGCSS = new cssStyleSheetShim();

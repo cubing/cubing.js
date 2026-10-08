@@ -1,5 +1,5 @@
-import type { Move } from "../../../../../alg";
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import type { Move } from "../../../../../alg/index.ts";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
 
 export interface CatchUpMove {
   move: Move | null;

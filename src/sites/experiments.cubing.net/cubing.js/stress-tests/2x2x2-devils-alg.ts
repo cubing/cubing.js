@@ -6,9 +6,9 @@ import {
   type AlgNode,
   Grouping,
   Move,
-} from "../../../../cubing/alg";
-import { experimentalCountMoves } from "../../../../cubing/notation";
-import { TwistyPlayer } from "../../../../cubing/twisty";
+} from "../../../../cubing/alg/index.ts";
+import { experimentalCountMoves } from "../../../../cubing/notation/index.ts";
+import { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
 
 const devilsAlgDef = {
   V: "U'",

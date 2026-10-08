@@ -1,4 +1,4 @@
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
 
 export type InitialHintFaceletsAnimation = "auto" | "always" | "none";
 

@@ -1,11 +1,15 @@
-import { AlgCommon, Comparable } from "../../common";
-import { IterationDirection } from "../../iteration";
-import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
-import { parseMove, parseQuantumMove, transferCharIndex } from "../../parseAlg";
-import type { ExperimentalSerializationOptions } from "../../SerializationOptions";
-import { warnOnce } from "../../warnOnce";
-import type { AlgLeaf } from "../AlgNode";
-import { QuantumWithAmount } from "../QuantumWithAmount";
+import { AlgCommon, Comparable } from "../../common.ts";
+import { IterationDirection } from "../../iteration.ts";
+import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits.ts";
+import {
+  parseMove,
+  parseQuantumMove,
+  transferCharIndex,
+} from "../../parseAlg.ts";
+import type { ExperimentalSerializationOptions } from "../../SerializationOptions.ts";
+import { warnOnce } from "../../warnOnce.ts";
+import type { AlgLeaf } from "../AlgNode.ts";
+import { QuantumWithAmount } from "../QuantumWithAmount.ts";
 
 interface QuantumMoveModifications {
   outerLayer?: number;

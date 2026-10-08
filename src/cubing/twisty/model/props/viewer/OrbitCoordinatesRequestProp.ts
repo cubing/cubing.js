@@ -1,5 +1,5 @@
-import { modIntoRange } from "../../helpers";
-import { TwistyPropSource } from "../TwistyProp";
+import { modIntoRange } from "../../helpers.ts";
+import { TwistyPropSource } from "../TwistyProp.ts";
 
 export type CoordinateDegrees = number;
 

@@ -1,4 +1,4 @@
-import { SimpleTwistyPropSource } from "../TwistyProp";
+import { SimpleTwistyPropSource } from "../TwistyProp.ts";
 
 // TODO: turn these maps into lists?
 export const visualizationFormats = {

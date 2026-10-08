@@ -1,17 +1,17 @@
-import { Alg, type AlgLeaf, Move } from "../../../../cubing/alg";
+import { Alg, type AlgLeaf, Move } from "../../../../cubing/alg/index.ts";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   type MoveEvent,
   type OrientationEvent,
-} from "../../../../cubing/bluetooth";
-import { countMetricMoves } from "../../../../cubing/notation/CountMoves";
-import { CommonMetric } from "../../../../cubing/notation/commonMetrics";
-import { cube3x3x3 } from "../../../../cubing/puzzles";
-import { randomScrambleForEvent } from "../../../../cubing/scramble";
-import { TwistyPlayer } from "../../../../cubing/twisty";
-import { Stats } from "./vendor/timer.cubing.net/Stats";
-import { type Milliseconds, Timer } from "./vendor/timer.cubing.net/Timer";
+} from "../../../../cubing/bluetooth/index.ts";
+import { countMetricMoves } from "../../../../cubing/notation/CountMoves.ts";
+import { CommonMetric } from "../../../../cubing/notation/commonMetrics.ts";
+import { cube3x3x3 } from "../../../../cubing/puzzles/index.ts";
+import { randomScrambleForEvent } from "../../../../cubing/scramble/index.ts";
+import { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
+import { Stats } from "./vendor/timer.cubing.net/Stats.ts";
+import { type Milliseconds, Timer } from "./vendor/timer.cubing.net/Timer.ts";
 
 function appendWithFMCCancellation(alg: Alg, leaf: AlgLeaf): Alg {
   const nodes = [...alg.childAlgNodes()];

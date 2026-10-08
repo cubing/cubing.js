@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { Move } from "./Move";
+import { Move } from "./Move.ts";
 
 test("can be modified", () => {
   expect(new Move("R").modified({ amount: 2 }).toString()).toStrictEqual("R2");

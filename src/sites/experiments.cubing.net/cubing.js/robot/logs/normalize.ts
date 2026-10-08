@@ -8,12 +8,12 @@ import {
   type Move,
   type Newline,
   type Pause,
-} from "../../../../../cubing/alg";
+} from "../../../../../cubing/alg/index.ts";
 import {
   functionFromTraversal,
   TraversalUp,
-} from "../../../../../cubing/alg/traversal";
-import { cube3x3x3 } from "../../../../../cubing/puzzles";
+} from "../../../../../cubing/alg/traversal.ts";
+import { cube3x3x3 } from "../../../../../cubing/puzzles/index.ts";
 
 // TODO: Test that inverses are bijections.
 class RemoveAnnotations extends TraversalUp<Generator<AlgNode>> {

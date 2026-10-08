@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle/index.ts";
 
 export const rediCubeJSON: KPuzzleDefinition = {
   name: "redi_cube",

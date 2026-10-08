@@ -1,5 +1,5 @@
-import { type AlgLeaf, Move } from "../../../alg";
-import { cube3x3x3KeyMapping } from "../3x3x3/cube3x3x3KeyMapping";
+import { type AlgLeaf, Move } from "../../../alg/index.ts";
+import { cube3x3x3KeyMapping } from "../3x3x3/cube3x3x3KeyMapping.ts";
 
 // See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
 

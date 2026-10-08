@@ -1,5 +1,5 @@
-import { Alg } from "./Alg";
-import type { AlgNode } from "./alg-nodes/AlgNode";
+import { Alg } from "./Alg.ts";
+import type { AlgNode } from "./alg-nodes/AlgNode.ts";
 
 /** @category Alg */
 export class AlgBuilder {

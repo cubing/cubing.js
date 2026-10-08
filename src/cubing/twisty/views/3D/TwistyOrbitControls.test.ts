@@ -2,13 +2,13 @@ import { expect, test } from "bun:test";
 import {
   type PuzzleID,
   PuzzleIDRequestProp,
-} from "../../model/props/puzzle/structure/PuzzleIDRequestProp";
-import type { TwistyPropParent } from "../../model/props/TwistyProp";
-import { LatitudeLimitProp } from "../../model/props/viewer/LatitudeLimit";
-import { OrbitCoordinatesProp } from "../../model/props/viewer/OrbitCoordinatesProp";
-import { OrbitCoordinatesRequestProp } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
-import { VisualizationFormatProp } from "../../model/props/viewer/VisualizationProp";
-import { VisualizationStrategyProp } from "../../model/props/viewer/VisualizationStrategyProp";
+} from "../../model/props/puzzle/structure/PuzzleIDRequestProp.ts";
+import type { TwistyPropParent } from "../../model/props/TwistyProp.ts";
+import { LatitudeLimitProp } from "../../model/props/viewer/LatitudeLimit.ts";
+import { OrbitCoordinatesProp } from "../../model/props/viewer/OrbitCoordinatesProp.ts";
+import { OrbitCoordinatesRequestProp } from "../../model/props/viewer/OrbitCoordinatesRequestProp.ts";
+import { VisualizationFormatProp } from "../../model/props/viewer/VisualizationProp.ts";
+import { VisualizationStrategyProp } from "../../model/props/viewer/VisualizationStrategyProp.ts";
 
 test("TwistyOrbitControls should update correctly", async () => {
   const orbitCoordinatesRequestProp = new OrbitCoordinatesRequestProp();

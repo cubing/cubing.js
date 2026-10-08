@@ -1,1 +1,1 @@
-export * from "./megaminx-ll.kpuzzle.svg";
+export * from "./megaminx-ll.kpuzzle.svg.ts";

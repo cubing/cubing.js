@@ -1,4 +1,4 @@
-import { cssStyleSheetShim } from "./node-custom-element-shims";
+import { cssStyleSheetShim } from "./node-custom-element-shims.ts";
 
 export const twistyViewerWrapperCSS = new cssStyleSheetShim();
 twistyViewerWrapperCSS.replaceSync(

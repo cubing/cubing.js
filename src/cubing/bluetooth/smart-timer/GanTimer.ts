@@ -1,5 +1,5 @@
-import type { MillisecondTimestamp } from "../../twisty/controllers/AnimationTypes";
-import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
+import type { MillisecondTimestamp } from "../../twisty/controllers/AnimationTypes.ts";
+import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle.ts";
 
 // TODO: Short IDs
 const UUIDs = {

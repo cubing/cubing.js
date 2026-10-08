@@ -1,7 +1,7 @@
-import { Move } from "../../../../../cubing/alg";
-import type { PuzzleID, StringListAsType } from "../url-params";
-import { type ActiveSwipe, SwipeTracker } from "./SwipeTracker";
-import { type Action, actionToUIText, moveMaps } from "./SwipeyPuzzle";
+import { Move } from "../../../../../cubing/alg/index.ts";
+import type { PuzzleID, StringListAsType } from "../url-params.ts";
+import { type ActiveSwipe, SwipeTracker } from "./SwipeTracker.ts";
+import { type Action, actionToUIText, moveMaps } from "./SwipeyPuzzle.ts";
 
 export const themes = [
   "blank",

@@ -1,9 +1,12 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
-import { experimentalSetPuzzleAlgValidation } from "../../../../cubing/twisty/model/props/puzzle/state/PuzzleAlgProp";
-import { solutionAlg } from "./megaminx-31x31-solve";
+import {
+  TwistyAlgViewer,
+  TwistyPlayer,
+} from "../../../../cubing/twisty/index.ts";
+import { experimentalSetPuzzleAlgValidation } from "../../../../cubing/twisty/model/props/puzzle/state/PuzzleAlgProp.ts";
+import { solutionAlg } from "./megaminx-31x31-solve.ts";
 
 experimentalSetPuzzleAlgValidation(false);
 

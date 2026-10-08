@@ -1,16 +1,16 @@
 /* tslint:disable no-bitwise */
 
-import { Move } from "../../alg";
-import type { KPuzzle } from "../../kpuzzle";
-import type { KPattern } from "../../kpuzzle/KPattern";
+import { Move } from "../../alg/index.ts";
+import type { KPuzzle } from "../../kpuzzle/index.ts";
+import type { KPattern } from "../../kpuzzle/KPattern.ts";
 import {
   experimentalBinaryComponentsToReid3x3x3,
   experimentalTwizzleBinaryToBinaryComponents,
-} from "../../protocol";
-import { puzzles } from "../../puzzles";
-import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
-import { flipBitOrder } from "./endianness";
+} from "../../protocol/index.ts";
+import { puzzles } from "../../puzzles/index.ts";
+import { debugLog } from "../debug.ts";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle.ts";
+import { flipBitOrder } from "./endianness.ts";
 
 // TODO: Short IDs
 const UUIDs = {

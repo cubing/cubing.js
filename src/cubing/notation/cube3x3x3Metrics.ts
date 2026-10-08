@@ -1,8 +1,8 @@
 // TODO: move this into the 3x3x3 puzzle loader.
 
-import type { Move } from "../alg";
-import { experimentalCube3x3x3KPuzzleDefinition } from "../puzzles/cubing-private";
-import { CommonMetric } from "./commonMetrics";
+import type { Move } from "../alg/index.ts";
+import { experimentalCube3x3x3KPuzzleDefinition } from "../puzzles/cubing-private/index.ts";
+import { CommonMetric } from "./commonMetrics.ts";
 
 enum MoveType {
   Rotation = "Rotation",

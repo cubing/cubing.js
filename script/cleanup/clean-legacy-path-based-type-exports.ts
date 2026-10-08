@@ -5,7 +5,7 @@
 import { existsSync } from "node:fs";
 import { rm, rmdir } from "node:fs/promises";
 import { join } from "node:path";
-import { packageNames } from "../build/common/packageNames";
+import { packageNames } from "../build/common/packageNames.ts";
 
 export const TYPESCRIPT_DECLARATION_INDEX_STRING = "index.d.ts";
 

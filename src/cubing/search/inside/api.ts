@@ -1,37 +1,37 @@
-import type { Alg } from "../../alg";
+import type { Alg } from "../../alg/index.ts";
 import {
   KPattern,
   type KPatternData,
   KPuzzle,
   type KPuzzleDefinition,
-} from "../../kpuzzle";
-import { puzzles, wcaEvents } from "../../puzzles";
-import { setIsInsideWorker } from "./inside-worker";
-import { preInitialize222, solve222 } from "./solve/puzzles/2x2x2";
+} from "../../kpuzzle/index.ts";
+import { puzzles, wcaEvents } from "../../puzzles/index.ts";
+import { setIsInsideWorker } from "./inside-worker.ts";
+import { preInitialize222, solve222 } from "./solve/puzzles/2x2x2.ts";
 import {
   initialize333,
   random333OrientedScramble,
   random333Scramble,
   solve333,
-} from "./solve/puzzles/3x3x3";
+} from "./solve/puzzles/3x3x3/index.ts";
 import {
   initialize444,
   random444OrientedScramble,
   random444Scramble,
-} from "./solve/puzzles/4x4x4";
-import { randomFTOScramble } from "./solve/puzzles/fto";
-import { randomKilominxScramble } from "./solve/puzzles/kilominx";
-import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx";
-import { solveMegaminx } from "./solve/puzzles/megaminx";
-import { solvePyraminx } from "./solve/puzzles/pyraminx";
-import { randomRediCubeScramble } from "./solve/puzzles/redi_cube";
-import { solveSkewb } from "./solve/puzzles/skewb";
+} from "./solve/puzzles/4x4x4.ts";
+import { randomFTOScramble } from "./solve/puzzles/fto.ts";
+import { randomKilominxScramble } from "./solve/puzzles/kilominx.ts";
+import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx.ts";
+import { solveMegaminx } from "./solve/puzzles/megaminx.ts";
+import { solvePyraminx } from "./solve/puzzles/pyraminx.ts";
+import { randomRediCubeScramble } from "./solve/puzzles/redi_cube.ts";
+import { solveSkewb } from "./solve/puzzles/skewb.ts";
 import {
   type TwipsOptions,
   wasmDeriveScrambleForEvent,
   wasmRandomScrambleForEvent,
   wasmTwips,
-} from "./solve/twips";
+} from "./solve/twips.ts";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
 

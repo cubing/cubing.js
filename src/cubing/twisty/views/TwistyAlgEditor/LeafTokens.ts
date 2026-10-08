@@ -9,13 +9,13 @@ import {
   type Newline,
   type Pause,
   TraversalDownUp,
-} from "../../../alg";
-import type { Parsed } from "../../../alg/parseAlg";
+} from "../../../alg/index.ts";
+import type { Parsed } from "../../../alg/parseAlg.ts";
 import type {
   LeafCount,
   LeafIndex,
-} from "../../controllers/indexer/AlgIndexer";
-import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves";
+} from "../../controllers/indexer/AlgIndexer.ts";
+import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves.ts";
 
 export type AnimatedLeafAlgNodeInfo = {
   leaf: Parsed<AnimatedLeafAlgNode>;

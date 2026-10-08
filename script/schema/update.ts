@@ -9,7 +9,7 @@ import {
   ZodKPatternData,
   ZodKPuzzleDefinitionJSON,
   ZodKTransformationData,
-} from "./zodSchemas";
+} from "./zodSchemas.ts";
 
 const PACKAGE_SCHEMA_FOLDER = new Path("./experimental-json-schema/kpuzzle/");
 

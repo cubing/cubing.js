@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
-import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS";
-import { KPattern } from "../kpuzzle";
-import { experimentalCountMetricMoves } from "../notation";
-import { CommonMetric } from "../notation/commonMetrics";
-import { cube3x3x3 } from "../puzzles";
-import { solveTwips } from "./outside";
+import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS.ts";
+import { KPattern } from "../kpuzzle/index.ts";
+import { CommonMetric } from "../notation/commonMetrics.ts";
+import { experimentalCountMetricMoves } from "../notation/index.ts";
+import { cube3x3x3 } from "../puzzles/index.ts";
+import { solveTwips } from "./outside.ts";
 
 test.skipIf(SKIP_SLOW_TESTS)(
   "`solveTwips(…)` can use `targetPattern`",

@@ -1,4 +1,4 @@
-import type { PuzzleID } from "../twisty";
+import type { PuzzleID } from "../twisty/index.ts";
 
 interface EventInfo {
   puzzleID: PuzzleID;

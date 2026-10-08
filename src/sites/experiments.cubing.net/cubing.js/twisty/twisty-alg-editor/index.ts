@@ -1,5 +1,5 @@
-import { TwistyPlayer } from "../../../../../cubing/twisty";
-import { TwistyAlgEditor } from "../../../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
+import { TwistyPlayer } from "../../../../../cubing/twisty/index.ts";
+import { TwistyAlgEditor } from "../../../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor.ts";
 
 const alg = `F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2
 

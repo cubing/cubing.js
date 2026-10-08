@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { puzzles } from "../puzzles";
-import { transformationRepetitionOrder } from "./calculate";
+import { puzzles } from "../puzzles/index.ts";
+import { transformationRepetitionOrder } from "./calculate.ts";
 
 test("allows an empty Alg", async () => {
   const kpuzzle = await puzzles["clock"].kpuzzle();

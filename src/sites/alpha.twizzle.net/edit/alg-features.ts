@@ -9,7 +9,7 @@ import {
   type Newline,
   type Pause,
   TraversalDownUp,
-} from "../../../cubing/alg";
+} from "../../../cubing/alg/index.ts";
 
 const noAlgFeatures = {
   commutator: false,

@@ -1,5 +1,5 @@
-import { Move, QuantumMove } from "../../alg";
-import type { StreamMessageEvent } from "./stream-types";
+import { Move, QuantumMove } from "../../alg/index.ts";
+import type { StreamMessageEvent } from "./stream-types.ts";
 
 class TwizzleStream extends EventTarget {
   socket: WebSocket;

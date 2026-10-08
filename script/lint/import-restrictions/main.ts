@@ -1,9 +1,9 @@
 import { checkAllowedImports } from "@cubing/dev-config/check-allowed-imports";
-import { packageEntryPoints } from "../../build/common/package-info";
+import { packageEntryPoints } from "../../build/common/package-info.ts";
 import {
   specAllowedImports as allowedImportsIncludingForSpecFiles,
   mainAllowedImports,
-} from "./allowedImports";
+} from "./allowedImports.ts";
 
 await checkAllowedImports(
   {

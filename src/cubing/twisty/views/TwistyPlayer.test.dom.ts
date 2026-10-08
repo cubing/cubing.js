@@ -1,5 +1,5 @@
-import { expect } from "../../../test/chai-workarounds";
-import { Alg } from "../../alg";
+import { expect } from "../../../test/chai-workarounds/index.ts";
+import { Alg } from "../../alg/index.ts";
 import { TwistyPlayer } from "..";
 
 const test = it;

@@ -1,4 +1,8 @@
 import {
+  ExperimentalIterationDirection,
+  experimentalDirectedGenerator,
+} from "../../../../alg/cubing-private/index.ts";
+import {
   Alg,
   type AlgNode,
   type Commutator,
@@ -10,15 +14,11 @@ import {
   type Pause,
   TraversalDownUp,
   TraversalUp,
-} from "../../../../alg";
-import {
-  ExperimentalIterationDirection,
-  experimentalDirectedGenerator,
-} from "../../../../alg/cubing-private";
-import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
-import type { MillisecondDuration } from "../../AnimationTypes";
-import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
-import type { LeafIndex as LeafCount } from "../AlgIndexer";
+} from "../../../../alg/index.ts";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle/index.ts";
+import type { MillisecondDuration } from "../../AnimationTypes.ts";
+import { AlgDuration, defaultDurationForAmount } from "../AlgDuration.ts";
+import type { LeafIndex as LeafCount } from "../AlgIndexer.ts";
 
 export class AlgWalkerDecoration {
   constructor(

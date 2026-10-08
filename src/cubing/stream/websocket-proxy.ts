@@ -1,4 +1,4 @@
-import type { AlgLeafEvent, OrientationEvent, ProxyEvent } from "./events";
+import type { AlgLeafEvent, OrientationEvent, ProxyEvent } from "./events.ts";
 
 export class WebSocketProxySender {
   protected websocket: WebSocket;

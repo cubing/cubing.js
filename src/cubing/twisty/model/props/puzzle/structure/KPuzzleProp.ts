@@ -1,6 +1,6 @@
-import type { KPuzzle } from "../../../../../kpuzzle";
-import type { PuzzleLoader } from "../../../../../puzzles";
-import { TwistyPropDerived } from "../../TwistyProp";
+import type { KPuzzle } from "../../../../../kpuzzle/index.ts";
+import type { PuzzleLoader } from "../../../../../puzzles/index.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
 
 export class KPuzzleProp extends TwistyPropDerived<
   { puzzleLoader: PuzzleLoader },

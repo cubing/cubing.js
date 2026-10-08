@@ -1,4 +1,4 @@
-import { cssStyleSheetShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
+import { cssStyleSheetShim } from "../../../../../cubing/twisty/views/node-custom-element-shims.ts";
 
 export const twistyPropDebuggerCSS = new cssStyleSheetShim();
 twistyPropDebuggerCSS.replaceSync(

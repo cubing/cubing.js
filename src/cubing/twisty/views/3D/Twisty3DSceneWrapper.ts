@@ -2,22 +2,22 @@ import type {
   PerspectiveCamera,
   Scene as ThreeScene,
 } from "three/src/Three.js";
-import type { PuzzleLoader } from "../../../puzzles";
-import type { Schedulable } from "../../controllers/RenderScheduler";
-import { bulk3DCode } from "../../heavy-code-imports/3d";
-import { StaleDropper } from "../../model/PromiseFreshener";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type { BackViewLayout as BackViewLayoutWithAuto } from "../../model/props/viewer/BackViewProp";
-import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { ClassListManager } from "../ClassListManager";
-import { InitialValueTracker } from "../InitialValueTracker";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
-import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css";
-import type { PressInfo } from "./DragTracker";
-import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
-import { Twisty3DVantage } from "./Twisty3DVantage";
+import type { PuzzleLoader } from "../../../puzzles/index.ts";
+import type { Schedulable } from "../../controllers/RenderScheduler.ts";
+import { bulk3DCode } from "../../heavy-code-imports/3d.ts";
+import { StaleDropper } from "../../model/PromiseFreshener.ts";
+import { FreshListenerManager } from "../../model/props/TwistyProp.ts";
+import type { BackViewLayout as BackViewLayoutWithAuto } from "../../model/props/viewer/BackViewProp.ts";
+import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp.ts";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
+import { ClassListManager } from "../ClassListManager.ts";
+import { InitialValueTracker } from "../InitialValueTracker.ts";
+import { ManagedCustomElement } from "../ManagedCustomElement.ts";
+import { customElementsShim } from "../node-custom-element-shims.ts";
+import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css.ts";
+import type { PressInfo } from "./DragTracker.ts";
+import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper.ts";
+import { Twisty3DVantage } from "./Twisty3DVantage.ts";
 
 export class Twisty3DSceneWrapper
   extends ManagedCustomElement

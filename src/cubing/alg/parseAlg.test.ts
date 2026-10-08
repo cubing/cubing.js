@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
-import { Alg } from ".";
-import { setAlgDebug } from "./debug";
-import { parseAlg } from "./parseAlg";
+import { setAlgDebug } from "./debug.ts";
+import { Alg } from "./index.ts";
+import { parseAlg } from "./parseAlg.ts";
 
 test("handles 0 amounts", () => {
   expect(parseAlg("R0").toString()).toStrictEqual("R0");

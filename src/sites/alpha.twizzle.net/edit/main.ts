@@ -1,10 +1,10 @@
-import "../../../cubing/twisty";
-import { setTwistyDebug } from "../../../cubing/twisty";
+import "../../../cubing/twisty/index.ts";
+import { setTwistyDebug } from "../../../cubing/twisty/index.ts";
 import {
   getConfigFromURL,
   remapLegacyURLParams,
-} from "../../../cubing/twisty/views/twizzle/url-params";
-import { App } from "./app";
+} from "../../../cubing/twisty/views/twizzle/url-params.ts";
+import { App } from "./app.ts";
 
 function getRawBooleanURLParam(
   paramName: string,

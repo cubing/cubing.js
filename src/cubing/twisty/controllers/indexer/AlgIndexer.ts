@@ -1,15 +1,15 @@
 import type { Tagged } from "type-fest";
-import type { Move } from "../../../alg/alg-nodes";
-import type { KTransformation } from "../../../kpuzzle";
-import type { KPattern } from "../../../kpuzzle/KPattern";
-import { arrayEqualsCompare } from "../../model/helpers";
+import type { Move } from "../../../alg/alg-nodes/index.ts";
+import type { KTransformation } from "../../../kpuzzle/index.ts";
+import type { KPattern } from "../../../kpuzzle/KPattern.ts";
+import { arrayEqualsCompare } from "../../model/helpers.ts";
 import type {
   Direction,
   MillisecondDuration,
   MillisecondTimestamp,
   PuzzlePosition,
-} from "../AnimationTypes";
-import type { AnimatedLeafAlgNode } from "./simultaneous-moves/simul-moves";
+} from "../AnimationTypes.ts";
+import type { AnimatedLeafAlgNode } from "./simultaneous-moves/simul-moves.ts";
 
 export interface CurrentMove {
   move: Move;

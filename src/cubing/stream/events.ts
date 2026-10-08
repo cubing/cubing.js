@@ -1,8 +1,8 @@
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
 
-import type { AlgLeaf } from "../alg";
-import type { KPattern } from "../kpuzzle";
+import type { AlgLeaf } from "../alg/index.ts";
+import type { KPattern } from "../kpuzzle/index.ts";
 
 /** @category Smart Puzzles */
 export interface AlgLeafEvent {

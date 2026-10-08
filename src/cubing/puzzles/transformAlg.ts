@@ -10,8 +10,8 @@ import {
   type Newline,
   type Pause,
   TraversalDownUp,
-} from "../alg";
-import type { AlgTransformData } from "./cubing-private";
+} from "../alg/index.ts";
+import type { AlgTransformData } from "./cubing-private/index.ts";
 
 class TransformAlg extends TraversalDownUp<
   AlgTransformData[string],

@@ -1,5 +1,5 @@
-import type { KTransformation } from "../../../../../kpuzzle";
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import type { KTransformation } from "../../../../../kpuzzle/index.ts";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
 
 export class SetupTransformationProp extends SimpleTwistyPropSource<KTransformation | null> {
   getDefaultValue(): KTransformation | null {

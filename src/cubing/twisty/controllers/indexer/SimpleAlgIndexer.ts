@@ -1,13 +1,13 @@
-import { Alg, type Move, type TraversalUp } from "../../../alg";
-import type { KPuzzle, KTransformation } from "../../../kpuzzle";
-import type { KPattern } from "../../../kpuzzle/KPattern";
-import { experimentalCountAnimatedLeaves } from "../../../notation";
+import { Alg, type Move, type TraversalUp } from "../../../alg/index.ts";
+import type { KPuzzle, KTransformation } from "../../../kpuzzle/index.ts";
+import type { KPattern } from "../../../kpuzzle/KPattern.ts";
+import { experimentalCountAnimatedLeaves } from "../../../notation/index.ts";
 import type {
   MillisecondDuration,
   MillisecondTimestamp,
-} from "../AnimationTypes";
-import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
-import type { AlgIndexer, LeafCount, LeafIndex } from "./AlgIndexer";
+} from "../AnimationTypes.ts";
+import { AlgDuration, defaultDurationForAmount } from "./AlgDuration.ts";
+import type { AlgIndexer, LeafCount, LeafIndex } from "./AlgIndexer.ts";
 
 export class SimpleAlgIndexer implements AlgIndexer {
   private moves: Alg;

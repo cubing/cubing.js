@@ -1,9 +1,9 @@
-import type { Alg, QuantumMove } from "../../../../alg";
-import { KPattern } from "../../../../kpuzzle";
-import { mustBeInsideWorker } from "../../inside-worker";
-import type { SGSCachedData } from "../parseSGS";
-import { TrembleSolver } from "../tremble";
-import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
+import type { Alg, QuantumMove } from "../../../../alg/index.ts";
+import { KPattern } from "../../../../kpuzzle/index.ts";
+import { mustBeInsideWorker } from "../../inside-worker.ts";
+import type { SGSCachedData } from "../parseSGS.ts";
+import { TrembleSolver } from "../tremble.ts";
+import { searchDynamicSideEvents } from "./dynamic/sgs-side-events/index.ts";
 
 const TREMBLE_DEPTH = 3;
 

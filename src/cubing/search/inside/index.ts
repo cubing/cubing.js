@@ -1,4 +1,4 @@
 import { expose } from "@cubing/comlink-everywhere";
-import { insideAPI } from "./api";
+import { insideAPI } from "./api.ts";
 
 expose(insideAPI);

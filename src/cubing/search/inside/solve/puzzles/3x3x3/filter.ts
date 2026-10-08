@@ -1,6 +1,6 @@
-import { Move } from "../../../../../alg";
-import type { KPuzzle } from "../../../../../kpuzzle";
-import { KPattern } from "../../../../../kpuzzle";
+import { Move } from "../../../../../alg/index.ts";
+import type { KPuzzle } from "../../../../../kpuzzle/index.ts";
+import { KPattern } from "../../../../../kpuzzle/index.ts";
 
 export function isEquivalentTranformationIgnoringCENTERS(
   t1: KPattern,

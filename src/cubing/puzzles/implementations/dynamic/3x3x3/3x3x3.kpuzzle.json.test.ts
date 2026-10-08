@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 
-import { KPuzzle } from "../../../../kpuzzle";
-import { cube3x3x3KPuzzleDefinition } from "./3x3x3.kpuzzle.json";
+import { KPuzzle } from "../../../../kpuzzle/index.ts";
+import { cube3x3x3KPuzzleDefinition } from "./3x3x3.kpuzzle.json.ts";
 
 const kpuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);
 

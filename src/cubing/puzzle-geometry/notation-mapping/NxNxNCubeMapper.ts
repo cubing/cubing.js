@@ -1,5 +1,5 @@
-import { Move, QuantumMove } from "../../alg";
-import type { NotationMapper } from "./NotationMapper";
+import { Move, QuantumMove } from "../../alg/index.ts";
+import type { NotationMapper } from "./NotationMapper.ts";
 
 export class NxNxNCubeMapper implements NotationMapper {
   constructor(public slices: number) {}

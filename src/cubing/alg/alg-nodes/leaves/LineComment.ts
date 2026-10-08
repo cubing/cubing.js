@@ -1,7 +1,7 @@
-import { AlgCommon, type Comparable } from "../../common";
-import { IterationDirection } from "../../iteration";
-import type { ExperimentalSerializationOptions } from "../../SerializationOptions";
-import type { AlgLeaf } from "../AlgNode";
+import { AlgCommon, type Comparable } from "../../common.ts";
+import { IterationDirection } from "../../iteration.ts";
+import type { ExperimentalSerializationOptions } from "../../SerializationOptions.ts";
+import type { AlgLeaf } from "../AlgNode.ts";
 
 // TODO: hash
 // TODO: this conflicts with the HTML `LineComment` class

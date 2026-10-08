@@ -9,18 +9,18 @@ import {
   type Newline,
   type Pause,
   TraversalDownUp,
-} from "../alg";
-import { combineTransformationData } from "./combine";
-import type { KPuzzle } from "./KPuzzle";
-import type { KPuzzleDefinition } from "./KPuzzleDefinition";
+} from "../alg/index.ts";
+import { combineTransformationData } from "./combine.ts";
+import type { KPuzzle } from "./KPuzzle.ts";
+import type { KPuzzleDefinition } from "./KPuzzleDefinition.ts";
 import type {
   KPatternData,
   KPatternOrbitData,
   KPuzzleOrbitDefinition,
   KTransformationData,
   KTransformationOrbitData,
-} from "./KPuzzleDefinitionJSON";
-import { KTransformation } from "./KTransformation";
+} from "./KPuzzleDefinitionJSON.ts";
+import { KTransformation } from "./KTransformation.ts";
 
 export function isOrbitTransformationDataIdentityUncached(
   numOrientations: number,

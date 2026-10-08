@@ -1,11 +1,11 @@
 import { Path } from "path-class";
 import { defineConfig } from "tsdown";
-import { packageEntryPoints } from "./script/build/common/package-info";
-import { packageNames } from "./script/build/common/packageNames";
+import { packageEntryPoints } from "./script/build/common/package-info.ts";
+import { packageNames } from "./script/build/common/packageNames.ts";
 import {
   DIST_LIB_CUBING,
   TYPESCRIPT_DECLARATION_INDEX,
-} from "./script/build/common/paths";
+} from "./script/build/common/paths.ts";
 
 console.warn(`
 ⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳

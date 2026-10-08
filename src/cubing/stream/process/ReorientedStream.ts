@@ -1,5 +1,5 @@
-import { experimentalIs, Move } from "../../alg";
-import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
+import { experimentalIs, Move } from "../../alg/index.ts";
+import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private/index.ts";
 
 export interface PuzzleStreamMoveEventDetail {
   move: Move;

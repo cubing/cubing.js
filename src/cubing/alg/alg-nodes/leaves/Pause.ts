@@ -1,8 +1,8 @@
-import { AlgCommon, type Comparable } from "../../common";
-import { IterationDirection } from "../../iteration";
-import type { ExperimentalSerializationOptions } from "../../SerializationOptions";
-import type { AlgLeaf } from "../AlgNode";
-import type { Grouping } from "../containers/Grouping";
+import { AlgCommon, type Comparable } from "../../common.ts";
+import { IterationDirection } from "../../iteration.ts";
+import type { ExperimentalSerializationOptions } from "../../SerializationOptions.ts";
+import type { AlgLeaf } from "../AlgNode.ts";
+import type { Grouping } from "../containers/Grouping.ts";
 
 /** @category Alg Nodes */
 export class Pause extends AlgCommon<Pause> {

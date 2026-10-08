@@ -1,6 +1,6 @@
-import { cube2x2x2 } from "../../../../cubing/puzzles";
-import { experimentalSolveTwips } from "../../../../cubing/search";
-import { randomScrambleForEvent } from "../../../../cubing/search/outside";
+import { cube2x2x2 } from "../../../../cubing/puzzles/index.ts";
+import { experimentalSolveTwips } from "../../../../cubing/search/index.ts";
+import { randomScrambleForEvent } from "../../../../cubing/search/outside.ts";
 
 const scramble222 = await randomScrambleForEvent("222");
 scramble222.log();

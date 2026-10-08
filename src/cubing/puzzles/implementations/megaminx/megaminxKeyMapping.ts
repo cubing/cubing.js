@@ -1,4 +1,4 @@
-import { type AlgLeaf, Move, Pause } from "../../../alg";
+import { type AlgLeaf, Move, Pause } from "../../../alg/index.ts";
 
 // See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
 

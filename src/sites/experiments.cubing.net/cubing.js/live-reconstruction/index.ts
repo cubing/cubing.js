@@ -4,22 +4,25 @@ import {
   LineComment,
   Move,
   Newline,
-} from "../../../../cubing/alg";
+} from "../../../../cubing/alg/index.ts";
 import {
   KPattern,
   type KPatternData,
   type KPatternOrbitData,
   type KTransformation,
-} from "../../../../cubing/kpuzzle";
-import { eventInfo, puzzles } from "../../../../cubing/puzzles";
-import { cubeLikePuzzleStickering } from "../../../../cubing/puzzles/stickerings/cube-like-stickerings";
-import { PieceStickering } from "../../../../cubing/puzzles/stickerings/mask";
-import { randomScrambleForEvent } from "../../../../cubing/scramble";
-import type { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
-import "../../../../cubing/twisty/cubing-private"; // TwistyStreamSource
-import type { TwistyStreamSource } from "../../../../cubing/twisty/cubing-private";
-import { constructMoveCountDisplay } from "../../../../cubing/twisty/cubing-private";
-import type { AlgWithIssues } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+} from "../../../../cubing/kpuzzle/index.ts";
+import { eventInfo, puzzles } from "../../../../cubing/puzzles/index.ts";
+import { cubeLikePuzzleStickering } from "../../../../cubing/puzzles/stickerings/cube-like-stickerings.ts";
+import { PieceStickering } from "../../../../cubing/puzzles/stickerings/mask.ts";
+import { randomScrambleForEvent } from "../../../../cubing/scramble/index.ts";
+import type {
+  TwistyAlgViewer,
+  TwistyPlayer,
+} from "../../../../cubing/twisty/index.ts";
+import "../../../../cubing/twisty/cubing-private/index.ts"; // TwistyStreamSource
+import type { TwistyStreamSource } from "../../../../cubing/twisty/cubing-private/index.ts";
+import { constructMoveCountDisplay } from "../../../../cubing/twisty/cubing-private/index.ts";
+import type { AlgWithIssues } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp.ts";
 
 const twistyStreamSource: TwistyStreamSource = document.querySelector(
   "twisty-stream-source",

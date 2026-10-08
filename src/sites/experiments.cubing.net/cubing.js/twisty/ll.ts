@@ -1,6 +1,6 @@
-import { puzzles } from "../../../../cubing/puzzles";
-import "../../../../cubing/twisty";
-import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG";
+import { puzzles } from "../../../../cubing/puzzles/index.ts";
+import "../../../../cubing/twisty/index.ts";
+import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG.ts";
 
 globalThis.addEventListener("DOMContentLoaded", async () => {
   const kpuzzle = await puzzles["3x3x3"].kpuzzle();

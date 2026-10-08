@@ -2,15 +2,15 @@ import {
   BoundaryType,
   Direction,
   type MillisecondTimestamp,
-} from "../../controllers/AnimationTypes";
-import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
-import type { DetailedTimelineInfo } from "../../model/props/timeline/DetailedTimelineInfoProp";
-import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { globalSafeDocument } from "../document";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
-import { twistyScrubberCSS } from "./TwistyScrubber.css";
+} from "../../controllers/AnimationTypes.ts";
+import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController.ts";
+import type { DetailedTimelineInfo } from "../../model/props/timeline/DetailedTimelineInfoProp.ts";
+import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp.ts";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
+import { globalSafeDocument } from "../document.ts";
+import { ManagedCustomElement } from "../ManagedCustomElement.ts";
+import { customElementsShim } from "../node-custom-element-shims.ts";
+import { twistyScrubberCSS } from "./TwistyScrubber.css.ts";
 
 const SLOW_DOWN_SCRUBBING = false;
 

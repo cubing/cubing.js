@@ -1,7 +1,7 @@
-import { expect } from "../../../../test/chai-workarounds";
+import { expect } from "../../../../test/chai-workarounds/index.ts";
 
-import { TwistyPlayer } from "../TwistyPlayer";
-import { TwistyAlgEditor } from "./TwistyAlgEditor";
+import { TwistyPlayer } from "../TwistyPlayer.ts";
+import { TwistyAlgEditor } from "./TwistyAlgEditor.ts";
 
 class ResizeObserver {
   observe() {

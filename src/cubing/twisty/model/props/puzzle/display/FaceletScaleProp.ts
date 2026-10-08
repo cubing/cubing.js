@@ -1,4 +1,4 @@
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
 
 export type FaceletScale = "auto" | number;
 export class FaceletScaleProp extends SimpleTwistyPropSource<FaceletScale> {

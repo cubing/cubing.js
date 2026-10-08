@@ -1,6 +1,6 @@
-import { Alg } from "../../../../alg";
-import { KPattern, type KTransformation } from "../../../../kpuzzle";
-import { experimental3x3x3KPuzzle } from "../../../cubing-private";
+import { Alg } from "../../../../alg/index.ts";
+import { KPattern, type KTransformation } from "../../../../kpuzzle/index.ts";
+import { experimental3x3x3KPuzzle } from "../../../cubing-private/index.ts";
 
 export function puzzleOrientation3x3x3Idx(pattern: KPattern): [number, number] {
   const idxU = pattern.patternData["CENTERS"].pieces[0];

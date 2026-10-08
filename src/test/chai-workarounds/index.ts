@@ -8,6 +8,6 @@
  */
 
 import type {} from "mocha";
-import "./Alg.chai";
+import "./Alg.chai.ts";
 
-export * from "./chai";
+export * from "./chai.ts";

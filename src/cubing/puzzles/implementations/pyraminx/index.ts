@@ -1,6 +1,6 @@
-import { PGPuzzleLoader } from "../../async/async-pg3d";
-import { getCached } from "../../async/lazy-cached";
-import type { AlgTransformData } from "../../cubing-private";
+import { PGPuzzleLoader } from "../../async/async-pg3d.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import type { AlgTransformData } from "../../cubing-private/index.ts";
 
 class PyraminxPuzzleLoader extends PGPuzzleLoader {
   constructor() {
@@ -11,8 +11,9 @@ class PyraminxPuzzleLoader extends PGPuzzleLoader {
     });
   }
   override svg = getCached(async () => {
-    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
-      .pyraminxSVG;
+    return (
+      await import("../dynamic/side-events/puzzles-dynamic-side-events.ts")
+    ).pyraminxSVG;
   });
   algTransformData: AlgTransformData = {
     "↔ Mirror (x)": {

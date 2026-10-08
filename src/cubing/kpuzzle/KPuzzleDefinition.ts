@@ -1,7 +1,7 @@
 // import type { KPattern } from "./KPattern";
 
-import type { KPattern } from "./KPattern";
-import type { KPuzzleDefinitionJSON } from "./KPuzzleDefinitionJSON";
+import type { KPattern } from "./KPattern.ts";
+import type { KPuzzleDefinitionJSON } from "./KPuzzleDefinitionJSON.ts";
 
 export interface KPuzzleDefinition extends KPuzzleDefinitionJSON {
   // Note: the options are intentionally required for now, since we haven't yet

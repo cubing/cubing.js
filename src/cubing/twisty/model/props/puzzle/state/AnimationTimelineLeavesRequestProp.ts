@@ -1,6 +1,6 @@
-import type { AlgLeaf } from "../../../../../alg";
-import type { MillisecondTimestamp } from "../../../../controllers/AnimationTypes";
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import type { AlgLeaf } from "../../../../../alg/index.ts";
+import type { MillisecondTimestamp } from "../../../../controllers/AnimationTypes.ts";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
 
 export interface AnimationTimelineLeaf {
   animLeaf: AlgLeaf;

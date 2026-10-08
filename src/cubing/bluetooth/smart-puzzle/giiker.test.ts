@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 
-import { Alg } from "../../alg";
-import { giikerMoveToAlgMoveForTesting } from "./giiker";
+import { Alg } from "../../alg/index.ts";
+import { giikerMoveToAlgMoveForTesting } from "./giiker.ts";
 
 test("should calculate giikerMoveToAlgMove() correctly", () => {
   // console.log(new Alg([giikerMoveToAlgMoveForTesting(1, 1)]).toString());

@@ -1,17 +1,17 @@
 import { Vector3 } from "three/src/math/Vector3.js";
-import { getPuzzleDescriptionString } from "../../../cubing/puzzle-geometry";
-import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
-import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/pgPuzzles";
+import { getPuzzleDescriptionString } from "../../../cubing/puzzle-geometry/index.ts";
+import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry.ts";
+import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/pgPuzzles.ts";
 import {
   setTwistyDebug,
   TwistyPlayer,
   type TwistyPlayerConfig,
-} from "../../../cubing/twisty";
-import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
-import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";
-import { getConfigFromURL } from "../../../cubing/twisty/views/twizzle/url-params";
-import { setupPropInputs } from "./prop-inputs";
-import { getURLParam, setAlgParam } from "./url-params";
+} from "../../../cubing/twisty/index.ts";
+import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp.ts";
+import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls.ts";
+import { getConfigFromURL } from "../../../cubing/twisty/views/twizzle/url-params.ts";
+import { setupPropInputs } from "./prop-inputs.ts";
+import { getURLParam, setAlgParam } from "./url-params.ts";
 
 export function constructTwistyPlayer(): TwistyPlayer {
   if (getURLParam("debug-show-render-stats")) {

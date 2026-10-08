@@ -1,9 +1,9 @@
-import type { ExperimentalStickering } from "../../../twisty";
-import { PGPuzzleLoader } from "../../async/async-pg3d";
-import { getCached } from "../../async/lazy-cached";
-import { ftoStickering } from "../../stickerings/fto-stickerings";
-import type { StickeringMask } from "../../stickerings/mask";
-import { ftoKeyMapping } from "../fto/ftoKeyMapping";
+import type { ExperimentalStickering } from "../../../twisty/index.ts";
+import { PGPuzzleLoader } from "../../async/async-pg3d.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import { ftoStickering } from "../../stickerings/fto-stickerings.ts";
+import type { StickeringMask } from "../../stickerings/mask.ts";
+import { ftoKeyMapping } from "../fto/ftoKeyMapping.ts";
 
 class BabyFTOPuzzleLoader extends PGPuzzleLoader {
   constructor() {
@@ -20,7 +20,7 @@ class BabyFTOPuzzleLoader extends PGPuzzleLoader {
     return ftoStickering(this, stickering);
   }
   override svg = getCached(async () => {
-    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
+    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial.ts"))
       .babyFTOSVG;
   });
   keyMapping = async () => ftoKeyMapping;

@@ -1,14 +1,14 @@
 import { LazyPromise } from "@cubing/lazy-promise";
-import { Alg } from "../../../../alg";
-import type { KPattern } from "../../../../kpuzzle/KPattern";
-import { puzzles } from "../../../../puzzles";
-import { mustBeInsideWorker } from "../../inside-worker";
-import type { SGSCachedData } from "../parseSGS";
-import { TrembleSolver } from "../tremble";
-import { dynamicFTO } from "./dynamic/fto";
+import { Alg } from "../../../../alg/index.ts";
+import type { KPattern } from "../../../../kpuzzle/KPattern.ts";
+import { puzzles } from "../../../../puzzles/index.ts";
+import { mustBeInsideWorker } from "../../inside-worker.ts";
+import type { SGSCachedData } from "../parseSGS.ts";
+import { TrembleSolver } from "../tremble.ts";
+import { dynamicFTO } from "./dynamic/fto/index.ts";
 
 const dynamic = new LazyPromise(
-  () => import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial"),
+  () => import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial.ts"),
 );
 
 const TREMBLE_DEPTH = 3;

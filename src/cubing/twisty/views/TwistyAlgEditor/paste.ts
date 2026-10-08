@@ -1,5 +1,5 @@
-import { Alg } from "../../../alg";
-import { globalSafeDocument } from "../document";
+import { Alg } from "../../../alg/index.ts";
+import { globalSafeDocument } from "../document.ts";
 
 const COMMENT_DELIMITER = "//";
 

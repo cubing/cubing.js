@@ -1,22 +1,22 @@
-import { Alg } from "../../../../cubing/alg";
-import type { KPatternData } from "../../../../cubing/kpuzzle";
-import { KPattern } from "../../../../cubing/kpuzzle/KPattern";
+import { Alg } from "../../../../cubing/alg/index.ts";
+import type { KPatternData } from "../../../../cubing/kpuzzle/index.ts";
+import { KPattern } from "../../../../cubing/kpuzzle/KPattern.ts";
 import {
   binaryComponentsToReid3x3x3,
   reid3x3x3ToBinaryComponents,
   reid3x3x3ToTwizzleBinary,
   twizzleBinaryToReid3x3x3,
-} from "../../../../cubing/protocol/binary/binary3x3x3";
-import { cube3x3x3 } from "../../../../cubing/puzzles";
-import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
-import { ExperimentalSVGAnimator } from "../../../../cubing/twisty";
+} from "../../../../cubing/protocol/binary/binary3x3x3.ts";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private/index.ts";
+import { cube3x3x3 } from "../../../../cubing/puzzles/index.ts";
+import { ExperimentalSVGAnimator } from "../../../../cubing/twisty/index.ts";
 import {
   kpatternToReidString,
   patternToString as kpatternToString,
   patternToStickers,
   reidStringToKPattern,
   stickersToKPattern,
-} from "./convert";
+} from "./convert.ts";
 
 export function bufferToSpacedHex(buffer: ArrayBuffer | Uint8Array): string {
   // buffer is an ArrayBuffer

@@ -1,5 +1,5 @@
-import { SimpleTwistyPropSource } from "../TwistyProp";
-import type { CoordinateDegrees } from "./OrbitCoordinatesRequestProp";
+import { SimpleTwistyPropSource } from "../TwistyProp.ts";
+import type { CoordinateDegrees } from "./OrbitCoordinatesRequestProp.ts";
 
 // Similar to https://alg.cubing.net/
 const DEFAULT_LATITUDE_LIMIT = 35;

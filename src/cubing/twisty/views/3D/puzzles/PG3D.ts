@@ -10,24 +10,24 @@ import { Vector3 } from "three/src/math/Vector3.js";
 import { Group } from "three/src/objects/Group.js";
 import { Mesh } from "three/src/objects/Mesh.js";
 import type { Texture } from "three/src/textures/Texture.js";
-import { Move } from "../../../../alg";
-import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
+import { Move } from "../../../../alg/index.ts";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle/index.ts";
 import type {
   StickerDat,
   StickerDatAxis,
   StickerDatSticker,
-} from "../../../../puzzle-geometry";
-import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
+} from "../../../../puzzle-geometry/index.ts";
+import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry.ts";
 import {
   type ExperimentalFaceletMeshStickeringMask,
   type ExperimentalStickeringMask,
   experimentalGetFaceletStickeringMask,
-} from "../../../../puzzles/cubing-private";
-import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
-import { smootherStep } from "../../../controllers/easing";
-import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp";
-import { TAU } from "../TAU";
-import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
+} from "../../../../puzzles/cubing-private/index.ts";
+import type { PuzzlePosition } from "../../../controllers/AnimationTypes.ts";
+import { smootherStep } from "../../../controllers/easing.ts";
+import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp.ts";
+import { TAU } from "../TAU.ts";
+import type { Twisty3DPuzzle } from "./Twisty3DPuzzle.ts";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,

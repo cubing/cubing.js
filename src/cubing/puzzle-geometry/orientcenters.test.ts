@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
-import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS";
-import { getPuzzleGeometryByName } from "./PuzzleGeometry";
-import { schreierSims } from "./SchreierSims";
+import { SKIP_SLOW_TESTS } from "../../test/SKIP_SLOW_TESTS.ts";
+import { getPuzzleGeometryByName } from "./PuzzleGeometry.ts";
+import { schreierSims } from "./SchreierSims.ts";
 
 // TODO: convert this to a table-based test.
 

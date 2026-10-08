@@ -2,7 +2,7 @@
 
 import { exit } from "node:process";
 import { styleText } from "node:util";
-import { schemas } from "./update";
+import { schemas } from "./update.ts";
 
 let failed = false;
 for (const [schema, schemaCheck] of schemas.map(

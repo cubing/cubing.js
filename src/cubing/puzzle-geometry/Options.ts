@@ -1,8 +1,8 @@
-import type { Move } from "../alg";
+import type { Move } from "../alg/index.ts";
 import {
   type PuzzleDescription,
   parsePuzzleDescription,
-} from "./PuzzleGeometry";
+} from "./PuzzleGeometry.ts";
 
 export function parseOptions(argv: string[]): {
   puzzleDescription: PuzzleDescription | null;

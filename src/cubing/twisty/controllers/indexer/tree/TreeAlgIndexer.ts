@@ -1,17 +1,17 @@
-import type { Alg, Move } from "../../../../alg";
-import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
-import type { KPattern } from "../../../../kpuzzle/KPattern";
+import type { Alg, Move } from "../../../../alg/index.ts";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle/index.ts";
+import type { KPattern } from "../../../../kpuzzle/KPattern.ts";
 import type {
   MillisecondDuration,
   MillisecondTimestamp,
-} from "../../AnimationTypes";
-import type { AlgIndexer, LeafCount, LeafIndex } from "../AlgIndexer";
+} from "../../AnimationTypes.ts";
+import type { AlgIndexer, LeafCount, LeafIndex } from "../AlgIndexer.ts";
 import {
   AlgWalker,
   type AlgWalkerDecoration,
   DecoratorConstructor,
-} from "./AlgWalker";
-import { chunkAlgs } from "./chunkAlgs";
+} from "./AlgWalker.ts";
+import { chunkAlgs } from "./chunkAlgs.ts";
 
 export class TreeAlgIndexer implements AlgIndexer {
   private decoration: AlgWalkerDecoration;

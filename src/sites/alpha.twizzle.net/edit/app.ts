@@ -1,42 +1,47 @@
-import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
-import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
-import { puzzles } from "../../../cubing/puzzles";
-import { randomScrambleForEvent } from "../../../cubing/scramble";
+import { experimentalEnsureAlg } from "../../../cubing/alg/Alg.ts";
+import {
+  Alg,
+  AlgBuilder,
+  LineComment,
+  Newline,
+} from "../../../cubing/alg/index.ts";
+import { puzzles } from "../../../cubing/puzzles/index.ts";
+import { randomScrambleForEvent } from "../../../cubing/scramble/index.ts";
 import {
   experimentalSolve2x2x2,
   experimentalSolve3x3x3IgnoringCenters,
   solveMegaminx,
   solvePyraminx,
   solveSkewb,
-} from "../../../cubing/search";
-import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
-import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
+} from "../../../cubing/search/index.ts";
+import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream.ts";
+import "../../../cubing/twisty/index.ts"; // For `<twisty-alg-editor>` custom elem registration.
+import {
+  constructMoveCountDisplay,
+  getStickeringGroup,
+} from "../../../cubing/twisty/cubing-private/index.ts";
 import {
   type ExperimentalStickering,
   type PuzzleID,
   TwistyPlayer,
   type TwistyPlayerConfig,
-} from "../../../cubing/twisty";
-import {
-  constructMoveCountDisplay,
-  getStickeringGroup,
-} from "../../../cubing/twisty/cubing-private";
-import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
-import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
-import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
-import "../../../cubing/twisty/views/stream/TwistyStreamSource";
+} from "../../../cubing/twisty/index.ts";
+import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp.ts";
+import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp.ts";
+import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims.ts";
+import "../../../cubing/twisty/views/stream/TwistyStreamSource.ts";
 import {
   type AlgTransformData,
   transformAlg,
-} from "../../../cubing/puzzles/cubing-private";
-import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
-import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
-import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
-import { computeAlgFeatures } from "./alg-features";
-import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
-import { examples } from "./examples";
-import { APP_TITLE } from "./strings";
-import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
+} from "../../../cubing/puzzles/cubing-private/index.ts";
+import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource.ts";
+import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor.ts";
+import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params.ts";
+import { computeAlgFeatures } from "./alg-features.ts";
+import { findOrCreateChild, findOrCreateChildWithClass } from "./dom.ts";
+import { examples } from "./examples.ts";
+import { APP_TITLE } from "./strings.ts";
+import { puzzleGroups, supportedPuzzles } from "./supported-puzzles.ts";
 
 // import { setURLParams } from "./url-params";
 

@@ -1,5 +1,5 @@
-import { Alg, Grouping } from "../../../../alg";
-import type { KPattern, KPuzzle } from "../../../../kpuzzle";
+import { Alg, Grouping } from "../../../../alg/index.ts";
+import type { KPattern, KPuzzle } from "../../../../kpuzzle/index.ts";
 
 export function puzzleOrientationBigCubeIdx(
   pattern: KPattern,

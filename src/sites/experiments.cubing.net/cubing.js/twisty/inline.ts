@@ -1,5 +1,5 @@
-import { Alg } from "../../../../cubing/alg";
-import { TwistyPlayer } from "../../../../cubing/twisty";
+import { Alg } from "../../../../cubing/alg/index.ts";
+import { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
 
 globalThis.addEventListener("DOMContentLoaded", () => {
   const elem = document.querySelector("#js-init-example")!;

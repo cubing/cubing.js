@@ -1,10 +1,10 @@
-import { Alg, type AlgNode } from "../../../../cubing/alg";
+import { Alg, type AlgNode } from "../../../../cubing/alg/index.ts";
 import {
   endCharIndexKey,
   type Parsed,
   startCharIndexKey,
-} from "../../../../cubing/alg/parseAlg";
-import { extract } from "./extractor";
+} from "../../../../cubing/alg/parseAlg.ts";
+import { extract } from "./extractor.ts";
 
 const algElem = document.querySelector("#alg") as HTMLTextAreaElement;
 const inspectorElem = document.querySelector("#inspector") as HTMLPreElement;

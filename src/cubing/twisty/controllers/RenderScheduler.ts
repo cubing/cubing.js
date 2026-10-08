@@ -1,4 +1,4 @@
-import type { MillisecondTimestamp } from "./AnimationTypes";
+import type { MillisecondTimestamp } from "./AnimationTypes.ts";
 
 // Debounces `requestAnimationFrame()`.
 export class RenderScheduler {

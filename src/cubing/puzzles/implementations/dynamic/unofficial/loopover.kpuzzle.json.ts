@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle/index.ts";
 
 const o = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

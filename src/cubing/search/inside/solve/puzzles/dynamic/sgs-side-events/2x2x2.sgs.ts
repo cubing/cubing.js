@@ -1,5 +1,5 @@
-import { cube2x2x2 } from "../../../../../../puzzles";
-import { parseSGS, type SGSCachedData } from "../../../parseSGS";
+import { cube2x2x2 } from "../../../../../../puzzles/index.ts";
+import { parseSGS, type SGSCachedData } from "../../../parseSGS.ts";
 
 let cachedData: Promise<SGSCachedData> | null = null;
 export async function cachedData222() {

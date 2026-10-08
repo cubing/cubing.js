@@ -1,11 +1,11 @@
 // tslint:disable-next-line no-namespace // TODO: nested module
 
-import { Alg } from "./Alg";
-import { Grouping } from "./alg-nodes";
-import { Commutator } from "./alg-nodes/containers/Commutator";
-import { Conjugate } from "./alg-nodes/containers/Conjugate";
-import { Move } from "./alg-nodes/leaves/Move";
-import { Pause } from "./alg-nodes/leaves/Pause";
+import { Alg } from "./Alg.ts";
+import { Commutator } from "./alg-nodes/containers/Commutator.ts";
+import { Conjugate } from "./alg-nodes/containers/Conjugate.ts";
+import { Grouping } from "./alg-nodes/index.ts";
+import { Move } from "./alg-nodes/leaves/Move.ts";
+import { Pause } from "./alg-nodes/leaves/Pause.ts";
 
 export const Example = {
   Sune: new Alg([

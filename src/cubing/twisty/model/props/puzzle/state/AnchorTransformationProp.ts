@@ -1,10 +1,10 @@
-import type { KTransformation } from "../../../../../kpuzzle";
+import type { KTransformation } from "../../../../../kpuzzle/index.ts";
 import type {
   AlgIndexer,
   LeafIndex,
-} from "../../../../controllers/indexer/AlgIndexer";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { SetupToLocation } from "./SetupAnchorProp";
+} from "../../../../controllers/indexer/AlgIndexer.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { SetupToLocation } from "./SetupAnchorProp.ts";
 
 interface AnchorTransformationPropInputs {
   setupTransformation: KTransformation | null;

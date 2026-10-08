@@ -11,9 +11,9 @@ export type {
   ProxyMoveEvent as ExperimentalProxyMoveEvent,
   ProxyOrientationEvent as ExperimentalProxyOrientationEvent,
   ProxyResetEvent as ExperimentalProxyResetEvent,
-} from "./events";
-export { TwizzleStreamServer as ExperimentalTwizzleStreamServer } from "./twizzle/TwizzleStream";
+} from "./events.ts";
+export { TwizzleStreamServer as ExperimentalTwizzleStreamServer } from "./twizzle/TwizzleStream.ts";
 export {
   WebSocketProxyReceiver as ExperimentalWebSocketProxyReceiver,
   WebSocketProxySender as ExperimentalWebSocketProxySender,
-} from "./websocket-proxy";
+} from "./websocket-proxy.ts";

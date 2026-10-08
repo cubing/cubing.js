@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { SKIP_SLOW_TESTS } from "../../../../test/SKIP_SLOW_TESTS";
-import { cube5x5x5 } from ".";
+import { SKIP_SLOW_TESTS } from "../../../../test/SKIP_SLOW_TESTS.ts";
+import { cube5x5x5 } from "./index.ts";
 
 test.skipIf(SKIP_SLOW_TESTS)(
   "`experimentalIsSolved(…)` for 5×5×5",

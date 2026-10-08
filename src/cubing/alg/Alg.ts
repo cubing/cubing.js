@@ -1,17 +1,17 @@
 // https://js.cubing.net/cubing/alg/
 
-import { Grouping, Pause } from "./alg-nodes";
-import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
-import { LineComment } from "./alg-nodes/leaves/LineComment";
-import { Move } from "./alg-nodes/leaves/Move";
-import { Newline } from "./alg-nodes/leaves/Newline";
-import { AlgCommon, type Comparable } from "./common";
-import { experimentalIs, experimentalIsAlgNode } from "./is";
-import { direct, IterationDirection, reverse } from "./iteration";
-import { parseAlg } from "./parseAlg";
-import type { ExperimentalSerializationOptions } from "./SerializationOptions";
-import { type SimplifyOptions, simplify } from "./simplify";
-import { warnOnce } from "./warnOnce";
+import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode.ts";
+import { Grouping, Pause } from "./alg-nodes/index.ts";
+import { LineComment } from "./alg-nodes/leaves/LineComment.ts";
+import { Move } from "./alg-nodes/leaves/Move.ts";
+import { Newline } from "./alg-nodes/leaves/Newline.ts";
+import { AlgCommon, type Comparable } from "./common.ts";
+import { experimentalIs, experimentalIsAlgNode } from "./is.ts";
+import { direct, IterationDirection, reverse } from "./iteration.ts";
+import { parseAlg } from "./parseAlg.ts";
+import type { ExperimentalSerializationOptions } from "./SerializationOptions.ts";
+import { type SimplifyOptions, simplify } from "./simplify/index.ts";
+import { warnOnce } from "./warnOnce.ts";
 
 export type FlexibleAlgSource = string | Iterable<AlgNode> | Alg;
 

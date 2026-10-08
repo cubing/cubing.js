@@ -1,10 +1,10 @@
 import type { Vector3 } from "three/src/Three.js";
-import { RenderScheduler } from "../../controllers/RenderScheduler";
-import { bulk3DCode } from "../../heavy-code-imports/3d";
-import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { DragMovementInfo, DragTracker } from "./DragTracker";
-import { DEGREES_PER_RADIAN } from "./TAU";
+import { RenderScheduler } from "../../controllers/RenderScheduler.ts";
+import { bulk3DCode } from "../../heavy-code-imports/3d.ts";
+import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp.ts";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
+import type { DragMovementInfo, DragTracker } from "./DragTracker.ts";
+import { DEGREES_PER_RADIAN } from "./TAU.ts";
 
 const INERTIA_DEFAULT: boolean = true;
 

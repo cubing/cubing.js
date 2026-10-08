@@ -1,10 +1,10 @@
-export type { PuzzleGeometryOptions as ExperimentalPuzzleGeometryOptions } from "./Options";
+export type { PuzzleGeometryOptions as ExperimentalPuzzleGeometryOptions } from "./Options.ts";
 export type {
   StickerDat,
   StickerDatAxis,
   StickerDatFace,
   StickerDatSticker,
-} from "./PuzzleGeometry";
+} from "./PuzzleGeometry.ts";
 // TODO: expose this from PG.
 export {
   getPG3DNamedPuzzles,
@@ -20,6 +20,6 @@ export {
   type PuzzleDescription as ExperimentalPuzzleDescription,
   PuzzleGeometry,
   parsePuzzleDescription,
-} from "./PuzzleGeometry";
-export { Quat } from "./Quat";
-export { schreierSims } from "./SchreierSims";
+} from "./PuzzleGeometry.ts";
+export { Quat } from "./Quat.ts";
+export { schreierSims } from "./SchreierSims.ts";

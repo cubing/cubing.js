@@ -1,4 +1,4 @@
-import type { Milliseconds } from "./Timer";
+import type { Milliseconds } from "./Timer.ts";
 
 // import "./db";
 // function Stats() {

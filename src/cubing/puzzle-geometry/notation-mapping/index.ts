@@ -1,11 +1,11 @@
-export { FaceRenamingMapper } from "./FaceRenamingMapper";
-export { FTONotationMapper } from "./FTONotationMapper";
-export { MegaminxScramblingNotationMapper } from "./MegaminxScramblingNotationMapper";
-export type { NotationMapper } from "./NotationMapper";
-export { NullMapper } from "./NullMapper";
-export { NxNxNCubeMapper } from "./NxNxNCubeMapper";
+export { FaceRenamingMapper } from "./FaceRenamingMapper.ts";
+export { FTONotationMapper } from "./FTONotationMapper.ts";
+export { MegaminxScramblingNotationMapper } from "./MegaminxScramblingNotationMapper.ts";
+export type { NotationMapper } from "./NotationMapper.ts";
+export { NullMapper } from "./NullMapper.ts";
+export { NxNxNCubeMapper } from "./NxNxNCubeMapper.ts";
 export {
   PyraminxNotationMapper,
   TetraminxNotationMapper,
-} from "./PyraminxNotationMapper";
-export { SkewbNotationMapper } from "./SkewbNotationMapper";
+} from "./PyraminxNotationMapper.ts";
+export { SkewbNotationMapper } from "./SkewbNotationMapper.ts";

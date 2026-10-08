@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { bufferToSpacedHex, spacedHexToBuffer } from "./hex";
+import { bufferToSpacedHex, spacedHexToBuffer } from "./hex.ts";
 
 test("converts to hex", () => {
   expect(

@@ -4,8 +4,8 @@ import { LineBasicMaterial } from "three/src/materials/LineBasicMaterial.js";
 import { Color } from "three/src/math/Color.js";
 import { LineSegments } from "three/src/objects/LineSegments.js";
 import { Scene } from "three/src/scenes/Scene.js";
-import type { VRInput } from "./vr-input";
-import type { VRPuzzle } from "./vr-puzzle";
+import type { VRInput } from "./vr-input.ts";
+import type { VRPuzzle } from "./vr-puzzle.ts";
 
 export class Room {
   public scene: Scene;

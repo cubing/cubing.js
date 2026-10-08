@@ -3,7 +3,7 @@ import { Vector3 } from "three/src/math/Vector3.js";
 import type {
   ExperimentalAlgLeafEvent,
   ExperimentalOrientationEvent,
-} from "../stream";
+} from "../stream/index.ts";
 
 // TODO: Combine orientation and alg leaves into a single event to handle quaternion remapping.
 export interface StreamTransformer {

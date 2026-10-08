@@ -1,12 +1,12 @@
 import type { Worker as NodeWorker } from "node:worker_threads";
 import { PortableWorker, wrap } from "@cubing/comlink-everywhere";
-import type { WorkerAPI } from "./inside/api";
-import { searchOutsideDebugGlobals } from "./outside";
+import type { WorkerAPI } from "./inside/api.ts";
+import { searchOutsideDebugGlobals } from "./outside.ts";
 import {
   searchWorkerURLEsbuildWorkaround,
   searchWorkerURLImportMetaResolve,
   searchWorkerURLNewURLImportMetaURL,
-} from "./worker-workarounds";
+} from "./worker-workarounds/index.ts";
 
 function wrapAPI(worker: Worker | NodeWorker): WorkerAPI {
   return wrap<WorkerAPI>(worker);

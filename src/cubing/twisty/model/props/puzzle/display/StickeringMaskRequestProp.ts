@@ -1,6 +1,6 @@
-import type { ExperimentalStickeringMask } from "../../../../../puzzles/cubing-private";
-import { TwistyPropSource } from "../../TwistyProp";
-import { parseSerializedStickeringMask } from "./parseSerializedStickeringMask";
+import type { ExperimentalStickeringMask } from "../../../../../puzzles/cubing-private/index.ts";
+import { TwistyPropSource } from "../../TwistyProp.ts";
+import { parseSerializedStickeringMask } from "./parseSerializedStickeringMask.ts";
 
 export class StickeringMaskRequestProp extends TwistyPropSource<
   ExperimentalStickeringMask | null,

@@ -1,5 +1,5 @@
-import type { TwistyPlayer } from "../../../../cubing/twisty";
-import type { OrbitCoordinatesRequest } from "../../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
+import type { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
+import type { OrbitCoordinatesRequest } from "../../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp.ts";
 
 export function getScaleParam(param: string, defaultVal: number = 1): number {
   const str = new URL(location.href).searchParams.get(param);

@@ -12,8 +12,8 @@
  * So instead we import this in all tests, for now.
  */
 
-import { Alg, experimentalEnsureAlg } from "../../cubing/alg/Alg";
-import { Assertion, expect } from "./chai";
+import { Alg, experimentalEnsureAlg } from "../../cubing/alg/Alg.ts";
+import { Assertion, expect } from "./chai.ts";
 
 Assertion.addMethod("identicalAlg", function (expected: Alg | string): void {
   expect(this._obj).to.be.instanceOf(Alg);

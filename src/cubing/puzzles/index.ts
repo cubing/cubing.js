@@ -1,24 +1,24 @@
-export { eventInfo, twizzleEvents, wcaEventInfo, wcaEvents } from "./events";
+export { eventInfo, twizzleEvents, wcaEventInfo, wcaEvents } from "./events.ts";
 export type { PuzzleLoader };
 export { cube2x2x2, cube3x3x3 };
 
-import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
-import { cube2x2x2 } from "./implementations/2x2x2";
-import { cube3x3x3 } from "./implementations/3x3x3";
-import { cube4x4x4 } from "./implementations/4x4x4";
-import { cube5x5x5 } from "./implementations/5x5x5";
-import { baby_fto } from "./implementations/baby_fto";
-import { clock } from "./implementations/clock";
-import { fto } from "./implementations/fto";
-import { kilominx } from "./implementations/kilominx";
-import { loopover } from "./implementations/loopover";
-import { megaminx } from "./implementations/megaminx";
-import { melindas2x2x2x2 } from "./implementations/melindas2x2x2x2";
-import { pyraminx } from "./implementations/pyraminx";
-import { rediCube } from "./implementations/redi-cube";
-import { square1 } from "./implementations/square1";
-import { tri_quad } from "./implementations/tri_quad";
-import type { PuzzleLoader } from "./PuzzleLoader";
+import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d.ts";
+import { cube2x2x2 } from "./implementations/2x2x2/index.ts";
+import { cube3x3x3 } from "./implementations/3x3x3/index.ts";
+import { cube4x4x4 } from "./implementations/4x4x4/index.ts";
+import { cube5x5x5 } from "./implementations/5x5x5/index.ts";
+import { baby_fto } from "./implementations/baby_fto/index.ts";
+import { clock } from "./implementations/clock/index.ts";
+import { fto } from "./implementations/fto/index.ts";
+import { kilominx } from "./implementations/kilominx/index.ts";
+import { loopover } from "./implementations/loopover/index.ts";
+import { megaminx } from "./implementations/megaminx/index.ts";
+import { melindas2x2x2x2 } from "./implementations/melindas2x2x2x2/index.ts";
+import { pyraminx } from "./implementations/pyraminx/index.ts";
+import { rediCube } from "./implementations/redi-cube/index.ts";
+import { square1 } from "./implementations/square1/index.ts";
+import { tri_quad } from "./implementations/tri_quad/index.ts";
+import type { PuzzleLoader } from "./PuzzleLoader.ts";
 
 /** @category All Puzzles */
 export const puzzles: Record<string, PuzzleLoader> = {

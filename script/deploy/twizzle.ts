@@ -1,8 +1,8 @@
 import * as assert from "node:assert";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
-import type { VersionJSON } from "../build/sites/barelyServeSite";
-import { rsync } from "./rsync";
+import type { VersionJSON } from "../build/sites/barelyServeSite.ts";
+import { rsync } from "./rsync.ts";
 
 const gitDescribeVersion = await new PrintableShellCommand("git", [
   "describe",

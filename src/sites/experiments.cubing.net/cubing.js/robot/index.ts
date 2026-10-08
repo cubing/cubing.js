@@ -1,16 +1,16 @@
-import { Alg, Move } from "../../../../cubing/alg";
+import { Alg, Move } from "../../../../cubing/alg/index.ts";
 import {
   type MoveEvent as algLeafEvent,
   type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
-} from "../../../../cubing/bluetooth";
-import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot";
-import type { GanRobot } from "../../../../cubing/bluetooth/smart-robot/GanRobot";
-import type { ExperimentalAlgLeafEvent } from "../../../../cubing/stream";
-import { TwizzleStreamServer } from "../../../../cubing/stream/twizzle/TwizzleStream";
-import "../../../../cubing/twisty";
-import type { TwistyPlayer } from "../../../../cubing/twisty";
+} from "../../../../cubing/bluetooth/index.ts";
+import type { GanRobot } from "../../../../cubing/bluetooth/smart-robot/GanRobot.ts";
+import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot/index.ts";
+import type { ExperimentalAlgLeafEvent } from "../../../../cubing/stream/index.ts";
+import { TwizzleStreamServer } from "../../../../cubing/stream/twizzle/TwizzleStream.ts";
+import "../../../../cubing/twisty/index.ts";
+import type { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
 
 const BOGUS_VALUE = "BOGUS";
 

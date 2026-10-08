@@ -1,13 +1,13 @@
 import { randomChoice } from "random-uint-below";
-import { Alg } from "../../../../../alg";
-import type { KPattern } from "../../../../../kpuzzle/KPattern";
-import { puzzles } from "../../../../../puzzles";
-import { mustBeInsideWorker } from "../../../inside-worker";
-import { addOrientationSuffix } from "../../addOrientationSuffix";
-import { dynamic3x3x3min2phase } from "../dynamic/3x3x3";
-import { toMin2PhasePattern } from "./convert";
-import { passesFilter } from "./filter";
-import { sgs3x3x3 } from "./legacy-sgs";
+import { Alg } from "../../../../../alg/index.ts";
+import type { KPattern } from "../../../../../kpuzzle/KPattern.ts";
+import { puzzles } from "../../../../../puzzles/index.ts";
+import { mustBeInsideWorker } from "../../../inside-worker.ts";
+import { addOrientationSuffix } from "../../addOrientationSuffix.ts";
+import { dynamic3x3x3min2phase } from "../dynamic/3x3x3/index.ts";
+import { toMin2PhasePattern } from "./convert.ts";
+import { passesFilter } from "./filter.ts";
+import { sgs3x3x3 } from "./legacy-sgs.ts";
 
 export async function random333Pattern(): Promise<KPattern> {
   const kpuzzle = await puzzles["3x3x3"].kpuzzle();

@@ -1,24 +1,24 @@
-import type { Alg, AppendCancelOptions } from "../../alg";
-import type { PuzzleDescriptionString } from "../../puzzle-geometry/pgPuzzles";
-import type { StickeringMask } from "../../puzzles/stickerings/mask";
-import type { ExperimentalStickering, PuzzleID } from "../../twisty";
-import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
-import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp";
-import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
-import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
-import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
-import type { IndexerStrategyName } from "../model/props/puzzle/state/IndexerConstructorRequestProp";
-import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
-import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
-import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
-import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
-import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
-import type { ColorSchemeWithAuto } from "../model/props/viewer/ColorSchemeRequestProp";
-import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
-import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
-import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
-import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
-import { ManagedCustomElement } from "./ManagedCustomElement";
+import type { Alg, AppendCancelOptions } from "../../alg/index.ts";
+import type { PuzzleDescriptionString } from "../../puzzle-geometry/pgPuzzles.ts";
+import type { StickeringMask } from "../../puzzles/stickerings/mask.ts";
+import type { ExperimentalStickering, PuzzleID } from "../../twisty/index.ts";
+import type { MillisecondTimestamp } from "../controllers/AnimationTypes.ts";
+import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp.ts";
+import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp.ts";
+import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp.ts";
+import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp.ts";
+import type { IndexerStrategyName } from "../model/props/puzzle/state/IndexerConstructorRequestProp.ts";
+import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp.ts";
+import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp.ts";
+import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp.ts";
+import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp.ts";
+import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp.ts";
+import type { ColorSchemeWithAuto } from "../model/props/viewer/ColorSchemeRequestProp.ts";
+import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp.ts";
+import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp.ts";
+import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp.ts";
+import { TwistyPlayerModel } from "../model/TwistyPlayerModel.ts";
+import { ManagedCustomElement } from "./ManagedCustomElement.ts";
 
 function err(propName: string): Error {
   return new Error(

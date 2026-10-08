@@ -1,10 +1,10 @@
-import type { Alg } from "../../../../alg";
-import type { KPattern } from "../../../../kpuzzle/KPattern";
-import { puzzles } from "../../../../puzzles";
-import { mustBeInsideWorker } from "../../inside-worker";
-import type { SGSCachedData } from "../parseSGS";
-import { randomPatternFromSGS, TrembleSolver } from "../tremble";
-import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
+import type { Alg } from "../../../../alg/index.ts";
+import type { KPattern } from "../../../../kpuzzle/KPattern.ts";
+import { puzzles } from "../../../../puzzles/index.ts";
+import { mustBeInsideWorker } from "../../inside-worker.ts";
+import type { SGSCachedData } from "../parseSGS.ts";
+import { randomPatternFromSGS, TrembleSolver } from "../tremble.ts";
+import { searchDynamicSideEvents } from "./dynamic/sgs-side-events/index.ts";
 
 const TREMBLE_DEPTH = 3;
 

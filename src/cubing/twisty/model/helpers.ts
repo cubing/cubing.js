@@ -1,4 +1,4 @@
-import { offsetMod } from "../../alg/cubing-private";
+import { offsetMod } from "../../alg/cubing-private/index.ts";
 
 export function arrayEquals<T>(a: readonly T[], b: readonly T[]): boolean {
   if (a === b) {

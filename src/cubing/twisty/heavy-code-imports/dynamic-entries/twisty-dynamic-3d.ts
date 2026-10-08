@@ -1,8 +1,8 @@
-import { cube3x3x3, type PuzzleLoader } from "../../../puzzles";
-import type { FaceletScale } from "../../model/props/puzzle/display/FaceletScaleProp";
-import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp";
-import { Cube3D, type Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
-import { PG3D } from "../../views/3D/puzzles/PG3D";
+import { cube3x3x3, type PuzzleLoader } from "../../../puzzles/index.ts";
+import type { FaceletScale } from "../../model/props/puzzle/display/FaceletScaleProp.ts";
+import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp.ts";
+import { Cube3D, type Cube3DOptions } from "../../views/3D/puzzles/Cube3D.ts";
+import { PG3D } from "../../views/3D/puzzles/PG3D.ts";
 
 // TODO: figure out how to load these dynamically without a bottleneck.
 export { PerspectiveCamera as ThreePerspectiveCamera } from "three/src/cameras/PerspectiveCamera.js";
@@ -14,9 +14,9 @@ export { Vector3 as ThreeVector3 } from "three/src/math/Vector3.js";
 export { WebGLRenderer as ThreeWebGLRenderer } from "three/src/renderers/WebGLRenderer.js";
 export { Scene as ThreeScene } from "three/src/scenes/Scene.js";
 
-export { Cube3D } from "../../views/3D/puzzles/Cube3D";
-export { PG3D } from "../../views/3D/puzzles/PG3D";
-export { Twisty3DScene } from "../../views/3D/Twisty3DScene";
+export { Cube3D } from "../../views/3D/puzzles/Cube3D.ts";
+export { PG3D } from "../../views/3D/puzzles/PG3D.ts";
+export { Twisty3DScene } from "../../views/3D/Twisty3DScene.ts";
 
 export async function cube3DShim(
   renderCallback: () => void,

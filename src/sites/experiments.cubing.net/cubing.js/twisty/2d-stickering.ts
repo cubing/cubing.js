@@ -1,3 +1,3 @@
-import { demo } from "./stickering-demo-algs";
+import { demo } from "./stickering-demo-algs.ts";
 
 demo("2D");

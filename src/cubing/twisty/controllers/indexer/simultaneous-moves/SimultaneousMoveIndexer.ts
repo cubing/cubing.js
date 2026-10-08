@@ -1,23 +1,23 @@
-import { type Alg, Move } from "../../../../alg";
-import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
-import type { KPattern } from "../../../../kpuzzle/KPattern";
+import { type Alg, Move } from "../../../../alg/index.ts";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle/index.ts";
+import type { KPattern } from "../../../../kpuzzle/KPattern.ts";
 import type {
   AnimationTimelineLeaf,
   AnimationTimelineLeaves,
-} from "../../../model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
+} from "../../../model/props/puzzle/state/AnimationTimelineLeavesRequestProp.ts";
 import {
   Direction,
   type MillisecondDuration,
   type MillisecondTimestamp,
   type PuzzlePosition,
-} from "../../AnimationTypes";
+} from "../../AnimationTypes.ts";
 import type {
   CurrentMove,
   CurrentMoveInfo,
   LeafCount,
   LeafIndex,
-} from "../AlgIndexer";
-import { type AnimatedLeafAlgNode, simulMoves } from "./simul-moves";
+} from "../AlgIndexer.ts";
+import { type AnimatedLeafAlgNode, simulMoves } from "./simul-moves.ts";
 
 export class SimultaneousMoveIndexer {
   private animLeaves: AnimationTimelineLeaf[];

@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 
-import { cube3x3x3 } from "../../puzzles";
-import { Alg } from "../Alg";
+import { cube3x3x3 } from "../../puzzles/index.ts";
+import { Alg } from "../Alg.ts";
 
 test("can cancel", () => {
   expect(

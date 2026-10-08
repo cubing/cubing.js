@@ -25,18 +25,18 @@ import { run } from "@optique/run";
 import { path } from "@optique/run/valueparser";
 import { Path } from "path-class";
 import { chromium } from "playwright";
-import { Alg } from "../../src/cubing/alg";
-import { experimentalStickerings } from "../../src/cubing/puzzles/cubing-private";
+import { Alg } from "../../src/cubing/alg/index.ts";
+import { experimentalStickerings } from "../../src/cubing/puzzles/cubing-private/index.ts";
 import type {
   PuzzleID,
   TwistyPlayerConfig,
   VisualizationFormat,
-} from "../../src/cubing/twisty/index.js";
+} from "../../src/cubing/twisty/index.ts";
 // We would use named imports, but that doesn't seem to be an option.
-import { visualizationFormats } from "../../src/cubing/twisty/model/props/viewer/VisualizationProp.js";
-import { packageVersion } from "../../src/metadata/packageVersion.js";
-import { startServer } from "../lib/experiments-server";
-import { printInlineImage } from "./printInlineImage";
+import { visualizationFormats } from "../../src/cubing/twisty/model/props/viewer/VisualizationProp.ts";
+import { packageVersion } from "../../src/metadata/packageVersion.ts";
+import { startServer } from "../lib/experiments-server/index.ts";
+import { printInlineImage } from "./printInlineImage.ts";
 
 const DEBUG = false;
 const PAGE_URL =

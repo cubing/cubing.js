@@ -1,5 +1,5 @@
-import type { KeyMapping } from "../puzzles/PuzzleLoader";
-import type { AlgLeaf } from "./alg-nodes/AlgNode";
+import type { KeyMapping } from "../puzzles/PuzzleLoader.ts";
+import type { AlgLeaf } from "./alg-nodes/AlgNode.ts";
 
 // TODO: options about whether to ignore modifier keys (e.g. alt, ctrl).
 // TODO: Support different mappings.

@@ -1,10 +1,10 @@
-import { Alg } from "../../../../../cubing/alg";
+import { Alg } from "../../../../../cubing/alg/index.ts";
 import {
   TwistyPlayer,
   type TwistyPlayerConfig,
-} from "../../../../../cubing/twisty";
-import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
-import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
+} from "../../../../../cubing/twisty/index.ts";
+import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement.ts";
+import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims.ts";
 
 const DEBUG = false;
 

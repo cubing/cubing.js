@@ -1,4 +1,4 @@
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../../TwistyProp.ts";
 
 // TODO: turn these maps into `Set`s?
 export const hintFaceletStyles = {

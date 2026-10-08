@@ -1,11 +1,11 @@
-export { KPattern } from "./KPattern";
-export { KPuzzle } from "./KPuzzle";
-export type { KPuzzleDefinition } from "./KPuzzleDefinition";
+export { KPattern } from "./KPattern.ts";
+export { KPuzzle } from "./KPuzzle.ts";
+export type { KPuzzleDefinition } from "./KPuzzleDefinition.ts";
 export type {
   KPatternData,
   KPatternOrbitData,
   KPuzzleOrbitDefinition,
   KTransformationData,
   KTransformationOrbitData,
-} from "./KPuzzleDefinitionJSON";
-export { KTransformation } from "./KTransformation";
+} from "./KPuzzleDefinitionJSON.ts";
+export { KTransformation } from "./KTransformation.ts";

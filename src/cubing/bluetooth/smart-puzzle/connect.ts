@@ -1,10 +1,13 @@
-import { type BluetoothConnectOptions, bluetoothConnect } from "../connect";
-import type { BluetoothPuzzle } from "./bluetooth-puzzle";
-import { ganConfig } from "./gan";
-import { giiKERConfig } from "./giiker";
-import { goCubeConfig } from "./gocube";
-import { heykubeConfig } from "./Heykube";
-import { qiyiConfig } from "./qiyi";
+import {
+  type BluetoothConnectOptions,
+  bluetoothConnect,
+} from "../connect/index.ts";
+import type { BluetoothPuzzle } from "./bluetooth-puzzle.ts";
+import { ganConfig } from "./gan.ts";
+import { giiKERConfig } from "./giiker.ts";
+import { goCubeConfig } from "./gocube.ts";
+import { heykubeConfig } from "./Heykube.ts";
+import { qiyiConfig } from "./qiyi.ts";
 
 const smartPuzzleConfigs = [
   ganConfig,

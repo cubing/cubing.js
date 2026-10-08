@@ -1,10 +1,10 @@
-import { Alg } from "../alg";
-import type { KPuzzle } from "../kpuzzle";
+import { Alg } from "../alg/index.ts";
+import type { KPuzzle } from "../kpuzzle/index.ts";
 // import { preInitialize222 } from "../implementations/2x2x2";
-import type { KPattern } from "../kpuzzle/KPattern";
-import type { PrefetchLevel, WorkerAPI } from "./inside/api";
-import type { TwipsOptions } from "./inside/solve/twips";
-import { allWorkerAPIPromises, instantiateWorkerAPI } from "./instantiator";
+import type { KPattern } from "../kpuzzle/KPattern.ts";
+import type { PrefetchLevel, WorkerAPI } from "./inside/api.ts";
+import type { TwipsOptions } from "./inside/solve/twips.ts";
+import { allWorkerAPIPromises, instantiateWorkerAPI } from "./instantiator.ts";
 
 let cachedWorkerInstance: Promise<WorkerAPI> | undefined;
 function getCachedWorkerInstance(): Promise<WorkerAPI> {

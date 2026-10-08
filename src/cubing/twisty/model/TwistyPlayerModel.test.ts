@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test";
-import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS";
-import { Alg, Move, Pause } from "../../alg";
-import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
-import { TwistyPlayerModel } from "./TwistyPlayerModel";
+import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS.ts";
+import { Alg, Move, Pause } from "../../alg/index.ts";
+import type { MillisecondTimestamp } from "../controllers/AnimationTypes.ts";
+import { TwistyPlayerModel } from "./TwistyPlayerModel.ts";
 
 test.skipIf(SKIP_SLOW_TESTS)("generates Twizzle links", async () => {
   const twistyPlayerModel = new TwistyPlayerModel();

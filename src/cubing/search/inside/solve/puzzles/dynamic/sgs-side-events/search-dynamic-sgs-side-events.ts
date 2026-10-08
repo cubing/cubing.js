@@ -1,14 +1,14 @@
-export { cachedData222 } from "./2x2x2.sgs";
+export { cachedData222 } from "./2x2x2.sgs.ts";
 export {
   cachedMegaminxKPuzzleWithoutMO,
   cachedSGSDataMegaminx,
-} from "./megaminx.sgs";
+} from "./megaminx.sgs.ts";
 export {
   sgsDataPyraminx,
   sgsDataPyraminxFixedOrientation,
-} from "./pyraminx.sgs";
+} from "./pyraminx.sgs.ts";
 export {
   sgsDataSkewb,
   sgsDataSkewbFixedCorner,
   skewbKPuzzleWithoutMOCached,
-} from "./skewb.sgs";
+} from "./skewb.sgs.ts";

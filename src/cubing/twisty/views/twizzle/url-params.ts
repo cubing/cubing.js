@@ -1,15 +1,15 @@
-import { EXPERIMENTAL_PROP_NO_VALUE } from "../../../../cubing/twisty";
+import { EXPERIMENTAL_PROP_NO_VALUE } from "../../../../cubing/twisty/index.ts";
 import type {
   AlgProp,
   AlgWithIssues,
-} from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp";
-import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
+} from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp.ts";
+import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp.ts";
+import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel.ts";
 import {
   type TwistyPlayerAttribute,
   type TwistyPlayerConfig,
   twistyPlayerAttributeMap,
-} from "../../../../cubing/twisty/views/TwistyPlayer";
+} from "../../../../cubing/twisty/views/TwistyPlayer.ts";
 
 function updateURL(url: URL): void {
   globalThis.history.replaceState("", "", url.toString());

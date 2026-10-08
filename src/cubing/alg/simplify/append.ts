@@ -1,8 +1,8 @@
-import { Alg } from "../Alg";
-import type { AlgNode } from "../alg-nodes";
-import type { AlgLeaf } from "../alg-nodes/AlgNode";
-import { Move } from "../alg-nodes/leaves/Move";
-import { type AppendOptions, AppendOptionsHelper } from "./options";
+import { Alg } from "../Alg.ts";
+import type { AlgLeaf } from "../alg-nodes/AlgNode.ts";
+import type { AlgNode } from "../alg-nodes/index.ts";
+import { Move } from "../alg-nodes/leaves/Move.ts";
+import { type AppendOptions, AppendOptionsHelper } from "./options.ts";
 
 function areSameDirection(direction: -1 | 1, move2: Move): boolean {
   // This multiplication has two properties:

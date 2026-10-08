@@ -8,8 +8,8 @@ import {
   type Newline,
   type Pause,
   TraversalUp,
-} from "../../../alg";
-import type { MillisecondDuration } from "../AnimationTypes";
+} from "../../../alg/index.ts";
+import type { MillisecondDuration } from "../AnimationTypes.ts";
 
 export function constantDurationForAmount(
   _amount: number,

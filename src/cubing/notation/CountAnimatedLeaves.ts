@@ -9,8 +9,8 @@ import {
   type Newline,
   type Pause,
   TraversalUp,
-} from "../alg";
-import type { LeafCount } from "../twisty/controllers/indexer/AlgIndexer";
+} from "../alg/index.ts";
+import type { LeafCount } from "../twisty/controllers/indexer/AlgIndexer.ts";
 
 // TODO: Include Pause, include amounts
 class CountAnimatedLeaves extends TraversalUp<LeafCount, LeafCount> {

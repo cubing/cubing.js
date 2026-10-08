@@ -1,6 +1,6 @@
-import { Alg } from "../../../../../cubing/alg";
-import type { AlgLeaf } from "../../../../../cubing/alg/alg-nodes/AlgNode";
-import { puzzles } from "../../../../../cubing/puzzles";
+import type { AlgLeaf } from "../../../../../cubing/alg/alg-nodes/AlgNode.ts";
+import { Alg } from "../../../../../cubing/alg/index.ts";
+import { puzzles } from "../../../../../cubing/puzzles/index.ts";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
 import {
   type BackViewLayout,
@@ -8,9 +8,9 @@ import {
   TwistyPlayer,
   type TwistyPlayerConfig,
   type VisualizationFormat,
-} from "../../../../../cubing/twisty";
-import { getCancel, getSetup, type PuzzleID } from "../url-params";
-import { SwipeGrid, type ThemeType, themes } from "./SwipeGrid";
+} from "../../../../../cubing/twisty/index.ts";
+import { getCancel, getSetup, type PuzzleID } from "../url-params.ts";
+import { SwipeGrid, type ThemeType, themes } from "./SwipeGrid.ts";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
 

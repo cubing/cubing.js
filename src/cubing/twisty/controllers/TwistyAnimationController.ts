@@ -1,21 +1,21 @@
-import { modIntoRange } from "../model/helpers";
-import { StaleDropper } from "../model/PromiseFreshener";
-import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";
+import { modIntoRange } from "../model/helpers.ts";
+import { StaleDropper } from "../model/PromiseFreshener.ts";
+import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp.ts";
 import type {
   PlayingInfo,
   SimpleDirection,
-} from "../model/props/timeline/PlayingInfoProp";
-import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
-import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
+} from "../model/props/timeline/PlayingInfoProp.ts";
+import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp.ts";
+import type { TwistyPlayerModel } from "../model/TwistyPlayerModel.ts";
 import {
   BoundaryType,
   Direction,
   directionScalar,
   type MillisecondTimestamp,
   type TimeRange,
-} from "./AnimationTypes";
-import type { CurrentMoveInfo } from "./indexer/AlgIndexer";
-import { RenderScheduler } from "./RenderScheduler";
+} from "./AnimationTypes.ts";
+import type { CurrentMoveInfo } from "./indexer/AlgIndexer.ts";
+import { RenderScheduler } from "./RenderScheduler.ts";
 
 // TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {

@@ -1,11 +1,11 @@
 import { LazyPromise } from "@cubing/lazy-promise";
-import type { ExperimentalStickering } from "../../twisty";
-import type { PuzzleLoader } from "../PuzzleLoader";
+import type { ExperimentalStickering } from "../../twisty/index.ts";
+import type { PuzzleLoader } from "../PuzzleLoader.ts";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,
-} from "./cube-like-stickerings";
-import type { StickeringMask } from "./mask";
+} from "./cube-like-stickerings.ts";
+import type { StickeringMask } from "./mask.ts";
 
 // TODO: cache calculations?
 export async function megaminxStickeringMask(

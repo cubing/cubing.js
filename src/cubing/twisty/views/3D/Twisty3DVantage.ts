@@ -1,22 +1,22 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three/src/Three.js";
-import { Stats } from "../../../vendor/mit/three/examples/jsm/libs/stats.modified.module";
-import { RenderScheduler } from "../../controllers/RenderScheduler";
-import { twistyDebugGlobals } from "../../debug";
-import { bulk3DCode } from "../../heavy-code-imports/3d";
-import { StaleDropper } from "../../model/PromiseFreshener";
-import type { DragInputMode } from "../../model/props/puzzle/state/DragInputProp";
-import type { TwistyPropParent } from "../../model/props/TwistyProp";
-import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { pixelRatio } from "../canvas";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
-import { DragTracker, type PressInfo } from "./DragTracker";
-import { newRenderer, renderPooled } from "./RendererPool";
-import { DEGREES_PER_RADIAN } from "./TAU";
-import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
-import { twisty3DVantageCSS } from "./Twisty3DVantage.css";
-import { TwistyOrbitControls } from "./TwistyOrbitControls";
+import { Stats } from "../../../vendor/mit/three/examples/jsm/libs/stats.modified.module.ts";
+import { RenderScheduler } from "../../controllers/RenderScheduler.ts";
+import { twistyDebugGlobals } from "../../debug.ts";
+import { bulk3DCode } from "../../heavy-code-imports/3d.ts";
+import { StaleDropper } from "../../model/PromiseFreshener.ts";
+import type { DragInputMode } from "../../model/props/puzzle/state/DragInputProp.ts";
+import type { TwistyPropParent } from "../../model/props/TwistyProp.ts";
+import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp.ts";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
+import { pixelRatio } from "../canvas.ts";
+import { ManagedCustomElement } from "../ManagedCustomElement.ts";
+import { customElementsShim } from "../node-custom-element-shims.ts";
+import { DragTracker, type PressInfo } from "./DragTracker.ts";
+import { newRenderer, renderPooled } from "./RendererPool.ts";
+import { DEGREES_PER_RADIAN } from "./TAU.ts";
+import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper.ts";
+import { twisty3DVantageCSS } from "./Twisty3DVantage.css.ts";
+import { TwistyOrbitControls } from "./TwistyOrbitControls.ts";
 
 export async function setCameraFromOrbitCoordinates(
   camera: PerspectiveCamera,

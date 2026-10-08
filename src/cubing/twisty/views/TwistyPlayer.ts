@@ -1,46 +1,49 @@
 import type { Object3D } from "three/src/Three.js";
-import type { Alg, Move } from "../../alg";
-import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
-import type { AppendCancelOptions, AppendOptions } from "../../alg/simplify";
-import type { PuzzleDescriptionString } from "../../puzzle-geometry/pgPuzzles";
-import type { ExperimentalStickeringMask } from "../../puzzles/cubing-private";
+import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode.ts";
+import type { Alg, Move } from "../../alg/index.ts";
+import type {
+  AppendCancelOptions,
+  AppendOptions,
+} from "../../alg/simplify/index.ts";
+import type { PuzzleDescriptionString } from "../../puzzle-geometry/pgPuzzles.ts";
+import type { ExperimentalStickeringMask } from "../../puzzles/cubing-private/index.ts";
 import type { ExperimentalStickering } from "..";
-import { RenderScheduler } from "../controllers/RenderScheduler";
-import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
-import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
-import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp";
-import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
-import type { HintFaceletsElevationRequest } from "../model/props/puzzle/display/HintFaceletsElevationProp";
-import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
-import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
-import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
-import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
-import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp";
-import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
-import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
+import { RenderScheduler } from "../controllers/RenderScheduler.ts";
+import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController.ts";
+import { TwistyPlayerController } from "../controllers/TwistyPlayerController.ts";
+import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp.ts";
+import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp.ts";
+import type { HintFaceletsElevationRequest } from "../model/props/puzzle/display/HintFaceletsElevationProp.ts";
+import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp.ts";
+import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp.ts";
+import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp.ts";
+import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp.ts";
+import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp.ts";
+import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp.ts";
+import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp.ts";
 import type {
   ColorScheme,
   ColorSchemeWithAuto,
-} from "../model/props/viewer/ColorSchemeRequestProp";
+} from "../model/props/viewer/ColorSchemeRequestProp.ts";
 import {
   type ControlPanelThemeWithAuto,
   controlsLocations,
-} from "../model/props/viewer/ControlPanelProp";
-import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
-import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
-import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
-import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
-import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
-import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
-import type { Twisty3DVantage } from "./3D/Twisty3DVantage";
-import { ClassListManager } from "./ClassListManager";
-import { TwistyButtons } from "./control-panel/TwistyButtons";
-import { TwistyScrubber } from "./control-panel/TwistyScrubber";
-import { InitialValueTracker } from "./InitialValueTracker";
-import { customElementsShim } from "./node-custom-element-shims";
-import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
-import { twistyPlayerCSS } from "./TwistyPlayer.css";
-import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
+} from "../model/props/viewer/ControlPanelProp.ts";
+import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp.ts";
+import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp.ts";
+import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp.ts";
+import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper.ts";
+import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle.ts";
+import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper.ts";
+import type { Twisty3DVantage } from "./3D/Twisty3DVantage.ts";
+import { ClassListManager } from "./ClassListManager.ts";
+import { TwistyButtons } from "./control-panel/TwistyButtons.ts";
+import { TwistyScrubber } from "./control-panel/TwistyScrubber.ts";
+import { InitialValueTracker } from "./InitialValueTracker.ts";
+import { customElementsShim } from "./node-custom-element-shims.ts";
+import { downloadURL, getDefaultFilename, screenshot } from "./screenshot.ts";
+import { twistyPlayerCSS } from "./TwistyPlayer.css.ts";
+import { TwistyPlayerSettable } from "./TwistyPlayerSettable.ts";
 
 const DATA_ATTRIBUTE_PREFIX = "data-";
 

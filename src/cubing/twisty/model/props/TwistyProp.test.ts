@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { SimpleTwistyPropSource, TwistyPropDerived } from "./TwistyProp";
+import { SimpleTwistyPropSource, TwistyPropDerived } from "./TwistyProp.ts";
 
 test("can set, get, and save prop values", async () => {
   class NumProp extends SimpleTwistyPropSource<number> {

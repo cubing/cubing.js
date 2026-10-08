@@ -1,7 +1,7 @@
-import { eventInfo } from "../../../../cubing/puzzles";
-import { randomScrambleForEvent } from "../../../../cubing/scramble";
-import "../../../../cubing/twisty";
-import type { TwistyPlayer } from "../../../../cubing/twisty";
+import { eventInfo } from "../../../../cubing/puzzles/index.ts";
+import { randomScrambleForEvent } from "../../../../cubing/scramble/index.ts";
+import "../../../../cubing/twisty/index.ts";
+import type { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
 
 const select = document.querySelector("select") as HTMLSelectElement;
 const scrambleStringDiv = document.querySelector(

@@ -1,7 +1,7 @@
 import {
   customElementsShim,
   HTMLElementShim,
-} from "./node-custom-element-shims";
+} from "./node-custom-element-shims.ts";
 
 // - Wrapped element
 //   - Shadow root

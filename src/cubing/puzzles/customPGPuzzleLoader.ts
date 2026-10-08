@@ -1,11 +1,11 @@
-import type { KPuzzle } from "../kpuzzle";
-import type { PuzzleGeometry } from "../puzzle-geometry";
-import type { PuzzleDescriptionString } from "../puzzle-geometry/pgPuzzles";
+import type { KPuzzle } from "../kpuzzle/index.ts";
+import type { PuzzleGeometry } from "../puzzle-geometry/index.ts";
+import type { PuzzleDescriptionString } from "../puzzle-geometry/pgPuzzles.ts";
 import {
   asyncGetKPuzzle,
   puzzleSpecificSimplifyOptionsPromise,
-} from "./async/async-pg3d";
-import type { PuzzleLoader } from "./PuzzleLoader";
+} from "./async/async-pg3d.ts";
+import type { PuzzleLoader } from "./PuzzleLoader.ts";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function descAsyncGetPuzzleGeometry(
@@ -19,7 +19,7 @@ export async function descAsyncGetPuzzleGeometry(
     addRotations?: boolean;
   },
 ): Promise<PuzzleGeometry> {
-  const puzzleGeometry = await import("../puzzle-geometry");
+  const puzzleGeometry = await import("../puzzle-geometry/index.ts");
   return puzzleGeometry.getPuzzleGeometryByDesc(desc, {
     allMoves: options?.allMoves ?? true,
     orientCenters: options?.orientCenters ?? true,

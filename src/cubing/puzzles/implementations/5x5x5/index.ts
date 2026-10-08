@@ -1,8 +1,8 @@
-import { CubePGPuzzleLoader, PGPuzzleLoader } from "../../async/async-pg3d";
-import { getCached } from "../../async/lazy-cached";
-import { bigCubePuzzleOrientation } from "../../cubing-private";
-import type { PuzzleLoader } from "../../PuzzleLoader";
-import { cube4x4x4And5x5x5KeyMapping } from "../4x4x4/cube4x4x4And5x5x5KeyMapping";
+import { CubePGPuzzleLoader, PGPuzzleLoader } from "../../async/async-pg3d.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import { bigCubePuzzleOrientation } from "../../cubing-private/index.ts";
+import type { PuzzleLoader } from "../../PuzzleLoader.ts";
+import { cube4x4x4And5x5x5KeyMapping } from "../4x4x4/cube4x4x4And5x5x5KeyMapping.ts";
 
 const cube5x5x5: PuzzleLoader = new CubePGPuzzleLoader({
   id: "5x5x5",

@@ -1,9 +1,9 @@
-import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/pgPuzzles";
+import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/pgPuzzles.ts";
 import {
   NO_VALUE,
   type NoValueType,
   SimpleTwistyPropSource,
-} from "../../TwistyProp";
+} from "../../TwistyProp.ts";
 
 export class PGPuzzleDescriptionStringProp extends SimpleTwistyPropSource<
   PuzzleDescriptionString | NoValueType

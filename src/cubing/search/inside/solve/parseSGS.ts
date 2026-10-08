@@ -1,5 +1,5 @@
-import { Alg } from "../../../alg";
-import type { KPuzzle, KTransformation } from "../../../kpuzzle";
+import { Alg } from "../../../alg/index.ts";
+import type { KPuzzle, KTransformation } from "../../../kpuzzle/index.ts";
 
 interface PieceReference {
   orbitName: string;

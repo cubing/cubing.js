@@ -1,7 +1,7 @@
 import {
   type ExperimentalProxyEvent,
   ExperimentalWebSocketProxyReceiver,
-} from "../../../../cubing/stream";
+} from "../../../../cubing/stream/index.ts";
 
 export class CallbackProxyReceiver extends ExperimentalWebSocketProxyReceiver {
   constructor(

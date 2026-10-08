@@ -1,1 +1,1 @@
-export { countLeavesInExpansionForSimultaneousMoveIndexer } from "../CountMoves";
+export { countLeavesInExpansionForSimultaneousMoveIndexer } from "../CountMoves.ts";

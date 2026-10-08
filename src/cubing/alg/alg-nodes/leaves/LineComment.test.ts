@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { LineComment } from "./LineComment";
+import { LineComment } from "./LineComment.ts";
 
 const expectedErrorMessage = "LineComment cannot contain newline";
 

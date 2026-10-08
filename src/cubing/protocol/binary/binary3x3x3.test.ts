@@ -1,12 +1,12 @@
 import { expect, test } from "bun:test";
-import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS";
-import { KPattern } from "../../kpuzzle/KPattern";
-import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
+import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS.ts";
+import { KPattern } from "../../kpuzzle/KPattern.ts";
+import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private/index.ts";
 import {
   reid3x3x3ToTwizzleBinary,
   twizzleBinaryToReid3x3x3,
-} from "./binary3x3x3";
-import { bufferToSpacedHex } from "./hex";
+} from "./binary3x3x3.ts";
+import { bufferToSpacedHex } from "./hex.ts";
 
 function patternForAlg(alg: string): KPattern {
   return experimental3x3x3KPuzzle.algToTransformation(alg).toKPattern();

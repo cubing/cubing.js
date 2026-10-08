@@ -1,16 +1,16 @@
 /* tslint:disable no-bitwise */
 
 import { Quaternion } from "three/src/math/Quaternion.js";
-import { Move } from "../../alg";
-import { KPattern, type KPuzzle } from "../../kpuzzle";
-import { puzzles } from "../../puzzles";
+import { Move } from "../../alg/index.ts";
+import { KPattern, type KPuzzle } from "../../kpuzzle/index.ts";
+import { puzzles } from "../../puzzles/index.ts";
 import {
   importKey,
   unsafeDecryptBlock,
-} from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
-import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
-import { getPatternData } from "./common";
+} from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes.ts";
+import { debugLog } from "../debug.ts";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle.ts";
+import { getPatternData } from "./common.ts";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;

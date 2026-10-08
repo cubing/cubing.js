@@ -1,7 +1,7 @@
-import { exposeAPI } from "./worker-guard";
+import { exposeAPI } from "./worker-guard.ts";
 
 if (exposeAPI.expose) {
-  void import("../inside").then(() => {
+  void import("../inside/index.ts").then(() => {
     // Workaround for `node`'
     if (globalThis.postMessage) {
       globalThis.postMessage("comlink-exposed"); // TODO: remove this

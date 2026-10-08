@@ -1,5 +1,5 @@
-import { arrayEquals } from "./helpers";
-import { SimpleTwistyPropSource } from "./props/TwistyProp";
+import { arrayEquals } from "./helpers.ts";
+import { SimpleTwistyPropSource } from "./props/TwistyProp.ts";
 
 interface UserVisibleError {
   errors: string[];

@@ -1,6 +1,6 @@
 import type { Tagged } from "type-fest";
-import type { Move } from "../../alg";
-import type { KPattern } from "../../kpuzzle/KPattern";
+import type { Move } from "../../alg/index.ts";
+import type { KPattern } from "../../kpuzzle/KPattern.ts";
 
 export type MillisecondTimestamp = Tagged<
   DOMHighResTimeStamp,

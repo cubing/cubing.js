@@ -1,7 +1,7 @@
 import type {
   KPuzzleDefinition,
   KTransformationOrbitData,
-} from "../../../../kpuzzle";
+} from "../../../../kpuzzle/index.ts";
 
 const p18 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 const o18 = new Array(18).fill(0);

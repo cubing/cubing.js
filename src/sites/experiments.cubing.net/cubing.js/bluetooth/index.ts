@@ -1,11 +1,14 @@
-import { Alg } from "../../../../cubing/alg";
+import { Alg } from "../../../../cubing/alg/index.ts";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   type MoveEvent,
   type OrientationEvent,
-} from "../../../../cubing/bluetooth";
-import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
+} from "../../../../cubing/bluetooth/index.ts";
+import {
+  TwistyAlgViewer,
+  TwistyPlayer,
+} from "../../../../cubing/twisty/index.ts";
 
 (globalThis as any).puzzle = null;
 

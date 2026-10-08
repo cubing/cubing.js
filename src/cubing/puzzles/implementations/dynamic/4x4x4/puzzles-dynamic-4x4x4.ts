@@ -1,1 +1,1 @@
-export * from "./4x4x4-ll.kpuzzle.svg";
+export * from "./4x4x4-ll.kpuzzle.svg.ts";

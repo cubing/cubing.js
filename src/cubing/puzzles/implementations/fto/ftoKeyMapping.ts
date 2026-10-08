@@ -1,4 +1,4 @@
-import { type AlgLeaf, Move, Pause } from "../../../alg";
+import { type AlgLeaf, Move, Pause } from "../../../alg/index.ts";
 
 export const ftoKeyMapping: { [key: number | string]: AlgLeaf } = {
   KeyI: new Move("R"),

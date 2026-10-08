@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 
-import { cube3x3x3 } from "../../puzzles";
-import { Alg } from "../Alg";
-import { Move } from "../alg-nodes";
-import { experimentalAppendMove } from "./append";
+import { cube3x3x3 } from "../../puzzles/index.ts";
+import { Alg } from "../Alg.ts";
+import { Move } from "../alg-nodes/index.ts";
+import { experimentalAppendMove } from "./append.ts";
 
 test("can append moves", () => {
   expect(

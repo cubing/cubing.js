@@ -1,4 +1,4 @@
-import { exposeAPI } from "./worker-guard";
+import { exposeAPI } from "./worker-guard.ts";
 
 export function searchWorkerURLImportMetaResolve(): string {
   // Note:

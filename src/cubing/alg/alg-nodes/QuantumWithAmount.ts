@@ -1,7 +1,7 @@
-import type { Repeatable } from "../common";
-import { type IterationDirection, toggleDirection } from "../iteration";
-import { MAX_INT, MAX_INT_DESCRIPTION, MIN_INT } from "../limits";
-import type { AlgLeaf } from "./AlgNode";
+import type { Repeatable } from "../common.ts";
+import { type IterationDirection, toggleDirection } from "../iteration.ts";
+import { MAX_INT, MAX_INT_DESCRIPTION, MIN_INT } from "../limits.ts";
+import type { AlgLeaf } from "./AlgNode.ts";
 
 export class QuantumWithAmount<Q extends Repeatable> {
   readonly quantum: Q;

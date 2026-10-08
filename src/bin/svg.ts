@@ -29,7 +29,7 @@ import { argv } from "node:process";
 import { argument, choice, object, option, withDefault } from "@optique/core";
 import { run } from "@optique/run";
 import { puzzles } from "cubing/puzzles";
-import { packageVersion } from "../metadata/packageVersion";
+import { packageVersion } from "../metadata/packageVersion.ts";
 
 const args = run(
   object({

@@ -1,13 +1,13 @@
-import type { Alg } from "./Alg";
-import type { AlgNode } from "./alg-nodes/AlgNode";
-import { Commutator } from "./alg-nodes/containers/Commutator";
-import { Conjugate } from "./alg-nodes/containers/Conjugate";
-import { Grouping } from "./alg-nodes/containers/Grouping";
-import { LineComment } from "./alg-nodes/leaves/LineComment";
-import { Move } from "./alg-nodes/leaves/Move";
-import { Newline } from "./alg-nodes/leaves/Newline";
-import { Pause } from "./alg-nodes/leaves/Pause";
-import type { Comparable } from "./common";
+import type { Alg } from "./Alg.ts";
+import type { AlgNode } from "./alg-nodes/AlgNode.ts";
+import { Commutator } from "./alg-nodes/containers/Commutator.ts";
+import { Conjugate } from "./alg-nodes/containers/Conjugate.ts";
+import { Grouping } from "./alg-nodes/containers/Grouping.ts";
+import { LineComment } from "./alg-nodes/leaves/LineComment.ts";
+import { Move } from "./alg-nodes/leaves/Move.ts";
+import { Newline } from "./alg-nodes/leaves/Newline.ts";
+import { Pause } from "./alg-nodes/leaves/Pause.ts";
+import type { Comparable } from "./common.ts";
 
 function dispatch<DataDown, DataAlgUp, DataAlgNodeUp>(
   t: TraversalDownUp<DataDown, DataAlgUp, DataAlgNodeUp>,

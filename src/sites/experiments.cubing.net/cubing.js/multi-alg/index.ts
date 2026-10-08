@@ -1,7 +1,10 @@
-import { Alg, LineComment, Newline } from "../../../../cubing/alg";
-import { puzzles } from "../../../../cubing/puzzles";
-import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
-import { type PuzzleID, TwistyPlayer } from "../../../../cubing/twisty";
+import { Alg, LineComment, Newline } from "../../../../cubing/alg/index.ts";
+import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private/index.ts";
+import { puzzles } from "../../../../cubing/puzzles/index.ts";
+import {
+  type PuzzleID,
+  TwistyPlayer,
+} from "../../../../cubing/twisty/index.ts";
 
 const algsTextarea = document.querySelector("#algs") as HTMLTextAreaElement;
 if (localStorage["multi-alg-textarea"]) {

@@ -4,11 +4,11 @@ import {
   type ExperimentalPuzzleCutDescription,
   type ExperimentalPuzzleCutType,
   type ExperimentalPuzzleDescription,
-} from "../../../cubing/puzzle-geometry";
+} from "../../../cubing/puzzle-geometry/index.ts";
 import type {
   PuzzleBaseShape,
   PuzzleCutType,
-} from "../../../cubing/puzzle-geometry/PuzzleGeometry";
+} from "../../../cubing/puzzle-geometry/PuzzleGeometry.ts";
 
 const sqrt = Math.sqrt.bind(Math);
 

@@ -1,13 +1,13 @@
-import { DEGREES_PER_RADIAN } from "../../../views/3D/TAU";
-import type { PuzzleID } from "../puzzle/structure/PuzzleIDRequestProp";
-import { TwistyPropDerived } from "../TwistyProp";
+import { DEGREES_PER_RADIAN } from "../../../views/3D/TAU.ts";
+import type { PuzzleID } from "../puzzle/structure/PuzzleIDRequestProp.ts";
+import { TwistyPropDerived } from "../TwistyProp.ts";
 import {
   type CoordinateDegrees,
   type OrbitCoordinates,
   type OrbitCoordinatesRequest,
   orbitCoordinatesEqual,
-} from "./OrbitCoordinatesRequestProp";
-import type { VisualizationStrategy } from "./VisualizationStrategyProp";
+} from "./OrbitCoordinatesRequestProp.ts";
+import type { VisualizationStrategy } from "./VisualizationStrategyProp.ts";
 
 interface OrbitCoordinatesPropInputs {
   orbitCoordinatesRequest: OrbitCoordinatesRequest;

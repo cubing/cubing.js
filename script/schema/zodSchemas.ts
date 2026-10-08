@@ -48,8 +48,8 @@ import type {
   KPuzzleOrbitDefinition,
   KTransformationData,
   KTransformationOrbitData,
-} from "../../src/cubing/kpuzzle";
-import type { KPuzzleDefinitionJSON } from "../../src/cubing/kpuzzle/KPuzzleDefinitionJSON";
+} from "../../src/cubing/kpuzzle/index.ts";
+import type { KPuzzleDefinitionJSON } from "../../src/cubing/kpuzzle/KPuzzleDefinitionJSON.ts";
 
 const ZodKPatternOrbitData = toZod<KPatternOrbitData>()(
   object({

@@ -1,5 +1,5 @@
-import { Alg } from "../../../../cubing/alg";
-import type { KPattern, KPuzzle } from "../../../../cubing/kpuzzle";
+import { Alg } from "../../../../cubing/alg/index.ts";
+import type { KPattern, KPuzzle } from "../../../../cubing/kpuzzle/index.ts";
 
 const postJSONInit: RequestInit = {
   method: "POST",

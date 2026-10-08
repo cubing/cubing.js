@@ -1,6 +1,6 @@
-import { Alg, Move as AlgNode, Move } from "../../alg";
-import { cube3x3x3 } from "../../puzzles";
-import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
+import { Alg, Move as AlgNode, Move } from "../../alg/index.ts";
+import { cube3x3x3 } from "../../puzzles/index.ts";
+import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle.ts";
 
 // TODO: Remove this. It's only used for debugging.
 function buf2hex(buffer: ArrayBuffer | Uint8Array): string {

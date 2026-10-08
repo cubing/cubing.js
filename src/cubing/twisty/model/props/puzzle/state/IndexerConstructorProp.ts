@@ -1,16 +1,16 @@
-import type { Alg } from "../../../../../alg";
-import type { KPuzzle } from "../../../../../kpuzzle";
-import { countLeavesInExpansionForSimultaneousMoveIndexer } from "../../../../../notation/CountMoves";
-import type { AlgIndexer } from "../../../..";
-import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer";
-import { SimultaneousMoveIndexer } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexer";
-import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { VisualizationStrategy } from "../../viewer/VisualizationStrategyProp";
-import type { PuzzleID } from "../structure/PuzzleIDRequestProp";
-import type { AlgWithIssues } from "./AlgProp";
-import type { AnimationTimelineLeaves } from "./AnimationTimelineLeavesRequestProp";
-import type { IndexerStrategyName } from "./IndexerConstructorRequestProp";
+import type { Alg } from "../../../../../alg/index.ts";
+import type { KPuzzle } from "../../../../../kpuzzle/index.ts";
+import { countLeavesInExpansionForSimultaneousMoveIndexer } from "../../../../../notation/CountMoves.ts";
+import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer.ts";
+import { SimultaneousMoveIndexer } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexer.ts";
+import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer.ts";
+import type { AlgIndexer } from "../../../../index.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { VisualizationStrategy } from "../../viewer/VisualizationStrategyProp.ts";
+import type { PuzzleID } from "../structure/PuzzleIDRequestProp.ts";
+import type { AlgWithIssues } from "./AlgProp.ts";
+import type { AnimationTimelineLeaves } from "./AnimationTimelineLeavesRequestProp.ts";
+import type { IndexerStrategyName } from "./IndexerConstructorRequestProp.ts";
 
 export type IndexerConstructor = new (
   kpuzzle: KPuzzle,

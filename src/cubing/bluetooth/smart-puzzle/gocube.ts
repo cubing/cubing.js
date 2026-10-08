@@ -1,7 +1,7 @@
 import { Quaternion } from "three/src/math/Quaternion.js";
-import { Alg, experimentalAppendMove, Move } from "../../alg";
-import { debugLog } from "../debug";
-import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import { Alg, experimentalAppendMove, Move } from "../../alg/index.ts";
+import { debugLog } from "../debug.ts";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle.ts";
 
 const UUIDs = {
   goCubeService: "6e400001-b5a3-f393-e0a9-e50e24dcca9e",

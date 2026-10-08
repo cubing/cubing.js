@@ -1,24 +1,24 @@
-import { URLProp } from "./props/general/URLProp";
-import { FaceletScaleProp } from "./props/puzzle/display/FaceletScaleProp";
-import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
-import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
-import { HintFaceletsElevationProp } from "./props/puzzle/display/HintFaceletsElevationProp";
-import { InitialHintFaceletsAnimationProp } from "./props/puzzle/display/InitialHintFaceletsAnimationProp";
-import { SpriteProp } from "./props/puzzle/display/SpriteProp";
-import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp";
-import { StickeringMaskRequestProp } from "./props/puzzle/display/StickeringMaskRequestProp";
-import { StickeringRequestProp } from "./props/puzzle/display/StickeringRequestProp";
-import { DragInputProp } from "./props/puzzle/state/DragInputProp";
-import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions";
-import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
-import { BackgroundProp } from "./props/viewer/BackgroundProp";
-import { ColorSchemeProp } from "./props/viewer/ColorSchemeProp";
-import { ColorSchemeRequestProp } from "./props/viewer/ColorSchemeRequestProp";
-import { DOMElementReferenceProp } from "./props/viewer/DOMElementReferenceProp";
-import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
-import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
-import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
-import type { TwistyPlayerModel } from "./TwistyPlayerModel";
+import { URLProp } from "./props/general/URLProp.ts";
+import { FaceletScaleProp } from "./props/puzzle/display/FaceletScaleProp.ts";
+import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp.ts";
+import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp.ts";
+import { HintFaceletsElevationProp } from "./props/puzzle/display/HintFaceletsElevationProp.ts";
+import { InitialHintFaceletsAnimationProp } from "./props/puzzle/display/InitialHintFaceletsAnimationProp.ts";
+import { SpriteProp } from "./props/puzzle/display/SpriteProp.ts";
+import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp.ts";
+import { StickeringMaskRequestProp } from "./props/puzzle/display/StickeringMaskRequestProp.ts";
+import { StickeringRequestProp } from "./props/puzzle/display/StickeringRequestProp.ts";
+import { DragInputProp } from "./props/puzzle/state/DragInputProp.ts";
+import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions.ts";
+import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp.ts";
+import { BackgroundProp } from "./props/viewer/BackgroundProp.ts";
+import { ColorSchemeProp } from "./props/viewer/ColorSchemeProp.ts";
+import { ColorSchemeRequestProp } from "./props/viewer/ColorSchemeRequestProp.ts";
+import { DOMElementReferenceProp } from "./props/viewer/DOMElementReferenceProp.ts";
+import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit.ts";
+import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp.ts";
+import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp.ts";
+import type { TwistyPlayerModel } from "./TwistyPlayerModel.ts";
 
 export class TwistySceneModel {
   // Depth 0

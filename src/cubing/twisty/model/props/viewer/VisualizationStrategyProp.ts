@@ -1,6 +1,6 @@
-import type { PuzzleID } from "../../..";
-import { TwistyPropDerived } from "../TwistyProp";
-import type { VisualizationFormatWithAuto } from "./VisualizationProp";
+import type { PuzzleID } from "../../../index.ts";
+import { TwistyPropDerived } from "../TwistyProp.ts";
+import type { VisualizationFormatWithAuto } from "./VisualizationProp.ts";
 
 type VisualizationStrategyPropInputs = {
   visualizationRequest: VisualizationFormatWithAuto;

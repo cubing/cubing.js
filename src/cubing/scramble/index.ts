@@ -9,4 +9,4 @@
 export {
   deriveScrambleForEvent as experimentalDeriveScrambleForEvent,
   randomScrambleForEvent,
-} from "../search/cubing-private";
+} from "../search/cubing-private/index.ts";

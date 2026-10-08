@@ -1,16 +1,16 @@
 // Include 3x3x3 in the main bundle for better performance.
-import type { ExperimentalStickering } from "../../../twisty";
-import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
-import { getCached } from "../../async/lazy-cached";
-import { experimental3x3x3KPuzzle } from "../../cubing-private";
-import type { AlgTransformData, PuzzleLoader } from "../../PuzzleLoader";
+import type { ExperimentalStickering } from "../../../twisty/index.ts";
+import { asyncGetPuzzleGeometry } from "../../async/async-pg3d.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import { experimental3x3x3KPuzzle } from "../../cubing-private/index.ts";
+import type { AlgTransformData, PuzzleLoader } from "../../PuzzleLoader.ts";
 import {
   cubeLikeStickeringList,
   cubeLikeStickeringMask,
-} from "../../stickerings/cube-like-stickerings";
-import type { StickeringMask } from "../../stickerings/mask";
-import { cube3x3x3KeyMapping } from "./cube3x3x3KeyMapping";
-import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
+} from "../../stickerings/cube-like-stickerings.ts";
+import type { StickeringMask } from "../../stickerings/mask.ts";
+import { cube3x3x3KeyMapping } from "./cube3x3x3KeyMapping.ts";
+import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications.ts";
 
 export const cubeMirrorTransforms: AlgTransformData = {
   "↔ Mirror (M)": {
@@ -64,15 +64,15 @@ export const cube3x3x3 = {
     return experimental3x3x3KPuzzle;
   }),
   svg: getCached(async () => {
-    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3.ts"))
       .cube3x3x3SVG;
   }),
   llSVG: getCached(async () => {
-    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3.ts"))
       .cube3x3x3LLSVG;
   }),
   llFaceSVG: getCached(async () => {
-    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3.ts"))
       .cube3x3x3LLFaceSVG;
   }),
   pg: getCached(async () => {

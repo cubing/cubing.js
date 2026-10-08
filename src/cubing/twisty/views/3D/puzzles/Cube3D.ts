@@ -14,26 +14,26 @@ import { Vector3 } from "three/src/math/Vector3.js";
 import { Group } from "three/src/objects/Group.js";
 import { Mesh } from "three/src/objects/Mesh.js";
 import type { Texture } from "three/src/textures/Texture.js";
-import type { KPuzzle } from "../../../../kpuzzle";
-import type { ExperimentalStickeringMask } from "../../../../puzzles/cubing-private";
+import type { KPuzzle } from "../../../../kpuzzle/index.ts";
+import type { ExperimentalStickeringMask } from "../../../../puzzles/cubing-private/index.ts";
 import type {
   FaceletMeshStickeringMask,
   StickeringMask,
-} from "../../../../puzzles/stickerings/mask";
+} from "../../../../puzzles/stickerings/mask.ts";
 import type {
   MillisecondTimestamp,
   PuzzlePosition,
-} from "../../../controllers/AnimationTypes";
-import { smootherStep } from "../../../controllers/easing";
-import type { FaceletScale } from "../../../model/props/puzzle/display/FaceletScaleProp";
+} from "../../../controllers/AnimationTypes.ts";
+import { smootherStep } from "../../../controllers/easing.ts";
+import type { FaceletScale } from "../../../model/props/puzzle/display/FaceletScaleProp.ts";
 import {
   type HintFaceletStyle,
   hintFaceletStyles,
-} from "../../../model/props/puzzle/display/HintFaceletProp";
-import type { InitialHintFaceletsAnimation } from "../../../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
-import { TAU } from "../TAU";
-import { haveStartedSharingRenderers } from "../Twisty3DVantage";
-import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
+} from "../../../model/props/puzzle/display/HintFaceletProp.ts";
+import type { InitialHintFaceletsAnimation } from "../../../model/props/puzzle/display/InitialHintFaceletsAnimationProp.ts";
+import { TAU } from "../TAU.ts";
+import { haveStartedSharingRenderers } from "../Twisty3DVantage.ts";
+import type { Twisty3DPuzzle } from "./Twisty3DPuzzle.ts";
 
 const svgLoader = new TextureLoader();
 

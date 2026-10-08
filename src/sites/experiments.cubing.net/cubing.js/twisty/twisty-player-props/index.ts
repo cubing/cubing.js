@@ -1,27 +1,27 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Alg } from "../../../../../cubing/alg";
-import { experimentalStickerings } from "../../../../../cubing/puzzles/cubing-private";
+import { Alg } from "../../../../../cubing/alg/index.ts";
+import { experimentalStickerings } from "../../../../../cubing/puzzles/cubing-private/index.ts";
 import {
   backViewLayouts,
   setTwistyDebug,
   TwistyPlayer,
-} from "../../../../../cubing/twisty";
-import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
-import { dragInputModes } from "../../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
-import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp";
-import { movePressInputNames } from "../../../../../cubing/twisty/model/props/puzzle/state/MovePressInputProp";
-import { setupToLocations } from "../../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
+} from "../../../../../cubing/twisty/index.ts";
+import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp.ts";
+import { dragInputModes } from "../../../../../cubing/twisty/model/props/puzzle/state/DragInputProp.ts";
+import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp.ts";
+import { movePressInputNames } from "../../../../../cubing/twisty/model/props/puzzle/state/MovePressInputProp.ts";
+import { setupToLocations } from "../../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp.ts";
 import {
   type PuzzleID,
   puzzleIDs,
-} from "../../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp";
-import { backgroundThemes } from "../../../../../cubing/twisty/model/props/viewer/BackgroundProp";
-import { controlsLocations } from "../../../../../cubing/twisty/model/props/viewer/ControlPanelProp";
-import { viewerLinkPages } from "../../../../../cubing/twisty/model/props/viewer/ViewerLinkProp";
-import { visualizationFormats } from "../../../../../cubing/twisty/model/props/viewer/VisualizationProp";
-import { TwistyPlayerDebugger } from "./TwistyPropDebugger";
+} from "../../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp.ts";
+import { backgroundThemes } from "../../../../../cubing/twisty/model/props/viewer/BackgroundProp.ts";
+import { controlsLocations } from "../../../../../cubing/twisty/model/props/viewer/ControlPanelProp.ts";
+import { viewerLinkPages } from "../../../../../cubing/twisty/model/props/viewer/ViewerLinkProp.ts";
+import { visualizationFormats } from "../../../../../cubing/twisty/model/props/viewer/VisualizationProp.ts";
+import { TwistyPlayerDebugger } from "./TwistyPropDebugger.ts";
 
 setTwistyDebug({ showRenderStats: true });
 

@@ -1,17 +1,17 @@
-import { Alg, Move } from "../../../../cubing/alg";
+import { Alg, Move } from "../../../../cubing/alg/index.ts";
 import {
   KPattern,
   type KPatternData,
   KPuzzle,
   type KPuzzleDefinition,
-} from "../../../../cubing/kpuzzle";
-import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
-import { experimentalSolveTwips } from "../../../../cubing/search";
-import type { SolveTwipsOptions } from "../../../../cubing/search/outside";
+} from "../../../../cubing/kpuzzle/index.ts";
+import { cube2x2x2, puzzles } from "../../../../cubing/puzzles/index.ts";
+import { experimentalSolveTwips } from "../../../../cubing/search/index.ts";
+import type { SolveTwipsOptions } from "../../../../cubing/search/outside.ts";
 import {
   solveTwipsServer,
   type TwipsServerClientOptions,
-} from "./twips-server";
+} from "./twips-server.ts";
 
 const LOCALSTORAGE_DEF = "twips/text-ui/def";
 const LOCALSTORAGE_SEARCH = "twips/text-ui/search";

@@ -1,6 +1,6 @@
-import { Move, QuantumMove } from "../../alg";
-import type { FaceNameSwizzler } from "../FaceNameSwizzler";
-import type { NotationMapper } from "./NotationMapper";
+import { Move, QuantumMove } from "../../alg/index.ts";
+import type { FaceNameSwizzler } from "../FaceNameSwizzler.ts";
+import type { NotationMapper } from "./NotationMapper.ts";
 
 export class FTONotationMapper implements NotationMapper {
   constructor(

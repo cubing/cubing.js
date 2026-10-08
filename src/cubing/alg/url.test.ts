@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 
-import { Alg } from "./Alg";
-import { experimentalAlgCubingNetLink } from "./url";
+import { Alg } from "./Alg.ts";
+import { experimentalAlgCubingNetLink } from "./url.ts";
 
 test("experimentalAlgCubingNetLink to generate proper URLs", () => {
   expect(

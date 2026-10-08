@@ -1,13 +1,13 @@
-import type { ExperimentalStickering, PuzzleID } from "../../twisty";
-import type { PuzzleLoader } from "../PuzzleLoader";
+import type { ExperimentalStickering, PuzzleID } from "../../twisty/index.ts";
+import type { PuzzleLoader } from "../PuzzleLoader.ts";
 import {
   type PieceSet,
   PieceStickering,
   PuzzleStickering,
   StickeringManager,
   type StickeringMask,
-} from "./mask";
-import { experimentalStickerings } from "./puzzle-stickerings";
+} from "./mask.ts";
+import { experimentalStickerings } from "./puzzle-stickerings.ts";
 
 export async function cubeLikeStickeringMask(
   puzzleLoader: PuzzleLoader,

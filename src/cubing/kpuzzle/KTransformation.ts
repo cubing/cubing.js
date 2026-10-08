@@ -1,15 +1,15 @@
-import type { Alg, Move } from "../alg";
+import type { Alg, Move } from "../alg/index.ts";
 import {
   invertTransformation,
   isTransformationDataIdentical,
   repeatTransformationUncached,
   transformationRepetitionOrder,
-} from "./calculate";
-import { combineTransformationData } from "./combine";
-import { constructIdentityTransformationDataUncached } from "./construct";
-import { KPattern } from "./KPattern";
-import type { KPuzzle, KTransformationSource } from "./KPuzzle";
-import type { KTransformationData } from "./KPuzzleDefinitionJSON";
+} from "./calculate.ts";
+import { combineTransformationData } from "./combine.ts";
+import { constructIdentityTransformationDataUncached } from "./construct.ts";
+import { KPattern } from "./KPattern.ts";
+import type { KPuzzle, KTransformationSource } from "./KPuzzle.ts";
+import type { KTransformationData } from "./KPuzzleDefinitionJSON.ts";
 
 export class KTransformation {
   constructor(

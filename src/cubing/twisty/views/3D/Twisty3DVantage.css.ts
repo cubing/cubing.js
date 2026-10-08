@@ -4,7 +4,7 @@
 // content` is a good fix for this, but there is no indication that Safari will
 // support it soon. https://developer.mozilla.org/en-US/docs/Web/CSS/contain
 
-import { cssStyleSheetShim } from "../node-custom-element-shims";
+import { cssStyleSheetShim } from "../node-custom-element-shims.ts";
 
 export const twisty3DVantageCSS = new cssStyleSheetShim();
 twisty3DVantageCSS.replaceSync(

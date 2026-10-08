@@ -1,5 +1,5 @@
-import type { PuzzleSpecificSimplifyOptions } from "../../../alg";
-import { Move, QuantumMove } from "../../../alg";
+import type { PuzzleSpecificSimplifyOptions } from "../../../alg/index.ts";
+import { Move, QuantumMove } from "../../../alg/index.ts";
 
 enum Axis {
   X = "x axis",

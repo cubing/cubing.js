@@ -1,15 +1,15 @@
-import { Alg } from "../Alg";
-import type { AlgNode } from "../alg-nodes/AlgNode";
-import { Commutator } from "../alg-nodes/containers/Commutator";
-import { Conjugate } from "../alg-nodes/containers/Conjugate";
-import { Grouping } from "../alg-nodes/containers/Grouping";
-import type { LineComment } from "../alg-nodes/leaves/LineComment";
-import { Move } from "../alg-nodes/leaves/Move";
-import type { Newline } from "../alg-nodes/leaves/Newline";
-import { Pause } from "../alg-nodes/leaves/Pause";
-import { functionFromTraversal, TraversalDownUp } from "../traversal";
-import { experimentalAppendNode } from "./append";
-import { AppendOptionsHelper, type SimplifyOptions } from "./options";
+import { Alg } from "../Alg.ts";
+import type { AlgNode } from "../alg-nodes/AlgNode.ts";
+import { Commutator } from "../alg-nodes/containers/Commutator.ts";
+import { Conjugate } from "../alg-nodes/containers/Conjugate.ts";
+import { Grouping } from "../alg-nodes/containers/Grouping.ts";
+import type { LineComment } from "../alg-nodes/leaves/LineComment.ts";
+import { Move } from "../alg-nodes/leaves/Move.ts";
+import type { Newline } from "../alg-nodes/leaves/Newline.ts";
+import { Pause } from "../alg-nodes/leaves/Pause.ts";
+import { functionFromTraversal, TraversalDownUp } from "../traversal.ts";
+import { experimentalAppendNode } from "./append.ts";
+import { AppendOptionsHelper, type SimplifyOptions } from "./options.ts";
 
 // TODO: Test that inverses are bijections.
 class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {

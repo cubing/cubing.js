@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
-import { Alg } from "../../../../alg";
-import type { MillisecondTimestamp } from "../../AnimationTypes";
-import { simulMoves } from "./simul-moves";
+import { Alg } from "../../../../alg/index.ts";
+import type { MillisecondTimestamp } from "../../AnimationTypes.ts";
+import { simulMoves } from "./simul-moves.ts";
 
 test("Ignores comments and newlines when determining simultaneous moves", () => {
   const leavesWithRanges = simulMoves(

@@ -1,13 +1,13 @@
 import { LazyPromise } from "@cubing/lazy-promise";
-import type { Alg } from "../../../alg";
+import type { Alg } from "../../../alg/index.ts";
 import type {
   KPattern,
   KPatternData,
   KPuzzleDefinition,
-} from "../../../kpuzzle";
+} from "../../../kpuzzle/index.ts";
 
 export const twipsPromise = new LazyPromise(
-  async () => import("../../../vendor/mpl/twips"),
+  async () => import("../../../vendor/mpl/twips/index.js"),
 );
 
 export interface TwipsOptions {

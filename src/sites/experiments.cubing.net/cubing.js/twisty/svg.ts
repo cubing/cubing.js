@@ -1,4 +1,4 @@
-import { TwistyPlayer } from "../../../../cubing/twisty";
+import { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
 
 globalThis.addEventListener("DOMContentLoaded", () => {
   const twistyPlayer = new TwistyPlayer({

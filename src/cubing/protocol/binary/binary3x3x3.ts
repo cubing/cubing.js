@@ -1,17 +1,17 @@
-import { KPattern, type KPatternData } from "../../kpuzzle";
+import { KPattern, type KPatternData } from "../../kpuzzle/index.ts";
 import {
   experimental3x3x3KPuzzle,
   experimentalNormalize3x3x3Orientation,
   experimentalPuzzleOrientation3x3x3Cache,
   experimentalPuzzleOrientation3x3x3Idx,
-} from "../../puzzles/cubing-private";
+} from "../../puzzles/cubing-private/index.ts";
 import {
   identityPermutation,
   lexToPermutation,
   maskToOrientations,
   orientationsToMask,
   permutationToLex,
-} from "./orbit-indexing";
+} from "./orbit-indexing.ts";
 
 // TODO: combine with `orientPuzzle`?
 export function reorientPuzzle(

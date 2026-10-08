@@ -1,5 +1,8 @@
-import { BoundaryType, Direction } from "../../../controllers/AnimationTypes";
-import { TwistyPropSource } from "../TwistyProp";
+import {
+  BoundaryType,
+  Direction,
+} from "../../../controllers/AnimationTypes.ts";
+import { TwistyPropSource } from "../TwistyProp.ts";
 
 export type SimpleDirection = Direction.Forwards | Direction.Backwards;
 

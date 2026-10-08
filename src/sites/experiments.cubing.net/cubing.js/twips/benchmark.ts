@@ -1,4 +1,4 @@
-import { randomScrambleForEvent } from "../../../../cubing/search/outside";
+import { randomScrambleForEvent } from "../../../../cubing/search/outside.ts";
 
 const num = parseInt(
   new URL(location.href).searchParams.get("num") ?? "1000",

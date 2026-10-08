@@ -1,7 +1,7 @@
-import type { Alg } from "./Alg";
-import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
-import type { IterationDirection } from "./iteration";
-import type { ExperimentalSerializationOptions } from "./SerializationOptions";
+import type { Alg } from "./Alg.ts";
+import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode.ts";
+import type { IterationDirection } from "./iteration.ts";
+import type { ExperimentalSerializationOptions } from "./SerializationOptions.ts";
 
 let writeAlgDebugField = false;
 export function setAlgDebugField(debug: boolean): void {

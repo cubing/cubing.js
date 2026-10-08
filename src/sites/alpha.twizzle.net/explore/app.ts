@@ -2,20 +2,23 @@ import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   type MoveEvent,
-} from "../../../cubing/bluetooth";
-import { KTransformation } from "../../../cubing/kpuzzle";
+} from "../../../cubing/bluetooth/index.ts";
+import { KTransformation } from "../../../cubing/kpuzzle/index.ts";
 import {
   getPG3DNamedPuzzles,
   getPuzzleDescriptionString,
   type PuzzleGeometry,
-} from "../../../cubing/puzzle-geometry";
-import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/pgPuzzles";
-import type { PuzzleLoader } from "../../../cubing/puzzles";
-import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
-import { constructMoveCountDisplay } from "../../../cubing/twisty/cubing-private";
-import { constructTwistyPlayer } from "./twisty-player";
-import "./TwistyPuzzleDescriptionInput";
-import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
+} from "../../../cubing/puzzle-geometry/index.ts";
+import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/pgPuzzles.ts";
+import type { PuzzleLoader } from "../../../cubing/puzzles/index.ts";
+import { constructMoveCountDisplay } from "../../../cubing/twisty/cubing-private/index.ts";
+import type {
+  TwistyAlgEditor,
+  TwistyPlayer,
+} from "../../../cubing/twisty/index.ts";
+import { constructTwistyPlayer } from "./twisty-player.ts";
+import "./TwistyPuzzleDescriptionInput.ts";
+import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params.ts";
 
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;

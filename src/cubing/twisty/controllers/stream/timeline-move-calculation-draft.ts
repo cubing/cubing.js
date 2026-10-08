@@ -1,8 +1,8 @@
-import { Move, QuantumMove } from "../../../alg";
+import { Move, QuantumMove } from "../../../alg/index.ts";
 import type {
   MillisecondDuration,
   MillisecondTimestamp,
-} from "../AnimationTypes";
+} from "../AnimationTypes.ts";
 
 interface Event {
   timeStamp: MillisecondTimestamp;

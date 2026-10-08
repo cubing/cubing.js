@@ -1,7 +1,7 @@
-import { Alg } from "../../../../cubing/alg";
-import type { KPuzzle } from "../../../../cubing/kpuzzle";
-import { puzzles } from "../../../../cubing/puzzles";
-import { ExperimentalSVGAnimator } from "../../../../cubing/twisty";
+import { Alg } from "../../../../cubing/alg/index.ts";
+import type { KPuzzle } from "../../../../cubing/kpuzzle/index.ts";
+import { puzzles } from "../../../../cubing/puzzles/index.ts";
+import { ExperimentalSVGAnimator } from "../../../../cubing/twisty/index.ts";
 
 class SVGDisplay {
   private svg: ExperimentalSVGAnimator;

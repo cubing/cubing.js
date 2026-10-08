@@ -1,10 +1,10 @@
-import { isOrbitTransformationDataIdentityUncached } from "./calculate";
-import type { KPuzzleDefinition } from "./KPuzzleDefinition";
+import { isOrbitTransformationDataIdentityUncached } from "./calculate.ts";
+import type { KPuzzleDefinition } from "./KPuzzleDefinition.ts";
 import type {
   KPatternData,
   KPatternOrbitData,
   KTransformationData,
-} from "./KPuzzleDefinitionJSON";
+} from "./KPuzzleDefinitionJSON.ts";
 
 export function combineTransformationData(
   definition: KPuzzleDefinition,

@@ -1,7 +1,7 @@
-import type { KPattern } from "../../../../../kpuzzle/KPattern";
-import type { PuzzlePosition } from "../../../../controllers/AnimationTypes";
-import type { CurrentMoveInfo } from "../../../../controllers/indexer/AlgIndexer";
-import { TwistyPropDerived } from "../../TwistyProp";
+import type { KPattern } from "../../../../../kpuzzle/KPattern.ts";
+import type { PuzzlePosition } from "../../../../controllers/AnimationTypes.ts";
+import type { CurrentMoveInfo } from "../../../../controllers/indexer/AlgIndexer.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
 
 export interface LegacyPositionPropInputs {
   currentMoveInfo: CurrentMoveInfo;

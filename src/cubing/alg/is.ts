@@ -1,4 +1,4 @@
-import type { Alg } from "./Alg";
+import type { Alg } from "./Alg.ts";
 import {
   Commutator,
   Conjugate,
@@ -7,7 +7,7 @@ import {
   Move,
   Newline,
   Pause,
-} from "./alg-nodes";
+} from "./alg-nodes/index.ts";
 
 export function experimentalIs(
   v: any,

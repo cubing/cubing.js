@@ -1,5 +1,5 @@
-import type { MillisecondTimestamp } from "../../../controllers/AnimationTypes";
-import { type PromiseOrValue, SimpleTwistyPropSource } from "../TwistyProp";
+import type { MillisecondTimestamp } from "../../../controllers/AnimationTypes.ts";
+import { type PromiseOrValue, SimpleTwistyPropSource } from "../TwistyProp.ts";
 
 const smartTimestamps = {
   auto: true,

@@ -1,6 +1,6 @@
-import { eventInfo, twizzleEvents } from "../../../../cubing/puzzles";
-import { randomScrambleForEvent } from "../../../../cubing/scramble";
-import { TwistyPlayer } from "../../../../cubing/twisty";
+import { eventInfo, twizzleEvents } from "../../../../cubing/puzzles/index.ts";
+import { randomScrambleForEvent } from "../../../../cubing/scramble/index.ts";
+import { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
 
 const currentEventID =
   new URL(location.href).searchParams.get("event") ?? "333";

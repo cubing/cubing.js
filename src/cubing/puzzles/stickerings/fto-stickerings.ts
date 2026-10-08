@@ -1,12 +1,12 @@
-import type { ExperimentalStickering } from "../../twisty";
-import type { PuzzleLoader } from "../PuzzleLoader";
+import type { ExperimentalStickering } from "../../twisty/index.ts";
+import type { PuzzleLoader } from "../PuzzleLoader.ts";
 import {
   type PieceSet,
   PieceStickering,
   PuzzleStickering,
   StickeringManager,
   type StickeringMask,
-} from "./mask";
+} from "./mask.ts";
 
 export async function ftoStickering(
   puzzleLoader: PuzzleLoader,

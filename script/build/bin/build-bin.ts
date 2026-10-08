@@ -1,6 +1,6 @@
 import { type BuildResult, build, type PluginBuild } from "esbuild";
 import { Path } from "path-class";
-import { packageVersion } from "../../../src/metadata/packageVersion";
+import { packageVersion } from "../../../src/metadata/packageVersion.ts";
 
 const OUT_DIR = new Path("./dist/bin/");
 

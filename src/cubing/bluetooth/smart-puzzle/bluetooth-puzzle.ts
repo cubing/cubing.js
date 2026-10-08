@@ -1,12 +1,12 @@
-import type { KPattern } from "../../kpuzzle/KPattern";
+import type { KPattern } from "../../kpuzzle/KPattern.ts";
 import type {
   ExperimentalAlgLeafEvent,
   ExperimentalOrientationEvent,
-} from "../../stream";
+} from "../../stream/index.ts";
 import {
   BasicRotationTransformer,
   type StreamTransformer,
-} from "../transformer";
+} from "../transformer.ts";
 
 /******** BluetoothPuzzle ********/
 

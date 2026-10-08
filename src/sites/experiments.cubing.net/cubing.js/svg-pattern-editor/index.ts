@@ -1,8 +1,11 @@
-import { offsetMod } from "../../../../cubing/alg/cubing-private";
-import { KPattern, type KPuzzle } from "../../../../cubing/kpuzzle";
-import { type PuzzleLoader, puzzles } from "../../../../cubing/puzzles";
-import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG";
-import { defToString, patternToString } from "../3x3x3-formats/convert";
+import { offsetMod } from "../../../../cubing/alg/cubing-private/index.ts";
+import { KPattern, type KPuzzle } from "../../../../cubing/kpuzzle/index.ts";
+import {
+  type PuzzleLoader,
+  puzzles,
+} from "../../../../cubing/puzzles/index.ts";
+import { TwistyAnimatedSVG } from "../../../../cubing/twisty/views/2D/TwistyAnimatedSVG.ts";
+import { defToString, patternToString } from "../3x3x3-formats/convert.ts";
 
 interface PieceFacelets {
   [orientation: number]: Facelet;

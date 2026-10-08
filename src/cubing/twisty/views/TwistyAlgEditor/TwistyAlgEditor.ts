@@ -11,26 +11,26 @@
  * proper rewrite with a better model would be very welcome.
  */
 
-import type { ExperimentalParsed } from "../../../alg";
-import { Alg, type Move, type Pause } from "../../../alg";
+import type { ExperimentalParsed } from "../../../alg/index.ts";
+import { Alg, type Move, type Pause } from "../../../alg/index.ts";
 import {
   endCharIndexKey,
   type Parsed,
   startCharIndexKey,
-} from "../../../alg/parseAlg";
-import type { MillisecondTimestamp } from "../../controllers/AnimationTypes";
+} from "../../../alg/parseAlg.ts";
+import type { MillisecondTimestamp } from "../../controllers/AnimationTypes.ts";
 import type {
   AlgProp,
   AlgWithIssues,
-} from "../../model/props/puzzle/state/AlgProp";
-import type { CurrentLeavesSimplified } from "../../model/props/puzzle/state/CurrentLeavesSimplified";
-import { ClassListManager } from "../ClassListManager";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
-import { TwistyPlayer } from "../TwistyPlayer";
-import { type HighlightInfo, TwistyAlgEditorModel } from "./model";
-import { pasteIntoTextArea } from "./paste";
-import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";
+} from "../../model/props/puzzle/state/AlgProp.ts";
+import type { CurrentLeavesSimplified } from "../../model/props/puzzle/state/CurrentLeavesSimplified.ts";
+import { ClassListManager } from "../ClassListManager.ts";
+import { ManagedCustomElement } from "../ManagedCustomElement.ts";
+import { customElementsShim } from "../node-custom-element-shims.ts";
+import { TwistyPlayer } from "../TwistyPlayer.ts";
+import { type HighlightInfo, TwistyAlgEditorModel } from "./model.ts";
+import { pasteIntoTextArea } from "./paste.ts";
+import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css.ts";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";

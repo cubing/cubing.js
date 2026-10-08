@@ -1,9 +1,9 @@
 // face renaming mapper.  Accepts two face name remappers.  We
 // work between the two.
 
-import { Move, QuantumMove } from "../../alg";
-import type { FaceNameSwizzler } from "../FaceNameSwizzler";
-import type { NotationMapper } from "./NotationMapper";
+import { Move, QuantumMove } from "../../alg/index.ts";
+import type { FaceNameSwizzler } from "../FaceNameSwizzler.ts";
+import type { NotationMapper } from "./NotationMapper.ts";
 
 export class FaceRenamingMapper implements NotationMapper {
   constructor(

@@ -1,4 +1,4 @@
-import { Move } from "../alg";
+import { Move } from "../alg/index.ts";
 import type {
   KPatternData,
   KPatternOrbitData,
@@ -6,9 +6,9 @@ import type {
   KPuzzleOrbitDefinition,
   KTransformationData,
   KTransformationOrbitData,
-} from "../kpuzzle";
-import { NullMapper } from "./notation-mapping";
-import type { NotationMapper } from "./notation-mapping/NotationMapper";
+} from "../kpuzzle/index.ts";
+import { NullMapper } from "./notation-mapping/index.ts";
+import type { NotationMapper } from "./notation-mapping/NotationMapper.ts";
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
   factorial,
@@ -16,7 +16,7 @@ import type { NotationMapper } from "./notation-mapping/NotationMapper";
   lcm,
   Perm,
   zeros,
-} from "./Perm";
+} from "./Perm.ts";
 export class PGOrbitDef {
   constructor(
     public size: number,

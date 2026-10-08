@@ -1,5 +1,5 @@
-import { Move } from "../../alg";
-import type { KPuzzleDefinition } from "../../kpuzzle";
+import { Move } from "../../alg/index.ts";
+import type { KPuzzleDefinition } from "../../kpuzzle/index.ts";
 
 export interface NotationMapper {
   notationToInternal(move: Move): Move | null;

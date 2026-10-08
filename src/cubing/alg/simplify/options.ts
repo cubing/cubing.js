@@ -1,4 +1,4 @@
-import type { Move, QuantumMove } from "../alg-nodes";
+import type { Move, QuantumMove } from "../alg-nodes/index.ts";
 
 // TODO: enums?
 const DEFAULT_DIRECTIONAL = "any-direction";

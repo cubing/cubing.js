@@ -1,12 +1,16 @@
-import { Alg, experimentalEnsureAlg, type FlexibleAlgSource } from "../../Alg";
-import { AlgCommon, type Comparable } from "../../common";
-import { IterationDirection } from "../../iteration";
-import type { ExperimentalSerializationOptions } from "../../SerializationOptions";
+import {
+  Alg,
+  experimentalEnsureAlg,
+  type FlexibleAlgSource,
+} from "../../Alg.ts";
+import { AlgCommon, type Comparable } from "../../common.ts";
+import { IterationDirection } from "../../iteration.ts";
+import type { ExperimentalSerializationOptions } from "../../SerializationOptions.ts";
 import { Commutator, Conjugate } from "..";
-import type { AlgLeaf, AlgNode } from "../AlgNode";
-import { Move, QuantumMove } from "../leaves/Move";
-import type { Pause } from "../leaves/Pause";
-import { QuantumWithAmount } from "../QuantumWithAmount";
+import type { AlgLeaf, AlgNode } from "../AlgNode.ts";
+import { Move, QuantumMove } from "../leaves/Move.ts";
+import type { Pause } from "../leaves/Pause.ts";
+import { QuantumWithAmount } from "../QuantumWithAmount.ts";
 
 // This is a workaround for `jest`, which doesn't handle cycles of imports inside `cubing/alg`.
 // We need to lazy-initialize the reusable quantum moves for Square-1, so we create this wrapper for it.

@@ -1,6 +1,6 @@
 /* tslint:disable prefer-for-of */ // TODO
 
-import { Quat, solvethreeplanes } from "./Quat";
+import { Quat, solvethreeplanes } from "./Quat.ts";
 
 // Next we define a class that yields quaternion generators for each of
 // the five platonic solids.  The quaternion generators chosen are

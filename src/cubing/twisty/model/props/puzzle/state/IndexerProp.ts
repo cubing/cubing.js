@@ -1,9 +1,9 @@
-import type { KPuzzle } from "../../../../../kpuzzle";
-import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { AlgWithIssues } from "./AlgProp";
-import type { AnimationTimelineLeaves } from "./AnimationTimelineLeavesRequestProp";
-import type { IndexerConstructor } from "./IndexerConstructorProp";
+import type { KPuzzle } from "../../../../../kpuzzle/index.ts";
+import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { AlgWithIssues } from "./AlgProp.ts";
+import type { AnimationTimelineLeaves } from "./AnimationTimelineLeavesRequestProp.ts";
+import type { IndexerConstructor } from "./IndexerConstructorProp.ts";
 
 type IndexerPropInputs = {
   indexerConstructor: IndexerConstructor;

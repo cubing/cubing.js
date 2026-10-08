@@ -1,9 +1,9 @@
-import type { KPuzzle } from "../../../kpuzzle";
-import type { KPattern } from "../../../kpuzzle/KPattern";
+import type { KPuzzle } from "../../../kpuzzle/index.ts";
+import type { KPattern } from "../../../kpuzzle/KPattern.ts";
 import type {
   FaceletMeshStickeringMask,
   StickeringMask,
-} from "../../../puzzles/stickerings/mask"; // TODO
+} from "../../../puzzles/stickerings/mask.ts"; // TODO
 
 const xmlns = "http://www.w3.org/2000/svg";
 const DATA_COPY_ID_ATTRIBUTE = "data-copy-id";

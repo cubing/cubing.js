@@ -1,4 +1,4 @@
-import type { Alg } from "./Alg";
+import type { Alg } from "./Alg.ts";
 
 import type {
   Commutator,
@@ -8,8 +8,8 @@ import type {
   Move,
   Newline,
   Pause,
-} from "./alg-nodes";
-import { functionFromTraversal, TraversalUp } from "./traversal";
+} from "./alg-nodes/index.ts";
+import { functionFromTraversal, TraversalUp } from "./traversal.ts";
 
 export class ValidationError extends Error {}
 

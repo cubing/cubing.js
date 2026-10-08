@@ -10,7 +10,7 @@ import {
   type Newline,
   type Pause,
   TraversalUp,
-} from "../../../../cubing/alg";
+} from "../../../../cubing/alg/index.ts";
 
 class Extractor extends TraversalUp<Generator<[string, AlgNode | Alg]>> {
   *traverseAlg(alg: Alg): Generator<[string, AlgNode | Alg]> {

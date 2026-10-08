@@ -1,4 +1,4 @@
-import { cssStyleSheetShim } from "./node-custom-element-shims";
+import { cssStyleSheetShim } from "./node-custom-element-shims.ts";
 
 // TODO: figure out why `:host(twisty-player):fullscreen { background-color: white }` doesn't work.
 export const twistyPlayerCSS = new cssStyleSheetShim();

@@ -5,7 +5,7 @@ import { Path } from "path-class";
 import { default as packageJSON } from "../../../../../../package.json" with {
   type: "json",
 };
-import { DIST_LIB_CUBING } from "../../../../../build/common/paths";
+import { DIST_LIB_CUBING } from "../../../../../build/common/paths.ts";
 import { needPath } from "../../../../../lib/needPath.js";
 
 const { exports: packageJSONExports } = packageJSON;

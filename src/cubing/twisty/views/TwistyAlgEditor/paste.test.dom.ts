@@ -1,6 +1,6 @@
-import { expect } from "../../../../test/chai-workarounds";
+import { expect } from "../../../../test/chai-workarounds/index.ts";
 
-import { pasteIntoTextArea } from "./paste";
+import { pasteIntoTextArea } from "./paste.ts";
 
 function createMockTextArea(
   originalValue: string,

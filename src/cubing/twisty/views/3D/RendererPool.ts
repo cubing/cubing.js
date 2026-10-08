@@ -11,14 +11,14 @@
 
 // const sharedRenderer: WebGLRenderer | null = null;
 
-import { bulk3DCode } from "../../heavy-code-imports/3d";
+import { bulk3DCode } from "../../heavy-code-imports/3d.ts";
 import type {
   Camera,
   LinearSRGBColorSpace,
   Scene,
   WebGLRenderer,
-} from "../../heavy-code-imports/three-types";
-import { pixelRatio } from "../canvas";
+} from "../../heavy-code-imports/three-types.ts";
+import { pixelRatio } from "../canvas.ts";
 
 const renderers: Promise<WebGLRenderer>[] = [];
 

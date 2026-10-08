@@ -1,8 +1,8 @@
-import { CubePGPuzzleLoader, PGPuzzleLoader } from "../../async/async-pg3d";
-import { getCached } from "../../async/lazy-cached";
-import { bigCubePuzzleOrientation } from "../../cubing-private";
-import type { PuzzleLoader } from "../../PuzzleLoader";
-import { cube4x4x4And5x5x5KeyMapping } from "./cube4x4x4And5x5x5KeyMapping";
+import { CubePGPuzzleLoader, PGPuzzleLoader } from "../../async/async-pg3d.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import { bigCubePuzzleOrientation } from "../../cubing-private/index.ts";
+import type { PuzzleLoader } from "../../PuzzleLoader.ts";
+import { cube4x4x4And5x5x5KeyMapping } from "./cube4x4x4And5x5x5KeyMapping.ts";
 
 const cube4x4x4: PuzzleLoader = new CubePGPuzzleLoader({
   id: "4x4x4",
@@ -12,7 +12,7 @@ const cube4x4x4: PuzzleLoader = new CubePGPuzzleLoader({
 });
 
 cube4x4x4.llSVG = getCached(async () => {
-  return (await import("../dynamic/4x4x4/puzzles-dynamic-4x4x4"))
+  return (await import("../dynamic/4x4x4/puzzles-dynamic-4x4x4.ts"))
     .cube4x4x4LLSVG;
 });
 cube4x4x4.keyMapping = async () => cube4x4x4And5x5x5KeyMapping; // TODO: async loading

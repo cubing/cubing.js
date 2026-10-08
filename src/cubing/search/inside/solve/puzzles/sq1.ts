@@ -1,5 +1,5 @@
-import { Alg } from "../../../../alg";
-import { dynamicSq1Solver } from "./dynamic/sq1";
+import { Alg } from "../../../../alg/index.ts";
+import { dynamicSq1Solver } from "./dynamic/sq1/index.ts";
 
 export async function getRandomSquare1Scramble(): Promise<Alg> {
   return Alg.fromString(

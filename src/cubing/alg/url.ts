@@ -1,4 +1,4 @@
-import type { Alg } from "./Alg";
+import type { Alg } from "./Alg.ts";
 
 // This is not the most sophisticated scheme, but it has been used in production
 // at alg.cubing.net for years.

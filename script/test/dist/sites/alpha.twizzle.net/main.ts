@@ -1,7 +1,7 @@
 import { chromium, type Page } from "playwright";
-import type { TwistyPlayer } from "../../../../../src/cubing/twisty";
-import type { TwizzleExplorerApp } from "../../../../../src/sites/alpha.twizzle.net/explore/app";
-import { startServer } from "../../../../lib/experiments-server";
+import type { TwistyPlayer } from "../../../../../src/cubing/twisty/index.ts";
+import type { TwizzleExplorerApp } from "../../../../../src/sites/alpha.twizzle.net/explore/app.ts";
+import { startServer } from "../../../../lib/experiments-server/index.ts";
 
 const OPEN_REPL = false; // Not supported in `bun`: https://bun.com/reference/node/repl
 const HEADLESS = !OPEN_REPL;

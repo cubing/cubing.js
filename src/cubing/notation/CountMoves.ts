@@ -10,10 +10,10 @@ import {
   type Newline,
   type Pause,
   TraversalUp,
-} from "../alg";
-import type { PuzzleLoader } from "../puzzles";
-import { CommonMetric } from "./commonMetrics";
-import { costFactorsByMetric, countMove3x3x3 } from "./cube3x3x3Metrics";
+} from "../alg/index.ts";
+import type { PuzzleLoader } from "../puzzles/index.ts";
+import { CommonMetric } from "./commonMetrics.ts";
+import { costFactorsByMetric, countMove3x3x3 } from "./cube3x3x3Metrics.ts";
 
 /*
  *   For movecount, that understands puzzle rotations.  This code

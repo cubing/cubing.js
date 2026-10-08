@@ -3,7 +3,7 @@ import { barelyServe } from "barely-a-dev-server";
 import type { Plugin } from "esbuild";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
-import { needPath } from "../../lib/needPath";
+import { needPath } from "../../lib/needPath.ts";
 
 // TODO: debug the phantom crash in `printable-shell-command` so that we don't need this.
 const USE_PREEMPTIVE_CI_WORKAROUND = true;

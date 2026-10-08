@@ -1,6 +1,6 @@
 // Ponyfills for prefixing in Safari.
 
-import { globalSafeDocument } from "../document";
+import { globalSafeDocument } from "../document.ts";
 
 declare global {
   interface Document {

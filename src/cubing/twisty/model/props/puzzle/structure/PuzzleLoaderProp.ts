@@ -1,12 +1,16 @@
-import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/pgPuzzles";
-import { cube3x3x3, type PuzzleLoader, puzzles } from "../../../../../puzzles";
-import { experimentalCustomPGPuzzleLoader } from "../../../../../puzzles/cubing-private";
+import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/pgPuzzles.ts";
+import { experimentalCustomPGPuzzleLoader } from "../../../../../puzzles/cubing-private/index.ts";
+import {
+  cube3x3x3,
+  type PuzzleLoader,
+  puzzles,
+} from "../../../../../puzzles/index.ts";
 import {
   NO_VALUE,
   type NoValueType,
   TwistyPropDerived,
-} from "../../TwistyProp";
-import type { PuzzleID } from "./PuzzleIDRequestProp";
+} from "../../TwistyProp.ts";
+import type { PuzzleID } from "./PuzzleIDRequestProp.ts";
 
 8;
 interface PuzzleLoaderPropInputs {

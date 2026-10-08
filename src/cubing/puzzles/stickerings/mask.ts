@@ -1,7 +1,7 @@
 // TODO: figure out where to house this permanently.
 
-import type { Move } from "../../alg";
-import type { KPuzzle } from "../../kpuzzle";
+import type { Move } from "../../alg/index.ts";
+import type { KPuzzle } from "../../kpuzzle/index.ts";
 
 export type FaceletMeshStickeringMask =
   | "regular"

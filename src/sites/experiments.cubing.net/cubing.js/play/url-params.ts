@@ -1,11 +1,11 @@
-import { Alg } from "../../../../cubing/alg";
-import type { QuantumDirectionalCancellation } from "../../../../cubing/alg/cubing-private";
-import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
+import type { QuantumDirectionalCancellation } from "../../../../cubing/alg/cubing-private/index.ts";
+import { Alg } from "../../../../cubing/alg/index.ts";
+import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private/index.ts";
 import type {
   ExperimentalStickering,
   VisualizationFormat,
-} from "../../../../cubing/twisty";
-import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
+} from "../../../../cubing/twisty/index.ts";
+import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp.ts";
 
 // Trick from https://github.com/microsoft/TypeScript/issues/28046#issuecomment-480516434
 export type StringListAsType<T extends ReadonlyArray<unknown>> =

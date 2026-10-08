@@ -1,9 +1,9 @@
 import type { PerspectiveCamera } from "three/src/Three.js";
-import { bulk3DCode } from "../heavy-code-imports/3d";
-import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
-import { rawRenderPooled } from "./3D/RendererPool";
-import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper";
-import { setCameraFromOrbitCoordinates } from "./3D/Twisty3DVantage";
+import { bulk3DCode } from "../heavy-code-imports/3d.ts";
+import type { TwistyPlayerModel } from "../model/TwistyPlayerModel.ts";
+import { rawRenderPooled } from "./3D/RendererPool.ts";
+import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper.ts";
+import { setCameraFromOrbitCoordinates } from "./3D/Twisty3DVantage.ts";
 
 export interface TwistyPlayerScreenshot {
   dataURL: string;

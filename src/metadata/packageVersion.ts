@@ -5,4 +5,4 @@ export const packageVersion: string =
   // We don't want to pull in the dynamic code into the import graph, so we use
   // dynamic import here. This entire fallback expression should get compiled
   // out by `esbuild`.
-  (await import("./packageVersionDynamic")).version;
+  (await import("./packageVersionDynamic.ts")).version;

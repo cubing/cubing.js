@@ -1,6 +1,6 @@
-import { KPuzzle } from "../../../kpuzzle";
-import { getCached } from "../../async/lazy-cached";
-import type { PuzzleLoader } from "../../PuzzleLoader";
+import { KPuzzle } from "../../../kpuzzle/index.ts";
+import { getCached } from "../../async/lazy-cached.ts";
+import type { PuzzleLoader } from "../../PuzzleLoader.ts";
 
 export const melindas2x2x2x2: PuzzleLoader = {
   id: "melindas2x2x2x2",
@@ -10,12 +10,13 @@ export const melindas2x2x2x2: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+        (await import("../dynamic/side-events/puzzles-dynamic-side-events.ts"))
           .melindas2x2x2x2OrbitJSON,
       ),
   ),
   svg: getCached(async () => {
-    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
-      .melindas2x2x2x2OrbitSVG;
+    return (
+      await import("../dynamic/side-events/puzzles-dynamic-side-events.ts")
+    ).melindas2x2x2x2OrbitSVG;
   }),
 };

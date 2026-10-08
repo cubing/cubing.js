@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS";
-import { insideAPI, setDebugMeasurePerf } from "./api";
+import { SKIP_SLOW_TESTS } from "../../../test/SKIP_SLOW_TESTS.ts";
+import { insideAPI, setDebugMeasurePerf } from "./api.ts";
 
 // To keep things fast, we only test a subset of events.
 // Other events are handled by `make test-dist-lib-node-scramble-all-events`

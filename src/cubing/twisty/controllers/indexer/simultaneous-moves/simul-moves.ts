@@ -9,13 +9,13 @@ import {
   Newline,
   type Pause,
   TraversalUp,
-} from "../../../../alg";
-import type { AnimationTimelineLeaf } from "../../../model/props/puzzle/state/AnimationTimelineLeavesRequestProp";
+} from "../../../../alg/index.ts";
+import type { AnimationTimelineLeaf } from "../../../model/props/puzzle/state/AnimationTimelineLeavesRequestProp.ts";
 import type {
   MillisecondDuration,
   MillisecondTimestamp,
-} from "../../AnimationTypes";
-import { defaultDurationForAmount } from "../AlgDuration";
+} from "../../AnimationTypes.ts";
+import { defaultDurationForAmount } from "../AlgDuration.ts";
 
 export type AnimatedLeafAlgNode = Move | Pause;
 export interface LocalAnimLeavesWithRange {

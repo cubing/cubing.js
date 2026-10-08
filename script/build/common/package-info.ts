@@ -1,7 +1,7 @@
 import type { BuildOptions } from "esbuild";
-import type { IterableElement } from "../../lib/vendor/type-fest";
-import { packageNames } from "./packageNames";
-import { SRC_CUBING, TYPESCRIPT_INDEX } from "./paths";
+import type { IterableElement } from "../../lib/vendor/type-fest.ts";
+import { packageNames } from "./packageNames.ts";
+import { SRC_CUBING, TYPESCRIPT_INDEX } from "./paths.ts";
 
 export const packageEntryPoints: string[] = packageNames.map(
   (p) => SRC_CUBING.join(p, TYPESCRIPT_INDEX).path,

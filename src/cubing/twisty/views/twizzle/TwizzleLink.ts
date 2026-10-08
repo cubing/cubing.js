@@ -1,17 +1,20 @@
-import { Alg } from "../../../alg";
+import { Alg } from "../../../alg/index.ts";
 import {
   ExperimentalCommonMetric,
   experimentalCountMetricMoves,
-} from "../../../notation";
-import { puzzles } from "../../../puzzles";
-import { TwistyPlayer } from "../..";
-import type { ColorSchemeWithAuto } from "../../model/props/viewer/ColorSchemeRequestProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { customElementsShim } from "../node-custom-element-shims";
-import { TwistyAlgViewer } from "../TwistyAlgViewer";
-import { twizzleLinkCSS, twizzleLinkForumTweaksCSS } from "./TwizzleLink.css";
-import { getConfigFromURL } from "./url-params";
+} from "../../../notation/index.ts";
+import { puzzles } from "../../../puzzles/index.ts";
+import { TwistyPlayer } from "../../index.ts";
+import type { ColorSchemeWithAuto } from "../../model/props/viewer/ColorSchemeRequestProp.ts";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
+import { ManagedCustomElement } from "../ManagedCustomElement.ts";
+import { customElementsShim } from "../node-custom-element-shims.ts";
+import { TwistyAlgViewer } from "../TwistyAlgViewer.ts";
+import {
+  twizzleLinkCSS,
+  twizzleLinkForumTweaksCSS,
+} from "./TwizzleLink.css.ts";
+import { getConfigFromURL } from "./url-params.ts";
 
 /** @category Other Custom Elements */
 
@@ -124,7 +127,7 @@ export class TwizzleLink extends ManagedCustomElement {
 
       if (config.puzzle && !(config.puzzle in puzzles)) {
         const puzzleDescription = (
-          await import("../../../puzzle-geometry")
+          await import("../../../puzzle-geometry/index.ts")
         ).getPuzzleDescriptionString(config.puzzle);
         delete config.puzzle;
         config.experimentalPuzzleDescription = puzzleDescription;

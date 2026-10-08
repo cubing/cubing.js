@@ -1,4 +1,8 @@
 import {
+  ExperimentalIterationDirection,
+  experimentalDirect,
+} from "../../alg/cubing-private/index.ts";
+import {
   type Alg,
   type AlgNode,
   type Commutator,
@@ -10,27 +14,23 @@ import {
   type Newline,
   Pause,
   TraversalDownUp,
-} from "../../alg";
-import {
-  ExperimentalIterationDirection,
-  experimentalDirect,
-} from "../../alg/cubing-private";
-import { type Parsed, startCharIndexKey } from "../../alg/parseAlg";
-import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
+} from "../../alg/index.ts";
+import { type Parsed, startCharIndexKey } from "../../alg/parseAlg.ts";
+import type { MillisecondTimestamp } from "../controllers/AnimationTypes.ts";
 import type {
   CurrentMoveInfo,
   LeafIndex,
-} from "../controllers/indexer/AlgIndexer";
-import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
-import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
-import { firstElementWithId } from "./firstElementWithId";
-import { ManagedCustomElement } from "./ManagedCustomElement";
+} from "../controllers/indexer/AlgIndexer.ts";
+import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp.ts";
+import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp.ts";
+import { firstElementWithId } from "./firstElementWithId.ts";
+import { ManagedCustomElement } from "./ManagedCustomElement.ts";
 import {
   customElementsShim,
   HTMLElementShim,
-} from "./node-custom-element-shims";
-import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css";
-import { TwistyPlayer } from "./TwistyPlayer";
+} from "./node-custom-element-shims.ts";
+import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css.ts";
+import { TwistyPlayer } from "./TwistyPlayer.ts";
 
 // TODO: dynamically adjust the fraction to take into account moves that rotate a lot (e.g. `R100`).
 const DEFAULT_OFFSET_FRACTION = 0.25;

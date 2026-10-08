@@ -4,15 +4,15 @@
 export type {
   ExperimentalAlgLeafEvent as MoveEvent,
   ExperimentalOrientationEvent as OrientationEvent,
-} from "../stream";
-export { enableDebugLogging } from "./debug";
-export { debugKeyboardConnect, KeyboardPuzzle } from "./keyboard";
-export type { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
-export { connectSmartPuzzle } from "./smart-puzzle/connect";
-export { GanCube } from "./smart-puzzle/gan";
-export { GiiKERCube } from "./smart-puzzle/giiker";
-export { GoCube } from "./smart-puzzle/gocube";
-export type { BluetoothRobot } from "./smart-robot";
-export { connectSmartRobot } from "./smart-robot";
-export type { BluetoothTimer } from "./smart-timer";
-export { connectSmartTimer } from "./smart-timer";
+} from "../stream/index.ts";
+export { enableDebugLogging } from "./debug.ts";
+export { debugKeyboardConnect, KeyboardPuzzle } from "./keyboard.ts";
+export type { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle.ts";
+export { connectSmartPuzzle } from "./smart-puzzle/connect.ts";
+export { GanCube } from "./smart-puzzle/gan.ts";
+export { GiiKERCube } from "./smart-puzzle/giiker.ts";
+export { GoCube } from "./smart-puzzle/gocube.ts";
+export type { BluetoothRobot } from "./smart-robot/index.ts";
+export { connectSmartRobot } from "./smart-robot/index.ts";
+export type { BluetoothTimer } from "./smart-timer/index.ts";
+export { connectSmartTimer } from "./smart-timer/index.ts";

@@ -1,7 +1,7 @@
 import { LazyPromise } from "@cubing/lazy-promise";
 import type { Tagged } from "type-fest";
-import { StaleDropper } from "../PromiseFreshener";
-import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
+import { StaleDropper } from "../PromiseFreshener.ts";
+import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker.ts";
 
 type InputRecord = Record<string, any>;
 

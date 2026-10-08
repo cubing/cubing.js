@@ -1,6 +1,6 @@
-import type { PuzzleLoader } from "../../../../../puzzles";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { PuzzleID } from "./PuzzleIDRequestProp";
+import type { PuzzleLoader } from "../../../../../puzzles/index.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { PuzzleID } from "./PuzzleIDRequestProp.ts";
 
 export class PuzzleIDProp extends TwistyPropDerived<
   { puzzleLoader: PuzzleLoader },

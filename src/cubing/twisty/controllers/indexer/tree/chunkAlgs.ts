@@ -11,7 +11,7 @@ import {
   type Newline,
   type Pause,
   TraversalUp,
-} from "../../../../alg";
+} from "../../../../alg/index.ts";
 
 const MIN_CHUNKING_THRESHOLD = 16;
 

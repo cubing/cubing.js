@@ -1,11 +1,11 @@
-import type { KPatternData } from "../../../../cubing/kpuzzle";
-import { experimentalReid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
+import type { KPatternData } from "../../../../cubing/kpuzzle/index.ts";
 import {
   type Binary3x3x3Components,
   reid3x3x3ToBinaryComponents,
-} from "../../../../cubing/protocol/binary/binary3x3x3";
-import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
-import { kpatternToReidString, patternToStickers } from "./convert";
+} from "../../../../cubing/protocol/binary/binary3x3x3.ts";
+import { experimentalReid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol/index.ts";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private/index.ts";
+import { kpatternToReidString, patternToStickers } from "./convert.ts";
 
 const tests: {
   name: string;

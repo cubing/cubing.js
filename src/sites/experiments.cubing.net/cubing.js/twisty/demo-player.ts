@@ -1,7 +1,7 @@
-import "../../../../cubing/twisty";
-import type { TwistyPlayer } from "../../../../cubing/twisty";
-import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/views/canvas";
-import { demoSpinCamera, getScaleParam } from "./demo-spin-camera";
+import "../../../../cubing/twisty/index.ts";
+import type { TwistyPlayer } from "../../../../cubing/twisty/index.ts";
+import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/views/canvas.ts";
+import { demoSpinCamera, getScaleParam } from "./demo-spin-camera.ts";
 
 const pixelRatio = new URL(location.href).searchParams.get("pixelRatio");
 if (pixelRatio !== null) {

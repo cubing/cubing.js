@@ -1,10 +1,10 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Alg } from "../../../../cubing/alg";
-import { KPuzzle } from "../../../../cubing/kpuzzle";
-import { experimentalCube3x3x3KPuzzleDefinition } from "../../../../cubing/puzzles/cubing-private";
-import "../../../../cubing/twisty";
+import { Alg } from "../../../../cubing/alg/index.ts";
+import { KPuzzle } from "../../../../cubing/kpuzzle/index.ts";
+import { experimentalCube3x3x3KPuzzleDefinition } from "../../../../cubing/puzzles/cubing-private/index.ts";
+import "../../../../cubing/twisty/index.ts";
 
 const AnySpeechRecognition = webkitSpeechRecognition;
 const AnySpeechGrammarList = webkitSpeechGrammarList;

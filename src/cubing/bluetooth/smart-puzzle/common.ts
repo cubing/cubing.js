@@ -1,4 +1,4 @@
-import type { KPatternData } from "../../kpuzzle";
+import type { KPatternData } from "../../kpuzzle/index.ts";
 
 const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
 const reidCornerOrder = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");

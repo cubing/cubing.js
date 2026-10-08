@@ -9,7 +9,7 @@ import {
   type ExperimentalPieceStickeringMask,
   type ExperimentalStickeringMask,
   experimentalGetPieceStickeringMask,
-} from "../../../../../puzzles/cubing-private";
+} from "../../../../../puzzles/cubing-private/index.ts";
 
 const charMap: Record<string, ExperimentalPieceStickering> = {
   "-": ExperimentalPieceStickering.Regular,

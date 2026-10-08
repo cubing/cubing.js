@@ -1,4 +1,4 @@
-import { rsync } from "./rsync";
+import { rsync } from "./rsync.ts";
 
 const typedocSFTPPath =
   "cubing_deploy@experiments.cubing.net:~/experiments.cubing.net/cubing.js-typedoc/";

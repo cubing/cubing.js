@@ -1,7 +1,7 @@
 // Sits on top of a (possibly null) notation mapper, and
 
-import { Move, QuantumMove } from "../../alg";
-import type { NotationMapper } from "./NotationMapper";
+import { Move, QuantumMove } from "../../alg/index.ts";
+import type { NotationMapper } from "./NotationMapper.ts";
 
 // adds R++/R--/D++/D-- notation mapping.
 export class MegaminxScramblingNotationMapper implements NotationMapper {

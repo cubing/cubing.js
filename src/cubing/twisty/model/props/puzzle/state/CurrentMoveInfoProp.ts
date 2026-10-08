@@ -1,16 +1,16 @@
-import { Move } from "../../../../../alg";
+import { Move } from "../../../../../alg/index.ts";
 import {
   Direction,
   type MillisecondTimestamp,
-} from "../../../../controllers/AnimationTypes";
+} from "../../../../controllers/AnimationTypes.ts";
 import type {
   AlgIndexer,
   CurrentMove,
   CurrentMoveInfo,
-} from "../../../../controllers/indexer/AlgIndexer";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { DetailedTimelineInfo } from "../../timeline/DetailedTimelineInfoProp";
-import type { CatchUpMove } from "./CatchUpMoveProp";
+} from "../../../../controllers/indexer/AlgIndexer.ts";
+import { TwistyPropDerived } from "../../TwistyProp.ts";
+import type { DetailedTimelineInfo } from "../../timeline/DetailedTimelineInfoProp.ts";
+import type { CatchUpMove } from "./CatchUpMoveProp.ts";
 
 interface PositionPropInputs {
   indexer: AlgIndexer;

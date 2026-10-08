@@ -1,9 +1,9 @@
-import { Alg, keyToMove } from "../alg";
-import type { KPattern } from "../kpuzzle/KPattern";
-import type { PuzzleLoader } from "../puzzles";
-import type { KeyMapping } from "../puzzles/cubing-private";
-import type { PuzzleID } from "../twisty";
-import { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
+import { Alg, keyToMove } from "../alg/index.ts";
+import type { KPattern } from "../kpuzzle/KPattern.ts";
+import type { KeyMapping } from "../puzzles/cubing-private/index.ts";
+import type { PuzzleLoader } from "../puzzles/index.ts";
+import type { PuzzleID } from "../twisty/index.ts";
+import { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle.ts";
 
 /** @category Keyboard Puzzles */
 export class KeyboardPuzzle extends BluetoothPuzzle {
@@ -36,7 +36,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
   ): Promise<[KeyMapping | undefined, KPattern]> {
     const puzzleLoader = await (async () =>
       typeof puzzle === "string"
-        ? (await import("../puzzles")).puzzles[puzzle]
+        ? (await import("../puzzles/index.ts")).puzzles[puzzle]
         : puzzle)();
     const kpuzzle = await (async () => puzzleLoader.kpuzzle())();
     return Promise.all([puzzleLoader.keyMapping?.(), kpuzzle.defaultPattern()]);

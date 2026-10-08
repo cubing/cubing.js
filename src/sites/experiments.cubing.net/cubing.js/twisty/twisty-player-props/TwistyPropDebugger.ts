@@ -1,15 +1,15 @@
-import type { Alg } from "../../../../../cubing/alg";
-import { experimentalCountMoves } from "../../../../../cubing/notation";
-import type { AlgIssues } from "../../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp";
-import { ClassListManager } from "../../../../../cubing/twisty/views/ClassListManager";
-import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
-import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
-import type { TwistyPlayer } from "../../../../../cubing/twisty/views/TwistyPlayer";
+import type { Alg } from "../../../../../cubing/alg/index.ts";
+import { experimentalCountMoves } from "../../../../../cubing/notation/index.ts";
+import type { AlgIssues } from "../../../../../cubing/twisty/model/props/puzzle/state/AlgProp.ts";
+import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp.ts";
+import { ClassListManager } from "../../../../../cubing/twisty/views/ClassListManager.ts";
+import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement.ts";
+import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims.ts";
+import type { TwistyPlayer } from "../../../../../cubing/twisty/views/TwistyPlayer.ts";
 import {
   twistyPlayerDebuggerCSS,
   twistyPropDebuggerCSS,
-} from "./TwistyPropDebugger.css";
+} from "./TwistyPropDebugger.css.ts";
 
 function truncateAlgForDisplay(alg: Alg): string {
   let str = alg.toString();

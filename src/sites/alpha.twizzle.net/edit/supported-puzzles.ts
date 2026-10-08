@@ -1,9 +1,12 @@
 import {
   getPuzzleGeometryByDesc,
   type StickerDat,
-} from "../../../cubing/puzzle-geometry";
-import { puzzles } from "../../../cubing/puzzles";
-import type { PuzzleID, VisualizationFormat } from "../../../cubing/twisty";
+} from "../../../cubing/puzzle-geometry/index.ts";
+import { puzzles } from "../../../cubing/puzzles/index.ts";
+import type {
+  PuzzleID,
+  VisualizationFormat,
+} from "../../../cubing/twisty/index.ts";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle" as const;
