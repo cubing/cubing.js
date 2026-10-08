@@ -13,13 +13,15 @@ import { KTransformation } from "./KTransformation.ts";
 export type KTransformationSource = Alg | Move | string | KTransformation;
 
 export class KPuzzle {
+  public readonly definition: KPuzzleDefinition;
   private experimentalPGNotation: PGNotation | undefined;
   constructor(
-    public readonly definition: KPuzzleDefinition,
+    definition: KPuzzleDefinition,
     options?: {
       experimentalPGNotation?: PGNotation;
     },
   ) {
+    this.definition = definition;
     this.experimentalPGNotation = options?.experimentalPGNotation;
   }
 

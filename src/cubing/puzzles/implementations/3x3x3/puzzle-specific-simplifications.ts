@@ -1,20 +1,22 @@
 import type { PuzzleSpecificSimplifyOptions } from "../../../alg/index.ts";
 import { Move, QuantumMove } from "../../../alg/index.ts";
 
-enum Axis {
-  X = "x axis",
-  Y = "y axis",
-  Z = "z axis",
-}
+export const Axis = {
+  X: "x axis",
+  Y: "y axis",
+  Z: "z axis",
+};
+export type Axis = (typeof Axis)[keyof typeof Axis];
 
-enum MoveSourceType {
-  INDEXABLE_SLICE_NEAR,
-  INDEXABLE_SLICE_FAR,
-  INDEXABLE_WIDE_NEAR,
-  INDEXABLE_WIDE_FAR,
-  SPECIFIC_SLICE,
-  ROTATION,
-}
+type MoveSourceType = (typeof MoveSourceType)[keyof typeof MoveSourceType];
+const MoveSourceType = {
+  INDEXABLE_SLICE_NEAR: 0,
+  INDEXABLE_SLICE_FAR: 1,
+  INDEXABLE_WIDE_NEAR: 2,
+  INDEXABLE_WIDE_FAR: 3,
+  SPECIFIC_SLICE: 4,
+  ROTATION: 5,
+};
 
 interface MoveSourceInfo {
   family: string;

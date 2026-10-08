@@ -10,10 +10,12 @@ import type {
 import { KTransformation } from "./KTransformation.ts";
 
 export class KPattern {
-  constructor(
-    public readonly kpuzzle: KPuzzle,
-    public readonly patternData: KPatternData,
-  ) {}
+  public readonly kpuzzle: KPuzzle;
+  public readonly patternData: KPatternData;
+  constructor(kpuzzle: KPuzzle, patternData: KPatternData) {
+    this.kpuzzle = kpuzzle;
+    this.patternData = patternData;
+  }
 
   toJSON(): any {
     return {

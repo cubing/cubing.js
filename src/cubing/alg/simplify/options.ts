@@ -32,7 +32,10 @@ export interface AppendOptions {
 }
 
 export class AppendOptionsHelper {
-  constructor(private config: AppendOptions = {}) {}
+  private config: AppendOptions;
+  constructor(config: AppendOptions = {}) {
+    this.config = config;
+  }
 
   cancelQuantum(): QuantumDirectionalCancellation {
     const { cancel } = this.config;

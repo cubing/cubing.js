@@ -1,7 +1,9 @@
-export enum IterationDirection {
-  Forwards = 1,
-  Backwards = -1,
-}
+export type IterationDirection =
+  (typeof IterationDirection)[keyof typeof IterationDirection];
+export const IterationDirection = {
+  Forwards: 1,
+  Backwards: -1,
+};
 
 export function toggleDirection(
   iterationDirection: IterationDirection,
@@ -16,6 +18,8 @@ export function toggleDirection(
     case IterationDirection.Backwards:
       return IterationDirection.Forwards;
   }
+
+  throw new Error("Invalid input iteration direction.");
 }
 
 export function direct<T>(

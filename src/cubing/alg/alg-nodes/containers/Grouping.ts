@@ -6,8 +6,8 @@ import {
 import { AlgCommon, type Comparable } from "../../common.ts";
 import { IterationDirection } from "../../iteration.ts";
 import type { ExperimentalSerializationOptions } from "../../SerializationOptions.ts";
-import { Commutator, Conjugate } from "..";
 import type { AlgLeaf, AlgNode } from "../AlgNode.ts";
+import { Commutator, Conjugate } from "../index.ts";
 import { Move, QuantumMove } from "../leaves/Move.ts";
 import type { Pause } from "../leaves/Pause.ts";
 import { QuantumWithAmount } from "../QuantumWithAmount.ts";

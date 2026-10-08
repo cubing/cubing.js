@@ -62,20 +62,23 @@ export function getFaceletStickeringMask(
   return faceletStickeringMask.mask;
 }
 
+export type PieceStickering =
+  (typeof PieceStickering)[keyof typeof PieceStickering];
 // TODO: Revert this to a normal enum, or write a standard to codify the names?
-export enum PieceStickering {
-  Regular = "Regular",
-  Dim = "Dim",
-  Ignored = "Ignored",
-  OrientationStickers = "OrientationStickers",
-  Invisible = "Invisible",
-  Ignoriented = "Ignoriented",
-  IgnoreNonPrimary = "IgnoreNonPrimary",
-  PermuteNonPrimary = "PermuteNonPrimary",
-  OrientationWithoutPermutation = "OrientationWithoutPermutation",
-  ExperimentalOrientationWithoutPermutation2 = "ExperimentalOrientationWithoutPermutation2", // TODO
-  Mystery = "Mystery", // TODO
-}
+export const PieceStickering = {
+  Regular: "Regular",
+  Dim: "Dim",
+  Ignored: "Ignored",
+  OrientationStickers: "OrientationStickers",
+  Invisible: "Invisible",
+  Ignoriented: "Ignoriented",
+  IgnoreNonPrimary: "IgnoreNonPrimary",
+  PermuteNonPrimary: "PermuteNonPrimary",
+  OrientationWithoutPermutation: "OrientationWithoutPermutation",
+  ExperimentalOrientationWithoutPermutation2:
+    "ExperimentalOrientationWithoutPermutation2", // TODO
+  Mystery: "Mystery", // TODO
+};
 
 export class PieceAnnotation<T> {
   stickerings: Map<string, T[]> = new Map();
@@ -202,7 +205,10 @@ export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
 export type PieceSet = PieceAnnotation<boolean>;
 
 export class StickeringManager {
-  constructor(private kpuzzle: KPuzzle) {}
+  private kpuzzle: KPuzzle;
+  constructor(kpuzzle: KPuzzle) {
+    this.kpuzzle = kpuzzle;
+  }
 
   and(pieceSets: PieceSet[]): PieceSet {
     const newPieceSet = new PieceAnnotation<boolean>(this.kpuzzle, false);

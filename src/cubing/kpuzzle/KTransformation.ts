@@ -12,10 +12,12 @@ import type { KPuzzle, KTransformationSource } from "./KPuzzle.ts";
 import type { KTransformationData } from "./KPuzzleDefinitionJSON.ts";
 
 export class KTransformation {
-  constructor(
-    public readonly kpuzzle: KPuzzle,
-    public readonly transformationData: KTransformationData,
-  ) {}
+  public readonly kpuzzle: KPuzzle;
+  public readonly transformationData: KTransformationData;
+  constructor(kpuzzle: KPuzzle, transformationData: KTransformationData) {
+    this.kpuzzle = kpuzzle;
+    this.transformationData = transformationData;
+  }
 
   toJSON(): any {
     return {

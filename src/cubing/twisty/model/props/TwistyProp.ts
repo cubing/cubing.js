@@ -203,11 +203,13 @@ export abstract class TwistyPropDerived<
   // cachedInputs:
   #parents: InputProps<InputTypes>;
 
+  protected userVisibleErrorTracker?: UserVisibleErrorTracker;
   constructor(
     parents: InputProps<InputTypes>,
-    protected userVisibleErrorTracker?: UserVisibleErrorTracker,
+    userVisibleErrorTracker?: UserVisibleErrorTracker,
   ) {
     super();
+    this.userVisibleErrorTracker = userVisibleErrorTracker;
     this.#parents = parents;
     for (const parent of Object.values(parents)) {
       (
