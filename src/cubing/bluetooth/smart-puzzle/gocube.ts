@@ -83,11 +83,16 @@ export class GoCube extends BluetoothPuzzle {
   private lastTarget: Quaternion = new Quaternion(0, 0, 0, 1);
   private alg: Alg = new Alg();
 
+  private server: BluetoothRemoteGATTServer;
+  public goCubeStateCharacteristic: BluetoothRemoteGATTCharacteristic;
+
   private constructor(
-    private server: BluetoothRemoteGATTServer,
-    public goCubeStateCharacteristic: BluetoothRemoteGATTCharacteristic,
+    server: BluetoothRemoteGATTServer,
+    goCubeStateCharacteristic: BluetoothRemoteGATTCharacteristic,
   ) {
     super();
+    this.server = server;
+    this.goCubeStateCharacteristic = goCubeStateCharacteristic;
   }
 
   disconnect(): void {

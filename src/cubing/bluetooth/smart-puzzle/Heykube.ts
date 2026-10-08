@@ -44,14 +44,19 @@ export class HeykubeCube extends BluetoothPuzzle {
     return cube;
   }
 
+  private server: BluetoothRemoteGATTServer;
+  private stateCharacteristic: BluetoothRemoteGATTCharacteristic;
+
   private constructor(
     _kpuzzle: KPuzzle,
     _service: BluetoothRemoteGATTService,
     device: BluetoothDevice,
-    private server: BluetoothRemoteGATTServer,
-    private stateCharacteristic: BluetoothRemoteGATTCharacteristic,
+    server: BluetoothRemoteGATTServer,
+    stateCharacteristic: BluetoothRemoteGATTCharacteristic,
   ) {
     super();
+    this.server = server;
+    this.stateCharacteristic = stateCharacteristic;
 
     device.addEventListener(
       "gattserverdisconnected",

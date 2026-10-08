@@ -140,12 +140,19 @@ export class GiiKERCube extends BluetoothPuzzle {
     return cube;
   }
 
+  private server: BluetoothRemoteGATTServer;
+  private cubeCharacteristic: BluetoothRemoteGATTCharacteristic;
+  private originalValue?: Uint8Array | null;
+
   private constructor(
-    private server: BluetoothRemoteGATTServer,
-    private cubeCharacteristic: BluetoothRemoteGATTCharacteristic,
-    private originalValue?: Uint8Array | null,
+    server: BluetoothRemoteGATTServer,
+    cubeCharacteristic: BluetoothRemoteGATTCharacteristic,
+    originalValue?: Uint8Array | null,
   ) {
     super();
+    this.server = server;
+    this.cubeCharacteristic = cubeCharacteristic;
+    this.originalValue = originalValue;
   }
 
   public name(): string | undefined {

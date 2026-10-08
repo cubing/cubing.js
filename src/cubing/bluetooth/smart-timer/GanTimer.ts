@@ -21,13 +21,19 @@ export class GanTimer extends EventTarget {
   private polling = false;
   private previousDetail: GanTimerDetail | null = null;
 
+  private server: BluetoothRemoteGATTServer;
+  private timeCharacteristic: BluetoothRemoteGATTCharacteristic;
+
   constructor(
     _service: BluetoothRemoteGATTService,
-    private server: BluetoothRemoteGATTServer,
+    server: BluetoothRemoteGATTServer,
     device: BluetoothDevice,
-    private timeCharacteristic: BluetoothRemoteGATTCharacteristic,
+    timeCharacteristic: BluetoothRemoteGATTCharacteristic,
   ) {
     super();
+    this.server = server;
+    this.timeCharacteristic = timeCharacteristic;
+
     this.startPolling();
     console.log(server);
     device.addEventListener(

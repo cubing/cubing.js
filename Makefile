@@ -135,7 +135,22 @@ test-src: test-ts test-src-node-compat
 test-ts: test-ts-bun test-ts-dom
 
 .PHONY: test-src-node-compat
-test-src-node-compat: test-src-node-compat-bin-svg test-src-node-compat-bin-order test-src-node-compat-bin-puzzle-geometry-bin test-src-node-compat-bin-scramble
+test-src-node-compat: set-src-node-compat-cubing test-src-node-compat-bin-svg test-src-node-compat-bin-order test-src-node-compat-bin-puzzle-geometry-bin test-src-node-compat-bin-scramble
+
+.PHONY: set-src-node-compat-cubing
+set-src-node-compat-cubing:
+	node -e 'console.log(await import("./src/cubing/alg/index.ts"))'
+	node -e 'console.log(await import("./src/cubing/bluetooth/index.ts"))'
+	node -e 'console.log(await import("./src/cubing/kpuzzle/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/notation/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/protocol/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/puzzle-geometry/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/puzzles/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/scramble/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/search/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/stream/index.ts"))'
+# 	node -e 'console.log(await import("./src/cubing/twisty/index.ts"))'
+
 
 .PHONY: test-src-node-compat-bin-svg
 test-src-node-compat-bin-svg: update-dependencies
