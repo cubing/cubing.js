@@ -47,15 +47,18 @@ interface DataUp {
 }
 
 class TwistyAlgLeafElem extends HTMLElementShim {
+  algOrAlgNode: Alg | AlgNode;
   constructor(
     className: string,
     text: string,
     dataDown: DataDown,
-    public algOrAlgNode: Alg | AlgNode,
+    algOrAlgNode: Alg | AlgNode,
     offsetIntoMove: boolean,
     clickable: boolean,
   ) {
     super();
+    this.algOrAlgNode = algOrAlgNode;
+
     this.classList.add(className);
 
     if (clickable) {
@@ -89,11 +92,11 @@ customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
 class TwistyAlgWrapperElem extends HTMLElementShim {
   private queue: Element[] = [];
 
-  constructor(
-    className: string,
-    public algOrAlgNode: Alg | AlgNode,
-  ) {
+  public algOrAlgNode: Alg | AlgNode;
+  constructor(className: string, algOrAlgNode: Alg | AlgNode) {
     super();
+    this.algOrAlgNode = algOrAlgNode;
+
     this.classList.add(className);
   }
 

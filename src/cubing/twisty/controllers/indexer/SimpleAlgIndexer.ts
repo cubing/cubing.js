@@ -16,10 +16,9 @@ export class SimpleAlgIndexer implements AlgIndexer {
     defaultDurationForAmount,
   );
 
-  constructor(
-    private kpuzzle: KPuzzle,
-    alg: Alg,
-  ) {
+  private kpuzzle: KPuzzle;
+  constructor(kpuzzle: KPuzzle, alg: Alg) {
+    this.kpuzzle = kpuzzle;
     // TODO: Avoid assuming all base moves are block moves.
     this.moves = new Alg(alg.experimentalExpand());
   }

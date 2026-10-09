@@ -18,14 +18,21 @@ export class Twisty2DSceneWrapper
     this.#freshListenerManager.disconnect();
   }
 
+  public model?: TwistySceneModel;
+  private effectiveVisualization?:
+    | "2D"
+    | "experimental-2D-LL"
+    | "experimental-2D-LL-face";
   constructor(
-    public model?: TwistySceneModel,
-    private effectiveVisualization?:
+    model?: TwistySceneModel,
+    effectiveVisualization?:
       | "2D"
       | "experimental-2D-LL"
       | "experimental-2D-LL-face",
   ) {
     super();
+    this.model = model;
+    this.effectiveVisualization = effectiveVisualization;
   }
 
   async connectedCallback(): Promise<void> {

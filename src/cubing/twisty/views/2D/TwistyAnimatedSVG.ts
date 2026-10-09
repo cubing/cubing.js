@@ -43,12 +43,19 @@ export class TwistyAnimatedSVG {
   private originalColors: { [type: string]: string } = {};
   private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
+
+  public kpuzzle: KPuzzle;
+  private showUnknownOrientations: boolean = false;
+
   constructor(
-    public kpuzzle: KPuzzle,
+    kpuzzle: KPuzzle,
     svgSource: string,
     experimentalStickeringMask?: StickeringMask,
-    private showUnknownOrientations: boolean = false,
+    showUnknownOrientations: boolean = false,
   ) {
+    this.kpuzzle = kpuzzle;
+    this.showUnknownOrientations = showUnknownOrientations;
+
     if (!svgSource) {
       throw new Error(`No SVG definition for puzzle type: ${kpuzzle.name()}`);
     }

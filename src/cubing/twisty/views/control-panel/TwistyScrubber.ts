@@ -64,11 +64,12 @@ let currentClickNum = 0;
 
 // Values are integers.
 export class TwistyScrubber extends ManagedCustomElement {
-  constructor(
-    public model?: TwistyPlayerModel,
-    public controller?: TwistyPlayerController,
-  ) {
+  public model?: TwistyPlayerModel;
+  public controller?: TwistyPlayerController;
+  constructor(model?: TwistyPlayerModel, controller?: TwistyPlayerController) {
     super();
+    this.model = model;
+    this.controller = controller;
   }
 
   async onDetailedTimelineInfo(

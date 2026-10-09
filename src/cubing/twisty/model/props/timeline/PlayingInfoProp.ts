@@ -4,7 +4,9 @@ import {
 } from "../../../controllers/AnimationTypes.ts";
 import { TwistyPropSource } from "../TwistyProp.ts";
 
-export type SimpleDirection = Direction.Forwards | Direction.Backwards;
+export type SimpleDirection =
+  | typeof Direction.Forwards
+  | typeof Direction.Backwards;
 
 export interface PlayingInfo {
   playing: boolean;

@@ -16,10 +16,9 @@ import { chunkAlgs } from "./chunkAlgs.ts";
 export class TreeAlgIndexer implements AlgIndexer {
   private decoration: AlgWalkerDecoration;
   private walker: AlgWalker;
-  constructor(
-    private kpuzzle: KPuzzle,
-    alg: Alg,
-  ) {
+  private kpuzzle: KPuzzle;
+  constructor(kpuzzle: KPuzzle, alg: Alg) {
+    this.kpuzzle = kpuzzle;
     const deccon = new DecoratorConstructor(this.kpuzzle);
 
     const chunkedAlg = chunkAlgs(alg);

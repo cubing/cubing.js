@@ -2,12 +2,21 @@ import type { ManagedCustomElement } from "./ManagedCustomElement.ts";
 
 export class ClassListManager<SuffixType extends string> {
   #currentClassName: string | null = null;
+
+  private elem: ManagedCustomElement;
+  private prefix: string;
+  private validSuffixes: SuffixType[];
+
   // The prefix should ideally end in a dash.
   constructor(
-    private elem: ManagedCustomElement,
-    private prefix: string,
-    private validSuffixes: SuffixType[],
-  ) {}
+    elem: ManagedCustomElement,
+    prefix: string,
+    validSuffixes: SuffixType[],
+  ) {
+    this.elem = elem;
+    this.prefix = prefix;
+    this.validSuffixes = validSuffixes;
+  }
 
   // Does nothing if there was no value.
   clearValue(): void {

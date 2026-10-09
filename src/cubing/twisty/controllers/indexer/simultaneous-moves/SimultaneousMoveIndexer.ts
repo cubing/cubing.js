@@ -22,12 +22,14 @@ import { type AnimatedLeafAlgNode, simulMoves } from "./simul-moves.ts";
 export class SimultaneousMoveIndexer {
   private animLeaves: AnimationTimelineLeaf[];
   // TODO: Allow custom `durationFn`.
-
+  private kpuzzle: KPuzzle;
   constructor(
-    private kpuzzle: KPuzzle,
+    kpuzzle: KPuzzle,
     alg: Alg,
     options?: { animationTimelineLeaves?: AnimationTimelineLeaves | null },
   ) {
+    this.kpuzzle = kpuzzle;
+
     this.animLeaves = options?.animationTimelineLeaves ?? simulMoves(alg);
     // TODO: Avoid assuming all base moves are block moves.
   }

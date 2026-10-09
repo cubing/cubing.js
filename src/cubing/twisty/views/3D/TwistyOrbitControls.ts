@@ -29,12 +29,22 @@ function momentumScale(progress: number) {
 class Inertia {
   private scheduler = new RenderScheduler(this.render.bind(this));
   private lastTimestamp: number;
+
+  private startTimestamp: number;
+  private momentumX: number;
+  private momentumY: number;
+  private callback: (movementX: number, movementY: number) => void;
   constructor(
-    private startTimestamp: number,
-    private momentumX: number,
-    private momentumY: number,
-    private callback: (movementX: number, movementY: number) => void,
+    startTimestamp: number,
+    momentumX: number,
+    momentumY: number,
+    callback: (movementX: number, movementY: number) => void,
   ) {
+    this.startTimestamp = startTimestamp;
+    this.momentumX = momentumX;
+    this.momentumY = momentumY;
+    this.callback = callback;
+
     this.scheduler.requestAnimFrame();
     this.lastTimestamp = startTimestamp;
   }
@@ -92,12 +102,22 @@ export class TwistyOrbitControls {
   experimentalInertia: boolean = INERTIA_DEFAULT;
   private onMovementBound = this.onMovement.bind(this);
   public experimentalHasBeenMoved: boolean = false;
+
+  private model: TwistyPlayerModel;
+  private mirror: boolean;
+  private canvas: HTMLCanvasElement;
+  private dragTracker: DragTracker;
   constructor(
-    private model: TwistyPlayerModel,
-    private mirror: boolean,
-    private canvas: HTMLCanvasElement,
-    private dragTracker: DragTracker,
+    model: TwistyPlayerModel,
+    mirror: boolean,
+    canvas: HTMLCanvasElement,
+    dragTracker: DragTracker,
   ) {
+    this.model = model;
+    this.mirror = mirror;
+    this.canvas = canvas;
+    this.dragTracker = dragTracker;
+
     this.dragTracker.addEventListener(
       "move",
       this.onMove.bind(this) as any as EventListener, // TODO: https://github.com/microsoft/TypeScript/issues/28357

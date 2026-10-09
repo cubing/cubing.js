@@ -29,7 +29,10 @@ class CatchUpHelper {
   pendingFrame = false;
 
   tempoScale: number = 1; // TODO
-  constructor(private model: TwistyPlayerModel) {
+  private model: TwistyPlayerModel;
+  constructor(model: TwistyPlayerModel) {
+    this.model = model;
+
     model.tempoScale.addFreshListener((tempoScale) => {
       this.tempoScale = tempoScale;
     });
@@ -104,11 +107,13 @@ export class TwistyAnimationController {
   private scheduler: RenderScheduler = new RenderScheduler(
     this.animFrame.bind(this),
   );
-
+  private delegate: TwistyAnimationControllerDelegate;
   constructor(
     model: TwistyPlayerModel,
-    private delegate: TwistyAnimationControllerDelegate,
+    delegate: TwistyAnimationControllerDelegate,
   ) {
+    this.delegate = delegate;
+
     this.model = model;
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 

@@ -57,7 +57,10 @@ export class TwistySceneModel {
   orbitCoordinates: OrbitCoordinatesProp;
   stickeringMask: StickeringMaskProp;
 
-  constructor(public twistyPlayerModel: TwistyPlayerModel) {
+  public twistyPlayerModel: TwistyPlayerModel;
+  constructor(twistyPlayerModel: TwistyPlayerModel) {
+    this.twistyPlayerModel = twistyPlayerModel;
+
     this.orbitCoordinates = new OrbitCoordinatesProp({
       orbitCoordinatesRequest: this.orbitCoordinatesRequest,
       latitudeLimit: this.latitudeLimit,

@@ -67,13 +67,17 @@ const CONSISTENT_METRIC_ABBREVIATIONS: Partial<
 export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
   a: HTMLAnchorElement | null = null;
-  constructor(
-    private options?: {
-      cdnForumTweaks?: boolean;
-      colorScheme?: ColorSchemeWithAuto;
-    },
-  ) {
+
+  private options?: {
+    cdnForumTweaks?: boolean;
+    colorScheme?: ColorSchemeWithAuto;
+  };
+  constructor(options?: {
+    cdnForumTweaks?: boolean;
+    colorScheme?: ColorSchemeWithAuto;
+  }) {
     super({ mode: "open" });
+    this.options = options;
   }
 
   #fallback() {

@@ -41,8 +41,10 @@ const MOVEMENT_EPSILON = 0.1; // px
 export class DragTracker extends EventTarget {
   #dragInfoMap: Map<PointerID, DragInfo> = new Map();
 
-  constructor(public readonly target: HTMLElement) {
+  public readonly target: HTMLElement;
+  constructor(target: HTMLElement) {
     super();
+    this.target = target;
   }
 
   // Idempotent

@@ -4,7 +4,10 @@ import type { MillisecondTimestamp } from "./AnimationTypes.ts";
 export class RenderScheduler {
   private animFrameID: number | null = null;
   private animFrame = this.animFrameWrapper.bind(this);
-  constructor(private callback: (timestamp: MillisecondTimestamp) => void) {}
+  private callback: (timestamp: MillisecondTimestamp) => void;
+  constructor(callback: (timestamp: MillisecondTimestamp) => void) {
+    this.callback = callback;
+  }
 
   requestIsPending(): boolean {
     return !!this.animFrameID;
