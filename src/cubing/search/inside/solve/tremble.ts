@@ -63,11 +63,16 @@ export class TrembleSolver {
     transformation: KTransformation;
   }[];
 
+  private kpuzzle: KPuzzle;
+  private sgs: SGSCachedData;
   constructor(
-    private kpuzzle: KPuzzle,
-    private sgs: SGSCachedData,
+    kpuzzle: KPuzzle,
+    sgs: SGSCachedData,
     trembleMoveNames?: string[],
   ) {
+    this.kpuzzle = kpuzzle;
+    this.sgs = sgs;
+
     this.searchMoves = calculateMoves(
       this.kpuzzle,
       trembleMoveNames ?? Object.keys(this.kpuzzle.definition.moves),

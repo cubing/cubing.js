@@ -194,11 +194,12 @@ async function randomScrambleForEvent(
   })());
 }
 
-export enum PrefetchLevel {
-  Auto = "auto",
-  None = "none",
-  Immediate = "immediate",
-}
+export type PrefetchLevel = (typeof PrefetchLevel)[keyof typeof PrefetchLevel];
+export const PrefetchLevel = {
+  Auto: "auto",
+  None: "none",
+  Immediate: "immediate",
+};
 
 let currentPrefetchLevel = PrefetchLevel.Auto;
 
