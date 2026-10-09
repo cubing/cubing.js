@@ -1,4 +1,4 @@
-@import "../../../fonts/ubuntu.css";
+@import "@cubing/thirdparty-fonts/ubuntu";
 
 body {
   display: flex;

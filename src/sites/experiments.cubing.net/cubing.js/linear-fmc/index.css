@@ -1,16 +1,8 @@
-@import "../../../fonts/ubuntu.css";
+@import "@cubing/thirdparty-fonts/ubuntu";
+@import "@cubing/thirdparty-fonts/digital-7";
+
 * {
   box-sizing: border-box;
-}
-
-@font-face {
-  font-family: digital-7-mono;
-  src: url("./vendor/timer.cubing.net/digital-7-mono.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: digital-7;
-  src: url("./vendor/timer.cubing.net/digital-7.ttf") format("truetype");
 }
 
 body {

@@ -1,4 +1,4 @@
-@import "../../sites/fonts/ubuntu.css";
+@import "@cubing/thirdparty-fonts/ubuntu";
 
 html,
 body {

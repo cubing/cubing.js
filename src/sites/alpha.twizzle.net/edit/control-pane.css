@@ -1,4 +1,4 @@
-@import "../../fonts/ubuntu-cubing-subset.css";
+@import "@cubing/thirdparty-fonts/ubuntu/cubing-subset";
 
 control-pane {
   grid-area: "control";
