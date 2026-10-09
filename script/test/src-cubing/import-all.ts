@@ -1,4 +1,5 @@
 import { Path } from "path-class";
+import { packageNames } from "../../build/common/packageNames.ts";
 
 const cubingSrcRootRelative = new Path("../../../src/cubing/");
 const INDEX_TS = new Path("index.ts");
@@ -13,14 +14,6 @@ async function print(packageName: string): Promise<void> {
   );
 }
 
-await print("alg");
-await print("bluetooth");
-await print("kpuzzle");
-await print("notation");
-await print("protocol");
-await print("puzzle-geometry");
-await print("puzzles");
-await print("scramble");
-await print("search");
-await print("stream");
-await print("twisty");
+for (const packageName of packageNames) {
+  await print(packageName);
+}
