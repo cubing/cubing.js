@@ -1,3 +1,0 @@
-[install]
-auto = "disable"
-linker = "isolated"
