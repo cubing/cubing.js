@@ -4,7 +4,7 @@ BUN_RUN=${BUN} run --
 BIOME=${BUN_DX} --package @biomejs/biome biome --
 NODE=node --
 NPM=npm
-WEB_TEST_RUNNER=${BUN_DX} --package @web/test-runner web-test-runner -- # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
+WEB_TEST_RUNNER=${BUN_DX} --package @web/test-runner web-test-runner -- --config ./.config/web-test-runner.config.js # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
 
 .PHONY: default
 default:
@@ -40,7 +40,7 @@ build-lib-js: update-dependencies
 
 .PHONY: build-lib-types
 build-lib-types: update-dependencies
-	${BUN_DX} --package tsdown tsdown --
+	${BUN_DX} --package tsdown tsdown -- --config ./.config/tsdown.config.ts
 	${BUN_RUN} ./script/build/types/fix-web-bluetooth-reference.ts
 
 .PHONY: build-bin

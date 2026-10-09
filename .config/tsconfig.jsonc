@@ -1,28 +1,29 @@
 {
   "schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./node_modules/@cubing/dev-config/ts/es2022-types/tsconfig.json",
+  "extends": "../node_modules/@cubing/dev-config/ts/es2022-types/tsconfig.json",
   "compilerOptions": {
     "module": "preserve",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "noEmit": true,
-    "rootDir": "./",
+    "rootDir": "../",
     "types": ["web-bluetooth", "dom-speech-recognition"],
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["script", "src"],
+  "include": ["../script/", "../src/"],
   "exclude": [
-    "./.temp/",
-    "./dist/",
+    "../.temp/",
+    "../dist/",
     // Avoid indexing `dist`.
-    "./script/test/dist/lib/cubing/build-size/src/total.js",
-    "./script/test/dist/lib/cubing/node/",
-    "./script/test/dist/lib/cubing/perf/",
-    "./src/bin/",
-    "./vendor/"
+    "../script/test/dist/lib/cubing/build-size/src/total.js",
+    "../script/test/dist/lib/cubing/node/",
+    "../script/test/dist/lib/cubing/perf/",
+    "../src/bin/",
+    "../vendor/"
   ],
+  // Paths are relative to invocation (repo) root.
   "typedocOptions": {
-    "out": "dist/sites/js.cubing.net/cubing/api",
+    "out": "./dist/sites/js.cubing.net/cubing/api",
     "categorizeByGroup": false,
     "categoryOrder": [
       // alg
