@@ -411,7 +411,7 @@ update-create-cubing-app: postpublish-clear-bun-cache
 
 .PHONY: publish
 publish:
-	${NPM} whoami || ${NPM} npm login
+	${NPM} whoami || ${NPM} login
 	${NPM} publish
 
 .PHONY: pack
