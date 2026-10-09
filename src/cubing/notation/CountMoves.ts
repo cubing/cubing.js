@@ -20,8 +20,10 @@ import { costFactorsByMetric, countMove3x3x3 } from "./cube3x3x3Metrics.ts";
  *   should be moved to the alg class, probably.
  */
 class CountMoves extends TraversalUp<number> {
-  constructor(private metric: (move: Move) => number) {
+  private metric: (move: Move) => number;
+  constructor(metric: (move: Move) => number) {
     super();
+    this.metric = metric;
   }
 
   public traverseAlg(alg: Alg): number {

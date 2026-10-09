@@ -4,11 +4,12 @@ import type { Move } from "../alg/index.ts";
 import { experimentalCube3x3x3KPuzzleDefinition } from "../puzzles/cubing-private/index.ts";
 import { CommonMetric } from "./commonMetrics.ts";
 
-enum MoveType {
-  Rotation = "Rotation",
-  Outer = "Outer",
-  Inner = "Inner",
-}
+export type MoveType = (typeof MoveType)[keyof typeof MoveType];
+export const MoveType = {
+  Rotation: "Rotation",
+  Outer: "Outer",
+  Inner: "Inner",
+};
 
 function uncachedMoveCount(moveQuantumString: string): MoveType {
   if (
