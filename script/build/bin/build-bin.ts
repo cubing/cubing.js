@@ -41,7 +41,7 @@ await build({
   },
   define: { "globalThis.PACKAGE_VERSION": JSON.stringify(packageVersion) },
   banner: {
-    js: "#!/usr/bin/env -S node --",
+    js: "#!/usr/bin/env -S node --experimental-web-worker --",
   },
   plugins: [makeEntriesExecutable],
 });

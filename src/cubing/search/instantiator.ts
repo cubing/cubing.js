@@ -1,5 +1,5 @@
 import type { Worker as NodeWorker } from "node:worker_threads";
-import { PortableWorker, wrap } from "@cubing/comlink-everywhere";
+import { wrap } from "@cubing/comlink-everywhere";
 import type { WorkerAPI } from "./inside/api.ts";
 import { searchOutsideDebugGlobals } from "./outside.ts";
 import {
@@ -18,9 +18,7 @@ async function instantiateModuleWorker(
   // biome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<WorkerAPI>(async (resolve, reject) => {
     try {
-      const worker = searchOutsideDebugGlobals.allowNodeStyleWorkers
-        ? new PortableWorker(workerEntryFileURL)
-        : new Worker(workerEntryFileURL, { type: "module" });
+      const worker = new Worker(workerEntryFileURL, { type: "module" });
 
       // TODO: Remove this once we can remove the workarounds for lack of `import.meta.resolve(…)` support.
       const onFirstMessage = (messageData: string) => {
@@ -38,21 +36,16 @@ async function instantiateModuleWorker(
         reject(e);
       };
 
-      if ("once" in worker /* hack to detect `node` */) {
-        // We have to use `once` so the `unref()` from `comlink-everywhere` allows the process to quit as expected.
-        worker.once("message", onFirstMessage);
-      } else {
-        worker.addEventListener("error", onError, {
+      worker.addEventListener("error", onError, {
+        once: true,
+      });
+      worker.addEventListener(
+        "message",
+        (e: MessageEvent) => onFirstMessage(e.data),
+        {
           once: true,
-        });
-        worker.addEventListener(
-          "message",
-          (e: MessageEvent) => onFirstMessage(e.data),
-          {
-            once: true,
-          },
-        );
-      }
+        },
+      );
     } catch (e) {
       reject(e);
     }
