@@ -47,12 +47,15 @@ export function ExperimentalScaledDefaultDurationForAmount(
 
 export class AlgDuration extends TraversalUp<MillisecondDuration> {
   // TODO: Pass durationForAmount as Down type instead?
+  public durationForAmount: (amount: number) => MillisecondDuration =
+    defaultDurationForAmount;
   constructor(
-    public durationForAmount: (
+    durationForAmount: (
       amount: number,
     ) => MillisecondDuration = defaultDurationForAmount,
   ) {
     super();
+    this.durationForAmount = durationForAmount;
   }
 
   public traverseAlg(alg: Alg): MillisecondDuration {

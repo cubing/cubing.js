@@ -117,14 +117,22 @@ export class GanRobot extends EventTarget {
     postSleep: 0,
   };
 
+  private server: BluetoothRemoteGATTServer;
+  private statusCharacteristic: BluetoothRemoteGATTCharacteristic;
+  private moveCharacteristic: BluetoothRemoteGATTCharacteristic;
+
   constructor(
     _service: BluetoothRemoteGATTService,
-    private server: BluetoothRemoteGATTServer,
+    server: BluetoothRemoteGATTServer,
     device: BluetoothDevice,
-    private statusCharacteristic: BluetoothRemoteGATTCharacteristic,
-    private moveCharacteristic: BluetoothRemoteGATTCharacteristic,
+    statusCharacteristic: BluetoothRemoteGATTCharacteristic,
+    moveCharacteristic: BluetoothRemoteGATTCharacteristic,
   ) {
     super();
+    this.server = server;
+    this.statusCharacteristic = statusCharacteristic;
+    this.moveCharacteristic = moveCharacteristic;
+
     device.addEventListener(
       "gattserverdisconnected",
       this.onDisconnect.bind(this),

@@ -242,12 +242,20 @@ export class QiyiCube extends BluetoothPuzzle {
     return new QiyiCube(await puzzles["3x3x3"].kpuzzle(), aesKey, server);
   }
 
+  private kpuzzle: KPuzzle;
+  private aesKey: CryptoKey;
+  private server: BluetoothRemoteGATTServer;
+
   public constructor(
-    private kpuzzle: KPuzzle,
-    private aesKey: CryptoKey,
-    private server: BluetoothRemoteGATTServer,
+    kpuzzle: KPuzzle,
+    aesKey: CryptoKey,
+    server: BluetoothRemoteGATTServer,
   ) {
     super();
+    this.kpuzzle = kpuzzle;
+    this.aesKey = aesKey;
+    this.server = server;
+
     this.allTimeStamps = new Set();
     this.allTimeStampsQueue = [];
     void (async () => {

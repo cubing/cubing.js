@@ -88,13 +88,15 @@ class PhysicalState {
     // console.log(value);
     return new PhysicalState(new DataView(value.buffer), timeStamp);
   }
+  private dataView: DataView;
+  public timeStamp: number;
 
   private arr: Uint8Array;
   private arrLen = 19;
-  private constructor(
-    private dataView: DataView,
-    public timeStamp: number,
-  ) {
+  private constructor(dataView: DataView, timeStamp: number) {
+    this.dataView = dataView;
+    this.timeStamp = timeStamp;
+
     this.arr = new Uint8Array(dataView.buffer);
     if (this.arr.length !== this.arrLen) {
       throw new Error("Unexpected array length");
@@ -281,15 +283,29 @@ export class GanCube extends BluetoothPuzzle {
     | Promise<BluetoothRemoteGATTCharacteristic>
     | undefined;
 
+  private kpuzzle: KPuzzle;
+  private service: BluetoothRemoteGATTService;
+  private server: BluetoothRemoteGATTServer;
+  private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic;
+  private lastMoveCounter: number;
+  private aesKey: CryptoKey | null;
+
   private constructor(
-    private kpuzzle: KPuzzle,
-    private service: BluetoothRemoteGATTService,
-    private server: BluetoothRemoteGATTServer,
-    private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic,
-    private lastMoveCounter: number,
-    private aesKey: CryptoKey | null,
+    kpuzzle: KPuzzle,
+    service: BluetoothRemoteGATTService,
+    server: BluetoothRemoteGATTServer,
+    physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic,
+    lastMoveCounter: number,
+    aesKey: CryptoKey | null,
   ) {
     super();
+    this.kpuzzle = kpuzzle;
+    this.service = service;
+    this.server = server;
+    this.physicalStateCharacteristic = physicalStateCharacteristic;
+    this.lastMoveCounter = lastMoveCounter;
+    this.aesKey = aesKey;
+
     this.pattern = kpuzzle.defaultPattern();
     this.startTrackingMoves();
   }

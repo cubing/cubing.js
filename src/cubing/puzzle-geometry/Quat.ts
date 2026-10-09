@@ -43,12 +43,16 @@ export function solvethreeplanes(
 }
 
 export class Quat {
-  constructor(
-    public a: number,
-    public b: number,
-    public c: number,
-    public d: number,
-  ) {}
+  public a: number;
+  public b: number;
+  public c: number;
+  public d: number;
+  constructor(a: number, b: number, c: number, d: number) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
+  }
 
   public mul(q: Quat): Quat {
     // Quaternion multiplication

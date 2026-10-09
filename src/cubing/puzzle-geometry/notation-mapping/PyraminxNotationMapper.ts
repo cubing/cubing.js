@@ -57,7 +57,10 @@ export class PyraminxNotationMapper implements NotationMapper {
   protected wcaHack: boolean = false;
   map: Record<string, string> = pyraminxFamilyMap;
 
-  constructor(private child: FaceNameSwizzler) {}
+  private child: FaceNameSwizzler;
+  constructor(child: FaceNameSwizzler) {
+    this.child = child;
+  }
 
   public notationToInternal(move: Move): Move | null {
     if (this.wcaHack && move.innerLayer === 2 && move.outerLayer === null) {

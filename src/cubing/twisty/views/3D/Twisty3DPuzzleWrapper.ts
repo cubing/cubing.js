@@ -14,13 +14,22 @@ import type { PG3D } from "./puzzles/PG3D.ts";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle.ts";
 
 export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
+  private model: TwistyPlayerModel;
+  public schedulable: Schedulable;
+  private puzzleLoader: PuzzleLoader;
+  private visualizationStrategy: VisualizationStrategy;
   constructor(
-    private model: TwistyPlayerModel,
-    public schedulable: Schedulable,
-    private puzzleLoader: PuzzleLoader,
-    private visualizationStrategy: VisualizationStrategy,
+    model: TwistyPlayerModel,
+    schedulable: Schedulable,
+    puzzleLoader: PuzzleLoader,
+    visualizationStrategy: VisualizationStrategy,
   ) {
     super();
+    this.model = model;
+    this.schedulable = schedulable;
+    this.puzzleLoader = puzzleLoader;
+    this.visualizationStrategy = visualizationStrategy;
+
     void this.twisty3DPuzzle(); // Start constructing.
 
     // TODO: Hook up listeners before loading the heavy code in the async constructor, so we get any intermediate updates?

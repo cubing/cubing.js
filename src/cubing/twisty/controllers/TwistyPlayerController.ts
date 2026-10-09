@@ -6,11 +6,14 @@ import {
 
 export class TwistyPlayerController {
   animationController: TwistyAnimationController;
+  model: TwistyPlayerModel;
 
   constructor(
-    private model: TwistyPlayerModel,
+    model: TwistyPlayerModel,
     delegate: TwistyAnimationControllerDelegate,
   ) {
+    this.model = model;
+
     this.animationController = new TwistyAnimationController(model, delegate);
   }
 

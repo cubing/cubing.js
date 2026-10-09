@@ -21,13 +21,24 @@ import { AlgDuration, defaultDurationForAmount } from "../AlgDuration.ts";
 import type { LeafIndex as LeafCount } from "../AlgIndexer.ts";
 
 export class AlgWalkerDecoration {
+  public moveCount: LeafCount;
+  public duration: MillisecondDuration;
+  public forward: KTransformation;
+  public backward: KTransformation;
+  public children: AlgWalkerDecoration[] = [];
   constructor(
-    public moveCount: LeafCount,
-    public duration: MillisecondDuration,
-    public forward: KTransformation,
-    public backward: KTransformation,
-    public children: AlgWalkerDecoration[] = [],
-  ) {}
+    moveCount: LeafCount,
+    duration: MillisecondDuration,
+    forward: KTransformation,
+    backward: KTransformation,
+    children: AlgWalkerDecoration[] = [],
+  ) {
+    this.moveCount = moveCount;
+    this.duration = duration;
+    this.forward = forward;
+    this.backward = backward;
+    this.children = children;
+  }
 }
 export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
   private identity: KTransformation;
@@ -38,8 +49,11 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
 
   private cache: { [key: string]: AlgWalkerDecoration } = {};
 
-  constructor(private kpuzzle: KPuzzle) {
+  private kpuzzle: KPuzzle;
+  constructor(kpuzzle: KPuzzle) {
     super();
+    this.kpuzzle = kpuzzle;
+
     this.identity = kpuzzle.identityTransformation();
     this.dummyLeaf = new AlgWalkerDecoration(
       0 as LeafCount,
@@ -167,11 +181,11 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
   }
 }
 class WalkerDown {
-  constructor(
-    public apd: AlgWalkerDecoration,
-    public back: boolean,
-  ) {
-    /**/
+  public apd: AlgWalkerDecoration;
+  public back: boolean;
+  constructor(apd: AlgWalkerDecoration, back: boolean) {
+    this.apd = apd;
+    this.back = back;
   }
 }
 export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
@@ -184,12 +198,20 @@ export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
   public dur: MillisecondDuration;
   private goalIndex: LeafCount;
   private goalDuration: MillisecondDuration;
+
+  public kpuzzle: KPuzzle;
+  public algOrAlgNode: Alg | AlgNode; // TODO: can we keep these separate?
+  public apd: AlgWalkerDecoration;
   constructor(
-    public kpuzzle: KPuzzle,
-    public algOrAlgNode: Alg | AlgNode, // TODO: can we keep these separate?
-    public apd: AlgWalkerDecoration,
+    kpuzzle: KPuzzle,
+    algOrAlgNode: Alg | AlgNode, // TODO: can we keep these separate?
+    apd: AlgWalkerDecoration,
   ) {
     super();
+    this.kpuzzle = kpuzzle;
+    this.algOrAlgNode = algOrAlgNode;
+    this.apd = apd;
+
     this.i = -1 as LeafCount;
     this.dur = -1 as MillisecondDuration;
     this.goalIndex = -1 as LeafCount;

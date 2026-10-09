@@ -15,11 +15,12 @@ export type MillisecondDuration = Tagged<number, "MillisecondDuration">; // Dura
 export type Fraction = number; // Value from 0 to 1.
 
 // 1, 0, -1 are used as scalars for `directionScalar` below.
-export enum Direction {
-  Forwards = 1,
-  Paused = 0,
-  Backwards = -1,
-}
+export type Direction = (typeof Direction)[keyof typeof Direction];
+export const Direction = {
+  Forwards: 1,
+  Paused: 0,
+  Backwards: -1,
+};
 
 export function directionScalar(direction: Direction): number {
   return direction;
@@ -36,10 +37,11 @@ export type PuzzlePosition = {
   movesInProgress: MoveInProgress[];
 };
 
-export enum BoundaryType {
-  Move = "move",
-  EntireTimeline = "entire-timeline",
-}
+export type BoundaryType = (typeof BoundaryType)[keyof typeof BoundaryType];
+export const BoundaryType = {
+  Move: "move",
+  EntireTimeline: "entire-timeline",
+};
 
 export interface TimeRange {
   start: MillisecondTimestamp;

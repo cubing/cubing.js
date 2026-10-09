@@ -6,10 +6,15 @@ import type { FaceNameSwizzler } from "../FaceNameSwizzler.ts";
 import type { NotationMapper } from "./NotationMapper.ts";
 
 export class FaceRenamingMapper implements NotationMapper {
+  public internalNames: FaceNameSwizzler;
+  public externalNames: FaceNameSwizzler;
   constructor(
-    public internalNames: FaceNameSwizzler,
-    public externalNames: FaceNameSwizzler,
-  ) {}
+    internalNames: FaceNameSwizzler,
+    externalNames: FaceNameSwizzler,
+  ) {
+    this.internalNames = internalNames;
+    this.externalNames = externalNames;
+  }
 
   // TODO:  consider putting a cache in front of this
   public convertString(

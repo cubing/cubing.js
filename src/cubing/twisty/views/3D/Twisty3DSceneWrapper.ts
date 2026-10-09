@@ -37,8 +37,10 @@ export class Twisty3DSceneWrapper
     this.#freshListenerManager.disconnect();
   }
 
-  constructor(public model?: TwistyPlayerModel) {
+  public model?: TwistyPlayerModel;
+  constructor(model?: TwistyPlayerModel) {
     super();
+    this.model = model;
   }
 
   async connectedCallback(): Promise<void> {

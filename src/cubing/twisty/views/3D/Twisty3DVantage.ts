@@ -64,12 +64,17 @@ export class Twisty3DVantage extends ManagedCustomElement {
   private rendererIsShared: boolean = shareRenderer();
 
   loadingElement: HTMLDivElement | null = null;
+  private model?: TwistyPlayerModel;
+  private options?: { backView?: boolean };
   constructor(
-    private model?: TwistyPlayerModel,
+    model?: TwistyPlayerModel,
     scene?: Twisty3DSceneWrapper,
-    private options?: { backView?: boolean },
+    options?: { backView?: boolean },
   ) {
     super();
+    this.model = model;
+    this.options = options;
+
     this.scene = scene ?? null;
 
     this.loadingElement = this.addElement(document.createElement("div"));

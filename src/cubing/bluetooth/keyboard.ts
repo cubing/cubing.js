@@ -13,13 +13,14 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
 
   listener: EventListener; // (e: KeyboardEvent) => Promise<void>;
 
+  private target: Element;
+
   // TODO: Decide on the right arguments.
   // TODO: support tying the puzzle to a TwistyPlayer.
-  constructor(
-    private target: Element,
-    puzzle: PuzzleID | PuzzleLoader = "3x3x3",
-  ) {
+  constructor(target: Element, puzzle: PuzzleID | PuzzleLoader = "3x3x3") {
     super();
+    this.target = target;
+
     // TODO: Filter out repeated keydown?
     // TODO: how do we avoid this awkward cast?
     this.listener = this.onKeyDown.bind(this) as any as EventListener;

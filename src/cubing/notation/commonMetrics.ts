@@ -1,24 +1,27 @@
-export enum CommonMetric {
+export type CommonMetric = (typeof CommonMetric)[keyof typeof CommonMetric];
+export const CommonMetric = {
   // OBTM (Outer Block Turn Metric)
-  OuterBlockTurnMetric = "OBTM",
+  OuterBlockTurnMetric: "OBTM",
   // RBTM (Range Block Turn Metric)
-  RangeBlockTurnMetric = "RBTM",
+  RangeBlockTurnMetric: "RBTM",
   // SSTM (Single Slice Turn Metric)
-  SingleSliceTurnMetric = "SSTM",
+  SingleSliceTurnMetric: "SSTM",
   // OBQTM (Outer Block Quantum Turn Metric)
-  OuterBlockQuantumTurnMetric = "OBQTM",
+  OuterBlockQuantumTurnMetric: "OBQTM",
   // RBQTM (Range Block Quantum Turn Metric)
-  RangeBlockQuantumTurnMetric = "RBQTM",
+  RangeBlockQuantumTurnMetric: "RBQTM",
   // SSQTM (Single Slice Quantum Turn Metric)
-  SingleSliceQuantumTurnMetric = "SSQTM",
-  ExecutionTurnMetric = "ETM",
-}
+  SingleSliceQuantumTurnMetric: "SSQTM",
+  ExecutionTurnMetric: "ETM",
+};
 
-export enum CommonMetricAlias {
+export type CommonMetricAlias =
+  (typeof CommonMetricAlias)[keyof typeof CommonMetricAlias];
+export const CommonMetricAlias = {
   // QTM (Quantum Turn Metric)
-  QuantumTurnMetric = "OBQTM",
+  QuantumTurnMetric: "OBQTM",
   // HTM (Hand Turn Metric)
-  HandTurnMetric = "OBTM",
+  HandTurnMetric: "OBTM",
   // STM (Slice Turn Metric)
-  SliceTurnMetric = "RBTM",
-}
+  SliceTurnMetric: "RBTM",
+};

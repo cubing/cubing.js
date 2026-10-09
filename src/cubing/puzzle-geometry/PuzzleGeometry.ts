@@ -146,11 +146,15 @@ class Face {
 }
 
 export class FaceTree {
-  constructor(
-    private face: Quat[],
-    private left?: FaceTree,
-    private right?: FaceTree,
-  ) {}
+  private face: Quat[];
+  private left?: FaceTree;
+  private right?: FaceTree;
+
+  constructor(face: Quat[], left?: FaceTree, right?: FaceTree) {
+    this.face = face;
+    this.left = left;
+    this.right = right;
+  }
 
   public split(q: Quat): FaceTree {
     const t = q.cutface(this.face);
@@ -731,11 +735,14 @@ export class PuzzleGeometry {
   private setReidOrSpeffzOrder: boolean = false;
 
   private options: PuzzleGeometryFullOptions;
+  public puzzleDescription: PuzzleDescription;
 
   constructor(
-    public puzzleDescription: PuzzleDescription,
+    puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
+    this.puzzleDescription = puzzleDescription;
+
     const t1 = tstart("genperms");
     this.options = new PuzzleGeometryFullOptions(options);
     if (this.options.verbosity > 0) {
@@ -3438,10 +3445,9 @@ Vertex distance ${this.vertexDistance}`;
 
 export class PGNotation {
   private orbitNames: string[];
-  constructor(
-    private pg: PuzzleGeometry,
-    od: PGOrbitsDef,
-  ) {
+  private pg: PuzzleGeometry;
+  constructor(pg: PuzzleGeometry, od: PGOrbitsDef) {
+    this.pg = pg;
     this.orbitNames = od.orbitnames;
   }
 

@@ -33,7 +33,10 @@ const skewbInternalQuantumZ = new QuantumMove("Fv");
 const skewbInternalQuantumZPrime = new QuantumMove("Bv");
 
 export class SkewbNotationMapper implements NotationMapper {
-  constructor(private child: FaceNameSwizzler) {}
+  private child: FaceNameSwizzler;
+  constructor(child: FaceNameSwizzler) {
+    this.child = child;
+  }
 
   public notationToInternal(move: Move): Move | null {
     if (move.innerLayer || move.outerLayer) {

@@ -5,10 +5,9 @@
 export class FaceNameSwizzler {
   public prefixFree: boolean = true;
   public gripnames: string[] = [];
-  constructor(
-    public facenames: string[],
-    gripnames_arg?: string[],
-  ) {
+  public facenames: string[];
+  constructor(facenames: string[], gripnames_arg?: string[]) {
+    this.facenames = facenames;
     if (gripnames_arg) {
       this.gripnames = gripnames_arg;
     }

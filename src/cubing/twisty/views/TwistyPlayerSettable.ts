@@ -281,7 +281,10 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
 }
 
 class ExperimentalGetters {
-  constructor(private model: TwistyPlayerModel) {}
+  private model: TwistyPlayerModel;
+  constructor(model: TwistyPlayerModel) {
+    this.model = model;
+  }
 
   async alg(): Promise<Alg> {
     return (await this.model.alg.get()).alg;

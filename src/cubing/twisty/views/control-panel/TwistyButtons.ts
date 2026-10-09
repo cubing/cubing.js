@@ -32,13 +32,20 @@ export type ButtonCommand = keyof typeof buttonCommands;
 export class TwistyButtons extends ManagedCustomElement {
   buttons: Record<ButtonCommand, TwistyButton> | null = null;
 
+  public model?: TwistyPlayerModel;
+  public controller?: TwistyPlayerController;
+  private defaultFullscreenElement?: HTMLElement;
+
   // TODO: Privacy
   constructor(
-    public model?: TwistyPlayerModel,
-    public controller?: TwistyPlayerController,
-    private defaultFullscreenElement?: HTMLElement,
+    model?: TwistyPlayerModel,
+    controller?: TwistyPlayerController,
+    defaultFullscreenElement?: HTMLElement,
   ) {
     super();
+    this.model = model;
+    this.controller = controller;
+    this.defaultFullscreenElement = defaultFullscreenElement;
   }
 
   connectedCallback(): void {

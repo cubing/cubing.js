@@ -6,15 +6,27 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel.ts";
 import { Twisty2DPuzzle } from "./Twisty2DPuzzle.ts";
 
 export class Twisty2DPuzzleWrapper implements Schedulable {
+  private model: TwistyPlayerModel;
+  public schedulable: Schedulable;
+  private puzzleLoader: PuzzleLoader;
+  private effectiveVisualization:
+    | "2D"
+    | "experimental-2D-LL"
+    | "experimental-2D-LL-face";
   constructor(
-    private model: TwistyPlayerModel,
-    public schedulable: Schedulable,
-    private puzzleLoader: PuzzleLoader,
-    private effectiveVisualization:
+    model: TwistyPlayerModel,
+    schedulable: Schedulable,
+    puzzleLoader: PuzzleLoader,
+    effectiveVisualization:
       | "2D"
       | "experimental-2D-LL"
       | "experimental-2D-LL-face",
   ) {
+    this.model = model;
+    this.schedulable = schedulable;
+    this.puzzleLoader = puzzleLoader;
+    this.effectiveVisualization = effectiveVisualization;
+
     void this.twisty2DPuzzle(); // Start constructing.
 
     this.#freshListenerManager.addListener(

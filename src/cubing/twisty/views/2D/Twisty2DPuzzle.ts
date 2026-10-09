@@ -33,14 +33,26 @@ export class Twisty2DPuzzle
   public svgWrapper?: TwistyAnimatedSVG;
   private scheduler = new RenderScheduler(this.render.bind(this));
   #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
+
+  private model?: TwistyPlayerModel;
+  private kpuzzle?: KPuzzle;
+  private svgSource?: string;
+  private options?: Twisty2DPuzzleOptions;
+  private puzzleLoader?: PuzzleLoader;
+
   constructor(
-    private model?: TwistyPlayerModel,
-    private kpuzzle?: KPuzzle,
-    private svgSource?: string,
-    private options?: Twisty2DPuzzleOptions,
-    private puzzleLoader?: PuzzleLoader,
+    model?: TwistyPlayerModel,
+    kpuzzle?: KPuzzle,
+    svgSource?: string,
+    options?: Twisty2DPuzzleOptions,
+    puzzleLoader?: PuzzleLoader,
   ) {
     super();
+    this.model = model;
+    this.kpuzzle = kpuzzle;
+    this.svgSource = svgSource;
+    this.options = options;
+
     this.addCSS(twisty2DSVGCSS);
 
     this.resetSVG(); // TODO: do this in `connectedCallback()`?
