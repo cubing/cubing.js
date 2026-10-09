@@ -151,22 +151,22 @@ test-src-node-compat-bin: \
 	test-src-node-compat-bin-scramble
 
 .PHONY: test-src-node-compat-bin-svg
-test-src-node-compat-bin-svg: update-dependencies
+test-src-node-compat-bin-svg: update-dependencies build-lib-js
 	# For now, we only check successful execution.
 	node -- ./src/bin/svg.ts 3x3x3
 
 .PHONY: test-src-node-compat-bin-order
-test-src-node-compat-bin-order: update-dependencies
+test-src-node-compat-bin-order: update-dependencies build-lib-js
 	# For now, we only check successful execution.
 	node -- ./src/bin/order.ts 3x3x3 "R U R' U R U2' R'"
 
 .PHONY: test-src-node-compat-bin-puzzle-geometry-bin
-test-src-node-compat-bin-puzzle-geometry-bin: update-dependencies
+test-src-node-compat-bin-puzzle-geometry-bin: update-dependencies build-lib-js
 	# For now, we only check successful execution.
 	node -- ./src/bin/puzzle-geometry-bin.ts --svg megaminx
 
 .PHONY: test-src-node-compat-bin-scramble
-test-src-node-compat-bin-scramble: update-dependencies
+test-src-node-compat-bin-scramble: update-dependencies build-lib-js
 	# For now, we only check successful execution.
 	node -- ./src/bin/scramble.ts 222
 
