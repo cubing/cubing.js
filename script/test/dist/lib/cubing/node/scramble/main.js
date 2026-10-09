@@ -15,8 +15,6 @@ import {
 } from "cubing/scramble";
 import { experimentalSolveTwips, setSearchDebug } from "cubing/search";
 
-setSearchDebug({ disableStringWorker: true });
-
 {
   (await randomScrambleForEvent("222")).log();
   (await randomScrambleForEvent("333")).log();
