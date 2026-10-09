@@ -140,62 +140,8 @@ test-src-node-compat: \
 	test-src-node-compat-bin
 
 .PHONY: test-src-node-compat-cubing
-test-src-node-compat-cubing: \
-	test-src-node-compat-cubing-alg \
-	test-src-node-compat-cubing-bluetooth \
-	test-src-node-compat-cubing-kpuzzle \
-	test-src-node-compat-cubing-notation \
-	test-src-node-compat-cubing-protocol \
-	test-src-node-compat-cubing-puzzle-geometry \
-	test-src-node-compat-cubing-puzzles \
-	test-src-node-compat-cubing-scramble \
-	test-src-node-compat-cubing-search \
-	test-src-node-compat-cubing-stream \
-	test-src-node-compat-cubing-twisty
-
-.PHONY: test-src-node-compat-cubing-alg
-test-src-node-compat-cubing-alg:
-	node -e 'console.log(await import("./src/cubing/alg/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-bluetooth
-test-src-node-compat-cubing-bluetooth:
-	node -e 'console.log(await import("./src/cubing/bluetooth/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-kpuzzle
-test-src-node-compat-cubing-kpuzzle:
-	node -e 'console.log(await import("./src/cubing/kpuzzle/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-notation
-test-src-node-compat-cubing-notation:
-	node -e 'console.log(await import("./src/cubing/notation/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-protocol
-test-src-node-compat-cubing-protocol:
-	node -e 'console.log(await import("./src/cubing/protocol/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-puzzle-geometry
-test-src-node-compat-cubing-puzzle-geometry:
-	node -e 'console.log(await import("./src/cubing/puzzle-geometry/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-puzzles
-test-src-node-compat-cubing-puzzles:
-	node -e 'console.log(await import("./src/cubing/puzzles/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-scramble
-test-src-node-compat-cubing-scramble:
-	node -e 'console.log(await import("./src/cubing/scramble/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-search
-test-src-node-compat-cubing-search:
-	node -e 'console.log(await import("./src/cubing/search/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-stream
-test-src-node-compat-cubing-stream:
-	node -e 'console.log(await import("./src/cubing/stream/index.ts"))'
-
-.PHONY: test-src-node-compat-cubing-twisty
-test-src-node-compat-cubing-twisty:
-	node -e 'console.log(await import("./src/cubing/twisty/index.ts"))'
+test-src-node-compat-cubing:
+	node -- './script/test/src-cubing/import-all.ts'
 
 .PHONY: test-src-node-compat-bin
 test-src-node-compat-bin: \
