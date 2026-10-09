@@ -10,13 +10,13 @@
       //
       // Hopefully some day this won't be necessary:
       // https://github.com/nodejs/node/issues/43583
-      "./node_modules/@types/node/worker_threads.d.ts"
+      "../../node_modules/@types/node/worker_threads.d.ts"
     ]
   },
   "exclude": [
     "./**/*.test.dom.ts",
     "./**/*.test.ts",
-    "./src/cubing/bluetooth/",
-    "./src/cubing/twisty/"
+    "./bluetooth/",
+    "./twisty/"
   ]
 }

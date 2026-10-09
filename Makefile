@@ -317,11 +317,11 @@ lint-tsc-main: update-dependencies
 
 .PHONY: lint-tsc-lib
 lint-tsc-lib: update-dependencies
-	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./tsconfig.lib.jsonc
+	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./src/cubing/tsconfig.lib.jsonc
 
 .PHONY: lint-tsc-lib-no-dom
 lint-tsc-lib-no-dom: update-dependencies
-	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./tsconfig.lib.no-dom.jsonc
+	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./src/cubing/tsconfig.lib.no-dom.jsonc
 
 .PHONY: lint-tsc-bin
 lint-tsc-bin: update-dependencies
