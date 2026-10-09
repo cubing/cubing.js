@@ -140,7 +140,7 @@ test-src-node-compat: \
 
 .PHONY: test-src-node-compat-cubing
 test-src-node-compat-cubing:
-	node -- './script/test/src-cubing/import-all.ts'
+	${NODE} './script/test/src-cubing/import-all.ts'
 
 .PHONY: test-src-node-compat-bin
 test-src-node-compat-bin: \
@@ -152,22 +152,22 @@ test-src-node-compat-bin: \
 .PHONY: test-src-node-compat-bin-svg
 test-src-node-compat-bin-svg: update-dependencies build-lib-js
 	# For now, we only check successful execution.
-	node -- ./src/bin/svg.ts 3x3x3
+	${NODE} ./src/bin/svg.ts 3x3x3
 
 .PHONY: test-src-node-compat-bin-order
 test-src-node-compat-bin-order: update-dependencies build-lib-js
 	# For now, we only check successful execution.
-	node -- ./src/bin/order.ts 3x3x3 "R U R' U R U2' R'"
+	${NODE} ./src/bin/order.ts 3x3x3 "R U R' U R U2' R'"
 
 .PHONY: test-src-node-compat-bin-puzzle-geometry-bin
 test-src-node-compat-bin-puzzle-geometry-bin: update-dependencies build-lib-js
 	# For now, we only check successful execution.
-	node -- ./src/bin/puzzle-geometry-bin.ts --svg megaminx
+	${NODE} ./src/bin/puzzle-geometry-bin.ts --svg megaminx
 
 .PHONY: test-src-node-compat-bin-scramble
 test-src-node-compat-bin-scramble: update-dependencies build-lib-js
 	# For now, we only check successful execution.
-	node -- ./src/bin/scramble.ts 222
+	${NODE} ./src/bin/scramble.ts 222
 
 .PHONY: test-ts-bun
 test-ts-bun: update-dependencies
