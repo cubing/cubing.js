@@ -1,5 +1,5 @@
 export const packageVersion: string =
-  // biome-ignore lint/suspicious/noTsIgnore: This comment is stil present in the compiled file, where an error is *not* expected.
+  // biome-ignore lint/suspicious/noTsIgnore: This comment is still present in the compiled file, where an error is *not* expected.
   /** @ts-ignore Populated by `esbuild` at compile time. */
   globalThis.PACKAGE_VERSION ??
   // We don't want to pull in the dynamic code into the import graph, so we use
