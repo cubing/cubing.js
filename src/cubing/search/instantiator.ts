@@ -18,7 +18,9 @@ async function instantiateModuleWorker(
   // biome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
   return new Promise<WorkerAPI>(async (resolve, reject) => {
     try {
-      const worker = new PortableWorker(workerEntryFileURL);
+      const worker = searchOutsideDebugGlobals.allowNodeStyleWorkers
+        ? new PortableWorker(workerEntryFileURL)
+        : new Worker(workerEntryFileURL, { type: "module" });
 
       // TODO: Remove this once we can remove the workarounds for lack of `import.meta.resolve(…)` support.
       const onFirstMessage = (messageData: string) => {
