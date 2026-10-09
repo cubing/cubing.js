@@ -43,7 +43,9 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
             return "PG3D";
           case "experimental-2D-LL":
           case "experimental-2D-LL-face":
-            if (["2x2x2", "4x4x4", "megaminx"].includes(inputs.puzzleID)) {
+            if (
+              ["2x2x2", "4x4x4", "5x5x5", "megaminx"].includes(inputs.puzzleID)
+            ) {
               // TODO: calculate this based on the `PuzzleLoader`.
               return "experimental-2D-LL";
             } else {
