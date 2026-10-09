@@ -18,10 +18,13 @@ import type { NotationMapper } from "./notation-mapping/NotationMapper.ts";
   zeros,
 } from "./Perm.ts";
 export class PGOrbitDef {
-  constructor(
-    public size: number,
-    public mod: number,
-  ) {}
+  public size: number;
+  public mod: number;
+  constructor(size: number, mod: number) {
+    this.size = size;
+    this.mod = mod;
+  }
+
   public reassemblySize(): bigint {
     return factorial(this.size) * BigInt(this.mod) ** BigInt(this.size);
   }
@@ -42,15 +45,30 @@ export function externalName(
 }
 
 export class PGOrbitsDef {
+  public orbitnames: string[];
+  private orbitdefs: PGOrbitDef[];
+  public solved: VisibleState;
+  public movenames: string[];
+  public moveops: PGTransform[];
+  public isRotation: boolean[];
+  public forcenames: boolean[];
   constructor(
-    public orbitnames: string[],
-    private orbitdefs: PGOrbitDef[],
-    public solved: VisibleState,
-    public movenames: string[],
-    public moveops: PGTransform[],
-    public isRotation: boolean[],
-    public forcenames: boolean[],
-  ) {}
+    orbitnames: string[],
+    orbitdefs: PGOrbitDef[],
+    solved: VisibleState,
+    movenames: string[],
+    moveops: PGTransform[],
+    isRotation: boolean[],
+    forcenames: boolean[],
+  ) {
+    this.orbitnames = orbitnames;
+    this.orbitdefs = orbitdefs;
+    this.solved = solved;
+    this.movenames = movenames;
+    this.moveops = moveops;
+    this.isRotation = isRotation;
+    this.forcenames = forcenames;
+  }
 
   public toKTransformationData(t: PGTransform): KTransformationData {
     const ktransformationData: KTransformationData = {};
@@ -387,11 +405,14 @@ export class PGOrbit {
     return new PGOrbit(iota(n), zeros(n), mod);
   }
 
-  constructor(
-    public perm: number[],
-    public ori: number[],
-    public orimod: number,
-  ) {}
+  public perm: number[];
+  public ori: number[];
+  public orimod: number;
+  constructor(perm: number[], ori: number[], orimod: number) {
+    this.perm = perm;
+    this.ori = ori;
+    this.orimod = orimod;
+  }
 
   public mul(b: PGOrbit): PGOrbit {
     const n = this.perm.length;
@@ -600,7 +621,11 @@ export class PGOrbit {
 }
 
 export class PGTransformBase {
-  constructor(public orbits: PGOrbit[]) {}
+  public orbits: PGOrbit[];
+  constructor(orbits: PGOrbit[]) {
+    this.orbits = orbits;
+  }
+
   public internalMul(b: PGTransformBase): PGOrbit[] {
     const newOrbits: PGOrbit[] = [];
     for (let i = 0; i < this.orbits.length; i++) {
@@ -727,7 +752,9 @@ export class VisibleState extends PGTransformBase {
 //  Disjoint set union implementation.
 class DisjointUnion {
   private heads: number[];
-  constructor(public n: number) {
+  public n: number;
+  constructor(n: number) {
+    this.n = n;
     this.heads = new Array<number>(n);
     for (let i = 0; i < n; i++) {
       this.heads[i] = i;

@@ -144,11 +144,11 @@ set-src-node-compat-cubing:
 	node -e 'console.log(await import("./src/cubing/kpuzzle/index.ts"))'
 	node -e 'console.log(await import("./src/cubing/notation/index.ts"))'
 	node -e 'console.log(await import("./src/cubing/protocol/index.ts"))'
-# 	node -e 'console.log(await import("./src/cubing/puzzle-geometry/index.ts"))'
-# 	node -e 'console.log(await import("./src/cubing/puzzles/index.ts"))'
-# 	node -e 'console.log(await import("./src/cubing/scramble/index.ts"))'
-# 	node -e 'console.log(await import("./src/cubing/search/index.ts"))'
-# 	node -e 'console.log(await import("./src/cubing/stream/index.ts"))'
+	node -e 'console.log(await import("./src/cubing/puzzle-geometry/index.ts"))'
+	node -e 'console.log(await import("./src/cubing/puzzles/index.ts"))'
+	node -e 'console.log(await import("./src/cubing/scramble/index.ts"))'
+	node -e 'console.log(await import("./src/cubing/search/index.ts"))'
+	node -e 'console.log(await import("./src/cubing/stream/index.ts"))'
 # 	node -e 'console.log(await import("./src/cubing/twisty/index.ts"))'
 
 

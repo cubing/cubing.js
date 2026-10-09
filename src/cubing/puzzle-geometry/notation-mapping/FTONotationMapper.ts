@@ -3,10 +3,12 @@ import type { FaceNameSwizzler } from "../FaceNameSwizzler.ts";
 import type { NotationMapper } from "./NotationMapper.ts";
 
 export class FTONotationMapper implements NotationMapper {
-  constructor(
-    private child: NotationMapper,
-    private sw: FaceNameSwizzler,
-  ) {}
+  private child: NotationMapper;
+  private sw: FaceNameSwizzler;
+  constructor(child: NotationMapper, sw: FaceNameSwizzler) {
+    this.child = child;
+    this.sw = sw;
+  }
 
   public notationToInternal(move: Move): Move | null {
     if (

@@ -5,7 +5,10 @@ import type { NotationMapper } from "./NotationMapper.ts";
 
 // adds R++/R--/D++/D-- notation mapping.
 export class MegaminxScramblingNotationMapper implements NotationMapper {
-  constructor(private child: NotationMapper) {}
+  private child: NotationMapper;
+  constructor(child: NotationMapper) {
+    this.child = child;
+  }
 
   public notationToInternal(move: Move): Move | null {
     if (move.innerLayer === undefined && move.outerLayer === undefined) {

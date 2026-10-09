@@ -2,7 +2,10 @@ import { Move, QuantumMove } from "../../alg/index.ts";
 import type { NotationMapper } from "./NotationMapper.ts";
 
 export class NxNxNCubeMapper implements NotationMapper {
-  constructor(public slices: number) {}
+  public slices: number;
+  constructor(slices: number) {
+    this.slices = slices;
+  }
 
   public notationToInternal(move: Move): Move {
     const grip = move.family;

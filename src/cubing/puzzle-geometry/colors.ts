@@ -1,31 +1,32 @@
-export enum PGColors {
-  White = "#ffffff",
-  Orange = "#ff8000",
-  Green = "#44ee00",
-  Red = "#ff0000",
-  Blue = "#2266ff",
-  Yellow = "#f4f400",
+export type PGColors = (typeof PGColors)[keyof typeof PGColors];
+export const PGColors = {
+  White: "#ffffff",
+  Orange: "#ff8000",
+  Green: "#44ee00",
+  Red: "#ff0000",
+  Blue: "#2266ff",
+  Yellow: "#f4f400",
 
-  LightGray = "#aaaaaa",
-  MediumGray = "#888888",
-  DarkGray = "#5c5c5c",
+  LightGray: "#aaaaaa",
+  MediumGray: "#888888",
+  DarkGray: "#5c5c5c",
 
-  Purple = "#8800dd",
-  Cream = "#e8d0a0",
-  Pink = "#ff66cc",
+  Purple: "#8800dd",
+  Cream: "#e8d0a0",
+  Pink: "#ff66cc",
 
-  BoldBlue = "#0000ff",
-  Aqua = "#3399ff",
-  DarkGreen = "#008800",
-  Lime = "#99ff00",
-  Teal = "#007a89",
-  Brown = "#7d3b11",
-  Lavender = "#b9a1ff",
-  SeaGreen = "#5ec4b6",
-  harcoal = "#292929",
-  Burgundy = "#980000",
-  Cerise = "#d41f69",
-}
+  BoldBlue: "#0000ff",
+  Aqua: "#3399ff",
+  DarkGreen: "#008800",
+  Lime: "#99ff00",
+  Teal: "#007a89",
+  Brown: "#7d3b11",
+  Lavender: "#b9a1ff",
+  SeaGreen: "#5ec4b6",
+  harcoal: "#292929",
+  Burgundy: "#980000",
+  Cerise: "#d41f69",
+};
 
 // TODO: change this back to a const JSON definition.
 export function defaultPlatonicColorSchemes(): any {
