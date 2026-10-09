@@ -77,7 +77,6 @@ RM_RF = ${BUN} -e 'process.argv.slice(1).map(p => process.getBuiltinModule("node
 
 .PHONY: clean
 clean:
-	${BUN_RUN} ./script/cleanup/clean-legacy-path-based-type-exports.ts
 	${RM_RF} ./dist/ ./.temp/ ./package-lock.json
 
 .PHONY: reset

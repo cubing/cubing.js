@@ -4,17 +4,3 @@
 
 # Replaced with `bun.lock`
 /package-lock.json
-
-# Legacy type re-export.
-# TODO: rid of this once TypeScript is able to use the `"exports"` field in `package.json` out of the box.
-/alg/index.d.ts
-/bluetooth/index.d.ts
-/kpuzzle/index.d.ts
-/notation/index.d.ts
-/protocol/index.d.ts
-/puzzle-geometry/index.d.ts
-/puzzles/index.d.ts
-/scramble/index.d.ts
-/search/index.d.ts
-/stream/index.d.ts
-/twisty/index.d.ts

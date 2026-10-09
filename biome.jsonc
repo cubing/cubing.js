@@ -6,7 +6,6 @@
       "**",
       "!!.temp",
       "!dist",
-      "!**/*/index.d.ts",
       "!src/cubing/vendor/mit/cs0x7f/**/*",
       "!src/cubing/vendor/mpl/twips/**/*.js",
       "!src/cubing/vendor/mpl/xyzzy/**/*.js",

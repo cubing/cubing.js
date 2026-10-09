@@ -1,34 +1,11 @@
-import { Path } from "path-class";
 import { defineConfig } from "tsdown";
 import { packageEntryPoints } from "./script/build/common/package-info.ts";
-import { packageNames } from "./script/build/common/packageNames.ts";
-import {
-  DIST_LIB_CUBING,
-  TYPESCRIPT_DECLARATION_INDEX,
-} from "./script/build/common/paths.ts";
 
 console.warn(`
 ⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳
 Note: The \`types\` target is slow. Expect several seconds.
 ⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳⏳
 `);
-
-// TODO: remove this once TypeScript resolves types from the `package.json` exports out of the box (by default).
-for (const packageName of packageNames) {
-  const path = new Path("./")
-    .join(packageName)
-    .join(TYPESCRIPT_DECLARATION_INDEX);
-  console.info(`Writing legacy re-export to: ${path}`);
-  await path.write(`export type * from ${JSON.stringify(
-    new Path("../").join(
-      DIST_LIB_CUBING,
-      packageName,
-      TYPESCRIPT_DECLARATION_INDEX,
-    ).path,
-  )};
-`);
-}
-console.info("");
 
 export default defineConfig({
   entry: packageEntryPoints,
