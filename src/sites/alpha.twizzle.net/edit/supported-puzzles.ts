@@ -72,19 +72,23 @@ class DisplayablePG3D {
 
 export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 
-enum OptGroup {
-  WCACubes = "Cubes",
-  WCAMore = "More WCA puzzles",
-  Other = "Other puzzles",
-}
-enum GeometrySymbol {
-  Square = "■",
-  Diamond = "◆",
-  Pentagon = "⬟",
-  TriangleUp = "▲",
-  TriangleDown = "▼",
-  Circle = "●",
-}
+export type OptGroup = (typeof OptGroup)[keyof typeof OptGroup];
+export const OptGroup = {
+  WCACubes: "Cubes",
+  WCAMore: "More WCA puzzles",
+  Other: "Other puzzles",
+};
+
+export type GeometrySymbol =
+  (typeof GeometrySymbol)[keyof typeof GeometrySymbol];
+export const GeometrySymbol = {
+  Square: "■",
+  Diamond: "◆",
+  Pentagon: "⬟",
+  TriangleUp: "▲",
+  TriangleDown: "▼",
+  Circle: "●",
+};
 
 const puzzleData: Partial<
   Record<

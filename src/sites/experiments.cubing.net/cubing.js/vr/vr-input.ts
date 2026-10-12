@@ -7,21 +7,23 @@ import type { Group } from "three/src/objects/Group.js";
 import { Line } from "three/src/objects/Line.js";
 import type { WebGLRenderer } from "three/src/renderers/WebGLRenderer.js";
 
-export enum Status {
-  Untargeted,
-  Targeted,
-  Pressed,
-}
+export type Status = (typeof Status)[keyof typeof Status];
+export const Status = {
+  Untargeted: "Untargeted",
+  Targeted: "Targeted",
+  Pressed: "Pressed",
+};
 
 const NUM_CONTROLLERS = 2;
 
-export enum OculusButton {
-  Trackpad = 0,
-  Trigger = 1,
-  Grip = 2,
-  XorA = 3,
-  YorB = 4,
-}
+export type OculusButton = (typeof OculusButton)[keyof typeof OculusButton];
+export const OculusButton = {
+  Trackpad: 0,
+  Trigger: 1,
+  Grip: 2,
+  XorA: 3,
+  YorB: 4,
+};
 
 export const controllerDirection: Vector3 = new Vector3(0, 0, -1);
 
@@ -52,12 +54,14 @@ const material = new LineBasicMaterial({
   opacity: 0.5,
 });
 
-export enum ButtonGrouping {
-  All = "all",
-  Any = "any",
-  Single = "single",
-  None = "none",
-}
+export type ButtonGrouping =
+  (typeof ButtonGrouping)[keyof typeof ButtonGrouping];
+export const ButtonGrouping = {
+  All: "all",
+  Any: "any",
+  Single: "single",
+  None: "none",
+};
 
 export type ButtonListenerCallback = () => void;
 

@@ -1,14 +1,15 @@
 {
   "schema": "https://json.schemastore.org/tsconfig",
-  "extends": "../node_modules/@cubing/dev-config/ts/es2022-types/tsconfig.json",
+  "extends": [
+    "../node_modules/@cubing/dev-config/ts/es2022-types/tsconfig.json",
+    "../node_modules/@cubing/dev-config/erasable/ts/tsconfig.json"
+  ],
   "compilerOptions": {
     "module": "preserve",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "noEmit": true,
     "rootDir": "../",
-    "types": ["web-bluetooth", "dom-speech-recognition"],
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true
+    "types": ["web-bluetooth", "dom-speech-recognition"]
   },
   "include": ["../script/", "../src/"],
   "exclude": [
