@@ -96,14 +96,26 @@ interface MaterialMap
 class AxisInfo {
   public stickerMaterial: MaterialMap;
   public hintStickerMaterial: MaterialMap;
+  public vector: Vector3; // Moved automatically for erasable syntax.
+  public fromZ: Euler; // Moved automatically for erasable syntax.
+  public color: number; // Moved automatically for erasable syntax.
+  public dimColor: number; // Moved automatically for erasable syntax.
+  public hintOpacityScale: number; // Moved automatically for erasable syntax.
+
   constructor(
-    public vector: Vector3,
-    public fromZ: Euler,
-    public color: number,
-    public dimColor: number,
-    public hintOpacityScale: number, // TODO: make this work better across bright *and* dark backgrounds. Maybe tweak sticker compositing settings?
+    vector: Vector3,
+    fromZ: Euler,
+    color: number,
+    dimColor: number,
+    hintOpacityScale: number, // TODO: make this work better across bright *and* dark backgrounds. Maybe tweak sticker compositing settings?
     options?: { hintColor?: number; hintDimColor?: number },
   ) {
+    this.hintOpacityScale = hintOpacityScale;
+    this.dimColor = dimColor;
+    this.color = color;
+    this.fromZ = fromZ;
+    this.vector = vector;
+
     const colorLinearSRGB = new Color(color).convertLinearToSRGB();
     const dimColorLinearSRGB = new Color(dimColor).convertLinearToSRGB();
     // TODO: Make sticker material single-sided when cubie foundation is opaque?
@@ -298,11 +310,15 @@ class CubieDef {
   public matrix: Matrix4;
   public stickerFaces: number[];
   // stickerFaceNames can be e.g. ["U", "F", "R"], "UFR" if every face is a single letter.
+  public orbit: string; // Moved automatically for erasable syntax.
+
   constructor(
-    public orbit: string,
+    orbit: string,
     stickerFaceNames: string[] | string,
     q: Quaternion,
   ) {
+    this.orbit = orbit;
+
     const individualStickerFaceNames =
       typeof stickerFaceNames === "string"
         ? stickerFaceNames.split("")
@@ -602,12 +618,17 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.hintSprite = texture;
   }
 
+  private kpuzzle: KPuzzle; // Moved automatically for erasable syntax.
+  private scheduleRenderCallback?: () => void; // Moved automatically for erasable syntax.
+
   constructor(
-    private kpuzzle: KPuzzle,
-    private scheduleRenderCallback?: () => void,
+    kpuzzle: KPuzzle,
+    scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},
   ) {
     super();
+    this.scheduleRenderCallback = scheduleRenderCallback;
+    this.kpuzzle = kpuzzle;
 
     this.options = { ...cube3DOptionsDefaults };
     Object.assign(this.options, options); // TODO: check if this works

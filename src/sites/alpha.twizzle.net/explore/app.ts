@@ -151,7 +151,11 @@ class ConfigUI {
     "#main-config",
   ) as HTMLInputElement;
   showing: boolean = false;
-  constructor(private app: TwizzleExplorerApp) {
+  private app: TwizzleExplorerApp; // Moved automatically for erasable syntax.
+
+  constructor(app: TwizzleExplorerApp) {
+    this.app = app;
+
     this.toggleButton.addEventListener("click", () => {
       this.showing = !this.showing;
       // TODO: Handle this with a single CSS class on the whole app.
@@ -212,7 +216,11 @@ class ConfigUI {
 }
 
 class SelectUI {
-  constructor(private app: TwizzleExplorerApp) {
+  private app: TwizzleExplorerApp; // Moved automatically for erasable syntax.
+
+  constructor(app: TwizzleExplorerApp) {
+    this.app = app;
+
     (
       document.body.querySelector("#actions") as HTMLSelectElement
     ).addEventListener(

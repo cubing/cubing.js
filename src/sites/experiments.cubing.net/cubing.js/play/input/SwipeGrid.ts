@@ -28,15 +28,24 @@ export class SwipeGrid extends HTMLElement {
   private swipeSource: HTMLElement | null = null;
   // private currentMove: string | null = null;
   // private lastSectorUnderSwipe: HTMLElement | null = null;
-  private showAllTargetMovesID: number = 0; // TODO: use proper state tracking.
+  private showAllTargetMovesID: number = 0;
+  private puzzleName: PuzzleID; // Moved automatically for erasable syntax.
+  private moveListener: (move: Move) => void; // Moved automatically for erasable syntax.
+  private actionListener: (action: Action) => void; // Moved automatically for erasable syntax.
+  private theme: ThemeType; // Moved automatically for erasable syntax.
+
   constructor(
-    private puzzleName: PuzzleID,
-    private moveListener: (move: Move) => void,
-    private actionListener: (action: Action) => void,
-    private theme: ThemeType,
+    puzzleName: PuzzleID,
+    moveListener: (move: Move) => void,
+    actionListener: (action: Action) => void,
+    theme: ThemeType,
     _active: boolean = false, // TODO
   ) {
     super();
+    this.theme = theme;
+    this.actionListener = actionListener;
+    this.moveListener = moveListener;
+    this.puzzleName = puzzleName;
 
     this.sectors = [];
     for (let i = 0; i < 9; i++) {

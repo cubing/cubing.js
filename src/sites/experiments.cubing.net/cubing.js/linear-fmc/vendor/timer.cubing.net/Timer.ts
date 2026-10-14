@@ -4,7 +4,11 @@ export class Timer {
   private running: boolean = false;
   private animFrameBound: () => void;
   private startTime?: number;
-  constructor(private currentTimeCallback: (t: Milliseconds) => void) {
+  private currentTimeCallback: (t: Milliseconds) => void; // Moved automatically for erasable syntax.
+
+  constructor(currentTimeCallback: (t: Milliseconds) => void) {
+    this.currentTimeCallback = currentTimeCallback;
+
     this.animFrameBound = this.animFrame.bind(this);
   }
 

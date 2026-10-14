@@ -139,16 +139,23 @@ export class SwipeyPuzzle extends HTMLElement {
   public twistyPlayer: TwistyPlayer;
 
   theme: ThemeType;
+  private puzzleName: PuzzleID; // Moved automatically for erasable syntax.
+  private actionListener: (action: Action) => void; // Moved automatically for erasable syntax.
+  private algListener: () => void; // Moved automatically for erasable syntax.
 
   constructor(
-    private puzzleName: PuzzleID,
+    puzzleName: PuzzleID,
     visualization: VisualizationFormat,
     stickering: ExperimentalStickering | null,
     tempoScale: number,
-    private actionListener: (action: Action) => void,
-    private algListener: () => void,
+    actionListener: (action: Action) => void,
+    algListener: () => void,
   ) {
     super();
+    this.algListener = algListener;
+    this.actionListener = actionListener;
+    this.puzzleName = puzzleName;
+
     this.twistyPlayer = constructTwistyPlayer(
       puzzleName,
       visualization,

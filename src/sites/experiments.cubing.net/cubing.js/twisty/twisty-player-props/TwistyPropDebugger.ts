@@ -25,11 +25,13 @@ function truncateAlgForDisplay(alg: Alg): string {
 }
 
 export class TwistyPropDebugger extends ManagedCustomElement {
-  constructor(
-    private name: string,
-    public twistyProp: TwistyPropParent<any>,
-  ) {
+  private name: string; // Moved automatically for erasable syntax.
+  public twistyProp: TwistyPropParent<any>; // Moved automatically for erasable syntax.
+
+  constructor(name: string, twistyProp: TwistyPropParent<any>) {
     super();
+    this.twistyProp = twistyProp;
+    this.name = name;
   }
 
   valueElem: HTMLElement | null = null;
@@ -155,8 +157,11 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 customElementsShim.define("twisty-prop-debugger", TwistyPropDebugger);
 
 export class TwistyPlayerDebugger extends ManagedCustomElement {
-  constructor(private player: TwistyPlayer) {
+  private player: TwistyPlayer; // Moved automatically for erasable syntax.
+
+  constructor(player: TwistyPlayer) {
     super({ mode: "open" });
+    this.player = player;
   }
 
   connectedCallback(): void {

@@ -139,10 +139,13 @@ class Filler {
   colors: Uint8Array;
   uvs?: Float32Array;
   ind: Uint8Array;
-  constructor(
-    public sz: number,
-    public tm: TextureMapper,
-  ) {
+  public sz: number; // Moved automatically for erasable syntax.
+  public tm: TextureMapper; // Moved automatically for erasable syntax.
+
+  constructor(sz: number, tm: TextureMapper) {
+    this.tm = tm;
+    this.sz = sz;
+
     this.vertices = new Float32Array(9 * sz);
     this.uvs = undefined;
     this.colors = new Uint8Array(18 * sz);
@@ -530,18 +533,29 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private stickerMaterialDisposable: boolean;
 
   #pendingStickeringUpdate: boolean = false;
+  private scheduleRenderCallback: () => void; // Moved automatically for erasable syntax.
+  private kpuzzle: KPuzzle; // Moved automatically for erasable syntax.
+  private stickerDat: StickerDat; // Moved automatically for erasable syntax.
+  private faceletScale: "auto" | number; // Moved automatically for erasable syntax.
+  private params: PG3DOptions; // Moved automatically for erasable syntax.
 
   constructor(
-    private scheduleRenderCallback: () => void,
-    private kpuzzle: KPuzzle,
-    private stickerDat: StickerDat,
+    scheduleRenderCallback: () => void,
+    kpuzzle: KPuzzle,
+    stickerDat: StickerDat,
     enableFoundationOpt: boolean = false,
     enableHintStickersOpt: boolean = false,
     hintStickerHeightScale: number = 1,
-    private faceletScale: "auto" | number = 1,
-    private params: PG3DOptions = {},
+    faceletScale: "auto" | number = 1,
+    params: PG3DOptions = {},
   ) {
     super();
+    this.params = params;
+    this.faceletScale = faceletScale;
+    this.stickerDat = stickerDat;
+    this.kpuzzle = kpuzzle;
+    this.scheduleRenderCallback = scheduleRenderCallback;
+
     if (stickerDat.stickers.length === 0) {
       throw Error("Reuse of stickerdat from pg; please don't do that.");
     }

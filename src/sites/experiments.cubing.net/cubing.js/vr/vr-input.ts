@@ -70,13 +70,25 @@ export interface ButtonSpec {
 class ButtonListener {
   // TODO: Calculate if the initial status is actually active.
   private activeLastTime: boolean = false;
+  private grouping: ButtonGrouping; // Moved automatically for erasable syntax.
+  private buttonSpecs: ButtonSpec[]; // Moved automatically for erasable syntax.
+  private activatedCallback: ButtonListenerCallback; // Moved automatically for erasable syntax.
+  private continuedActiveCallback?: ButtonListenerCallback; // Moved automatically for erasable syntax.
+  private deactivatedCallback?: ButtonListenerCallback; // Moved automatically for erasable syntax.
+
   constructor(
-    private grouping: ButtonGrouping,
-    private buttonSpecs: ButtonSpec[],
-    private activatedCallback: ButtonListenerCallback,
-    private continuedActiveCallback?: ButtonListenerCallback,
-    private deactivatedCallback?: ButtonListenerCallback,
-  ) {}
+    grouping: ButtonGrouping,
+    buttonSpecs: ButtonSpec[],
+    activatedCallback: ButtonListenerCallback,
+    continuedActiveCallback?: ButtonListenerCallback,
+    deactivatedCallback?: ButtonListenerCallback,
+  ) {
+    this.deactivatedCallback = deactivatedCallback;
+    this.continuedActiveCallback = continuedActiveCallback;
+    this.activatedCallback = activatedCallback;
+    this.buttonSpecs = buttonSpecs;
+    this.grouping = grouping;
+  }
 
   public update(buttonStates: ButtonStates): void {
     const active = this.currentlyActive(buttonStates);

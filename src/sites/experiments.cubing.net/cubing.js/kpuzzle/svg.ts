@@ -5,10 +5,11 @@ import { ExperimentalSVGAnimator } from "../../../../cubing/twisty/index.ts";
 
 class SVGDisplay {
   private svg: ExperimentalSVGAnimator;
-  constructor(
-    private kpuzzle: KPuzzle,
-    svg: string,
-  ) {
+  private kpuzzle: KPuzzle; // Moved automatically for erasable syntax.
+
+  constructor(kpuzzle: KPuzzle, svg: string) {
+    this.kpuzzle = kpuzzle;
+
     this.svg = new ExperimentalSVGAnimator(kpuzzle, svg);
   }
 

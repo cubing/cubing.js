@@ -89,10 +89,11 @@ export class App {
   public twistyPlayer!: TwistyPlayer; // TODO: https://github.com/microsoft/TypeScript/issues/30462
   private puzzlePane: HTMLElement;
   public controlPane: ControlPane;
-  constructor(
-    public element: Element,
-    initialConfig: TwistyPlayerConfig,
-  ) {
+  public element: Element; // Moved automatically for erasable syntax.
+
+  constructor(element: Element, initialConfig: TwistyPlayerConfig) {
+    this.element = element;
+
     this.puzzlePane = findOrCreateChild(
       this.element,
       "puzzle-pane",
@@ -345,13 +346,25 @@ class ControlPane {
   private commutatorConjugateInfo: HTMLElement;
   private square1Info: HTMLElement;
   private twistyStreamSource: TwistyStreamSource;
+  private app: App; // Moved automatically for erasable syntax.
+  private twistyPlayer: TwistyPlayer; // Moved automatically for erasable syntax.
+  public element: Element; // Moved automatically for erasable syntax.
+  private solve: () => void; // Moved automatically for erasable syntax.
+  private scramble: () => void; // Moved automatically for erasable syntax.
+
   constructor(
-    private app: App,
-    private twistyPlayer: TwistyPlayer,
-    public element: Element,
-    private solve: () => void,
-    private scramble: () => void,
+    app: App,
+    twistyPlayer: TwistyPlayer,
+    element: Element,
+    solve: () => void,
+    scramble: () => void,
   ) {
+    this.scramble = scramble;
+    this.solve = solve;
+    this.element = element;
+    this.twistyPlayer = twistyPlayer;
+    this.app = app;
+
     const appTitleElem: HTMLAnchorElement = findOrCreateChildWithClass(
       this.element,
       "title",

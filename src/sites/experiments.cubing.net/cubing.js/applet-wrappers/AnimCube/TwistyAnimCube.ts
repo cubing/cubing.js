@@ -45,10 +45,13 @@ const paramsNotImplementedYet: Record<string, true> = {
 
 export class TwistyAnimCube extends ManagedCustomElement {
   twistyPlayer?: TwistyPlayer;
+  private finishConnectedCallback?: (twistyAnimCube: TwistyAnimCube) => void; // Moved automatically for erasable syntax.
+
   constructor(
-    private finishConnectedCallback?: (twistyAnimCube: TwistyAnimCube) => void,
+    finishConnectedCallback?: (twistyAnimCube: TwistyAnimCube) => void,
   ) {
     super();
+    this.finishConnectedCallback = finishConnectedCallback;
   }
 
   protected connectedCallback(): void {

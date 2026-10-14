@@ -117,9 +117,12 @@ class PuzzlePatternEditor {
   svgAnimator!: TwistyAnimatedSVG; // TODO: Refactor to avoid non-null assertion.
   svgString!: string; // TODO: Refactor to avoid non-null assertion.
   kpuzzle!: KPuzzle; // TODO: Refactor to avoid non-null assertion.
-  pattern!: KPattern; // TODO: Refactor to avoid non-null assertion.
+  pattern!: KPattern;
+  private displayPatternText: () => void; // Moved automatically for erasable syntax.
 
-  private constructor(private displayPatternText: () => void) {
+  private constructor(displayPatternText: () => void) {
+    this.displayPatternText = displayPatternText;
+
     this.displayPatternText();
   }
 

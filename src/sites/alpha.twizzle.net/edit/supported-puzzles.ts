@@ -11,10 +11,13 @@ import type {
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle" as const;
   // TODO: push display name into the KSolve defition.
-  constructor(
-    private kpuzzleName: string,
-    public viz: VisualizationFormat,
-  ) {}
+  private kpuzzleName: string; // Moved automatically for erasable syntax.
+  public viz: VisualizationFormat; // Moved automatically for erasable syntax.
+
+  constructor(kpuzzleName: string, viz: VisualizationFormat) {
+    this.viz = viz;
+    this.kpuzzleName = kpuzzleName;
+  }
 
   public displayName(): string {
     return puzzles[this.kpuzzleName].fullName;
@@ -31,12 +34,22 @@ class DisplayableKPuzzle {
 class DisplayablePG3D {
   public type: "pg3d" = "pg3d" as const;
   public viz: VisualizationFormat = "PG3D";
+  private displayNameStr: string; // Moved automatically for erasable syntax.
+  private name: string; // Moved automatically for erasable syntax.
+  private desc: string; // Moved automatically for erasable syntax.
+  public polarVantages: boolean; // Moved automatically for erasable syntax.
+
   constructor(
-    private displayNameStr: string,
-    private name: string,
-    private desc: string,
-    public polarVantages: boolean,
-  ) {}
+    displayNameStr: string,
+    name: string,
+    desc: string,
+    polarVantages: boolean,
+  ) {
+    this.polarVantages = polarVantages;
+    this.desc = desc;
+    this.name = name;
+    this.displayNameStr = displayNameStr;
+  }
 
   public displayName(): string {
     return this.displayNameStr;

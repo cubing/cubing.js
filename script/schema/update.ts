@@ -15,10 +15,16 @@ const PACKAGE_SCHEMA_FOLDER = new Path("./experimental-json-schema/kpuzzle/");
 
 class SchemaInfo {
   // TODO: Return type for JSON schema?
+  private zodSchema: ZodMiniRecord<any> | ZodMiniObject<any>; // Moved automatically for erasable syntax.
+  private outputName: string; // Moved automatically for erasable syntax.
+
   constructor(
-    private zodSchema: ZodMiniRecord<any> | ZodMiniObject<any>,
-    private outputName: string,
-  ) {}
+    zodSchema: ZodMiniRecord<any> | ZodMiniObject<any>,
+    outputName: string,
+  ) {
+    this.outputName = outputName;
+    this.zodSchema = zodSchema;
+  }
 
   async schema(): Promise<any> {
     // TODO: get this working with the JSON API.

@@ -12,14 +12,22 @@ export class SwipeTracker {
   private sectorIndices: Map<HTMLElement, number> = new Map();
   private activeTouchesByID: Map<number, ActiveTouch> = new Map();
   private activeTouches: ActiveTouch[] = [];
+  private sectors: HTMLElement[]; // Moved automatically for erasable syntax.
+  private swipeChangeListener: (activeSwipes: ActiveSwipe[]) => void; // Moved automatically for erasable syntax.
+  private swipeFinishListener: (
+    source: HTMLElement,
+    target: HTMLElement,
+  ) => void; // Moved automatically for erasable syntax.
+
   constructor(
-    private sectors: HTMLElement[],
-    private swipeChangeListener: (activeSwipes: ActiveSwipe[]) => void,
-    private swipeFinishListener: (
-      source: HTMLElement,
-      target: HTMLElement,
-    ) => void,
+    sectors: HTMLElement[],
+    swipeChangeListener: (activeSwipes: ActiveSwipe[]) => void,
+    swipeFinishListener: (source: HTMLElement, target: HTMLElement) => void,
   ) {
+    this.swipeFinishListener = swipeFinishListener;
+    this.swipeChangeListener = swipeChangeListener;
+    this.sectors = sectors;
+
     for (const [idx, sector] of this.sectors.entries()) {
       this.sectorIndices.set(sector, idx);
       sector.addEventListener("touchstart", this.touchStart.bind(this, sector));

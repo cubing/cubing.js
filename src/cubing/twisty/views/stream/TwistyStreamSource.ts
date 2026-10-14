@@ -15,8 +15,12 @@ interface StreamSource extends EventTarget {
 }
 
 class BluetoothStreamSource extends EventTarget {
-  private constructor(private puzzle: BluetoothPuzzle) {
+  private puzzle: BluetoothPuzzle; // Moved automatically for erasable syntax.
+
+  private constructor(puzzle: BluetoothPuzzle) {
     super();
+    this.puzzle = puzzle;
+
     puzzle.addAlgLeafListener((e: ExperimentalAlgLeafEvent): void => {
       const move = e.latestAlgLeaf.as(Move);
       if (!move) {
@@ -44,8 +48,12 @@ class BluetoothStreamSource extends EventTarget {
 }
 
 class KeyboardStreamSource extends EventTarget {
-  private constructor(private puzzle: KeyboardPuzzle) {
+  private puzzle: KeyboardPuzzle; // Moved automatically for erasable syntax.
+
+  private constructor(puzzle: KeyboardPuzzle) {
     super();
+    this.puzzle = puzzle;
+
     puzzle.addAlgLeafListener((e: ExperimentalAlgLeafEvent) => {
       const move = e.latestAlgLeaf.as(Move);
       if (!move) {

@@ -223,12 +223,22 @@ class PatternChecker {
     number /* DRF piece */,
     Record<number /* DRF orientation */, KPattern>
   > = {};
+  public name: string; // Moved automatically for erasable syntax.
+  private flatPuzzleStickering: FlatPuzzleStickering; // Moved automatically for erasable syntax.
+  private orientationAnchor: OrientationAnchor; // Moved automatically for erasable syntax.
+  public obviates: string[]; // Moved automatically for erasable syntax.
+
   constructor(
-    public name: string,
-    private flatPuzzleStickering: FlatPuzzleStickering,
-    private orientationAnchor: OrientationAnchor,
-    public obviates: string[] = [],
+    name: string,
+    flatPuzzleStickering: FlatPuzzleStickering,
+    orientationAnchor: OrientationAnchor,
+    obviates: string[] = [],
   ) {
+    this.obviates = obviates;
+    this.orientationAnchor = orientationAnchor;
+    this.flatPuzzleStickering = flatPuzzleStickering;
+    this.name = name;
+
     for (const cubeOrientation of cubeOrientations) {
       const orientedPattern = orientedSolvedPattern.applyTransformation(
         cubeOrientation.inverseTransformation,

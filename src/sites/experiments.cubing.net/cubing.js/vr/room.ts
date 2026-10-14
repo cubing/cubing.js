@@ -10,10 +10,13 @@ import type { VRPuzzle } from "./vr-puzzle.ts";
 export class Room {
   public scene: Scene;
   private box: LineSegments;
-  constructor(
-    private vrInput: VRInput,
-    private vrPuzzle: VRPuzzle,
-  ) {
+  private vrInput: VRInput; // Moved automatically for erasable syntax.
+  private vrPuzzle: VRPuzzle; // Moved automatically for erasable syntax.
+
+  constructor(vrInput: VRInput, vrPuzzle: VRPuzzle) {
+    this.vrPuzzle = vrPuzzle;
+    this.vrInput = vrInput;
+
     this.scene = new Scene();
     this.scene.background = new Color(0x505050);
 
