@@ -12,11 +12,11 @@ import type { NotationMapper } from "./notation-mapping/NotationMapper.ts";
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
   factorial,
-  iota,
   lcm,
-  Perm,
+  Permutation,
+  range,
   zeros,
-} from "./Perm.ts";
+} from "./Permutation.ts";
 export class PGOrbitDef {
   public size: number;
   public mod: number;
@@ -402,7 +402,7 @@ export class PGOrbit {
   private static ktransformationCache: KTransformationOrbitData[] = [];
 
   public static e(n: number, mod: number): PGOrbit {
-    return new PGOrbit(iota(n), zeros(n), mod);
+    return new PGOrbit(range(n), zeros(n), mod);
   }
 
   public perm: number[];
@@ -463,10 +463,10 @@ export class PGOrbit {
     return this;
   }
 
-  public toPerm(): Perm {
+  public toPerm(): Permutation {
     const o = this.orimod;
     if (o === 1) {
-      return new Perm(this.perm);
+      return new Permutation(this.perm);
     }
     const n = this.perm.length;
     const newPerm = new Array<number>(n * o);
@@ -475,7 +475,7 @@ export class PGOrbit {
         newPerm[i * o + j] = o * this.perm[i] + ((this.ori[i] + j) % o);
       }
     }
-    return new Perm(newPerm);
+    return new Permutation(newPerm);
   }
 
   // number the pieces in order.
@@ -521,7 +521,7 @@ export class PGOrbit {
 
   public isIdentity(): boolean {
     const n = this.perm.length;
-    if (this.perm === iota(n) && this.ori === zeros(n)) {
+    if (this.perm === range(n) && this.ori === zeros(n)) {
       return true;
     }
     for (let i = 0; i < n; i++) {
@@ -600,7 +600,7 @@ export class PGOrbit {
     if (this.isIdentity()) {
       if (!PGOrbit.ktransformationCache[n]) {
         PGOrbit.ktransformationCache[n] = {
-          permutation: iota(n),
+          permutation: range(n),
           orientationDelta: zeros(n),
         };
       }
@@ -658,23 +658,23 @@ export class PGTransformBase {
     return this;
   }
 
-  public toPerm(): Perm {
-    const perms: Perm[] = [];
+  public toPerm(): Permutation {
+    const perms: Permutation[] = [];
     let n = 0;
     for (const orbit of this.orbits) {
       const p = orbit.toPerm();
       perms.push(p);
-      n += p.n;
+      n += p.length;
     }
     const newPerm = new Array<number>(n);
     n = 0;
     for (const p of perms) {
-      for (let j = 0; j < p.n; j++) {
-        newPerm[n + j] = n + p.p[j];
+      for (let j = 0; j < p.length; j++) {
+        newPerm[n + j] = n + p.permutation[j];
       }
-      n += p.n;
+      n += p.length;
     }
-    return new Perm(newPerm);
+    return new Permutation(newPerm);
   }
 
   public identicalPieces(): number[][] {

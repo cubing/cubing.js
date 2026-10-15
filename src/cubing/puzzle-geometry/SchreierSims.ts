@@ -1,4 +1,4 @@
-import { identity, type Perm } from "./Perm.ts";
+import { identity, type Permutation } from "./Permutation.ts";
 
 class FactoredNumber {
   public mult: number[];
@@ -43,47 +43,50 @@ class FactoredNumber {
   }
 }
 
-export function schreierSims(g: Perm[], disp: (s: string) => void): bigint {
-  const n = g[0].p.length;
+export function schreierSims(
+  g: Permutation[],
+  disp: (s: string) => void,
+): bigint {
+  const n = g[0].permutation.length;
   const e = identity(n);
-  let sgs: Perm[][] = [];
-  let sgsi: Perm[][] = [];
+  let sgs: Permutation[][] = [];
+  let sgsi: Permutation[][] = [];
   let sgslen: number[][] = [];
-  let Tk: Perm[][] = [];
+  let Tk: Permutation[][] = [];
   let Tklen: number[][] = [];
-  function resolve(p: Perm): boolean {
-    for (let i = p.p.length - 1; i >= 0; i--) {
-      const j = p.p[i];
+  function resolve(p: Permutation): boolean {
+    for (let i = p.permutation.length - 1; i >= 0; i--) {
+      const j = p.permutation[i];
       if (j !== i) {
         if (!sgs[i][j]) {
           return false;
         }
-        p = p.mul(sgsi[i][j]);
+        p = p.multiply(sgsi[i][j]);
       }
     }
     return true;
   }
-  function knutha(k: number, p: Perm, len: number): void {
+  function knutha(k: number, p: Permutation, len: number): void {
     Tk[k].push(p);
     Tklen[k].push(len);
     for (let i = 0; i < sgs[k].length; i++) {
       if (sgs[k][i]) {
-        knuthb(k, sgs[k][i].mul(p), len + sgslen[k][i]);
+        knuthb(k, sgs[k][i].multiply(p), len + sgslen[k][i]);
       }
     }
   }
-  function knuthb(k: number, p: Perm, len: number): void {
-    const j = p.p[k];
+  function knuthb(k: number, p: Permutation, len: number): void {
+    const j = p.permutation[k];
     if (!sgs[k][j]) {
       sgs[k][j] = p;
-      sgsi[k][j] = p.inv();
+      sgsi[k][j] = p.invert();
       sgslen[k][j] = len;
       for (let i = 0; i < Tk[k].length; i++) {
-        knuthb(k, p.mul(Tk[k][i]), len + Tklen[k][i]);
+        knuthb(k, p.multiply(Tk[k][i]), len + Tklen[k][i]);
       }
       return;
     }
-    const p2 = p.mul(sgsi[k][j]);
+    const p2 = p.multiply(sgsi[k][j]);
     if (!resolve(p2)) {
       knutha(k - 1, p2, len + sgslen[k][j]);
     }

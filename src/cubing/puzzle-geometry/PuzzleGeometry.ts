@@ -24,7 +24,6 @@ import {
   PuzzleGeometryFullOptions,
   type PuzzleGeometryOptions,
 } from "./Options.ts";
-import { iota, Perm, zeros } from "./Perm.ts";
 import {
   externalName,
   PGOrbit,
@@ -34,6 +33,7 @@ import {
   showcanon,
   VisibleState,
 } from "./PermOriSet.ts";
+import { Permutation, range, zeros } from "./Permutation.ts";
 import {
   closure,
   cube,
@@ -2415,7 +2415,7 @@ export class PuzzleGeometry {
       // gap doesn't like angle brackets in IDs
       mvs.push(movename);
       if (doinv) {
-        r.push(`${movename}:=${os.moveops[i].toPerm().inv().toGap()};`);
+        r.push(`${movename}:=${os.moveops[i].toPerm().invert().toGap()};`);
       } else {
         r.push(`${movename}:=${os.moveops[i].toPerm().toGap()};`);
       }
@@ -2450,7 +2450,9 @@ export class PuzzleGeometry {
       }
       mvs.push(movename);
       if (doinv) {
-        r.push(`${movename}=${os.moveops[i].toPerm().inv().toMathematica()};`);
+        r.push(
+          `${movename}=${os.moveops[i].toPerm().invert().toMathematica()};`,
+        );
       } else {
         r.push(`${movename}=${os.moveops[i].toPerm().toMathematica()};`);
       }
@@ -2493,7 +2495,7 @@ export class PuzzleGeometry {
     const oris = [];
     // TODO: refactor to avoid non-null-assertion
     for (const len of this.cubieOrbitSizes!) {
-      perms.push(iota(len));
+      perms.push(range(len));
       oris.push(zeros(len));
     }
     for (let m = moverange[0]; m <= moverange[1]; m++) {
@@ -2510,7 +2512,7 @@ export class PuzzleGeometry {
           inc = mperm.length - 2;
           oinc = mperm.length - 1;
         }
-        if (perms[setnum] === iota(this.cubieOrbitSizes![setnum])) {
+        if (perms[setnum] === range(this.cubieOrbitSizes![setnum])) {
           // TODO: refactor to avoid non-null-assertion
           perms[setnum] = perms[setnum].slice();
           if (
@@ -2535,7 +2537,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    let lastId = new PGOrbit(iota(24), zeros(24), 1);
+    let lastId = new PGOrbit(range(24), zeros(24), 1);
     for (let ii = 0; ii < this.cubieSetNames!.length; ii++) {
       // TODO: refactor to avoid non-null-assertion
       if (setmoves && !setmoves[ii]) {
@@ -2543,7 +2545,7 @@ export class PuzzleGeometry {
       }
       if (this.orbitOrientations![ii] === 1 || this.options.fixedOrientation) {
         // TODO: refactor to avoid non-null-assertion
-        if (perms[ii] === iota(lastId.perm.length)) {
+        if (perms[ii] === range(lastId.perm.length)) {
           if (perms[ii] !== lastId.perm) {
             lastId = new PGOrbit(perms[ii], oris[ii], 1);
           }
@@ -2903,7 +2905,7 @@ export class PuzzleGeometry {
     return od.toKTransformationData(od.getScrambleTransformation(n));
   }
 
-  public getMovesAsPerms(): Perm[] {
+  public getMovesAsPerms(): Permutation[] {
     return this.getOrbitsDef(false).moveops.map((_) => _.toPerm());
   }
 
@@ -2912,7 +2914,7 @@ export class PuzzleGeometry {
     showcanon(this.getOrbitsDef(false), disp);
   }
 
-  public getsolved(): Perm {
+  public getsolved(): Permutation {
     // get a solved position
     const r = [];
     for (let i = 0; i < this.baseFaceCount; i++) {
@@ -2920,7 +2922,7 @@ export class PuzzleGeometry {
         r.push(i);
       }
     }
-    return new Perm(r);
+    return new Permutation(r);
   }
 
   // Given a rotation description that says to align feature1
@@ -3268,7 +3270,9 @@ export class PuzzleGeometry {
         const cubieori = this.faceToCubieOrd![i]; // TODO: refactor to avoid non-null-assertion
         const cubiesetnum = this.cubieSetNums![cubie]; // TODO: refactor to avoid non-null-assertion
         const cubieord = this.cubieOrdNums![cubie]; // TODO: refactor to avoid non-null-assertion
-        const color = this.graybyori(cubie) ? "#808080" : colormap[pos.p[i]];
+        const color = this.graybyori(cubie)
+          ? "#808080"
+          : colormap[pos.permutation[i]];
         let id = `${this.cubieSetNames![cubiesetnum]}-l${cubieord}-o${cubieori}`; // TODO: refactor to avoid non-null-assertion
         svg.push(drawedges(id, facegeo[i], color));
         if (this.duplicatedFaces[i]) {
