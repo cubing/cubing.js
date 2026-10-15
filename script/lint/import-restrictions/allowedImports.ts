@@ -219,4 +219,7 @@ export const specAllowedImports: AllowedImports = {
   "src/test/SKIP_SLOW_TESTS.ts": {
     static: ["node:process"],
   },
+  "src/test/stub.test.ts": {
+    static: ["bun:test", "path-class"],
+  },
 };
