@@ -49,6 +49,9 @@ export const mainAllowedImports: AllowedImports = {
     static: ["random-uint-below"],
     dynamic: ["src/cubing/scramble/index.ts"],
   },
+  "script/test/src-cubing/web-worker-scrambles": {
+    static: ["src/cubing/search/index.ts", "src/cubing/scramble/index.ts"],
+  },
   "script/cleanup": {
     static: ["node:fs", "node:fs/promises", "node:path"],
   },
