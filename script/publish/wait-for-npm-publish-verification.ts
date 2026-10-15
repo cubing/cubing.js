@@ -16,11 +16,12 @@ const NUM_RETRIES = 10;
 let latestNPMVersion: string;
 
 for (let i = 0; i < NUM_RETRIES; i++) {
-  latestNPMVersion = (
-    await new PrintableShellCommand("npm", ["show", "--json", "cubing"]).json<{
-      version: string;
-    }>()
-  ).version;
+  latestNPMVersion = await new PrintableShellCommand("npm", [
+    "show",
+    "--",
+    "cubing",
+    "version",
+  ]).text({ trimTrailingNewlines: "single-required" });
 
   if (semver.satisfies(latestNPMVersion, packageVersion)) {
     console.info(`\`npm\` version is up to date: ${latestNPMVersion}`);
