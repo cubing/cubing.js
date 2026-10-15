@@ -21,7 +21,7 @@ for (const dirEnt of await DIR.readDir({
       break;
     }
     case "index.js": {
-      contents = contents.replace(`"cubing/alg"`, `"../../../alg"`);
+      contents = contents.replace(`"cubing/alg"`, `"../../../alg/index.ts"`);
       contents = contents.replace(
         `module_or_path = new URL("twips_wasm_bg.wasm", import.meta.url);`,
         // TODO: change this once the ecosystem is in a better place.

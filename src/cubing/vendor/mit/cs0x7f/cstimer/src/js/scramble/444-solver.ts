@@ -1,8 +1,8 @@
 // @ts-nocheck
 
-import { Alg } from "../../../../../../../alg";
-import { rawRandom333Scramble } from "../../../../../../../search/cubing-private";
-import { circle, Cnk, set8Perm } from "../lib/mathlib";
+import { Alg } from "../../../../../../../alg/index.ts";
+import { rawRandom333Scramble } from "../../../../../../../search/cubing-private/index.ts";
+import { circle, Cnk, set8Perm } from "../lib/mathlib.ts";
 import { randomUIntBelow } from "random-uint-below";
 
 function createArray(length1: number, length2?: number) {

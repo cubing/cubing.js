@@ -55,7 +55,7 @@ also work with recent versions of Edge, Safari, etc.
 
 "use strict";
 
-import { Alg } from "../../../alg";
+import { Alg } from "../../../alg/index.ts";
 import { randomUIntBelow } from "random-uint-below";
 
 let PHASE4_THRESHOLD = 7;

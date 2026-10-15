@@ -45,6 +45,10 @@ export const mainAllowedImports: AllowedImports = {
   "script/test/dist/lib/cubing/build-size/main.ts": {
     static: ["node:util", "node:zlib"],
   },
+  "script/test/src-cubing/import-all.ts": {
+    static: ["random-uint-below"],
+    dynamic: ["src/cubing/scramble/index.ts"],
+  },
   "script/cleanup": {
     static: ["node:fs", "node:fs/promises", "node:path"],
   },

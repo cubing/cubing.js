@@ -5,7 +5,7 @@
 import "./chunks/chunk-7CTX7TNJ.js";
 
 // src/wasm-package/index.ts
-import { Alg } from "../../../alg";
+import { Alg } from "../../../alg/index.ts";
 
 // .temp/rust-wasm/twips_wasm.js
 var wasm;

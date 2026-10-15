@@ -5,7 +5,7 @@
 "use strict";
 
 import { randomUIntBelow } from "random-uint-below";
-import { Alg } from "../../../../../cubing/alg";
+import { Alg } from "../../../../../cubing/alg/index.ts";
 
 /*
 MIT Licence
