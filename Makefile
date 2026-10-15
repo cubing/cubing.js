@@ -356,7 +356,11 @@ prepublishOnly: update-dependencies
 	mak clean check build || make clean check build
 
 .PHONY: postpublish
-postpublish: update-cdn update-create-cubing-app deploy
+postpublish: wait-for-npm-publish-verification update-cdn update-create-cubing-app deploy
+
+.PHONY: wait-for-npm-publish-verification
+wait-for-npm-publish-verification:
+	${BUN_RUN} ./script/publish/wait-for-npm-publish-verification.ts
 
 .PHONY: postpublish-clear-bun-cache
 postpublish-clear-bun-cache:

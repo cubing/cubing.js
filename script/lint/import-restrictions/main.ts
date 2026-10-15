@@ -32,6 +32,9 @@ await checkAllowedImports(
   {
     overrideEsbuildOptions: {
       logOverride: { "empty-glob": "silent" },
+      loader: {
+        ".json": "json",
+      },
     },
   },
 );

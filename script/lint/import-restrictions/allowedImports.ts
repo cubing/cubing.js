@@ -42,6 +42,9 @@ export const mainAllowedImports: AllowedImports = {
   "script/lint/import-restrictions": {
     static: ["@cubing/dev-config"],
   },
+  "script/publish/wait-for-npm-publish-verification.ts": {
+    static: ["bun"],
+  },
   "script/test/dist/lib/cubing/build-size/main.ts": {
     static: ["node:util", "node:zlib"],
   },
