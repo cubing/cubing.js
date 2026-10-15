@@ -1,4 +1,8 @@
 import { AlgCommon, Comparable } from "../../common.ts";
+import {
+  formatForCustomInspectWithParseDataAnnotation,
+  NODEJS_UTIL_INSPECT_CUSTOM,
+} from "../../inspect.ts";
 import { IterationDirection } from "../../iteration.ts";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits.ts";
 import {
@@ -283,4 +287,12 @@ export class Move extends AlgCommon<Move> {
   //     outerLayer: this.outerLayer,
   //   };
   // }
+
+  [NODEJS_UTIL_INSPECT_CUSTOM]() {
+    return formatForCustomInspectWithParseDataAnnotation(
+      "Move",
+      JSON.stringify(this.toString()),
+      this,
+    );
+  }
 }
