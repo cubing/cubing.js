@@ -22,7 +22,7 @@ test.skipIf(SKIP_SLOW_TESTS)(
     });
     const os = pg.getOrbitsDef(false);
     const ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
+      os.moveOps.map((_) => _.toPermutation()),
       (_) => null,
     );
     expect(Number(ss)).toStrictEqual(768);
@@ -38,7 +38,7 @@ test.skipIf(SKIP_SLOW_TESTS)(
     });
     const os = pg.getOrbitsDef(false);
     const ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
+      os.moveOps.map((_) => _.toPermutation()),
       (_) => null,
     );
     expect(Number(ss)).toStrictEqual(11520);
@@ -56,7 +56,7 @@ test.skipIf(SKIP_SLOW_TESTS)(
     });
     const os = pg.getOrbitsDef(false);
     const ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
+      os.moveOps.map((_) => _.toPermutation()),
       (_) => null,
     );
     expect(Number(ss)).toStrictEqual(60);
@@ -72,7 +72,7 @@ test.skipIf(SKIP_SLOW_TESTS)(
     });
     const os = pg.getOrbitsDef(false);
     const ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
+      os.moveOps.map((_) => _.toPermutation()),
       (_) => null,
     );
     expect(Number(ss)).toStrictEqual(58471875000000000);

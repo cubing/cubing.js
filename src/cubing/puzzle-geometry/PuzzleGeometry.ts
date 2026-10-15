@@ -24,16 +24,16 @@ import {
   PuzzleGeometryFullOptions,
   type PuzzleGeometryOptions,
 } from "./Options.ts";
+import { Permutation, range, zeros } from "./Permutation.ts";
 import {
-  externalName,
+  externalMoveName,
   PGOrbit,
   PGOrbitDef,
   PGOrbitsDef,
   PGTransform,
-  showcanon,
+  showCanonical,
   VisibleState,
-} from "./PermOriSet.ts";
-import { Permutation, range, zeros } from "./Permutation.ts";
+} from "./PGOrbit.ts";
 import {
   closure,
   cube,
@@ -2401,10 +2401,10 @@ export class PuzzleGeometry {
     const os = this.getOrbitsDef(false);
     const r = [];
     const mvs = [];
-    for (let i = 0; i < os.moveops.length; i++) {
-      let movename = os.movenames[i];
-      if (!os.forcenames[i]) {
-        movename = `M_${externalName(this.notationMapper, movename)}`;
+    for (let i = 0; i < os.moveOps.length; i++) {
+      let movename = os.moveNames[i];
+      if (!os.forceNames[i]) {
+        movename = `M_${externalMoveName(this.notationMapper, movename)}`;
       }
       movename = `M_${movename}`;
       let doinv = false;
@@ -2415,9 +2415,11 @@ export class PuzzleGeometry {
       // gap doesn't like angle brackets in IDs
       mvs.push(movename);
       if (doinv) {
-        r.push(`${movename}:=${os.moveops[i].toPerm().invert().toGap()};`);
+        r.push(
+          `${movename}:=${os.moveOps[i].toPermutation().invert().toGap()};`,
+        );
       } else {
-        r.push(`${movename}:=${os.moveops[i].toPerm().toGap()};`);
+        r.push(`${movename}:=${os.moveOps[i].toPermutation().toGap()};`);
       }
     }
     r.push("Gen:=[");
@@ -2441,8 +2443,8 @@ export class PuzzleGeometry {
     const r = [];
     const mvs = [];
     r.push(`(* ${this.header("").trim()} *)`);
-    for (let i = 0; i < os.moveops.length; i++) {
-      let movename = `m${externalName(this.notationMapper, os.movenames[i])}`;
+    for (let i = 0; i < os.moveOps.length; i++) {
+      let movename = `m${externalMoveName(this.notationMapper, os.moveNames[i])}`;
       let doinv = false;
       if (movename[movename.length - 1] === "'") {
         movename = movename.substring(0, movename.length - 1);
@@ -2451,10 +2453,10 @@ export class PuzzleGeometry {
       mvs.push(movename);
       if (doinv) {
         r.push(
-          `${movename}=${os.moveops[i].toPerm().invert().toMathematica()};`,
+          `${movename}=${os.moveOps[i].toPermutation().invert().toMathematica()};`,
         );
       } else {
-        r.push(`${movename}=${os.moveops[i].toPerm().toMathematica()};`);
+        r.push(`${movename}=${os.moveOps[i].toPermutation().toMathematica()};`);
       }
     }
     r.push(`gen={${mvs.join(",")}};`);
@@ -2545,8 +2547,8 @@ export class PuzzleGeometry {
       }
       if (this.orbitOrientations![ii] === 1 || this.options.fixedOrientation) {
         // TODO: refactor to avoid non-null-assertion
-        if (perms[ii] === range(lastId.perm.length)) {
-          if (perms[ii] !== lastId.perm) {
+        if (perms[ii] === range(lastId.permutation.length)) {
+          if (perms[ii] !== lastId.permutation) {
             lastId = new PGOrbit(perms[ii], oris[ii], 1);
           }
           moveorbits.push(lastId);
@@ -2566,7 +2568,7 @@ export class PuzzleGeometry {
     }
     let mv = new PGTransform(moveorbits);
     if (amount !== 1) {
-      mv = mv.mulScalar(amount);
+      mv = mv.multiplyByScalar(amount);
     }
     return mv;
   }
@@ -2906,12 +2908,12 @@ export class PuzzleGeometry {
   }
 
   public getMovesAsPerms(): Permutation[] {
-    return this.getOrbitsDef(false).moveops.map((_) => _.toPerm());
+    return this.getOrbitsDef(false).moveOps.map((_) => _.toPermutation());
   }
 
   public showcanon(disp: (s: string) => void): void {
     // show information for canonical move derivation
-    showcanon(this.getOrbitsDef(false), disp);
+    showCanonical(this.getOrbitsDef(false), disp);
   }
 
   public getsolved(): Permutation {
@@ -3452,7 +3454,7 @@ export class PGNotation {
   private pg: PuzzleGeometry;
   constructor(pg: PuzzleGeometry, od: PGOrbitsDef) {
     this.pg = pg;
-    this.orbitNames = od.orbitnames;
+    this.orbitNames = od.orbitNames;
   }
 
   public lookupMove(move: Move): KTransformationData | null {
