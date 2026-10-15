@@ -46,9 +46,7 @@ export abstract class AlgCommon<T extends Alg | AlgNode>
   get log(): (message?: any) => void {
     // By returning a (bound) version of `console.log`, we ensure that DevTools
     // logs the call site instead of this function.
-    return console.log.bind(console, this, this.toString()) as (
-      message?: any,
-    ) => void;
+    return console.log.bind(console, this) as (message?: any) => void;
   }
 
   abstract override toString(

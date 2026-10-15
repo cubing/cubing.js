@@ -6,6 +6,10 @@ import { LineComment } from "./alg-nodes/leaves/LineComment.ts";
 import { Move } from "./alg-nodes/leaves/Move.ts";
 import { Newline } from "./alg-nodes/leaves/Newline.ts";
 import { AlgCommon, type Comparable } from "./common.ts";
+import {
+  formatForCustomInspectWithParseDataAnnotation,
+  NODEJS_UTIL_INSPECT_CUSTOM,
+} from "./inspect.ts";
 import { experimentalIs, experimentalIsAlgNode } from "./is.ts";
 import { direct, IterationDirection, reverse } from "./iteration.ts";
 import { parseAlg } from "./parseAlg.ts";
@@ -330,6 +334,19 @@ export class Alg extends AlgCommon<Alg> {
   /** @deprecated See {@link experimentalSimplify} */
   simplify(options?: SimplifyOptions): Alg {
     return this.experimentalSimplify(options);
+  }
+
+  [NODEJS_UTIL_INSPECT_CUSTOM]() {
+    const string = (() => {
+      const asString = this.toString();
+      if (asString.includes("\n")) {
+        // .replaceAll("\n", "↩\n")
+        return `\`${asString.replaceAll(/(`\$)/g, "\\$1")}\``;
+      } else {
+        return JSON.stringify(asString);
+      }
+    })();
+    return formatForCustomInspectWithParseDataAnnotation("Alg", string, this);
   }
 }
 
