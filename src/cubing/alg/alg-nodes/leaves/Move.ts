@@ -11,7 +11,6 @@ import {
   transferCharIndex,
 } from "../../parseAlg.ts";
 import type { ExperimentalSerializationOptions } from "../../SerializationOptions.ts";
-import { warnOnce } from "../../warnOnce.ts";
 import type { AlgLeaf } from "../AlgNode.ts";
 import { QuantumWithAmount } from "../QuantumWithAmount.ts";
 
@@ -221,12 +220,6 @@ export class Move extends AlgCommon<Move> {
 
   get amount(): number {
     return this.#quantumWithAmount.amount;
-  }
-
-  /** @deprecated */
-  get type(): string {
-    warnOnce("deprecated: type");
-    return "blockMove";
   }
 
   /** @deprecated */

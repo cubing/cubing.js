@@ -15,7 +15,6 @@ import { direct, IterationDirection, reverse } from "./iteration.ts";
 import { parseAlg } from "./parseAlg.ts";
 import type { ExperimentalSerializationOptions } from "./SerializationOptions.ts";
 import { type SimplifyOptions, simplify } from "./simplify/index.ts";
-import { warnOnce } from "./warnOnce.ts";
 
 export type FlexibleAlgSource = string | Iterable<AlgNode> | Alg;
 
@@ -237,12 +236,6 @@ export class Alg extends AlgCommon<Alg> {
 
   experimentalNumChildAlgNodes(): number {
     return Array.from(this.#algNodes).length;
-  }
-
-  /** @deprecated */
-  get type(): string {
-    warnOnce("deprecated: type");
-    return "sequence";
   }
 
   /**
