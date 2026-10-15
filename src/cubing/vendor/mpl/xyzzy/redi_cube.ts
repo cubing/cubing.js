@@ -1,17 +1,19 @@
 // @ts-nocheck
 
+// biome-ignore-all lint/complexity/useDateNow: TODO
+// biome-ignore-all lint/correctness/noUnusedVariables: TODO
+// biome-ignore-all lint/suspicious/noImplicitAnyLet: TODO
+
 /* Redi cube scramble generator */
 // From https://torchlight.github.io/rediscrambler.js
 // Added to `cubing.js` under the GPL license by permission from the author (@torchlight/xyzzy).
 
-"use strict";
-
-import { Alg } from "../../../alg/index.ts";
 import { randomUIntBelow } from "random-uint-below";
+import { Alg } from "../../../alg/index.ts";
 
 function counter(A) {
-  let counts = [];
-  for (let a of A) {
+  const counts = [];
+  for (const a of A) {
     counts[a] = (counts[a] || 0) + 1;
   }
   return counts;
@@ -53,10 +55,10 @@ function permutation_to_index(perm) {
     n--;
     // invariant: f === factorial(n)
     // also, perm stores meaningful values up to perm[n]
-    let e = perm[0];
+    const e = perm[0];
     ind += e * f;
     for (let i = 0; i < n; i++) {
-      let x = perm[i + 1];
+      const x = perm[i + 1];
       perm[i] = x - (x > e);
     }
     f /= n;
@@ -65,7 +67,7 @@ function permutation_to_index(perm) {
 }
 
 function index_to_permutation(ind, n) {
-  let perm = [];
+  const perm = [];
   let f = factorial(n - 1);
   for (let i = 0; i < n; i++) {
     perm[i] = (ind / f) | 0;
@@ -82,7 +84,7 @@ function index_to_permutation(ind, n) {
 }
 
 function permutation_parity(A) {
-  let n = A.length;
+  const n = A.length;
   let parity = 0;
   // again, there is a linearithmic algorithm to count inversions, but >lazy
   for (let i = 0; i < n - 1; i++) {
@@ -96,7 +98,7 @@ function permutation_parity(A) {
 }
 
 function index_to_evenpermutation(ind, n) {
-  let perm = [];
+  const perm = [];
   let f = factorial(n - 1) / 2;
   let parity = 0;
   for (let i = 0; i < n - 1; i++) {
@@ -152,8 +154,8 @@ function comb_to_index(l) {
 function index_to_comb(ind, ones, bits) {
   let zeros = bits - ones;
   let b = C(bits - 1, ones);
-  let l = [];
-  let n = bits - 1;
+  const l = [];
+  const n = bits - 1;
   for (let i = 0; i < n; i++) {
     bits--;
     if (ind < b) {
@@ -170,7 +172,7 @@ function index_to_comb(ind, ones, bits) {
 }
 
 function compose(A, B) {
-  let C = [];
+  const C = [];
   for (let i = 0; i < B.length; i++) {
     C[i] = A[B[i]];
   }
@@ -178,7 +180,7 @@ function compose(A, B) {
 }
 
 function permutation_from_cycle(cycle, n) {
-  let perm = [];
+  const perm = [];
   for (let i = 0; i < n; i++) {
     perm[i] = i;
   }
@@ -189,62 +191,71 @@ function permutation_from_cycle(cycle, n) {
 }
 
 function unsparsify_list(d, n) {
-  let l = Array(n).fill(0);
-  for (let k in d) {
+  const l = Array(n).fill(0);
+  for (const k in d) {
     l[k] = d[k];
   }
   return l;
 }
 
 function compose_state(state1, state2) {
-  let o = Array(8).fill(0);
+  const o = Array(8).fill(0);
   for (let i = 0; i < 8; i++) {
     o[i] = (state1[1][i] + state2[1][i]) % 3;
   }
   return [compose(state1[0], state2[0]), o];
 }
 
-let move_UL = [
+const move_UL = [
   permutation_from_cycle([0, 1, 4], 12),
   unsparsify_list({ 0: 2 }, 8),
 ];
-let move_U = [
+const move_U = [
   permutation_from_cycle([1, 2, 5], 12),
   unsparsify_list({ 1: 2 }, 8),
 ];
-let move_UR = [
+const move_UR = [
   permutation_from_cycle([2, 3, 6], 12),
   unsparsify_list({ 2: 2 }, 8),
 ];
-let move_F = [
+const move_F = [
   permutation_from_cycle([3, 0, 7], 12),
   unsparsify_list({ 3: 2 }, 8),
 ];
-let move_L = [
+const move_L = [
   permutation_from_cycle([9, 8, 4], 12),
   unsparsify_list({ 4: 2 }, 8),
 ];
-let move_B = [
+const move_B = [
   permutation_from_cycle([10, 9, 5], 12),
   unsparsify_list({ 5: 2 }, 8),
 ];
-let move_R = [
+const move_R = [
   permutation_from_cycle([11, 10, 6], 12),
   unsparsify_list({ 6: 2 }, 8),
 ];
-let move_D = [
+const move_D = [
   permutation_from_cycle([8, 11, 7], 12),
   unsparsify_list({ 7: 2 }, 8),
 ];
 
-let solved = [index_to_permutation(0, 12), Array(8).fill(0)];
+const solved = [index_to_permutation(0, 12), Array(8).fill(0)];
 
-let moves = [move_UL, move_U, move_UR, move_F, move_L, move_B, move_R, move_D];
-let move_names = ["UL", "U", "UR", "F", "L", "B", "R", "D"];
-let tetrad = [0, 1, 0, 1, 1, 0, 1, 0];
+const moves = [
+  move_UL,
+  move_U,
+  move_UR,
+  move_F,
+  move_L,
+  move_B,
+  move_R,
+  move_D,
+];
+const move_names = ["UL", "U", "UR", "F", "L", "B", "R", "D"];
+const tetrad = [0, 1, 0, 1, 1, 0, 1, 0];
 
 function apply_move_sequence(state, move_sequence) {
-  for (let [m, r] of move_sequence) {
+  for (const [m, r] of move_sequence) {
     for (let i = 0; i < r; i++) {
       state = compose_state(state, moves[m]);
     }
@@ -253,8 +264,8 @@ function apply_move_sequence(state, move_sequence) {
 }
 
 function stringify_move_sequence(move_sequence) {
-  let suffixes = ["0", "", "'"];
-  let s = move_sequence.map(([m, r]) => move_names[m] + suffixes[r]);
+  const suffixes = ["0", "", "'"];
+  const s = move_sequence.map(([m, r]) => move_names[m] + suffixes[r]);
   return s.join(" ");
 }
 
@@ -263,11 +274,11 @@ function print_move_sequence(move_sequence) {
 }
 
 function generate_random_state() {
-  let p = index_to_evenpermutation(
+  const p = index_to_evenpermutation(
     Math.floor(randomUIntBelow(factorial(12)) / 2),
     12,
   );
-  let o = Array(8);
+  const o = Array(8);
   for (let i = 0; i < 8; i++) {
     o[i] = randomUIntBelow(3);
   }
@@ -283,32 +294,36 @@ function generate_scramble_sequence() {
 }
 
 function solve(state) {
-  let phase1_indices = index_phase1(state);
-  let phase1_mtables = [
+  const phase1_indices = index_phase1(state);
+  const phase1_mtables = [
     generate_phase1_edge_mtable(),
     generate_phase1_separate_mtable(),
   ];
-  let phase1_ptables = [
+  const phase1_ptables = [
     generate_phase1_edge_ptable(),
     generate_phase1_separate_ptable(),
   ];
-  let phase2_mtables = [
+  const phase2_mtables = [
     generate_phase2_edge_mtable(),
     generate_phase2_corner_mtable(),
   ];
-  let phase2_ptables = [
+  const phase2_ptables = [
     generate_phase2_edge_ptable(),
     generate_phase1_corner_ptable(),
   ];
 
-  let phase1gen = ida_solve_gen(phase1_indices, phase1_mtables, phase1_ptables);
-  let best = undefined;
-  let intermediate_states = new Set();
-  let start_time = +new Date();
+  const phase1gen = ida_solve_gen(
+    phase1_indices,
+    phase1_mtables,
+    phase1_ptables,
+  );
+  let best;
+  const intermediate_states = new Set();
+  const start_time = +new Date();
   for (let i = 0; i < 25; i++) {
-    let { value: sol1, done } = phase1gen.next();
+    const { value: sol1, done } = phase1gen.next();
     let new_state = state;
-    for (let [m, r] of sol1) {
+    for (const [m, r] of sol1) {
       for (let i = 0; i < r; i++) {
         new_state = compose_state(new_state, moves[m]);
       }
@@ -319,15 +334,15 @@ function solve(state) {
     } else {
       intermediate_states.add(new_state.toString());
     }
-    let edge_ind = evenpermutation_to_index(new_state[0].slice(0, 8));
+    const edge_ind = evenpermutation_to_index(new_state[0].slice(0, 8));
     let corner_ind = 0;
     for (let i = 0; i < 4; i++) {
       corner_ind += new_state[1][i] * 3 ** i;
     }
-    let phase2_indices = [edge_ind, corner_ind];
+    const phase2_indices = [edge_ind, corner_ind];
     //let sol2 = [];
-    let moves_left = best ? best.length - sol1.length - 1 : 999999;
-    let sol2 = ida_solve(
+    const moves_left = best ? best.length - sol1.length - 1 : 999999;
+    const sol2 = ida_solve(
       phase2_indices,
       phase2_mtables,
       phase2_ptables,
@@ -362,23 +377,23 @@ function index_phase1(state) {
   for (let i = 0; i < 4; i++) {
     corner_ind += state[1][i + 4] * 3 ** i;
   }
-  let filtered = state[0].map((x) => Math.max(-1, x - 8));
-  let separate_ind =
+  const filtered = state[0].map((x) => Math.max(-1, x - 8));
+  const separate_ind =
     comb_to_index(filtered.map((x) => +(x >= 0))) * 2 +
     permutation_parity(filtered.filter((x) => x >= 0));
   return [edge_ind, corner_ind + 81 * separate_ind];
 }
 
-let tables = {};
+const tables = {};
 
 function generate_phase1_corner_mtable() {
   if (tables.phase1cm) {
     return tables.phase1cm;
   }
-  let mtable = [];
+  const mtable = [];
   for (let i = 0; i < 81; i++) {
     mtable[i] = Array(8);
-    let o = [
+    const o = [
       i % 3,
       Math.floor(i / 3) % 3,
       Math.floor(i / 9) % 3,
@@ -398,9 +413,9 @@ function generate_phase1_corner_ptable() {
   if (tables.phase1cp) {
     return tables.phase1cp;
   }
-  let ptable = Array(81);
+  const ptable = Array(81);
   for (let i = 0; i < 81; i++) {
-    let o = [
+    const o = [
       i % 3,
       Math.floor(i / 3) % 3,
       Math.floor(i / 9) % 3,
@@ -415,14 +430,14 @@ function generate_phase1_edge_mtable() {
   if (tables.phase1em) {
     return tables.phase1em;
   }
-  let mtable_single = [];
+  const mtable_single = [];
   for (let i = 0; i < 12; i++) {
     mtable_single[i] = [];
     for (let m = 0; m < 8; m++) {
       mtable_single[i][m] = moves[m][0].indexOf(i);
     }
   }
-  let mtable = Array(12 ** 4);
+  const mtable = Array(12 ** 4);
   for (let i = 0; i < 12 ** 4; i++) {
     mtable[i] = Array(8);
     for (let m = 0; m < 8; m++) {
@@ -450,11 +465,11 @@ function generate_phase1_separate_mtable() {
     return tables.phase1sm;
   }
   const C12_4 = C(12, 4);
-  let mtable_c = [];
+  const mtable_c = [];
   for (let i = 0; i < C12_4; i++) {
     mtable_c[i] = [];
-    let comb = index_to_comb(i, 4, 12);
-    let perm = [];
+    const comb = index_to_comb(i, 4, 12);
+    const perm = [];
     for (let j = 0, k = 0; j < 12; j++) {
       if (comb[j] === 0) {
         perm[j] = -1;
@@ -463,18 +478,18 @@ function generate_phase1_separate_mtable() {
       }
     }
     for (let m = 0; m < 8; m++) {
-      let new_perm = compose(perm, moves[m][0]);
-      let new_comb = compose(comb, moves[m][0]);
-      let parity = permutation_parity(new_perm.filter((x) => x >= 0));
+      const new_perm = compose(perm, moves[m][0]);
+      const new_comb = compose(comb, moves[m][0]);
+      const parity = permutation_parity(new_perm.filter((x) => x >= 0));
       mtable_c[i][m] = comb_to_index(new_comb) * 2 + parity;
     }
   }
-  let mtable_co = generate_phase1_corner_mtable();
-  let mtable = [];
+  const mtable_co = generate_phase1_corner_mtable();
+  const mtable = [];
   for (let j = 0; j < C12_4; j++) {
     for (let i = 0; i < 81; i++) {
-      let m0 = (mtable[i + 81 * (2 * j)] = []);
-      let m1 = (mtable[i + 81 * (2 * j + 1)] = []);
+      const m0 = (mtable[i + 81 * (2 * j)] = []);
+      const m1 = (mtable[i + 81 * (2 * j + 1)] = []);
       for (let m = 0; m < 8; m++) {
         m0[m] = mtable_co[i][m] + 81 * mtable_c[j][m];
         m1[m] = mtable_co[i][m] + 81 * (mtable_c[j][m] ^ 1);
@@ -495,8 +510,8 @@ function generate_phase2_corner_mtable() {
   if (tables.phase2cm) {
     return tables.phase2cm;
   }
-  let phase1_mtable = generate_phase1_corner_mtable();
-  let mtable = Array(81);
+  const phase1_mtable = generate_phase1_corner_mtable();
+  const mtable = Array(81);
   for (let i = 0; i < 81; i++) {
     mtable[i] = phase1_mtable[i].slice(4, 8);
   }
@@ -509,13 +524,13 @@ function generate_phase2_edge_mtable() {
   }
   const n = 8;
   const HALFFACT8 = factorial(n) / 2;
-  let mtable = Array(HALFFACT8);
-  let perm = [0, 1, 2, 3, 4, 5, 6, 7];
+  const mtable = Array(HALFFACT8);
+  const perm = [0, 1, 2, 3, 4, 5, 6, 7];
   for (let i = 0; i < HALFFACT8; i++) {
     //perm = index_to_evenpermutation(i, 8);
     mtable[i] = Array(4);
     for (let m = 0; m < 4; m++) {
-      let new_perm = compose(perm, moves[m][0].slice(0, 8));
+      const new_perm = compose(perm, moves[m][0].slice(0, 8));
       mtable[i][m] = evenpermutation_to_index(new_perm);
     }
 
@@ -558,15 +573,15 @@ function generate_phase2_edge_ptable() {
 }
 
 function bfs(mtable, goal_states) {
-  let N = mtable.length;
-  let nmoves = mtable[0].length;
-  let ptable = Array(N).fill(-1);
+  const N = mtable.length;
+  const nmoves = mtable[0].length;
+  const ptable = Array(N).fill(-1);
   let queue = goal_states.slice();
   let new_queue = [];
   let depth = 0;
   while (queue.length > 0) {
     new_queue.length = 0;
-    for (let state of queue) {
+    for (const state of queue) {
       if (ptable[state] !== -1) {
         continue;
       }
@@ -587,13 +602,13 @@ function bfs(mtable, goal_states) {
 
 function ida_solve(indices, mtables, ptables, max_bound) {
   max_bound = max_bound || 999999;
-  let ncoords = indices.length;
+  const ncoords = indices.length;
   let bound = 0;
   for (let i = 0; i < ncoords; i++) {
     bound = Math.max(bound, ptables[i][indices[i]]);
   }
   while (bound <= max_bound) {
-    let path = ida_search(indices, mtables, ptables, bound, -1);
+    const path = ida_search(indices, mtables, ptables, bound, -1);
     if (path !== undefined) {
       return path;
     }
@@ -602,8 +617,8 @@ function ida_solve(indices, mtables, ptables, max_bound) {
 }
 
 function ida_search(indices, mtables, ptables, bound, last) {
-  let ncoords = indices.length;
-  let nmoves = mtables[0][0].length;
+  const ncoords = indices.length;
+  const nmoves = mtables[0][0].length;
   let heuristic = 0;
   for (let i = 0; i < ncoords; i++) {
     heuristic = Math.max(heuristic, ptables[i][indices[i]]);
@@ -624,13 +639,13 @@ function ida_search(indices, mtables, ptables, bound, last) {
     if (m < last && tetrad[m] === tetrad[last]) {
       continue;
     }
-    let new_indices = indices.slice();
+    const new_indices = indices.slice();
     for (let c = 0; c < ncoords; c++) {
       new_indices[c] = mtables[c][indices[c]][m];
     }
     let r = 1;
     while (indices.some((_, i) => indices[i] !== new_indices[i])) {
-      let subpath = ida_search(new_indices, mtables, ptables, bound - 1, m);
+      const subpath = ida_search(new_indices, mtables, ptables, bound - 1, m);
       if (subpath !== undefined) {
         return [[m, r]].concat(subpath);
       }
@@ -644,7 +659,7 @@ function ida_search(indices, mtables, ptables, bound, last) {
 }
 
 function* ida_solve_gen(indices, mtables, ptables) {
-  let ncoords = indices.length;
+  const ncoords = indices.length;
   let bound = 0;
   for (let i = 0; i < ncoords; i++) {
     bound = Math.max(bound, ptables[i][indices[i]]);
@@ -656,8 +671,8 @@ function* ida_solve_gen(indices, mtables, ptables) {
 }
 
 function* ida_search_gen(indices, mtables, ptables, bound, last) {
-  let ncoords = indices.length;
-  let nmoves = mtables[0][0].length;
+  const ncoords = indices.length;
+  const nmoves = mtables[0][0].length;
   let heuristic = 0;
   for (let i = 0; i < ncoords; i++) {
     heuristic = Math.max(heuristic, ptables[i][indices[i]]);
@@ -679,13 +694,13 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
     if (m < last && tetrad[m] === tetrad[last]) {
       continue;
     }
-    let new_indices = indices.slice();
+    const new_indices = indices.slice();
     for (let c = 0; c < ncoords; c++) {
       new_indices[c] = mtables[c][indices[c]][m];
     }
     let r = 1;
     while (indices.some((_, i) => indices[i] !== new_indices[i])) {
-      let subpath_gen = ida_search_gen(
+      const subpath_gen = ida_search_gen(
         new_indices,
         mtables,
         ptables,
@@ -693,7 +708,7 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
         m,
       );
       while (true) {
-        let { value: subpath, done } = subpath_gen.next();
+        const { value: subpath, done } = subpath_gen.next();
         if (done) {
           break;
         }

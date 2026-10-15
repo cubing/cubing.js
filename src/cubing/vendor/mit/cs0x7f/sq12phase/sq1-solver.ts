@@ -1,5 +1,8 @@
 // @ts-nocheck
 
+// biome-ignore-all lint/suspicious/noImplicitAnyLet: TODO
+// biome-ignore-all lint/correctness/noInnerDeclarations: TOD
+
 /*
 
 scramble_sq1.js
@@ -128,10 +131,10 @@ function FullCube_pieceAt(obj, idx) {
   idx < 6
     ? (ret = ~~obj.ul >> ((5 - idx) << 2))
     : idx < 12
-    ? (ret = ~~obj.ur >> ((11 - idx) << 2))
-    : idx < 18
-    ? (ret = ~~obj.dl >> ((17 - idx) << 2))
-    : (ret = ~~obj.dr >> ((23 - idx) << 2));
+      ? (ret = ~~obj.ur >> ((11 - idx) << 2))
+      : idx < 18
+        ? (ret = ~~obj.dl >> ((17 - idx) << 2))
+        : (ret = ~~obj.dr >> ((23 - idx) << 2));
   return ~~((ret & 15) << 24) >> 24;
 }
 
@@ -779,7 +782,7 @@ function Square_init() {
           ++done;
           SquarePrun[inv ? i : idxx] = ~~(depth << 24) >> 24;
           if (inv) {
-            continue OUT;
+            continue;
           }
         }
         idxx = idx;
@@ -878,7 +881,7 @@ function binarySearch(sortedArray, key) {
 
 var square1Solver_initialized = false;
 
-var square1SolverInitialize = function (doneCallback, _, statusCallback) {
+var square1SolverInitialize = (doneCallback, _, statusCallback) => {
   if (!square1Solver_initialized) {
     Shape_$clinit();
     Square_$clinit();
@@ -894,19 +897,19 @@ var square1SolverInitialize = function (doneCallback, _, statusCallback) {
   }
 };
 
-var square1SolverGetRandomPosition = function () {
+var square1SolverGetRandomPosition = () => {
   if (!square1Solver_initialized) {
     square1SolverInitialize();
   }
   return FullCube_randomCube();
 };
 
-var square1SolverGenerate = function (pattern) {
+var square1SolverGenerate = (pattern) => {
   var search_search = new Search_Search(); // Can this be factored out?
   return Search_solution(search_search, pattern);
 };
 
-var square1SolverGetRandomScramble = function () {
+var square1SolverGetRandomScramble = () => {
   var randomPattern = square1SolverGetRandomPosition();
   var scrambleString = square1SolverGenerate(randomPattern);
 

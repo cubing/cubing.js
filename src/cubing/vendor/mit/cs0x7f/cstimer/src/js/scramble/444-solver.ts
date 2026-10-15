@@ -1,9 +1,12 @@
 // @ts-nocheck
 
+// biome-ignore-all lint/complexity/noCommaOperator: TODO
+// biome-ignore-all lint/suspicious/noImplicitAnyLet: TODO
+
+import { randomUIntBelow } from "random-uint-below";
 import { Alg } from "../../../../../../../alg/index.ts";
 import { rawRandom333Scramble } from "../../../../../../../search/cubing-private/index.ts";
-import { circle, Cnk, set8Perm } from "../lib/mathlib.ts";
-import { randomUIntBelow } from "random-uint-below";
+import { Cnk, circle, set8Perm } from "../lib/mathlib.ts";
 
 function createArray(length1: number, length2?: number) {
   const result = new Array<number[]>(length1);
@@ -43,6 +46,7 @@ function defineSeed(
   if (seed && !seed.___clazz$) {
     _ = seed.prototype;
   } else {
+    // biome-ignore lint/complexity/useArrowFunction: https://github.com/biomejs/biome/issues/12372
     !seed && (seed = seedTable[id] = function () {});
     _ = seed.prototype = superSeed < 0 ? {} : newSeed(superSeed);
     _.castableTypeMap$ = castableTypeMap;
@@ -2320,9 +2324,7 @@ function $doSearch(this$static) {
     ),
   );
 
-  p1SolsArr.sort(function (a, b) {
-    return a.value - b.value;
-  });
+  p1SolsArr.sort((a, b) => a.value - b.value);
   MAX_LENGTH2 = 9;
   do {
     OUT: for (length12 = p1SolsArr[0].value; length12 < 100; ++length12) {
@@ -2350,9 +2352,7 @@ function $doSearch(this$static) {
     }
     ++MAX_LENGTH2;
   } while (length12 === 100);
-  this$static.arr2.sort(function (a, b) {
-    return a.value - b.value;
-  });
+  this$static.arr2.sort((a, b) => a.value - b.value);
   index = 0;
   MAX_LENGTH3 = 13;
   do {
@@ -2754,7 +2754,7 @@ function setClassLiteral(seedId, clazz) {
       if (seed) {
         proto = seed.prototype;
       } else {
-        seed = seedTable[seedId] = function () {};
+        seed = seedTable[seedId] = () => {};
         seed.___clazz$ = clazz;
         return;
       }

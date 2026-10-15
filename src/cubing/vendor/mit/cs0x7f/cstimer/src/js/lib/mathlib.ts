@@ -51,4 +51,4 @@ function set8Perm(arr: number[], idx: number, n?: number, even?: number) {
   return arr;
 }
 
-export { Cnk, set8Perm, circle };
+export { Cnk, circle, set8Perm };

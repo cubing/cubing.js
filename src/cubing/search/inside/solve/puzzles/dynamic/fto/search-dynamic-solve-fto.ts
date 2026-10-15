@@ -1,1 +1,1 @@
-export * from "../../../../../../vendor/mit/cs0x7f/fto/scramble_fto_standalone.js";
+export * from "../../../../../../vendor/mit/cs0x7f/fto/scramble_fto_standalone.ts";

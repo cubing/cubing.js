@@ -1,1 +1,1 @@
-export * from "../../../../../../vendor/mpl/xyzzy/kilosolver.js";
+export * from "../../../../../../vendor/mpl/xyzzy/kilosolver.ts";

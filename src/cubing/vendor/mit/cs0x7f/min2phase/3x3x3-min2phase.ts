@@ -1,5 +1,12 @@
 // @ts-nocheck
 
+// biome-ignore-all assist/source/organizeImports: TODO
+// biome-ignore-all lint/complexity/noArguments: TODO
+// biome-ignore-all lint/complexity/noCommaOperator: TODO
+// biome-ignore-all lint/correctness/noInnerDeclarations: TODO
+// biome-ignore-all lint/suspicious/noImplicitAnyLet: TODO
+// biome-ignore-all lint/suspicious/useIsArray: TODO
+
 var $intern_3 = { 3: 1 };
 var $intern_9 = 4194303;
 var $intern_10 = 1048575;
@@ -43,7 +50,6 @@ function defineClass(typeId, superTypeId, castableTypeMap) {
     !superTypeId && (_.typeMarker$ = typeMarkerFn);
   }
   for (let i = 3; i < arguments.length; ++i) {
-    // biome-ignore lint/style/noArguments: Legacy code
     arguments[i].prototype = _;
   }
   clazz && (_.___clazz$ = clazz);
@@ -2883,9 +2889,7 @@ var C_classLit = createForPrimitive("char", "C");
 createForClass("com.google.gwt.user.client.rpc", "XsrfToken", null),
   createForInterface("java.util", "Map/Entry");
 
-export const initialize = function () {
+export const initialize = (): void => {
   init_0(false);
 };
-export const solvePattern = function (s) {
-  return $solution(new Search(), s);
-};
+export const solvePattern = (s): string => $solution(new Search(), s);
