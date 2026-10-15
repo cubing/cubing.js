@@ -365,11 +365,9 @@ wait-for-npm-publish-verification:
 .PHONY: postpublish-clear-bun-cache
 postpublish-clear-bun-cache:
 	# Ensure that we get the newly published `cubing` version in other `postpublish` steps.
-
-	# bun pm cache rm # TODO: this is not compatible with the global install cache.
-
 	# This works for XDG-basedir-compatible installations without breaking the global install cache.
-	rm -f "${HOME}/.cache/.bun/install/cache/*.npm"
+	rm -f "${HOME}/.cache/.bun/install/cache/"*.npm
+	# bun pm cache rm # TODO: this is not compatible with the global install cache.
 
 .PHONY: check-for-duplicate-dependencies
 check-for-duplicate-dependencies: update-dependencies
