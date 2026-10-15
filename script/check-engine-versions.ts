@@ -9,9 +9,9 @@ import { type SystemError, semver } from "bun";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 
-const { enginesForDev, engines } = await new Path(
-  "./package.json",
-).readJSON<JSONSchemaForNPMPackageJsonFiles>();
+const { enginesForDev, engines } = await new Path("./package.json").readJSON<
+  JSONSchemaForNPMPackageJsonFiles & { enginesForDev: Record<string, string> }
+>();
 
 let exitCode = 0;
 
@@ -20,18 +20,9 @@ const SKIP_DEV_ENGINE_CHECK_ENV_VAR = "SKIP_DEV_ENGINE_CHECK";
 async function checkEngine(
   engineID: string,
   versionCommand: PrintableShellCommand,
-  options?: { dev: boolean },
 ) {
-  const engineRequirement = (options?.dev ? enginesForDev : engines)![
-    engineID
-  ]!;
-
-  if (options?.dev && env[SKIP_DEV_ENGINE_CHECK_ENV_VAR] === "true") {
-    console.error(
-      `Skipping dev engine check due to env var: ${SKIP_DEV_ENGINE_CHECK_ENV_VAR}`,
-    );
-    return;
-  }
+  const engineRequirement = engines![engineID]!;
+  const engineForDevRequirement: string = enginesForDev![engineID]!;
 
   try {
     let engineVersion: string;
@@ -47,15 +38,29 @@ async function checkEngine(
       return;
     }
 
-    if (!semver.satisfies(engineVersion, engineRequirement)) {
+    function check(
+      requirement: string,
+      additionalRequirementDescription: string = "",
+    ) {
+      if (!semver.satisfies(engineVersion, requirement)) {
+        console.error(
+          `Current version of \`${engineID}\` is out of date: ${engineVersion}`,
+        );
+        console.error(
+          `Version of \`${engineID}\` required${additionalRequirementDescription}: ${engineRequirement}`,
+        );
+        exitCode = 1;
+        return;
+      }
+    }
+
+    check(engineRequirement);
+    if (env[SKIP_DEV_ENGINE_CHECK_ENV_VAR] === "true") {
       console.error(
-        `Current version of \`${engineID}\` is out of date: ${engineVersion}`,
+        `Skipping dev engine check for \`${versionCommand.commandName}\` due to env var: ${SKIP_DEV_ENGINE_CHECK_ENV_VAR}`,
       );
-      console.error(
-        `Version of \`${engineID}\` required: ${engineRequirement}`,
-      );
-      exitCode = 1;
-      return;
+    } else {
+      check(engineForDevRequirement, " for dev");
     }
   } catch (e) {
     if ((e as any as SystemError).code === "ENOENT") {
@@ -74,9 +79,6 @@ async function checkEngines(): Promise<void> {
   await Promise.all([
     checkEngine("bun", new PrintableShellCommand("bun", ["--version"])),
     checkEngine("node", new PrintableShellCommand("node", ["--version"])),
-    checkEngine("node", new PrintableShellCommand("node", ["--version"]), {
-      dev: true,
-    }),
   ]);
 }
 

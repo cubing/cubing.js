@@ -14,7 +14,8 @@
     "bun": ">=1.3.0"
   },
   "enginesForDev": {
-    "node": ">=26.10.0"
+    "node": ">=26.10.0",
+    "bun": ">=1.4.3"
   },
   "type": "module",
   "exports": {
