@@ -3,23 +3,36 @@
 // TOOD: remove this once https://github.com/oven-sh/bun/issues/5846 is implemented.
 // TODO: turn this into a package?
 
-import { exit } from "node:process";
+import { env, exit } from "node:process";
 import type { JSONSchemaForNPMPackageJsonFiles } from "@schemastore/package";
 import { type SystemError, semver } from "bun";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 
-const { engines } = await new Path(
+const { enginesForDev, engines } = await new Path(
   "./package.json",
 ).readJSON<JSONSchemaForNPMPackageJsonFiles>();
 
 let exitCode = 0;
 
+const SKIP_DEV_ENGINE_CHECK_ENV_VAR = "SKIP_DEV_ENGINE_CHECK";
+
 async function checkEngine(
   engineID: string,
   versionCommand: PrintableShellCommand,
+  options?: { dev: boolean },
 ) {
-  const engineRequirement = engines![engineID]!;
+  const engineRequirement = (options?.dev ? enginesForDev : engines)![
+    engineID
+  ]!;
+
+  if (options?.dev && env[SKIP_DEV_ENGINE_CHECK_ENV_VAR] === "true") {
+    console.error(
+      `Skipping dev engine check due to env var: ${SKIP_DEV_ENGINE_CHECK_ENV_VAR}`,
+    );
+    return;
+  }
+
   try {
     let engineVersion: string;
     try {
@@ -61,6 +74,9 @@ async function checkEngines(): Promise<void> {
   await Promise.all([
     checkEngine("bun", new PrintableShellCommand("bun", ["--version"])),
     checkEngine("node", new PrintableShellCommand("node", ["--version"])),
+    checkEngine("node", new PrintableShellCommand("node", ["--version"]), {
+      dev: true,
+    }),
   ]);
 }
 

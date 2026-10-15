@@ -139,8 +139,15 @@ test-src-node-compat: \
 	test-src-node-compat-bin
 
 .PHONY: test-src-node-compat-cubing
-test-src-node-compat-cubing:
+test-src-node-compat-cubing: test-src-node-compat-cubing-import test-src-node-compat-cubing-web-worker-scrambles
+
+.PHONY: test-src-node-compat-cubing-import
+test-src-node-compat-cubing-import:
 	${NODE} './script/test/src-cubing/import-all.ts'
+
+.PHONY: test-src-node-compat-cubing-web-worker-scrambles
+test-src-node-compat-cubing-web-worker-scrambles:
+	${NODE} './script/test/src-cubing/web-worker-scrambles/test.ts'
 
 .PHONY: test-src-node-compat-bin
 test-src-node-compat-bin: \
