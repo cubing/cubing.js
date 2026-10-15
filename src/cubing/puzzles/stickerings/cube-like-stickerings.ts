@@ -356,6 +356,14 @@ export async function cubeLikePuzzleStickering(
       puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
       break;
     }
+    case "L2E": {
+      puzzleStickering.set(m.all(), PieceStickering.Ignored);
+      puzzleStickering.set(
+        m.or([EDGE(["U", "F"]), EDGE(["U", "B"])]),
+        PieceStickering.Regular,
+      );
+      break;
+    }
     case "PBL": {
       puzzleStickering.set(m.all(), PieceStickering.Ignored);
       puzzleStickering.set(
