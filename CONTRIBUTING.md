@@ -48,7 +48,7 @@ make test
 
 ## Goals and Principles
 
-The goal of `cubing.js` to make it easier to write _any_ cubing application. `cubing.js` should make it easy to do the right thing, and it should be reasonably compatible with any use case out of the box.
+The goal of `cubing.js` is to make it easier to write _any_ cubing application. `cubing.js` should make it easy to do the right thing, and it should be reasonably compatible with any use case out of the box.
 
 This means the library and the UI must be:
 
