@@ -16,7 +16,7 @@ export const esmOptions: BuildOptions = {
   bundle: true,
   splitting: true,
   logLevel: "info",
-  sourcemap: true,
+  sourcemap: false,
   //
   external: external,
   metafile: true,
