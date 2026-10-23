@@ -57,7 +57,7 @@ export const schemas = [
 if (import.meta.main) {
   await Promise.all(schemas.map((schema) => schema.write()));
   await new PrintableShellCommand("bun", [
-    ["x", "--", "bun-dx", "--package", "@biomejs/biome", "biome", "--"],
+    ["x", "--no-install", "--", "biome"],
     ["check", "--write", "--"],
     ...schemas.map((schema) => schema.outputPath),
   ]).shellOut();

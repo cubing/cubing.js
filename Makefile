@@ -1,10 +1,10 @@
 BUN=bun
-BUN_DX=${BUN} x -- bun-dx
+BUN_DX=${BUN} x --no-install --
 BUN_RUN=${BUN} run --
-BIOME=${BUN_DX} --package @biomejs/biome biome --
+BIOME=${BUN_DX} biome
 NODE=node --
 NPM=npm
-WEB_TEST_RUNNER=${BUN_DX} --package @web/test-runner web-test-runner -- --config ./.config/web-test-runner.config.js # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
+WEB_TEST_RUNNER=${BUN_DX} web-test-runner --config ./.config/web-test-runner.config.js # TODO(https://github.com/oven-sh/bun/issues/9178): restore this to @web/test-runner
 
 .PHONY: default
 default:
@@ -40,7 +40,7 @@ build-lib-js: update-dependencies
 
 .PHONY: build-lib-types
 build-lib-types: update-dependencies
-	${BUN_DX} --package tsdown tsdown -- --config ./.config/tsdown.config.ts
+	${BUN_DX} tsdown --config ./.config/tsdown.config.ts
 	${BUN_RUN} ./script/build/types/fix-web-bluetooth-reference.ts
 
 .PHONY: build-bin
@@ -61,7 +61,7 @@ build-site-experiments: update-dependencies
 .PHONY: build-site-docs
 build-site-docs: update-dependencies
 	rm -rf ./dist/sites/js.cubing.net/
-	${BUN_DX} --package typedoc typedoc -- src/cubing/*/index.ts
+	${BUN_DX} typedoc src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
 
@@ -194,7 +194,7 @@ test-ts-dom: update-dependencies install-playwright
 
 .PHONY: install-playwright
 install-playwright: update-dependencies
-	${BUN_DX} --package playwright playwright -- install
+	${BUN_DX} playwright install
 
 .PHONY: test-ts-dom-with-coverage
 test-ts-dom-with-coverage: update-dependencies install-playwright
@@ -320,19 +320,19 @@ lint-tsc: lint-tsc-main lint-tsc-lib lint-tsc-lib-no-dom lint-tsc-bin
 
 .PHONY: lint-tsc-main
 lint-tsc-main: update-dependencies
-	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./tsconfig.json
+	${BUN_DX} tsgo --project ./tsconfig.json
 
 .PHONY: lint-tsc-lib
 lint-tsc-lib: update-dependencies
-	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./src/cubing/tsconfig.lib.jsonc
+	${BUN_DX} tsgo --project ./src/cubing/tsconfig.lib.jsonc
 
 .PHONY: lint-tsc-lib-no-dom
 lint-tsc-lib-no-dom: update-dependencies
-	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./src/cubing/tsconfig.lib.no-dom.jsonc
+	${BUN_DX} tsgo --project ./src/cubing/tsconfig.lib.no-dom.jsonc
 
 .PHONY: lint-tsc-bin
 lint-tsc-bin: update-dependencies
-	${BUN_DX} --package @typescript/native-preview tsgo -- --project ./src/bin/tsconfig.json
+	${BUN_DX} tsgo --project ./src/bin/tsconfig.json
 
 .PHONY: check-schemas
 check-schemas: update-dependencies
@@ -344,7 +344,7 @@ update-schemas: update-dependencies
 
 .PHONY: check-package.json
 check-package.json: build-lib-js build-lib-types build-bin
-	${BUN_DX} --package @cubing/dev-config package.json -- check
+	${BUN_DX} package.json check
 
 .PHONY: prepack
 prepack: clean build test-dist-lib-node-import test-dist-lib-node-scramble test-dist-lib-plain-esbuild-compat
@@ -371,11 +371,11 @@ postpublish-clear-bun-cache:
 
 .PHONY: check-for-duplicate-dependencies
 check-for-duplicate-dependencies: update-dependencies
-	${BUN_DX} --package bun-dedupe dedupe -- --check
+	${BUN_DX} dedupe --check
 
 .PHONY: fix-duplicate-dependencies
 fix-duplicate-dependencies: update-dependencies
-	${BUN_DX} --package bun-dedupe dedupe --
+	${BUN_DX} dedupe
 
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
@@ -386,7 +386,7 @@ deploy-twizzle: build-site-twizzle
 
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
-	${BUN_DX} --package @cubing/deploy deploy --
+	${BUN_DX} deploy
 
 
 VENDORED_TWIPS_GIT_VERSION_TXT=./src/cubing/vendor/mpl/twips/vendored-twips-git-version.txt
@@ -400,7 +400,7 @@ roll-vendored-twips:
 	rm -rf ./src/cubing/vendor/mpl/twips/*
 	cp -R ../twips/dist/wasm/* ./src/cubing/vendor/mpl/twips/
 	printf "# " > ${VENDORED_TWIPS_GIT_VERSION_TXT}
-	cd ../twips/ && ${BUN_DX} --package @lgarron-bin/repo repo -- version get >> ../cubing.js/${VENDORED_TWIPS_GIT_VERSION_TXT}
+	cd ../twips/ && ${BUN_DX} repo version get >> ../cubing.js/${VENDORED_TWIPS_GIT_VERSION_TXT}
 	# TODO: why does using normal `echo -n` ignore the `-n` here?
 	printf "\nhttps://github.com/cubing/twips/tree/" >> ${VENDORED_TWIPS_GIT_VERSION_TXT}
 	git -C ../twips/ rev-parse HEAD >> ${VENDORED_TWIPS_GIT_VERSION_TXT}
