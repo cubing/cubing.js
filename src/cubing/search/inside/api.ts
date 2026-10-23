@@ -79,7 +79,7 @@ async function measurePerf<T>(
 const prefetchPromises: Map<string, Promise<Alg>> = new Map();
 // This would just be a number, except `node` is extremely silly and returns an object instead.
 // https://nodejs.org/api/timers.html#settimeoutcallback-delay-args
-let queuedPrefetchTimeoutID: ReturnType<typeof setTimeout> | null = null;
+let latestPrefetchTimeoutID: ReturnType<typeof setTimeout> | undefined;
 
 // This is used to ensure only one scramble is running (and measured) at a time, as interleaving scrambles within a single worker isn't supported (yet).
 // Scrambles may perform async work (e.g. loading code), and this guard this prevents unintended interleaving.
@@ -231,14 +231,21 @@ export const insideAPI = {
       promise = randomScrambleForEvent(eventID);
     }
     if (currentPrefetchLevel !== PrefetchLevel.None) {
-      promise.then(() => {
-        // `queuedPrefetch` could be 0, but:
-        // > Passing an invalid ID to clearTimeout() silently does nothing; no exception is thrown.
-        // https://developer.mozilla.org/en-US/docs/Web/API/clearTimeout#notes
-        if (queuedPrefetchTimeoutID) {
-          clearTimeout(queuedPrefetchTimeoutID);
+      void promise.then(() => {
+        /**
+         * Clear the latest prefetch. This is a no-op in the case where the
+         * prefetch aready finished, but it doesn't hurt. In theory, we could
+         * set `latestPrefetchTimeoutID` back to `undefined` to avoid the no-op,
+         * but that would just add a little bit to the code size for no real
+         * correctness or performance gains.
+         *
+         * Note that timeout IDs are positive, we can use
+         * `latestPrefetchTimeoutID` directly in the false-ish check.
+         */
+        if (latestPrefetchTimeoutID) {
+          clearTimeout(latestPrefetchTimeoutID);
         }
-        queuedPrefetchTimeoutID = setTimeout(
+        latestPrefetchTimeoutID = setTimeout(
           () => {
             prefetchPromises.set(
               eventID,
