@@ -257,19 +257,23 @@ test-dist-bin-shebang: test-dist-bin-shebang-order test-dist-bin-shebang-puzzle-
 
 .PHONY: test-dist-bin-shebang-order
 test-dist-bin-shebang-order: build-bin
-	time dist/bin/order.js 3x3x3 "R U R'"
+	time dist/bin/order.js 3x3x3 "R U R'" || \
+		./dist/bin/order.js 3x3x3 "R U R'"
 
 .PHONY: test-dist-bin-shebang-puzzle-geometry
 test-dist-bin-shebang-puzzle-geometry: build-bin
-	time dist/bin/puzzle-geometry-bin.js --svg 2x2x2
+	time dist/bin/puzzle-geometry-bin.js --svg 2x2x2 || \
+		./dist/bin/puzzle-geometry-bin.js --svg 2x2x2
 
 .PHONY: test-dist-bin-shebang-scramble
 test-dist-bin-shebang-scramble: build-bin
-	time dist/bin/scramble.js 222
+	time dist/bin/scramble.js 222 || \
+		./dist/bin/scramble.js 222
 
 .PHONY: test-dist-bin-npm-exec
 test-dist-bin-npm-exec: build-bin
-	time ${NPM} exec scramble -- 222
+	time ${NPM} exec scramble -- 222 || \
+		${NPM} exec scramble -- 222
 
 .PHONY: format
 format: update-dependencies
