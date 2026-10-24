@@ -47,7 +47,7 @@ async function checkEngine(
           `Current version of \`${engineID}\` is out of date: ${engineVersion}`,
         );
         console.error(
-          `Version of \`${engineID}\` required${additionalRequirementDescription}: ${engineRequirement}`,
+          `Version of \`${engineID}\` required${additionalRequirementDescription}: ${requirement}`,
         );
         exitCode = 1;
         return;
