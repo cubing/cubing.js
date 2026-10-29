@@ -48,6 +48,9 @@ export const mainAllowedImports: AllowedImports = {
   "script/test/dist/lib/cubing/build-size/main.ts": {
     static: ["node:util", "node:zlib"],
   },
+  "script/test/src-cubing/node-test.ts": {
+    static: ["node:fs/promises", "random-uint-below"],
+  },
   "script/test/src-cubing/import-all.ts": {
     static: ["random-uint-below"],
     dynamic: ["src/cubing/scramble/index.ts"],
@@ -189,9 +192,14 @@ export const mainAllowedImports: AllowedImports = {
 
 // This is a separate definition because the `*.test.ts`/`*.test.dom.ts` files are interleaved with source files, and it's easier to run a separate check for them.
 export const specAllowedImports: AllowedImports = {
+  "script/test/src-cubing/node-test.ts": {
+    static: ["node:fs/promises", "random-uint-below"],
+  },
   "src/cubing": {
     static: [
       "bun:test",
+      "node:test",
+      "node:assert",
       "src/test/chai-workarounds",
       "src/test/SKIP_SLOW_TESTS.ts",
       "@cubing/lazy-promise",

@@ -131,7 +131,7 @@ test-all: test-src test-build test-dist
 test-src: test-ts test-src-node-compat
 
 .PHONY: test-ts
-test-ts: test-ts-bun test-ts-dom
+test-ts: test-ts-bun test-ts-node-partial test-ts-dom
 
 .PHONY: test-src-node-compat
 test-src-node-compat: \
@@ -179,6 +179,10 @@ test-src-node-compat-bin-scramble: update-dependencies build-lib-js
 .PHONY: test-ts-bun
 test-ts-bun: update-dependencies
 	${BUN} test
+
+.PHONY: test-ts-node-partial
+test-ts-node-partial: update-dependencies
+	${NODE} ./script/test/src-cubing/node-test.ts
 
 .PHONY: test-ts-bun-fast
 test-ts-bun-fast: update-dependencies
