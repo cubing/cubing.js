@@ -72,7 +72,7 @@ async function checkEngine(
         `Binary is missing for engine version check: \`${versionCommand.commandName}\``,
       );
     } else {
-      console.error(`Unexpected error while trying to run version check: ${e}`);
+      console.error(`Unexpected error while trying to run version check:`, e);
     }
     exitCode = 1;
     return;
