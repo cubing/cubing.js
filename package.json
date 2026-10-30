@@ -97,6 +97,7 @@
     "barely-a-dev-server": ">=0.8.3",
     "bun-dedupe": "^0.0.5",
     "chai": "^5.1.1",
+    "compare-versions": "^6.1.1",
     "esbuild": ">=0.28.1",
     "jszip": "^3.10.1",
     "mocha": "^10.7.3",

@@ -5,7 +5,8 @@
 
 import { env, exit } from "node:process";
 import type { JSONSchemaForNPMPackageJsonFiles } from "@schemastore/package";
-import { type SystemError, semver } from "bun";
+import type { SystemError } from "bun";
+import { satisfies } from "compare-versions";
 import { Path } from "path-class";
 import { PrintableShellCommand } from "printable-shell-command";
 
@@ -27,7 +28,9 @@ async function checkEngine(
   try {
     let engineVersion: string;
     try {
-      engineVersion = await versionCommand.stdout().text();
+      engineVersion = await versionCommand
+        .stdout()
+        .text({ trimTrailingNewlines: "single-if-present" });
     } catch {
       console.error(
         `Command failed while getting version:
@@ -42,7 +45,8 @@ async function checkEngine(
       requirement: string,
       additionalRequirementDescription: string = "",
     ) {
-      if (!semver.satisfies(engineVersion, requirement)) {
+      // TODO: go back to `semver.satisfies(…)` `bun` built-in once https://github.com/oven-sh/bun/issues/47421 is resolved.
+      if (!satisfies(engineVersion, requirement)) {
         console.error(
           `Current version of \`${engineID}\` is out of date: ${engineVersion}`,
         );

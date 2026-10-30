@@ -37,7 +37,7 @@ export const mainAllowedImports: AllowedImports = {
     static: ["node:fs/promises"],
   },
   "script/check-engine-versions.ts": {
-    static: ["bun"],
+    static: ["bun", "compare-versions"],
   },
   "script/lint/import-restrictions": {
     static: ["@cubing/dev-config"],
