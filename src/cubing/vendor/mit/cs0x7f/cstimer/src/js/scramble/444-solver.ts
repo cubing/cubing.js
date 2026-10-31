@@ -2,6 +2,7 @@
 
 // biome-ignore-all lint/complexity/noCommaOperator: TODO
 // biome-ignore-all lint/suspicious/noImplicitAnyLet: TODO
+// biome-ignore-all lint/complexity/useMathMinMax: Legacy code. The fix is probably correct, but it's safer not to touch the code.
 
 import { randomUIntBelow } from "random-uint-below";
 import { Alg } from "../../../../../../../alg/index.ts";

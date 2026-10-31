@@ -6,6 +6,7 @@
 // biome-ignore-all lint/correctness/noInnerDeclarations: TODO
 // biome-ignore-all lint/suspicious/noImplicitAnyLet: TODO
 // biome-ignore-all lint/suspicious/useIsArray: TODO
+// biome-ignore-all lint/complexity/useMathMinMax: Legacy code. The fix is probably correct, but it's safer not to touch the code.
 
 var $intern_3 = { 3: 1 };
 var $intern_9 = 4194303;
