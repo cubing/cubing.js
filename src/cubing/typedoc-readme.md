@@ -1,4 +1,4 @@
-Welcome to the `cubing.js` API reference!  If you're importing `cubing.js` modules in JavaScript, this documentation site serves as a full reference for what is available.
+Welcome to the `cubing.js` API reference! If you're importing `cubing.js` modules in JavaScript, this documentation site serves as a full reference for what is available.
 
 ## If you are new to `cubing.js` or unfamiliar with JavaScript:
 
