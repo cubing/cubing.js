@@ -190,6 +190,7 @@ export class App {
           "square1",
           "clock",
           "megaminx",
+          "fto",
         ] satisfies PuzzleID[]) {
           const puzzleLoader = puzzles[puzzleID];
           const kpuzzle = await puzzleLoader.kpuzzle();
