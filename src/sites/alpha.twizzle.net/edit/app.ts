@@ -229,7 +229,7 @@ export class App {
                 this.controlPane.puzzleSelectChanged();
               } else {
                 for (const elem of this.element.querySelectorAll(
-                  ".auto-notation-puzzle-new-new",
+                  ".auto-notation-puzzle-new",
                 )) {
                   elem.textContent = puzzleLoader.fullName;
                 }
