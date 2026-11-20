@@ -51,9 +51,18 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
 
   public traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
     const dataUp = this.traverseAlg(grouping.alg, dataDown);
+    const numLeaves = Math.abs(dataUp.numLeavesInside);
+    if (grouping.amount < 0) {
+      for (const token of dataUp.tokens) {
+        token.idx = (dataDown.numMovesSoFar +
+          numLeaves -
+          1 -
+          (token.idx - dataDown.numMovesSoFar)) as LeafIndex;
+      }
+    }
     return {
       tokens: dataUp.tokens,
-      numLeavesInside: (dataUp.numLeavesInside * grouping.amount) as LeafCount,
+      numLeavesInside: (numLeaves * Math.abs(grouping.amount)) as LeafCount,
     };
   }
 
