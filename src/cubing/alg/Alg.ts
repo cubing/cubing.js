@@ -150,7 +150,14 @@ export class Alg extends AlgCommon<Alg> {
   invert(): Alg {
     // TODO: Handle newLines and comments correctly
     // TODO: Make more efficient.
-    return new Alg(reverse(Array.from(this.#algNodes).map((u) => u.invert())));
+    const invertedNodes: AlgNode[] = [];
+    for (const algNode of this.#algNodes) {
+      // Drop NISS placeholders; their grouping is inverted as ordinary notation.
+      if (!algNode.as(Pause)?.experimentalNISSGrouping) {
+        invertedNodes.push(algNode.invert());
+      }
+    }
+    return new Alg(reverse(invertedNodes));
   }
 
   /** @deprecated Use {@link Alg.expand} instead. */
